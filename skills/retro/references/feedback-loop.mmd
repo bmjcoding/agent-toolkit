@@ -1,0 +1,117 @@
+---
+title: Feedback Loop — Retro → Improve → Verify
+---
+graph LR
+    subgraph RUN1["Run N"]
+        TASK1["Task executes<br/>(any workflow)"]
+    end
+
+    subgraph RETRO1["Retro N"]
+        R_SCOPE["Scope<br/>type + subject"]
+        R_DATA["Collect<br/>git, artifacts"]
+        R_WELL["3.1 What<br/>Went Well"]
+        R_WRONG["3.2 What<br/>Went Wrong"]
+        R_SPEC["3.3 Spec &<br/>Planning"]
+        R_EFF["3.4 Efficiency<br/>cost, model"]
+        R_COORD["3.5 Coordination<br/>& Quality Loops"]
+        R_FIDELITY["3.6 Scope<br/>Fidelity"]
+        R_REC["3.7 Recommendations<br/>What/Where/Why/Priority/Type"]
+        R_VALIDATE["Validate<br/>verify-claims.py"]
+        R_TRENDS["Trends<br/>--subject filter"]
+        R_SAVE["Save<br/>.md + .json + history"]
+
+        R_SCOPE --> R_DATA
+        R_DATA --> R_WELL
+        R_DATA --> R_WRONG
+        R_DATA --> R_SPEC
+        R_DATA --> R_EFF
+        R_DATA --> R_COORD
+        R_DATA --> R_FIDELITY
+        R_WELL --> R_REC
+        R_WRONG --> R_REC
+        R_SPEC --> R_REC
+        R_EFF --> R_REC
+        R_COORD --> R_REC
+        R_FIDELITY --> R_REC
+        R_REC --> R_VALIDATE --> R_TRENDS --> R_SAVE
+    end
+
+    subgraph GATE["User Gate"]
+        PROMPT["N recommendations<br/>yes / no?"]
+    end
+
+    subgraph IMPROVE1["Improve N"]
+        I_PARSE["Parse recs<br/>from retro file"]
+        I_READ["Read<br/>target file"]
+        I_EDIT["Apply<br/>change"]
+        I_LINT["Verify<br/>lint-definition.py"]
+        I_EVAL["Eval<br/>smoke test"]
+        I_SEMANTIC["Semantic<br/>spot-check"]
+        I_ACCEPT{"Accept?"}
+        I_BUMP["Version<br/>bump"]
+        I_REVERT["Revert"]
+        I_PATTERN["Save<br/>patterns"]
+        I_SAVE["Save outcome<br/>diffs + versions"]
+
+        I_PARSE --> I_READ --> I_EDIT --> I_LINT
+        I_EDIT --> I_EVAL
+        I_EDIT --> I_SEMANTIC
+        I_LINT --> I_ACCEPT
+        I_EVAL --> I_ACCEPT
+        I_SEMANTIC --> I_ACCEPT
+        I_ACCEPT -->|"pass"| I_BUMP
+        I_ACCEPT -->|"fail"| I_REVERT
+        I_BUMP --> I_PARSE
+        I_REVERT --> I_PARSE
+        I_PARSE -->|"all done"| I_PATTERN --> I_SAVE
+    end
+
+    subgraph RUN2["Run N+1"]
+        TASK2["Task executes<br/>(improved)"]
+    end
+
+    subgraph RETRO2["Retro N+1"]
+        R2_CHECK["Check:<br/>was improve run?"]
+        R2_EFFECT["Did root causes<br/>decrease?"]
+        R2_VER["Version<br/>changed?"]
+    end
+
+    TASK1 --> RETRO1
+    R_SAVE --> GATE
+    GATE -->|"yes"| IMPROVE1
+    GATE -->|"no"| RUN2
+    I_SAVE --> RUN2
+    RUN2 --> RETRO2
+    R2_CHECK -->|"yes"| R2_EFFECT
+    R2_CHECK -->|"no improve record"| R2_VER
+    R2_EFFECT -->|"decreased"| WORKING["✅ Treatment<br/>worked"]
+    R2_EFFECT -->|"same/increased"| NOTWORKING["⚠️ Treatment<br/>ineffective"]
+
+    subgraph STORE["~/.claude/retros/{subject}/"]
+        S_MD[".md retro"]
+        S_JSON[".json summary<br/>+ version"]
+        S_IMP["-improve.json<br/>diffs + versions"]
+        S_HIST["history.jsonl"]
+    end
+
+    R_SAVE --> S_MD
+    R_SAVE --> S_JSON
+    R_SAVE --> S_HIST
+    I_SAVE --> S_IMP
+    I_SAVE --> S_HIST
+    R_TRENDS -.->|"reads"| S_HIST
+    R2_CHECK -.->|"reads"| S_HIST
+
+    classDef run fill:#744210,stroke:#975a16,color:#e2e8f0
+    classDef retro fill:#1a365d,stroke:#2a4a7f,color:#e2e8f0
+    classDef improve fill:#1a4731,stroke:#2d6a4f,color:#e2e8f0
+    classDef gate fill:#4a2040,stroke:#6b3060,color:#e2e8f0
+    classDef store fill:#2d3748,stroke:#4a5568,color:#e2e8f0
+    classDef result fill:#991b1b,stroke:#dc2626,color:#e2e8f0
+
+    class TASK1,TASK2 run
+    class R_SCOPE,R_DATA,R_WELL,R_WRONG,R_SPEC,R_EFF,R_COORD,R_FIDELITY,R_REC,R_VALIDATE,R_TRENDS,R_SAVE,R2_CHECK,R2_EFFECT,R2_VER retro
+    class I_PARSE,I_READ,I_EDIT,I_LINT,I_EVAL,I_SEMANTIC,I_ACCEPT,I_BUMP,I_REVERT,I_PATTERN,I_SAVE improve
+    class PROMPT gate
+    class S_MD,S_JSON,S_IMP,S_HIST store
+    class WORKING,NOTWORKING result

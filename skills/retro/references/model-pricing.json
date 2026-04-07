@@ -1,0 +1,28 @@
+{
+  "_comment": "Claude model pricing in USD per million tokens. Update this file when pricing changes. Last updated: 2026-04.",
+  "_source": "https://platform.claude.com/docs/en/docs/about-claude/models",
+  "models": {
+    "opus": {
+      "input_per_mtok": 5.00,
+      "output_per_mtok": 25.00,
+      "blended_per_mtok": 15.00
+    },
+    "sonnet": {
+      "input_per_mtok": 3.00,
+      "output_per_mtok": 15.00,
+      "blended_per_mtok": 9.00
+    },
+    "haiku": {
+      "input_per_mtok": 1.00,
+      "output_per_mtok": 5.00,
+      "blended_per_mtok": 3.00
+    }
+  },
+  "aliases": {
+    "claude-opus-4-6": "opus",
+    "claude-sonnet-4-6": "sonnet",
+    "claude-haiku-4-5-20251001": "haiku",
+    "claude-haiku-4-5": "haiku",
+    "inherit": "opus"
+  }
+}

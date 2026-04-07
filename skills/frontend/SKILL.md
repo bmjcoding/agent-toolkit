@@ -1,0 +1,27 @@
+---
+name: frontend
+description: Lightweight frontend workflow — implement with design system enforcement, review, and lint. Use instead of the orchestrator pipeline for frontend-only changes.
+disable-model-invocation: true
+metadata:
+  version: 1.0.0
+---
+
+# Frontend Workflow
+
+Implement frontend changes with design system enforcement. Lighter than the full orchestration pipeline — no planning, no quality loop, no shipping.
+
+## Process
+
+1. **Implement**: Spawn `frontend-engineer` with the task. It has the `design-authority` skill and will follow the design system.
+
+2. **Review**: When implementation completes, spawn `design-architect` to review the changes. It runs structural lint (Pillar 0) and semantic review (Pillars A-C).
+
+3. **Fix**: If design-architect reports findings:
+   - Spawn `frontend-engineer` again with the specific findings and remediation instructions
+   - Re-run `design-architect` to verify (max 1 retry)
+
+4. **Report**: Present results to the user. Do NOT commit, push, or create PRs — the user decides what to do next.
+
+## Task
+
+$ARGUMENTS
