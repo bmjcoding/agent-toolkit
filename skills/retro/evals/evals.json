@@ -1,0 +1,66 @@
+{
+  "skill_name": "retro",
+  "evals": [
+    {
+      "id": 1,
+      "name": "lightweight-single-agent",
+      "prompt": "Run a retro on this session. I just had Claude rename 3 variables in a single file, no errors.",
+      "expected_output": "A lightweight retro with sections 3.1, 3.2, 3.7, and summary table. Should be concise — no metrics table, no scripts invoked.",
+      "assertions": [
+        "Output contains section 3.1 (What Went Well)",
+        "Output contains section 3.2 (What Went Wrong) — should note there were no issues or only minor observations",
+        "Output contains section 3.7 (Recommendations)",
+        "Output contains a summary table with Run type, Subject, and Files changed",
+        "Output does NOT contain a per-agent metrics table (single agent, no structured logs)",
+        "Output contains a header line with subject and date (# Retro: ...)",
+        "Retro mentions model selection — a 3-variable rename on Opus is a downgrade candidate"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "standard-single-agent-with-errors",
+      "prompt": "Run a retro on the last session. I asked Claude to build a login page and it guessed the API endpoint wrong twice before reading the existing routes. It also used inline validation instead of the project's zod schemas.",
+      "expected_output": "A standard-depth retro covering spec quality, tool usage, error recovery, and recommendations pointing to specific files.",
+      "assertions": [
+        "Root cause table classifies the endpoint guessing as 'prompt gap' or 'spec gap'",
+        "Root cause table classifies the inline validation as 'prompt gap'",
+        "Section 3.3 (Specification & Planning) analyzes whether the prompt was specific enough",
+        "Recommendations include a specific file path for each fix (e.g., CLAUDE.md, a skill file)",
+        "Each recommendation has What, Where, Why, Priority, Type columns",
+        "Retro was saved to ~/.claude/retros/ (markdown + JSON)",
+        "Output ends with /improve prompt"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "full-orchestration",
+      "prompt": "Run a retro on the orchestrator pipeline that just completed. The .orchestrator/ directory has all artifacts.",
+      "expected_output": "A full-depth retro with per-agent metrics table including cost, model selection analysis, plan quality assessment, coordination analysis, trends, and save.",
+      "assertions": [
+        "parse-metrics.py was invoked against .orchestrator/",
+        "Per-agent metrics table includes Model and Est. Cost columns",
+        "Pipeline total cost is computed at the bottom of the metrics table",
+        "Section 3.3 references orchestration-deep-dive.md for plan quality",
+        "Section 3.5 references orchestration-deep-dive.md for coordination",
+        "Model selection section identifies downgrade candidates with rationale",
+        "Subject was extracted from orchestrator artifacts (not guessed)",
+        "Trends were checked via retro-history.py with --subject flag",
+        "Full retro markdown saved to ~/.claude/retros/",
+        "Summary JSON saved with subject, run_type, and project fields",
+        "Output ends with /improve prompt"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "edge-case-no-git-repo",
+      "prompt": "Run a retro on this session. We're not in a git repo — I was just having Claude analyze a PDF and summarize it.",
+      "expected_output": "A lightweight retro that gracefully skips git commands and relies on conversation history only.",
+      "assertions": [
+        "Retro does not fail due to missing git repo",
+        "Data collection notes that git history is unavailable",
+        "Analysis is based on conversation context",
+        "Retro is still saved to ~/.claude/retros/"
+      ]
+    }
+  ]
+}

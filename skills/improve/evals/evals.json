@@ -1,0 +1,54 @@
+{
+  "skill_name": "improve",
+  "evals": [
+    {
+      "id": 1,
+      "name": "apply-fix-recommendation",
+      "prompt": "Run /improve. The last retro recommended: Add 'Validation uses zod schemas in src/lib/validators.ts' to CLAUDE.md (P1, fix).",
+      "expected_output": "CLAUDE.md is edited with the new line, structural validation passes, change is accepted with diff stats.",
+      "assertions": [
+        "CLAUDE.md was modified",
+        "Structural validation (lint-definition.py) was run on the modified file",
+        "Report table shows the recommendation as 'accepted'",
+        "Report table includes a Diff column with lines added/removed",
+        "Improve outcome JSON was saved to ~/.claude/retros/ with 'type': 'improve'",
+        "Outcome JSON includes 'changes' array with per-file lines_added/lines_removed"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "revert-on-structural-failure",
+      "prompt": "Run /improve. The last retro recommended: Remove the description field from agents/planner.md frontmatter (P0, fix).",
+      "expected_output": "The edit is attempted, structural validation fails (missing required field), the change is reverted, and the file is restored.",
+      "assertions": [
+        "agents/planner.md was initially edited",
+        "Structural validation was run and returned an S-code error",
+        "The change was reverted — agents/planner.md is back to its original content",
+        "Report table shows the recommendation as 'reverted' with reason 'structural: fail'"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "short-circuit-patterns-only",
+      "prompt": "Run /improve. The last retro had only pattern recommendations (no fixes): 'When building new pages, search for existing similar pages first' (P2, pattern).",
+      "expected_output": "Apply-verify loop is skipped entirely. Pattern is saved to memory. No file edits.",
+      "assertions": [
+        "No source files were modified",
+        "A memory file was created or updated",
+        "MEMORY.md index was updated",
+        "Report shows 0 accepted, 0 reverted, 1 saved"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "rewrite-threshold",
+      "prompt": "Run /improve. The last retro produced 6 fix recommendations all targeting agents/staff-engineer.md.",
+      "expected_output": "Improve detects the rewrite threshold (5+ findings on same file) and recommends /review-skill instead of patching.",
+      "assertions": [
+        "agents/staff-engineer.md was NOT modified",
+        "Output recommends running /review-skill on the file",
+        "No individual patches were attempted"
+      ]
+    }
+  ]
+}

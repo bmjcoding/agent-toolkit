@@ -1,0 +1,72 @@
+---
+title: Self-Improvement System — Overview
+---
+graph TB
+    subgraph PRE["Pre-merge Gate"]
+        direction TB
+        CI["lint-definition.py --strict<br/>(CI check)"]
+        RS["/review-skill<br/>semantic review"]
+        CI -->|"0 errors"| RS
+        CI -->|"errors"| REJECT["❌ Reject"]
+        RS -->|"PASS"| MERGE["✅ Merge"]
+        RS -->|"NEEDS WORK"| IMP_NW["/improve<br/>(from review table)"]
+        RS -->|"REWRITE"| REJECT
+        IMP_NW -->|"fixes applied"| CI
+    end
+
+    subgraph EXEC["Execution"]
+        direction TB
+        FRANK["🔧 Orchestrator<br/>orchestrator"]
+        SINGLE["🔧 Single agent<br/>or skill"]
+        OTHER["🔧 Custom pipeline<br/>or subagent"]
+    end
+
+    subgraph DIAG["Diagnosis — /retro"]
+        direction TB
+        SCOPE["1. Scoping<br/>run type + subject"]
+        DATA["2. Data Collection<br/>git, artifacts, scripts"]
+        ANALYSIS["3. Analysis<br/>7 sections + deep dives"]
+        FINAL["4. Finalization<br/>validate, output, trends, save"]
+        SCOPE --> DATA --> ANALYSIS --> FINAL
+    end
+
+    subgraph TREAT["Treatment — /improve"]
+        direction TB
+        PARSE["1. Parse<br/>recommendations"]
+        LOOP["2. Apply-Verify Loop<br/>accept / revert"]
+        VER["3. Version Bump<br/>semver"]
+        PAT["4. Save Patterns<br/>to memory"]
+        SAVE_I["5. Save Outcome<br/>diffs + versions"]
+        PARSE --> LOOP --> VER --> PAT --> SAVE_I
+    end
+
+    subgraph STORE["Persistence — ~/.claude/retros/"]
+        direction LR
+        HIST["history.jsonl<br/>global trend index"]
+        SUBDIR["{subject}/<br/>retro .md + .json<br/>improve .json"]
+    end
+
+    FRANK -->|"Phase 7a: spawn<br/>autoresearch-analyst<br/>(retro mode)"| DIAG
+    SINGLE -->|"user types /retro"| DIAG
+    OTHER -->|"user types /retro"| DIAG
+
+    DIAG -->|"saves"| STORE
+    DIAG -->|"prompts user"| TREAT
+    TREAT -->|"saves"| STORE
+
+    TREAT -->|"next run improved"| EXEC
+    STORE -->|"trends feed<br/>next retro"| DIAG
+
+    classDef gate fill:#4a2040,stroke:#6b3060,color:#e2e8f0
+    classDef exec fill:#744210,stroke:#975a16,color:#e2e8f0
+    classDef diag fill:#1a365d,stroke:#2a4a7f,color:#e2e8f0
+    classDef treat fill:#1a4731,stroke:#2d6a4f,color:#e2e8f0
+    classDef store fill:#2d3748,stroke:#4a5568,color:#e2e8f0
+    classDef action fill:#991b1b,stroke:#dc2626,color:#e2e8f0
+
+    class CI,RS,IMP_NW gate
+    class FRANK,SINGLE,OTHER exec
+    class SCOPE,DATA,ANALYSIS,FINAL diag
+    class PARSE,LOOP,VER,PAT,SAVE_I treat
+    class HIST,SUBDIR store
+    class MERGE,REJECT action

@@ -1,0 +1,54 @@
+{
+  "skill_name": "review-skill",
+  "evals": [
+    {
+      "id": 1,
+      "name": "pass-well-structured-skill",
+      "prompt": "Run /review-skill on ~/.claude/skills/retro/SKILL.md",
+      "expected_output": "PASS verdict — no structural errors, instructions are actionable, output format defined.",
+      "assertions": [
+        "lint-definition.py reports 0 errors",
+        "Semantic review covers description, instructions, architecture, and completeness",
+        "Verdict is PASS"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "reject-garbage-skill",
+      "prompt": "Run /review-skill on this skill:\n---\nname: My Cool Skill\ndescription: Helps with stuff\n---\nThis skill helps you do things. Make sure to do them well. Ensure quality. Handle errors appropriately.",
+      "expected_output": "REWRITE verdict — name is invalid, description is vague, instructions are entirely declarative with no procedure.",
+      "assertions": [
+        "lint-definition.py reports at least 1 S-code error (name not kebab-case)",
+        "lint-definition.py reports Q03 warning (vague description)",
+        "lint-definition.py reports Q04 warning (no actionable steps)",
+        "Semantic review identifies instructions as declarative not procedural",
+        "Verdict is REWRITE (not NEEDS WORK — too many issues to patch)",
+        "Output includes an outline of what a good version would look like"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "needs-work-mediocre-skill",
+      "prompt": "Run /review-skill on a skill that has valid frontmatter and a decent workflow, but is missing gotchas, has no output template, and the description doesn't include trigger context.",
+      "expected_output": "NEEDS WORK verdict with a required changes table that /improve can consume.",
+      "assertions": [
+        "lint-definition.py reports 0 errors but 2+ warnings",
+        "Verdict is NEEDS WORK",
+        "Required changes table has columns: #, What, Where, Why, Priority, Type",
+        "Table is directly consumable by /improve (same format as retro recommendations)"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "agent-definition-review",
+      "prompt": "Run /review-skill on ~/.claude/agents/staff-engineer.md",
+      "expected_output": "Review covers agent-specific checks: tools scoping, maxTurns, disallowedTools, identity boundaries, handoff format.",
+      "assertions": [
+        "Review checks for tools/disallowedTools scoping",
+        "Review checks for maxTurns presence",
+        "Review checks for handoff/output format specification",
+        "S10 (name vs directory) is not flagged (agents live in flat agents/ dir)"
+      ]
+    }
+  ]
+}
