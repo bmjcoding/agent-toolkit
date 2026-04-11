@@ -10,7 +10,7 @@ skills:
   - changelog
 initialPrompt: |
   mkdir -p .orchestrator/{handoffs,context,logs} && git rev-parse --is-inside-work-tree 2>/dev/null && (grep -qxF '.orchestrator/' .gitignore 2>/dev/null || echo '.orchestrator/' >> .gitignore) || true
-# version: 1.7.0
+# version: 1.8.0
 ---
 
 # Frankenstein
@@ -76,6 +76,8 @@ Launch exploration agents — ALL in ONE message, `run_in_background: true`. Use
 - `frontend-engineer` — components, pages, routes, state, styling
 - `backend-engineer` — API endpoints, services, data shapes, hooks
 - `staff-engineer` — shared types, schemas, infra, config, build tools — **skip for small projects** (<20 source files or no infra/config layer). Fold its scope into the other two agents' prompts instead.
+
+**Explorer model override**: Exploration agents are read-only inventory agents — they run Glob/Grep/Read exclusively and produce markdown summary files. Dispatch them with `model: haiku` when the SDK supports per-dispatch model selection. These agents make no code decisions and do not require the reasoning depth of Sonnet. At current pricing (Sonnet $9/Mtok vs Haiku $3/Mtok), 3 explorer agents consume ~$2/run at Sonnet vs ~$0.67 at Haiku — a ~$1.35 per-session saving that compounds across all pipeline runs. Apply the same downgrade to `ST-1`-class subtasks that are pure git operations (commit/tag only).
 
 Tell each: "RESEARCH ONLY — do not write code." Each writes TWO files:
 1. `{domain}-summary.md` (max 100 lines) → `.orchestrator/context/` — for planner
@@ -189,6 +191,9 @@ When all reviewers complete:
 Only if not NO-SHIP.
 
 **5a**: Spawn `doc-writer` (handles README, CHANGELOG, API docs, and ADRs). Wait.
+
+**Post-delivery changelog rule**: After Phase 5a completes, any agent that commits code outside the main delivery pipeline (quality-fix agents, UI-iteration agents, hotfix agents) MUST be followed by a `release-engineer` dispatch to update CHANGELOG.md before the next commit. Do NOT batch post-delivery commits and update the changelog only at the final gate — this causes changelog entries to be missing for commits that landed between the delivery pipeline and the final gate. If a user commits inline (bypassing `release-engineer`), dispatch `release-engineer` immediately to backfill before proceeding to Phase 6.
+
 **5b**: Spawn `quality-engineer` in post-validation mode with this briefing: "POST-VALIDATION IS READ-ONLY for codebase and service files. Do NOT modify source code, test files, scripts, or configuration. You ARE permitted — and required — to write your handoff file to .orchestrator/handoffs/quality-engineer-post-validation.json. Read the compiled artifacts and run checks only." Wait. When reading the post-validation report, note: uncommitted doc files (CHANGELOG.md, docs/adr/*.md, README.md) after doc-writer are EXPECTED — do not flag these as findings. If post-validation reports non-doc failures (build errors, test failures, unexpected file changes), report to user and ask whether to re-enter the quality loop or proceed to Ship. Do not silently advance to Phase 6.
 
 **Handoff fallback**: If the post-validation agent's handoff file is missing (agent refused to write it despite the explicit carve-out), parse the `` ```handoff `` block from its return message. Construct the handoff JSON manually from message content if needed — do not block Phase 6 due to a missing handoff file when the agent's message clearly shows a PASS verdict.
