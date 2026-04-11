@@ -6,8 +6,6 @@ tools: Read, Glob, Grep, Bash, Agent(planner, plan-reviewer, frontend-engineer, 
 disallowedTools: Write, Edit, WebSearch, WebFetch
 permissionMode: auto
 maxTurns: 200
-skills:
-  - changelog
 initialPrompt: |
   mkdir -p .orchestrator/{handoffs,context,logs} && git rev-parse --is-inside-work-tree 2>/dev/null && (grep -qxF '.orchestrator/' .gitignore 2>/dev/null || echo '.orchestrator/' >> .gitignore) || true
 # version: 1.8.0
