@@ -49,6 +49,83 @@
         "Output recommends running /review-skill on the file",
         "No individual patches were attempted"
       ]
+    },
+    {
+      "id": 5,
+      "name": "p0-carve-out",
+      "prompt": "Run /improve. The last retro produced 6 fix recommendations all targeting agents/staff-engineer.md. One of them is P0: 'Remove the broken model field that causes crashes on startup.'",
+      "expected_output": "Improve detects the rewrite threshold but applies the single P0 finding, then stops and recommends /review-skill for the remaining 5 findings.",
+      "assertions": [
+        "agents/staff-engineer.md was modified exactly once (the P0 finding only)",
+        "Report table shows exactly 1 accepted change",
+        "Output recommends running /review-skill for the remaining findings",
+        "The 5 non-P0 findings were not applied"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "validate-converges",
+      "prompt": "Run /improve --validate. The last retro recommended: Add a gotchas section to agents/planner.md (P1, fix). When asked for max iterations, use the default (3).",
+      "expected_output": "Improve applies the fix, then runs review-skill on agents/planner.md. If review-skill returns PASS, validation converges in 1 iteration. Report shows both improve results and validation loop table.",
+      "assertions": [
+        "User was prompted for max validation iterations before the loop started",
+        "Inline review checks (linter + semantic review) were run on agents/planner.md without invoking the Skill tool",
+        "Validation loop report table is present with iteration count, reviewed, passed columns",
+        "Outcome JSON contains a 'validation' field with 'converged' and 'per_iteration' data",
+        "Only ONE outcome JSON file was created (not one per iteration)",
+        "Version was bumped exactly once (in the initial pass, not again in validation iterations)"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "validate-stops-on-rewrite",
+      "prompt": "Run /improve --validate. The last retro recommended 2 fixes targeting a poorly-written skill. After improve applies them, review-skill returns REWRITE. Max iterations: 3.",
+      "expected_output": "Validation loop exits immediately on REWRITE verdict without attempting further iterations. Reports the REWRITE verdict and recommends /review-skill for a full rewrite.",
+      "assertions": [
+        "Validation loop ran exactly 1 iteration (reviewed, got REWRITE, stopped)",
+        "Report shows stopped_reason as 'rewrite_verdict'",
+        "No second iteration was attempted",
+        "Output recommends running /review-skill for a full rewrite"
+      ]
+    },
+    {
+      "id": 8,
+      "name": "validate-no-double-version-bump",
+      "prompt": "Run /improve --validate. The last retro recommended: Add error handling guidance to agents/quality-engineer.md (P1, fix). After improve applies it (bumping 1.0.0 → 1.0.1), review-skill returns NEEDS WORK with 1 additional finding. The second iteration fixes it and review-skill returns PASS. Max iterations: 3.",
+      "expected_output": "Version is bumped once to 1.0.1 in the initial pass. The validation iteration applies the review-skill finding but does NOT bump the version again. Changelog has one entry, not two.",
+      "assertions": [
+        "agents/quality-engineer.md version is 1.0.1 (not 1.0.2)",
+        "agents/CHANGELOG.md has exactly one new entry for this improve run",
+        "Validation iteration did not call version bump step",
+        "Outcome JSON validation.per_iteration shows 2 iterations"
+      ]
+    },
+    {
+      "id": 9,
+      "name": "validate-all-patterns-short-circuit",
+      "prompt": "Run /improve --validate. The last retro had only pattern recommendations (no fixes): 'When building new pages, search for existing similar pages first' (P2, pattern).",
+      "expected_output": "Apply-verify loop is skipped entirely. Pattern is saved to memory. --validate has no effect message is shown. Validation loop is not started. No file edits.",
+      "assertions": [
+        "No source files were modified",
+        "A memory file was created or updated",
+        "MEMORY.md index was updated",
+        "Report shows 0 accepted, 0 reverted, 1 saved",
+        "Output informs user that '--validate has no effect — all recommendations are patterns'",
+        "Validation loop was not started"
+      ]
+    },
+    {
+      "id": 10,
+      "name": "validate-skip-heuristic",
+      "prompt": "Run /improve --validate. The last retro recommended: Add a gotcha about path resolution to skills/retro/SKILL.md (P2, fix). The edit adds 1 line to the Gotchas section and removes 0 lines.",
+      "expected_output": "Improve applies the additive-only gotcha edit. The --validate loop checks the skip heuristic: lines_removed==0 AND edit targets Gotchas section AND no workflow steps modified → loop is skipped with explanation. No validation iterations run.",
+      "assertions": [
+        "skills/retro/SKILL.md was modified (gotcha added)",
+        "Structural validation passed",
+        "Output includes skip message: 'Skipping --validate loop: all changes are additive-only edits to Gotchas/references sections'",
+        "Validation loop iteration table is NOT present in the report",
+        "Outcome JSON does not contain a 'validation' field (or contains validation.skipped: true)"
+      ]
     }
   ]
 }

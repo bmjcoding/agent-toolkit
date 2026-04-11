@@ -37,5 +37,5 @@ This provides a baseline. Override with the Tailwind ring utilities above when y
 ## Skip Link (if needed)
 
 ```
-sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-white focus:text-gray-950 focus:rounded-lg focus:shadow-sm
+sr-only focus-visible:not-sr-only focus-visible:absolute focus-visible:top-4 focus-visible:left-4 focus-visible:z-50 focus-visible:px-4 focus-visible:py-2 focus-visible:bg-white focus-visible:text-gray-950 focus-visible:rounded-lg focus-visible:shadow-sm
 ```

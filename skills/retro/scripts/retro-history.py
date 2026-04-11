@@ -240,7 +240,11 @@ def cmd_trends(args):
         if agents:
             series["agents_spawned"].append(agents)
 
-        qi = s.get("quality_iterations") or s.get("quality_loop_iterations")
+        qi = (
+            s.get("quality_iterations")
+            or s.get("quality_loop_iterations")
+            or (s.get("quality_loop") or {}).get("iterations")
+        )
         if qi:
             series["quality_iterations"].append(qi)
 

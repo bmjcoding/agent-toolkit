@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
 # Check: dark-mode-pairs
 # Detects color utilities missing dark: counterparts
-# Rule: Every bg- and text- color class needs a dark: pair
+# Rule: Every bg-, text-, border-, divide-, and ring- color class needs a dark: pair
 set -euo pipefail
+
+COLOR_NAMES='gray|red|green|blue|amber|orange|yellow|purple|pink|indigo|slate|zinc|neutral|stone'
+PREFIXES='bg|text|border|divide|ring'
 
 violations=0
 for file in "$@"; do
@@ -17,16 +20,20 @@ for file in "$@"; do
       prev_line="$line"
       continue
     fi
-    # Look for className strings containing bg- or text- color classes
-    if echo "$line" | grep -qE '(bg|text)-(gray|red|green|blue|amber|orange|yellow|purple|pink|indigo|slate|zinc|neutral|stone)-[0-9]'; then
-      # Check if the same line has a dark: counterpart
-      if ! echo "$line" | grep -qE 'dark:(bg|text)-'; then
-        match=$(echo "$line" | grep -oE '(bg|text)-(gray|red|green|blue|amber|orange|yellow|purple|pink|indigo|slate|zinc|neutral|stone)-[0-9]+' | head -1)
-        if [[ -n "$match" ]]; then
-          echo "$file:$line_num:$match"
-          violations=1
+    # Look for className strings containing bg-, text-, border-, divide-, or ring- color classes
+    if echo "$line" | grep -qE "(${PREFIXES})-(${COLOR_NAMES})-[0-9]"; then
+      # Check if the same line has a dark: counterpart for each prefix found
+      for prefix in bg text border divide ring; do
+        if echo "$line" | grep -qE "${prefix}-(${COLOR_NAMES})-[0-9]"; then
+          if ! echo "$line" | grep -qE "dark:${prefix}-"; then
+            match=$(echo "$line" | grep -oE "${prefix}-(${COLOR_NAMES})-[0-9]+" | head -1)
+            if [[ -n "$match" ]]; then
+              echo "$file:$line_num:$match"
+              violations=1
+            fi
+          fi
         fi
-      fi
+      done
     fi
     prev_line="$line"
   done < "$file"

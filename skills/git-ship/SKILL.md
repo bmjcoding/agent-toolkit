@@ -18,6 +18,7 @@ Unified git shipping workflow. Subcommand is inferred from `$ARGUMENTS`:
 | `pr` | Push + open PR only |
 | `merge` | Enable auto-merge on existing PR |
 | `cleanup` | Remove current worktree and branch |
+| `--force` (standalone) | **Guard**: warn "Did you mean `cleanup --force`?" and stop — do not route to Full Ship |
 | *(anything else or empty)* | Full ship: commit + push + open PR + optional auto-merge |
 
 Read `references/provider-detection.md` for GitHub vs Bitbucket DC API patterns. All commands are provider-aware.
@@ -36,6 +37,8 @@ On any failure, stop and report the error so the user can resume.
 
 ## Full Ship *(default)*
 
+**Pre-flight guard**: abort if current branch equals the default branch. Full Ship must not run on the default branch — use a feature branch.
+
 **Performance**: Minimize tool calls. Batch independent commands as parallel Bash calls. Chain dependent commands with `&&`. Target 4 or fewer total tool calls.
 
 ### Call 1 (parallel)
@@ -48,6 +51,8 @@ On any failure, stop and report the error so the user can resume.
 
 1. **Delete stale remote branches** (if any from Call 1): `git push origin --delete <branches>` — exclude default, current, `release/*`, `hotfix/*`
 2. **Commit** (skip if clean): stage changed files specifically (never `git add -A`), generate message matching repo style, append `Co-Authored-By: Claude <noreply@anthropic.com>`. Exclude sensitive files (`.env`, `*.key`, `*.pem`, `credentials.*`)
+
+**Empty-branch guard**: after Call 2, if no commit was created (working tree was already clean) and the branch has 0 commits ahead of the default branch, report "Nothing to ship" and stop. Do not proceed to Call 3.
 
 ### Call 3 (sequential chain)
 
@@ -63,9 +68,16 @@ Create PR. Parse branch/commits for issue refs (`#\d+`). See `references/provide
 
 **Auto-merge** (only if `--auto-merge` and not `--draft`): enable via provider API. See `references/provider-detection.md`.
 
-### Report
+### Output format
 
-Commit SHA, PR URL, auto-merge status, branches pruned.
+```
+| Item | Value |
+|---|---|
+| Commit | SHA |
+| PR | URL (or "existing: URL") |
+| Auto-merge | enabled / not requested / not supported |
+| Branches pruned | list or "none" |
+```
 
 ---
 
@@ -108,5 +120,6 @@ Remaining arguments: `--force`.
 - **`--force-with-lease` fails**: this means someone else pushed to the branch. Report it — don't escalate to `--force`.
 - **Worktree removal on current branch**: `git worktree remove` fails if you're inside the worktree. The cleanup flow handles this by `cd`-ing to main repo first.
 - **Bitbucket DC token expired**: `curl` calls return 401. Report "BITBUCKET_TOKEN may be expired" rather than generic "request failed."
+- **`--auto-merge` on repos with no required status checks**: the PR may merge immediately after creation. Before enabling auto-merge, warn the user: "This repo has no required status checks — enabling auto-merge may merge the PR instantly."
 
 $ARGUMENTS

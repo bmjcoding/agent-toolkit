@@ -1,0 +1,12 @@
+{
+  "bundleId": "infrastructure",
+  "name": "Infrastructure",
+  "description": "Infrastructure and observability patterns for SRE workflows — placeholder pending full item authoring.",
+  "items": [
+    { "category": "skill", "itemId": "infra",                      "required": true },
+    { "category": "skill", "itemId": "observability-patterns",     "required": true },
+    { "category": "agent", "itemId": "site-reliability-engineer",  "required": true }
+  ],
+  "tags": ["infrastructure", "observability", "sre"],
+  "status": "placeholder"
+}

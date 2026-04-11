@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { ChevronUp, ChevronDown } from 'lucide-react';
 
 interface Column<T> {
   key: keyof T & string;
   label: string;
   sortable?: boolean;
-  render?: (value: T[keyof T], row: T) => React.ReactNode;
+  render?: (value: T[keyof T], row: T) => ReactNode;
 }
 
 interface DataTableProps<T> {

@@ -22,6 +22,7 @@ Before generating any UI code, explicitly state:
 - No external UI libraries (no shadcn/ui, no Radix primitives, no Headless UI)
 - No inline styles — Tailwind classes only
 - No CVA (`class-variance-authority`) — not in dependency tree
+- **Color notation**: OKLCH exclusively — all color values use `oklch(L C H)` format (see `references/color-system.md`). Arbitrary hex values (`#FFF`, `#334155`) are banned.
 
 ## Token Quick-Ref
 
@@ -45,7 +46,7 @@ bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-
 
 **Hover row/item:**
 ```
-hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors
+hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors
 ```
 
 **Active/selected state:**
@@ -79,8 +80,8 @@ Every color utility MUST have a `dark:` counterpart. No exceptions.
 | Banned | Use Instead | Why |
 |--------|-------------|-----|
 | `rounded-md`, `rounded-sm` | `rounded-2xl`, `rounded-xl`, `rounded-lg` | Generic AI radius |
-| Arbitrary hex (`#FFF`, `#334155`) | Semantic Tailwind tokens | Breaks theming |
-| `shadow-md`, `shadow-lg`, `shadow-xl` | `shadow-sm` max, `hover:shadow-sm` | Too heavy |
+| Arbitrary hex (`#FFF`, `#334155`) | Semantic Tailwind tokens or OKLCH CSS variables | Breaks theming |
+| `shadow-md`, `shadow-lg`, `shadow-xl`, `shadow-2xl` | `shadow-sm` max, `hover:shadow-sm` | Too heavy |
 | Missing `dark:` pair | Always pair light + dark | Broken dark mode |
 | Explicit `font-sans` | Omit (inherited) | Unnecessary |
 | >3 non-gray colors in a view | Monochromatic + single accent | Color-busy |
@@ -137,7 +138,7 @@ Load the relevant reference based on what you're building:
 
 | Building... | Load |
 |-------------|------|
-| Any component | `references/components/INDEX.md` (always) |
+| Any component | `references/components/INDEX.md` (load first before other component references) |
 | Colors, tokens | `references/design-tokens.md` |
 | Color decisions, gamut | `references/color-system.md` |
 | Typography, fonts | `references/typography.md` |
@@ -161,3 +162,10 @@ Copy and adapt from `templates/` when building:
 - `data-table.tsx` — sortable table with hover rows
 - `stat-card-grid.tsx` — 3-col stat cards
 - `filter-bar.tsx` — configurable pill filter bar
+
+## Gotchas
+
+- Reference files (`references/`) may not exist in all projects — check before loading or skip gracefully.
+- Tokens like `bg-primary` and `text-primary` are relative to the project's CSS variable definitions; verify `--color-primary` is defined in the project's global CSS before using them.
+- Tailwind v4 uses CSS-native config — there is no `tailwind.config.js`. Class generation is driven by `@theme` blocks in CSS files.
+- OKLCH color values require a browser with wide-gamut support. All production deployments in this system target modern browsers; this is acceptable. Do not substitute oklch() with hex or rgb() equivalents.

@@ -416,8 +416,8 @@ def main():
     if not os.path.isdir(orch_dir):
         print(json.dumps({"error": f"Directory not found: {orch_dir}",
                           "hint": "Pass the orchestrator directory as an argument, "
-                                  "or run from the project root if using .orchestrator/"}),
-              indent=2)
+                                  "or run from the project root if using .orchestrator/"},
+                         indent=2))
         sys.exit(1)
 
     result = {

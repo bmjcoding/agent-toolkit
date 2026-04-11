@@ -53,6 +53,7 @@ Checks:
     Q12  No $ARGUMENTS in user-invocable skill
     Q13  No version defined (missing metadata.version or # version comment)
     Q14  Version unchanged but file has uncommitted modifications (git)
+    Q15  Eval file (evals/evals.json) has structural issues: wrong keys, non-sequential IDs, missing fields
 """
 
 import json
@@ -83,6 +84,9 @@ VAGUE_DESCRIPTION_PATTERNS = [
     r"^manage",
     r"^process",
     r"^handle",
+    r"^this (skill|agent) helps\b",
+    r"^a (skill|tool|agent) (for|that)\b",
+    r"^use this to\b",
 ]
 
 AGENT_KNOWLEDGE_PHRASES = [
@@ -313,12 +317,19 @@ def lint_file(filepath, file_type=None, base=None):
         always_words = set(w.lower() for w in always_patterns)
         never_words = set(w.lower() for w in never_patterns)
         conflicts = always_words & never_words
-        # Filter common false positives
-        conflicts -= {"the", "a", "an", "it", "this", "that", "to", "do", "be", "use", "run"}
+        # Filter common false positives — English stopwords and common tool names
+        conflicts -= {"the", "a", "an", "it", "this", "that", "to", "do", "be", "use", "run", "if", "in", "on", "for", "with", "from"}
+        conflicts -= {"git", "npm", "pip", "docker", "make", "bash", "python", "node", "yarn", "cargo"}
+        conflicts -= {"include", "specify", "commit", "add", "create", "write", "read", "check", "set", "call", "pass", "push", "pull", "modify", "change", "update", "delete", "remove"}
         if conflicts:
             warn("Q11", f"Potentially conflicting imperatives found — both ALWAYS and NEVER reference: {', '.join(sorted(conflicts)[:3])}")
 
     # Q12: Missing $ARGUMENTS
+    # Note: this check uses a full-content string match for "$ARGUMENTS". If $ARGUMENTS appears
+    # anywhere in the file — including in code examples, comments, or the body — the check will
+    # not fire. A skill author including $ARGUMENTS as a placeholder in a code block will
+    # suppress this warning without intending to. This is the correct behavior for real skills,
+    # but reviewers should be aware that Q12 is silenced by any occurrence of the string.
     if file_type == "skill":
         is_user_invocable = fm.get("user-invocable", "true").lower() != "false"
         disable_model = fm.get("disable-model-invocation", "false").lower() == "true"
@@ -360,13 +371,17 @@ def lint_file(filepath, file_type=None, base=None):
                 ["git", "diff", "--name-only", filepath],
                 capture_output=True, text=True, timeout=5,
             )
-            is_modified = diff_result.returncode == 0 and filepath.rstrip("/") in diff_result.stdout.strip()
+            is_modified = diff_result.returncode == 0 and any(
+                filepath.endswith(line) for line in diff_result.stdout.strip().splitlines() if line
+            )
             if not is_modified:
                 diff_staged = subprocess.run(
                     ["git", "diff", "--name-only", "--cached", filepath],
                     capture_output=True, text=True, timeout=5,
                 )
-                is_modified = diff_staged.returncode == 0 and filepath.rstrip("/") in diff_staged.stdout.strip()
+                is_modified = diff_staged.returncode == 0 and any(
+                    filepath.endswith(line) for line in diff_staged.stdout.strip().splitlines() if line
+                )
             diff_cmd = ["git", "diff", filepath]
 
         if is_modified and has_version:
@@ -379,6 +394,37 @@ def lint_file(filepath, file_type=None, base=None):
     except (subprocess.TimeoutExpired, FileNotFoundError):
         pass  # Not in a git repo or git not available — skip
 
+    # Q15: Eval file validation (skills only)
+    if file_type == "skill":
+        skill_dir = os.path.dirname(filepath)
+        eval_path = os.path.join(skill_dir, "evals", "evals.json")
+        if os.path.isfile(eval_path):
+            try:
+                with open(eval_path) as ef:
+                    eval_data = json.load(ef)
+                # Check top-level keys
+                if "skill_name" not in eval_data:
+                    warn("Q15", f"Eval file missing 'skill_name' key (found: {list(eval_data.keys())[:3]})")
+                if "evals" not in eval_data:
+                    warn("Q15", f"Eval file missing 'evals' key (found: {list(eval_data.keys())[:3]})")
+                elif isinstance(eval_data["evals"], list):
+                    evals = eval_data["evals"]
+                    # Check sequential IDs
+                    ids = [e.get("id") for e in evals if "id" in e]
+                    expected = list(range(1, len(ids) + 1))
+                    if ids != expected:
+                        warn("Q15", f"Eval IDs not sequential: {ids} (expected {expected})")
+                    # Check required fields per eval
+                    for e in evals:
+                        eid = e.get("id", "?")
+                        for field in ("name", "prompt", "assertions"):
+                            if field not in e:
+                                warn("Q15", f"Eval id={eid} missing required field '{field}'")
+                        if "assertions" in e and not e["assertions"]:
+                            warn("Q15", f"Eval id={eid} has empty assertions array")
+            except json.JSONDecodeError as je:
+                warn("Q15", f"Eval file is invalid JSON: {je}")
+
     return findings
 
 
@@ -390,7 +436,7 @@ def find_files(target):
         for fname in fnames:
             if fname == "SKILL.md":
                 files.append(os.path.join(root, fname))
-            elif fname.endswith(".md") and "/agents/" in os.path.join(root, fname):
+            elif fname.endswith(".md") and "/agents/" in os.path.join(root, fname) and fname != "CHANGELOG.md":
                 files.append(os.path.join(root, fname))
     return sorted(files)
 

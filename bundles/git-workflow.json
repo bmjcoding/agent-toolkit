@@ -1,0 +1,14 @@
+{
+  "bundleId": "git-workflow",
+  "name": "Git Workflow",
+  "description": "Git operations and shipping workflow covering branching safety, secrets scanning, and release mechanics.",
+  "items": [
+    { "category": "skill",   "itemId": "git-ship",          "required": true },
+    { "category": "skill",   "itemId": "changelog",         "required": true },
+    { "category": "command", "itemId": "git-verify",        "required": true },
+    { "category": "hook",    "itemId": "branch-guard",      "required": true },
+    { "category": "hook",    "itemId": "pre-push-secrets",  "required": true }
+  ],
+  "tags": ["git", "shipping", "version-control"],
+  "status": "stable"
+}

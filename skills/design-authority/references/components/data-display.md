@@ -79,6 +79,8 @@ inline-flex items-center px-2 py-0.5 text-xs font-medium rounded-full
 | Warning | `bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-300` |
 | Danger | `bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300` |
 
+**Note**: Badge tints (`bg-green-100`, `bg-amber-100`, etc.) use Tailwind named scale classes — this is an accepted exception to the OKLCH-first rule for tinted backgrounds. Do not replace these with OKLCH arbitrary values.
+
 ## Skeleton Loader
 
 ```

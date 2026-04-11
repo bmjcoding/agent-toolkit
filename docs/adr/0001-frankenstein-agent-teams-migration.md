@@ -61,15 +61,16 @@ Phase 7    Retrospective (autoresearch-analyst)
 
 | Hook | Script | Purpose |
 |------|--------|---------|
-| SessionStart | inline | Re-inject state.json after context compact |
 | SubagentStart | inject-context.sh | Context injection + orchestrator constraints |
 | SubagentStop | extract-handoff.sh | Extract handoff JSON to .orchestrator/handoffs/ |
 | PreToolUse | branch-guard.sh | Deny push to main/master |
 | PreToolUse | pre-push-secrets.sh | Gitleaks / regex secrets scan |
 | TaskCreated | inline | Log to tasks.log |
 | TaskCompleted | inline | Log to tasks.log |
-| TeammateIdle | prompt | Check plan.json for remaining tasks |
+| TeammateIdle | prompt | Future: check plan.json for remaining tasks (agent teams only — see below) |
 | FileChanged | inline | Warn on .env modification |
+
+**Note on TeammateIdle**: This hook is pre-wired for the [Agent Teams](https://code.claude.com/docs/en/agent-teams) migration. It is not a current Claude Code hook event — it will activate when agent teams is enabled. Until then it is inert in settings.json and does no harm. Do not remove it; it is part of the migration preparation.
 
 ## Decision
 
@@ -147,10 +148,9 @@ Organization uses tmux-based terminal setup. Agent teams support tmux split-pane
 |------|--------|
 | SubagentStart (inject-context.sh) | **Remove** -- replaced by shared team context |
 | SubagentStop (extract-handoff.sh) | **Remove** -- replaced by native mailbox |
-| TeammateIdle | **Keep** -- already wired for agent teams |
+| TeammateIdle | **Activate** -- already wired in settings.json, currently inert. Becomes active when agent teams is enabled. |
 | TaskCreated / TaskCompleted | **Promote** -- add integration-check trigger logic |
 | PreToolUse (branch-guard, secrets) | **Keep** -- orthogonal to agent model |
-| SessionStart (state.json) | **Keep** -- crash recovery until native resumption confirmed |
 
 ### Rollback
 
@@ -161,4 +161,4 @@ Agent `.md` definition files remain valid under both models. If agent teams prov
 - Agent definitions: `~/.claude/agents/` (symlinked from `claude-toolkit/agents/`)
 - Hook scripts: `~/.claude/hooks/`
 - Orchestrator runtime: `.orchestrator/` (per-project, gitignored)
-- Audit findings: `docs/FRANKENSTEIN-AUDIT.md`
+- Audit findings: summarized in `~/.claude/projects/-Users-bmj--claude/memory/reference_frankenstein_audit.md` (original audit doc retired; findings tracked in memory)

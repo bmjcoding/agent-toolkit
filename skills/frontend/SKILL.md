@@ -1,6 +1,6 @@
 ---
 name: frontend
-description: Lightweight frontend workflow — implement with design system enforcement, review, and lint. Use instead of the orchestrator pipeline for frontend-only changes.
+description: Lightweight frontend workflow — implement with design system enforcement, review, and lint. Use when making frontend-only changes without needing the full orchestrator pipeline.
 disable-model-invocation: true
 metadata:
   version: 1.0.0
@@ -21,6 +21,15 @@ Implement frontend changes with design system enforcement. Lighter than the full
    - Re-run `design-architect` to verify (max 1 retry)
 
 4. **Report**: Present results to the user. Do NOT commit, push, or create PRs — the user decides what to do next.
+
+## Output Format
+
+Present a brief summary: what was implemented, design-architect findings (pillar + severity), and whether the fix loop ran. No commit or PR actions taken.
+
+## Gotchas
+
+- Design review only covers changed files — pre-existing violations in untouched components are not reported.
+- Max 1 retry on the fix loop; unresolved design findings are surfaced to the user, not silently dropped.
 
 ## Task
 
