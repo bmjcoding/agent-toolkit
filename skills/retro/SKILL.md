@@ -13,13 +13,13 @@ metadata:
 Run a structured retrospective grounded in actual artifacts. Read everything before analyzing.
 
 **Depth calibration**: Scale the retro to the run. Use this default:
-- **Lightweight** (single agent, <5 files changed, no errors): sections 3.1, 3.2, 3.7, summary table. Skip verify-claims and parse-metrics scripts. Still save and check trends.
-- **Standard** (single agent/subagent with errors or rework, or any skill-based workflow): all applicable sections, run verify-claims.
+- **Lightweight** (single agent, <5 files changed, no errors): sections 3.1, 3.2, 3.7, summary table. Skip verify-claims and parse-metrics scripts. Still save and check trends. Recommendations in 3.7 must derive only from findings in 3.1 and 3.2 — do not invent root causes from sections that were skipped.
+- **Standard** (single agent/subagent with errors or rework, or any skill-based workflow): all applicable sections (3.5 only if multi-agent), run verify-claims.
 - **Full** (orchestration/pipeline, or any run with >3 findings): all sections, all scripts, trends.
 
 Always save to `~/.claude/retros/` regardless of depth — even lightweight retros contribute to trend analysis.
 
-Before writing, read the example matching your run type from `references/example-output.md` — Example A for single-agent, Example B for orchestration.
+Before writing, read the example matching your run type from `references/example-output.md` — Example A for single-agent, Example B for orchestration. For subagent runs, use Example A as the closest match — substitute subagent dispatch quality analysis for skill effectiveness.
 
 ## 1. Scoping
 
@@ -56,7 +56,16 @@ Read everything that exists. Skip what doesn't.
 3. Conversation history — task description, user interactions, errors encountered. If retro is invoked in a fresh session (no conversation history), rely on git history and orchestrator artifacts instead.
 
 **Orchestration / pipeline** (standard/full depth only):
-4. Run `python3 ${CLAUDE_SKILL_DIR}/scripts/parse-metrics.py [ORCHESTRATOR_DIR]` to generate structured metrics. Use the JSON output to ground analysis in data rather than re-parsing artifacts manually.
+4. Locate and run `parse-metrics.py` to generate structured metrics. Resolve path in this order:
+   - `~/.claude/skills/retro/scripts/parse-metrics.py` (canonical install path)
+   - `.claude/skills/retro/scripts/parse-metrics.py` (project-local install)
+   - Skip with warning if neither path exists
+   ```bash
+   METRICS_SCRIPT=$(find ~/.claude/skills/retro/scripts -name "parse-metrics.py" 2>/dev/null | head -1)
+   [ -z "$METRICS_SCRIPT" ] && METRICS_SCRIPT=$(find .claude/skills/retro/scripts -name "parse-metrics.py" 2>/dev/null | head -1)
+   [ -n "$METRICS_SCRIPT" ] && python3 "$METRICS_SCRIPT" [ORCHESTRATOR_DIR]
+   ```
+   Use the JSON output to ground analysis in data rather than re-parsing artifacts manually.
 5. If the script is unavailable or the directory doesn't exist, read artifacts directly: state files, plan files, agent logs, handoff files, backlog, prior attempts, exploration context.
 
 ## 3. Analysis
@@ -188,12 +197,22 @@ Common retro mistakes — read before analyzing:
 
 After completing the analysis, read `references/finalization.md` and follow all steps in order: validation, output formatting with summary table, trend analysis, and saving to `~/.claude/retros/`. All steps must complete before presenting the /improve prompt.
 
+Steps in order: (1) write draft to temp path (e.g., `/tmp/retro-draft-TIMESTAMP.md`) → (2) run verify-claims → (3) fix failures → (4) format output with summary table → (5) check trends → (6) save final to `~/.claude/retros/{subject}/`.
+
 ## Next Step
 
-If there are any `fix` type recommendations, prompt the user to invoke `/improve` themselves:
+If there are any `fix` type recommendations, prompt the user:
 
-> This retro produced N recommendations (N P0, N P1, N P2). Type `/improve` to apply them with verification, or "no" to skip.
+> This retro produced N recommendations (N P0, N P1, N P2).
+> - `/improve` — apply recommendations with verification
+> - `/improve --validate` — apply and validate with review-skill (you'll be asked for max iterations, default 3)
+> - "no" to skip
 
-**Important**: The user must type `/improve` directly — do not attempt to apply recommendations yourself or delegate to an agent. The `/improve` skill has its own accept/revert verification loop and saves the outcome to `~/.claude/retros/` for trend tracking. Applying fixes through any other mechanism (agent dispatch, manual edits) bypasses verification and outcome tracking.
+If there are 0 `fix` recommendations and only `pattern` recommendations, note:
+> No file changes needed — run `/improve` to save patterns to memory, or skip.
+
+If there are 0 recommendations of any type, skip the /improve prompt entirely.
+
+**Important**: The user must invoke `/improve` directly — do not attempt to apply recommendations yourself or delegate to an agent. The `/improve` skill has its own accept/revert verification loop and saves the outcome to `~/.claude/retros/` for trend tracking. Applying fixes through any other mechanism (agent dispatch, manual edits) bypasses verification and outcome tracking.
 
 $ARGUMENTS

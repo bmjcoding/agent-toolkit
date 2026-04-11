@@ -6,13 +6,14 @@ Read this after completing the analysis sections. Follow these steps in order.
 
 ## Validation
 
-*Standard/full depth only.* Before finalizing, write the retro draft to `~/.claude/retros/` and run the verification script:
+*Standard/full depth only.* Before finalizing, write the retro draft to a **temp path** and run the verification script:
 
 ```bash
-python3 ${CLAUDE_SKILL_DIR}/scripts/verify-claims.py ~/.claude/retros/YYYY-MM-DDTHHMMSS.md [--orch-dir DIR]
+python3 ${CLAUDE_SKILL_DIR}/scripts/verify-claims.py /tmp/retro-draft-TIMESTAMP.md [--orch-dir DIR]
+# fallback: python3 ~/.claude/skills/retro/scripts/verify-claims.py /tmp/retro-draft-TIMESTAMP.md [--orch-dir DIR]
 ```
 
-This checks that cited file paths exist, agent IDs match handoff files, git SHAs resolve, and severity counts match the backlog. Fix any failures before presenting the retro.
+This checks that cited file paths exist, agent IDs match handoff files, git SHAs resolve, and severity counts match the backlog. Fix any failures before saving to the canonical path. After all checks pass, move the draft to `~/.claude/retros/{subject}/TIMESTAMP.md` in the Save step — do not write to the final path before verification succeeds.
 
 Then manually cross-check what the script can't verify:
 
@@ -56,6 +57,7 @@ After producing the summary, check for historical retro data:
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/retro-history.py trends --history ~/.claude/retros --subject SUBJECT
+# fallback: python3 ~/.claude/skills/retro/scripts/retro-history.py trends --history ~/.claude/retros --subject SUBJECT
 ```
 
 Pass the subject identifier from the Scoping step. If history exists (2+ prior retros for this subject), include a **Trends** section after the summary table highlighting:
@@ -82,15 +84,35 @@ Files are organized by subject subdirectory: `~/.claude/retros/{subject}/`
 
 1. Create the subject directory: `mkdir -p ~/.claude/retros/{subject}`
 2. Write the full retro markdown to `~/.claude/retros/{subject}/YYYY-MM-DDTHHMMSS.md`
-3. Write the summary table metrics as JSON to `~/.claude/retros/{subject}/YYYY-MM-DDTHHMMSS.json` — include these fields:
+3. Write the summary table metrics as JSON to `~/.claude/retros/{subject}/YYYY-MM-DDTHHMMSS.json` — include these required fields plus all applicable metric fields below:
+
+   **Required fields** (always present):
    - `subject`: the retro subject identifier from Scoping
    - `version`: current `metadata.version` from the subject's primary definition file (if versioned)
    - `run_type`: orchestration / custom-pipeline / subagent / single-agent
    - `project`: git remote URL or project directory name
+
+   **Metric fields** (include when data is available; `retro-history.py trends` reads these exact key names):
+
+   | Key | Type | Description |
+   |---|---|---|
+   | `total_tokens` | integer | Total tokens consumed across all agents |
+   | `quality_iterations` | integer | Number of quality loop iterations (top-level, not nested) |
+   | `findings` | object | `{"critical": N, "high": N, "medium": N, "low": N}` |
+   | `model_downgrades_recommended` | integer | Number of model downgrade recommendations |
+   | `root_causes` | object | `{"prompt gap": N, "spec gap": N, ...}` — one key per root cause type found |
+   | `files_changed` | integer | Total files modified |
+   | `agents_spawned` | integer | Number of agents spawned (use 1 for single-agent runs) |
+   | `user_interventions` | integer | Total user interventions (planned + unplanned) |
+   | `estimated_cost_usd` | number | Estimated pipeline cost in USD |
+
+   Use `null` for fields where data is unavailable. Do not omit tracked metric fields — `null` is better than missing, because the trends script can distinguish "not logged" from "zero."
+
 4. Append to global trend history:
 
 ```bash
 python3 ${CLAUDE_SKILL_DIR}/scripts/retro-history.py save ~/.claude/retros/{subject}/YYYY-MM-DDTHHMMSS.json --history ~/.claude/retros
+# fallback: python3 ~/.claude/skills/retro/scripts/retro-history.py save ~/.claude/retros/{subject}/YYYY-MM-DDTHHMMSS.json --history ~/.claude/retros
 ```
 
 Use the current timestamp for the filename. The script appends to `~/.claude/retros/history.jsonl` (global, cross-subject). All writes must complete before moving on.

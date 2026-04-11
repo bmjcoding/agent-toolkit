@@ -70,4 +70,4 @@ curl -s -H "Authorization: Bearer $BITBUCKET_TOKEN" \
   "$BASE_URL/pull-requests?state=MERGED&at=refs/heads/{branch}"
 ```
 
-**Auto-merge**: Not supported natively. Inform the user.
+**Auto-merge**: Not supported natively. Inform the user and provide the PR URL so they can merge manually via the web UI: "Auto-merge is not supported on Bitbucket Data Center. Merge manually at: <PR URL>".

@@ -15,8 +15,8 @@ No chart library installed. D3 is used for topology visualization only, not for 
 | Primary series | Accent | `var(--color-primary)` | `text-primary` |
 | Secondary series | Gray 400 | `oklch(0.705 0 0)` | `text-gray-400` |
 | Tertiary series | Gray 300 | `oklch(0.785 0 0)` | `text-gray-300` |
-| Healthy | Green | `oklch(0.72 0.17 155)` | `text-green-600` |
-| Warning | Amber | `oklch(0.75 0.18 85)` | `text-amber-500` |
+| Healthy | Green | `oklch(0.72 0.17 145)` | `text-green-600` |
+| Warning | Amber | `oklch(0.75 0.15 85)` | `text-amber-500` |
 | Critical | Red | `oklch(0.63 0.19 25)` | `text-red-600` |
 | Grid lines | Gray 200 | `oklch(0.875 0 0)` | `stroke-gray-200` |
 | Axis labels | Gray 500 | `oklch(0.55 0 0)` | `text-gray-500` |

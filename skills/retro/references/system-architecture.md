@@ -1,6 +1,6 @@
 # Self-Improvement System Architecture
 
-Diagram: `references/system-map.png` (or render `references/system-map.mmd`)
+Diagram: `references/system-overview.svg` (or render `references/system-overview.mmd`)
 
 ## Components
 

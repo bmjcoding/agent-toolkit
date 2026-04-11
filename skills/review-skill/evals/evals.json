@@ -47,7 +47,32 @@
         "Review checks for tools/disallowedTools scoping",
         "Review checks for maxTurns presence",
         "Review checks for handoff/output format specification",
-        "S10 (name vs directory) is not flagged (agents live in flat agents/ dir)"
+        "S10 (name vs directory) is not flagged (S10 is skill-type-gated, skipped for agent definitions regardless of directory structure)"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "batch-review-directory",
+      "prompt": "Run /review-skill on ~/.claude/agents/ (the directory, not a single file).",
+      "expected_output": "Batch detection triggers. Multiple agent definitions are discovered and reviewed. A combined Batch Review Summary table and Consolidated Required Changes table are produced.",
+      "assertions": [
+        "Step 0 batch detection identified multiple .md files in the agents/ directory",
+        "Each definition was reviewed individually (linter + semantic review + verdict)",
+        "A Batch Review Summary table is present with File, Verdict, Structural, Quality columns",
+        "A Consolidated Required Changes table merges all NEEDS WORK findings into /improve-compatible format",
+        "PASS files are excluded from the Consolidated Required Changes table",
+        "REWRITE files are excluded from the Consolidated Required Changes table (noted separately)"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "batch-review-small-directory",
+      "prompt": "Run /review-skill on a directory containing exactly 2 skill definitions.",
+      "expected_output": "Batch detection finds 2-3 files and processes them sequentially (no parallel agent dispatch). Combined summary produced.",
+      "assertions": [
+        "Step 0 identified 2 files (below the 4+ threshold for parallel dispatch)",
+        "Files were processed sequentially, not via parallel agents",
+        "Both individual verdicts and a combined summary table are present"
       ]
     }
   ]

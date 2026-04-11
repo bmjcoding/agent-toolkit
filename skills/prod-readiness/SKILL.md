@@ -1,8 +1,9 @@
 ---
 name: prod-readiness
 description: >
-  Full production readiness check — build, lint, audit, test, simplify, validate, git verify,
-  and ship verdict. Use when preparing code for production or before shipping.
+  Full production readiness check — build, lint, audit, test, simplify, final validation (internal
+  phase, not a --validate flag), git verify, and ship verdict. Use when preparing code for
+  production or before shipping.
 disable-model-invocation: true
 argument-hint: "[--dry-run] [--ship [--draft] [--auto-merge]]"
 metadata:
@@ -21,11 +22,27 @@ Read `references/phases.md` for detailed phase instructions. Summary:
 
 1. **Phase 0 — Backlog check**: resolve previously-deferred items, flag carry-forwards
 2. **Phase 1 — Build**: fail-fast gate, fix up to 2 iterations
-3. **Phase 2+3 — Lint + Audit** (parallel): auto-fix, report unfixable
+3. **Phase 2 — Lint + Audit** (parallel): auto-fix, report unfixable
 4. **Phase 3 — Test**: green baseline, coverage gaps, iterate
 5. **Phase 4 — Simplify**: reuse, quality, efficiency. Guard: >10 files or >200 lines → defer
 6. **Phase 5 — Final validation**: re-run tests/linters/build, smoke test
 7. **Phase 6 — Git verification**: secrets scan (NO-SHIP condition), sensitive files, large files
+
+## Output format
+
+### Final Report
+
+| Phase | Key Metrics |
+|---|---|
+| Build | PASS/FAIL, size delta |
+| Lint | Issues fixed, standards violations, CVEs |
+| Audit | Found by severity, fixed |
+| Tests | Coverage %, flaky tests |
+| Simplify | Changes made, deferred |
+| Validation | Tests/Linter/Build/Smoke PASS/FAIL |
+| Git | Secrets, sensitive files, large files, commit quality |
+
+Remaining items: anything unresolved, with reason.
 
 ## Ship Verdict
 
@@ -49,26 +66,12 @@ VERDICT: NO-SHIP | SHIP WITH CAUTION | CLEAR TO SHIP
 [reasons]
 ```
 
-## Final Report
-
-| Phase | Key Metrics |
-|---|---|
-| Build | PASS/FAIL, size delta |
-| Lint | Issues fixed, standards violations, CVEs |
-| Audit | Found by severity, fixed |
-| Tests | Coverage %, flaky tests |
-| Simplify | Changes made, deferred |
-| Validation | Tests/Linter/Build/Smoke PASS/FAIL |
-| Git | Secrets, sensitive files, large files, commit quality |
-
-Remaining items: anything unresolved, with reason.
-
 ## Auto-ship
 
 If `$ARGUMENTS` contains `--ship`:
 
 - **CLEAR TO SHIP**: run `/git-ship` with any flags after `--ship` (e.g., `--ship --draft`)
-- **SHIP WITH CAUTION**: print warnings, then run `/git-ship`
+- **SHIP WITH CAUTION**: print warnings, then ask "Ship with these warnings? (yes/no)". Wait for the user's response. If yes, run `/git-ship`. If no, stop.
 - **NO-SHIP**: stop. Print blocking reasons.
 
 If `--ship` not present, print verdict and stop.
@@ -88,5 +91,6 @@ Each entry: severity, file, one-line description, phase that flagged it, date. M
 - **Bundle size delta requires base branch**: if the base branch build isn't cached, this adds significant time. Skip delta if base build fails and note "no baseline available."
 - **Flaky tests contaminate the verdict**: always separate flaky from real failures. A flaky test is not a NO-SHIP condition.
 - **Secrets scan is absolute**: even a revoked key in a test fixture is a NO-SHIP. The key may be in git history forever.
+- **`--dry-run` scope**: in `--dry-run` mode, auto-fix phases (lint, audit, simplify) report findings only — no writes to source files. Build and final validation still execute normally. `/git-ship` is not run even if `--ship` is present.
 
 $ARGUMENTS

@@ -1,0 +1,2 @@
+# Integrity baseline — contains local absolute paths, must not be committed
+.security/

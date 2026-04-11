@@ -13,7 +13,7 @@
         "Output contains a summary table with Run type, Subject, and Files changed",
         "Output does NOT contain a per-agent metrics table (single agent, no structured logs)",
         "Output contains a header line with subject and date (# Retro: ...)",
-        "Retro mentions model selection — a 3-variable rename on Opus is a downgrade candidate"
+        "Section 3.7 includes a recommendation to consider model downgrade for simple tasks"
       ]
     },
     {
@@ -47,7 +47,7 @@
         "Trends were checked via retro-history.py with --subject flag",
         "Full retro markdown saved to ~/.claude/retros/",
         "Summary JSON saved with subject, run_type, and project fields",
-        "Output ends with /improve prompt"
+        "Output does NOT end with /improve prompt (orchestrator handles the gate)"
       ]
     },
     {

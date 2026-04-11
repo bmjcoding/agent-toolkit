@@ -78,15 +78,16 @@ def extract_file_paths(content):
         candidate = match.group(1)
         # Filter out things that look like paths but aren't
         if "/" in candidate and not candidate.startswith("http"):
-            # Strip leading ./ or ./
-            candidate = candidate.lstrip("./")
+            # Strip leading ./ only — do not use lstrip which would also eat
+            # the leading / from absolute paths like /Users/...
+            candidate = candidate[2:] if candidate.startswith("./") else candidate
             paths.add(candidate)
 
     # Bare paths in table cells (between |)
     for match in re.finditer(r"\|\s*([^\|`]+\.[a-zA-Z]{1,5})\s*\|", content):
         candidate = match.group(1).strip()
         if "/" in candidate and not candidate.startswith("http"):
-            candidate = candidate.lstrip("./")
+            candidate = candidate[2:] if candidate.startswith("./") else candidate
             paths.add(candidate)
 
     return paths
@@ -141,6 +142,37 @@ def extract_severity_counts(content):
     }
 
 
+def is_likely_sha(candidate, source_line):
+    """Filter CSS hex colors and non-SHA hex strings from commit SHA candidates.
+
+    Returns True if the candidate looks like a real git commit SHA,
+    False if it appears to be a CSS hex color or other non-SHA hex value.
+
+    Rules applied (in order):
+    1. Pure digit strings are not SHAs (already pre-filtered, but guard here too).
+    2. If the character immediately before the candidate in the source line is '#',
+       it is a CSS/markdown color literal (e.g. #f2f2f2, #0ea5e9).
+    3. Six-character hex strings (exact CSS color length) in lines that contain
+       CSS property keywords are treated as CSS colors, not SHAs. Git short SHAs
+       are typically 7+ characters; 6-char is exclusively CSS hex color territory.
+    """
+    if candidate.isdigit():
+        return False
+
+    # Check for '#' immediately before the candidate in the line
+    idx = source_line.find(candidate)
+    if idx > 0 and source_line[idx - 1] == '#':
+        return False
+
+    # 6-character hex strings in CSS contexts are colors, not SHAs
+    if len(candidate) == 6:
+        css_ctx = ('color:', 'background:', 'border:', 'fill:', 'stroke:', '#')
+        if any(c in source_line.lower() for c in css_ctx):
+            return False
+
+    return True
+
+
 def verify_file_paths(paths):
     """Check which cited file paths exist on disk."""
     existing = []
@@ -157,7 +189,7 @@ def verify_file_paths(paths):
             candidates.append(os.path.join(home, ".claude", p))
 
         for candidate in candidates:
-            if os.path.exists(candidate):
+            if os.path.exists(os.path.expanduser(candidate)):
                 existing.append(p)
                 found = True
                 break
@@ -174,15 +206,25 @@ def verify_file_paths(paths):
 
 
 def verify_git_commits(content):
-    """Check that any cited git SHAs actually exist."""
-    # Match 7-40 char hex strings that look like commit SHAs
-    sha_pattern = re.finditer(r"\b([0-9a-f]{7,40})\b", content)
+    """Check that any cited git SHAs actually exist.
+
+    Uses is_likely_sha() to filter CSS hex color strings (e.g. f2f2f2, 1e293b,
+    0ea5e9) from candidates before making any subprocess calls. The filter checks
+    per-line context so that '#'-preceded hex and 6-char hex in CSS property lines
+    are excluded without running git cat-file on them.
+    """
+    sha_re = re.compile(r"\b([0-9a-f]{7,40})\b")
     cited_shas = set()
 
-    for match in sha_pattern:
-        candidate = match.group(1)
-        # Filter out things that are probably not SHAs
-        if len(candidate) >= 7 and not candidate.isdigit():
+    for line in content.splitlines():
+        for match in sha_re.finditer(line):
+            candidate = match.group(1)
+            # Pre-filter: pure digits are not SHAs
+            if candidate.isdigit():
+                continue
+            # Apply CSS/context filter using the full source line
+            if not is_likely_sha(candidate, line):
+                continue
             cited_shas.add(candidate)
 
     if not cited_shas:

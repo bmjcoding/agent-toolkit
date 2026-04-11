@@ -10,7 +10,7 @@ Read `.claude/backlog.md` if it exists. Check whether any previously-deferred it
 
 Detect project type and run the appropriate build. Fix build errors up to 2 iterations. If still broken, stop and report.
 
-## Phase 2+3: Lint and Audit (parallel)
+## Phase 2: Lint and Audit (parallel)
 
 Run lint and audit in parallel — they are independent:
 

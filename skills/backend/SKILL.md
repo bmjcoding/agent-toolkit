@@ -1,6 +1,6 @@
 ---
 name: backend
-description: Lightweight backend workflow — implement with convention awareness, security review, and lint. Use instead of the orchestrator pipeline for backend-only changes.
+description: Lightweight backend workflow — implement with convention awareness, security review, and lint. Use when making backend-only changes without needing the full orchestrator pipeline.
 disable-model-invocation: true
 metadata:
   version: 1.0.0
@@ -21,6 +21,15 @@ Implement backend changes with security enforcement. Lighter than the full orche
    - Re-run `security-engineer` to verify (max 1 retry)
 
 4. **Report**: Present results to the user. Do NOT commit, push, or create PRs.
+
+## Output Format
+
+Present a brief summary: what was implemented, any security findings (severity + category), and whether the fix loop ran. No commit or PR actions taken.
+
+## Gotchas
+
+- Security review only covers changed files — pre-existing vulnerabilities in untouched files are not reported.
+- Max 1 retry on the fix loop; unresolved critical findings are surfaced to the user, not silently dropped.
 
 ## Task
 

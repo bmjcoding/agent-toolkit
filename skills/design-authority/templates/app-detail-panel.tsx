@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 
 interface AppDetailPanelProps {
   title: string;
   subtitle?: string;
   tabs: readonly string[];
-  children: (activeTab: string) => React.ReactNode;
+  children: (activeTab: string) => ReactNode;
 }
 
 export function AppDetailPanel({ title, subtitle, tabs, children }: AppDetailPanelProps) {
@@ -33,7 +33,7 @@ export function AppDetailPanel({ title, subtitle, tabs, children }: AppDetailPan
               activeTab === tab
                 ? 'font-medium text-primary dark:text-primary-light border-primary dark:border-primary-light'
                 : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 border-transparent'
-            } focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2`}
+            } focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-primary-light focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-950`}
           >
             {tab}
           </button>

@@ -17,9 +17,9 @@ for file in "$@"; do
       prev_line="$line"
       continue
     fi
-    # Match arbitrary z-index: z-[999], z-[9999], etc.
-    if echo "$line" | grep -qE 'z-\[[0-9]+\]'; then
-      match=$(echo "$line" | grep -oE 'z-\[[0-9]+\]' | head -1)
+    # Match arbitrary z-index: z-[999], z-[var(--z)], z-[calc(...)], etc.
+    if echo "$line" | grep -qE 'z-\['; then
+      match=$(echo "$line" | grep -oE 'z-\[[^]]+\]' | head -1)
       echo "$file:$line_num:$match"
       violations=1
     fi

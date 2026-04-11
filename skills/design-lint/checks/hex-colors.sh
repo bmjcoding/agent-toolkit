@@ -18,8 +18,8 @@ for file in "$@"; do
       prev_line="$line"
       continue
     fi
-    # Skip comments and imports
-    if [[ "$line" =~ ^[[:space:]]*(//|\*|import) ]]; then
+    # Skip comments and imports (line comments, block comment lines, block comments, imports)
+    if [[ "$line" =~ ^[[:space:]]*(//|\*|/\*|import) ]]; then
       prev_line="$line"
       continue
     fi
