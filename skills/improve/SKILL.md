@@ -8,7 +8,7 @@ disable-model-invocation: true
 model: sonnet
 argument-hint: "[retro-output or recommendation] [--validate] [--skip-validation]"
 metadata:
-  version: 1.0.0
+  version: 1.1.0
 ---
 
 # Improve
@@ -119,19 +119,26 @@ Record the old and new version for each file in the report and outcome JSON.
 
 #### f. Changelog entry (accepted changes only)
 
-After bumping the version, append a changelog entry for the change:
+After bumping the version, append a changelog entry to the component's own `CHANGELOG.md`:
 
-- **Skills**: append to the skill's `CHANGELOG.md` (e.g., `skills/retro/CHANGELOG.md`)
-- **Agents**: append to `agents/CHANGELOG.md` under the agent's section
-- **Commands**: append to `commands/CHANGELOG.md` under the command's section
-- **Reference files and scripts inside a skill directory** (`skills/{name}/references/`, `skills/{name}/scripts/`): append to that skill's `CHANGELOG.md` (e.g., `skills/prod-readiness/CHANGELOG.md`), not the global one
-- **All other files** (e.g., `CLAUDE.md`, memory files, global scripts, hooks, docs): append to `~/.claude/CHANGELOG.md`. Create it with a `# Changelog — ~/.claude` header if it doesn't exist.
+- **Skills**: `skills/{name}/CHANGELOG.md`
+- **Agents**: `agents/{name}/CHANGELOG.md`
+- **Commands**: `commands/{name}/CHANGELOG.md`
+- **Hooks**: `hooks/{name}/CHANGELOG.md`
+- **Rules**: `rules/{name}/CHANGELOG.md`
+- **Reference files and scripts inside a component directory** (e.g., `skills/{name}/references/`, `agents/{name}/evals/`): append to that component's `CHANGELOG.md`, not a global one
+- **All other files** (e.g., `CLAUDE.md`, memory files, global scripts, docs): append to `~/.claude/CHANGELOG.md`. Create it with a `# Changelog — ~/.claude` header if it doesn't exist.
 
-Format:
+Every component has its own `CHANGELOG.md` in its subdirectory. There are NO aggregated changelogs — do not write to `agents/CHANGELOG.md` or `commands/CHANGELOG.md` at the category root level.
+
+Changelog format (Claude Code style):
 ```
-### X.Y.Z — YYYY-MM-DD
-- What was changed and why (one line per recommendation applied)
+## VERSION
+
+- Verb-prefixed one-liner description
 ```
+
+No dates in headers. Flat bullets with verb prefixes (Added, Fixed, Improved, Changed, Removed).
 
 If the changelog file doesn't exist, create it with a header line.
 
