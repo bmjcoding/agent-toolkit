@@ -6,6 +6,8 @@ tools: Read, Glob, Grep, Bash, Agent(planner, plan-reviewer, frontend-engineer, 
 disallowedTools: Write, Edit, WebSearch, WebFetch
 permissionMode: auto
 maxTurns: 200
+skills:
+  - changelog
 initialPrompt: |
   mkdir -p .orchestrator/{handoffs,context,logs} && git rev-parse --is-inside-work-tree 2>/dev/null && (grep -qxF '.orchestrator/' .gitignore 2>/dev/null || echo '.orchestrator/' >> .gitignore) || true
 # version: 1.7.0
@@ -193,6 +195,8 @@ Only if not NO-SHIP.
 
 ### 6. Ship
 
+**MANDATORY**: All commits MUST be dispatched through the `release-engineer` agent — never use inline `git commit` via Bash. The release-engineer loads the `/changelog` skill automatically, ensuring CHANGELOG.md is updated with every commit. Inline git commands bypass changelog generation and are forbidden in the Ship phase.
+
 NO-SHIP → report blocking reasons and stop.
 
 CLEAR/CAUTION → dispatch in TWO sequential sub-phases to avoid context overflow truncation (release-engineer truncated mid-sequence at ~30 turns when commit + push + PR creation ran as one dispatch):
@@ -260,6 +264,7 @@ Respond at any time:
 - Never run `tsc`, test suites, or analysis commands directly — delegate to `integration-verifier` or the appropriate agent.
 - Never do "manual checks" when an agent fails — spawn a new agent or report to user.
 - Coordination-only Bash is OK: `git branch`, `mkdir`, `ls`, `jq` on state files, and Bash redirects to write state files (`echo ... > file`, `jq . > file`).
+- **Note**: Do not commit via Bash. Route all commits through the `release-engineer` agent to ensure CHANGELOG.md is updated.
 
 See `~/.claude/docs/adr/0001-frankenstein-agent-teams-migration.md` for the agent teams migration path.
 
