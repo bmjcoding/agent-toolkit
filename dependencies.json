@@ -18,16 +18,49 @@
     ],
     "note": "Frankenstein orchestrator dispatches to all sub-agents"
   },
-  "skill/retro": {
-    "requires": ["agent/autoresearch-analyst"],
-    "note": "Retro skill is loaded by autoresearch-analyst agent"
+  "agent/autoresearch-analyst": {
+    "requires": [
+      "skill/retro",
+      "skill/improve",
+      "skill/review-skill"
+    ],
+    "note": "autoresearch-analyst loads retro, improve, and review-skill skills"
   },
-  "skill/improve": {
-    "requires": ["agent/autoresearch-analyst"],
-    "note": "Improve skill is loaded by autoresearch-analyst agent"
+  "agent/design-architect": {
+    "requires": [
+      "skill/design-lint",
+      "skill/design-authority"
+    ],
+    "note": "design-architect loads design-lint (structural checks) and design-authority (UI/design reference) skills"
+  },
+  "agent/frontend-engineer": {
+    "requires": [
+      "skill/design-authority"
+    ],
+    "note": "frontend-engineer loads design-authority skill for design system awareness"
   },
   "agent/release-gate": {
-    "requires": ["skill/prod-readiness"],
-    "note": "Release gate runs prod-readiness checks"
+    "requires": [
+      "skill/prod-readiness"
+    ],
+    "note": "release-gate runs prod-readiness checks"
+  },
+  "agent/security-engineer": {
+    "requires": [
+      "skill/owasp-reference"
+    ],
+    "note": "security-engineer loads owasp-reference skill for STRIDE/OWASP review"
+  },
+  "agent/site-reliability-engineer": {
+    "requires": [
+      "skill/observability-patterns"
+    ],
+    "note": "site-reliability-engineer loads observability-patterns skill"
+  },
+  "agent/release-engineer": {
+    "requires": [
+      "skill/changelog"
+    ],
+    "note": "release-engineer loads changelog skill for pre-commit changelog generation"
   }
 }
