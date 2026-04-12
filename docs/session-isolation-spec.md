@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Session isolation matters because multiple Frankenstein runs on the same project accumulate findings in one flat backlog file. Without a session identifier, it is impossible to filter, prune, or report on findings from a specific run, or to distinguish carry-forward items from newly discovered ones. The `session_id` column in the unified 12-column schema allows per-session filtering and reporting without destroying cross-session history. This document defines the SESSION_ID format, the v1 flat-file convention, the deferred v2 per-session directory layout, and the carry-forward protocol.
+Session isolation matters because multiple Frankenstein runs on the same project accumulate findings in one flat backlog file. Without a session identifier, it is impossible to filter, prune, or report on findings from a specific run, or to distinguish carry-forward items from newly discovered ones. The `session_id` column in the unified 12-column schema allows per-session filtering and reporting without destroying cross-session history. This document defines the SESSION_ID format, the v1 flat-file convention, the per-session directory layout, and the carry-forward protocol.
 
 ---
 
@@ -16,14 +16,16 @@ YYYYMMDDTHHMMSS
 
 Example value: `20260411T143022`
 
-**Storage**: written to `.orchestrator/session.id` as a plain-text file — a single line with no trailing newline padding.
+**Storage**: written to `.orchestrator/session.id` as a plain-text file — a single line with no trailing newline.
 
-**Generation command** (SPEC ONLY — Frankenstein Phase 0 does not yet run this command; a future task will wire it in):
+**Generation command** (implemented 2026-04-12 — wired in Frankenstein Phase 0; cross-reference: frankenstein.md Phase 0 and the 4 updated hooks):
 
 ```bash
 SESSION_ID=$(date '+%Y%m%dT%H%M%S')
-echo "$SESSION_ID" > .orchestrator/session.id
+printf '%s' "$SESSION_ID" > .orchestrator/session.id
 ```
+
+> **Note:** Using `printf '%s'` ensures no trailing newline, which is required for the hook-side regex format validation `^[0-9]{8}T[0-9]{6}$` to match.
 
 ---
 
@@ -41,11 +43,9 @@ The `/backlog` slash command reads `.claude/backlog.md`. Items written by the sl
 
 ---
 
-## Per-Session Layout (v2, DEFERRED)
+## Per-Session Layout
 
-> **DEFERRED**: v2 is not implemented in this release. This section defines the target state for a future task.
-
-In v2, each Frankenstein session writes to its own subdirectory under `.orchestrator/sessions/`:
+Each Frankenstein session writes to its own subdirectory under `.orchestrator/sessions/`:
 
 ```
 .orchestrator/sessions/<SESSION_ID>/backlog.md   # per-session findings
@@ -57,13 +57,21 @@ This layout enables per-session archiving, parallel session safety (each session
 
 ---
 
-## Merge Protocol (v2, DEFERRED)
+## Flat Path Exceptions
 
-> **DEFERRED**: Not implemented.
+The following paths are intentionally flat (not nested under `.orchestrator/sessions/<SESSION_ID>/`) because they serve cross-session or bootstrap roles:
 
-The four-step merge protocol for v2:
+- `.orchestrator/lock.d` — cross-session atomic mutex, acquired BEFORE SESSION_ID is generated. Using an atomic `mkdir` here prevents TOCTOU races when multiple Frankenstein sessions start simultaneously on the same project directory.
+- `.orchestrator/backlog.md` — cross-session merged backlog; session findings accumulate here; remains flat so `/backlog --sync` has a stable path regardless of which session is active.
+- `.orchestrator/session.id` — bootstrap sentinel; hooks read this to resolve the per-session root; cannot itself live inside the per-session root because it must be readable before the per-session root is known.
 
-1. On Frankenstein startup (Phase 0), read `.orchestrator/backlog.md` to load carry-forward items — rows with status `open` or `blocked` from previous sessions.
+---
+
+## Merge Protocol
+
+The four-step merge protocol:
+
+1. On Frankenstein startup (Phase 0), read `.orchestrator/backlog.md` to load carry-forward items — rows with status `open`, `blocked`, or `in-progress` from previous sessions.
 2. Seed the new session backlog at `.orchestrator/sessions/<SESSION_ID>/backlog.md` with carry-forward items plus new findings from this session's handoffs.
 3. At Phase 4 completion, merge back into `.orchestrator/backlog.md`: for rows with a matching `finding_id`, update `status` and `added_at`; for rows with no match, append as new rows.
 4. Mark prior-session rows that were not re-reported in this session as `resolved` if the underlying file no longer contains the violation (verified by file content check, not by absence from handoffs alone).
@@ -76,13 +84,14 @@ The four-step merge protocol for v2:
 - All pipeline-seeded rows in `.orchestrator/backlog.md` carry this `session_id` in the last column.
 - Rows written by the `/backlog` slash command carry empty `session_id`.
 - To filter a specific session: `grep '<SESSION_ID>' .orchestrator/backlog.md`
-- Because Phase 0 does not yet generate `.orchestrator/session.id`, all rows seeded by the current release carry an empty `session_id`. Per-session filtering is available once Phase 0 wires in the SESSION_ID generation command above.
+- Phase 0 generates `.orchestrator/session.id` as of 2026-04-12. All rows seeded by the current release carry the session's SESSION_ID. Per-session filtering is available.
 
 ---
 
 ## Carry-Forward Convention
 
-- Any row in `.orchestrator/backlog.md` with status `open` or `blocked` is a carry-forward item at the start of a new session.
+- Any row in `.orchestrator/backlog.md` with status `open`, `blocked`, or `in-progress` is a carry-forward item at the start of a new session.
+  - `in-progress`: Items claimed by an agent mid-session but not yet complete — carrying forward preserves the active-work marker across session boundaries.
 - Carry-forward items retain their original `session_id`; they are not re-assigned to the new session's ID.
 - The quality-engineer agent should read `.orchestrator/backlog.md` at Phase 4 start to load carry-forward items before processing new findings from handoffs, preventing duplicate entries for unresolved findings.
 - Items with status `resolved`, `wont-fix`, `deferred-env`, or `deferred-session` are not carry-forward items and should not be re-processed by the new session.

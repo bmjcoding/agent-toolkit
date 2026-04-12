@@ -23,7 +23,7 @@ If a file you open describes a planned or deferred capability (e.g., a session-i
 ## Workflow
 
 1. Run `git diff --name-only HEAD` to see what changed
-2. Read `.orchestrator/plan.json` for scope
+2. Read `.orchestrator/sessions/$SID/plan.json` for scope
 3. Check if new dependencies were added: `git diff HEAD -- package.json pyproject.toml Cargo.toml go.mod requirements.txt`
 
 ## Security Review

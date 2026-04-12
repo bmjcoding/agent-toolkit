@@ -6,6 +6,7 @@
 # RT-MSA-004 fix: scan full git history (--log-opts=HEAD), not just working tree.
 # .orchestrator/handoffs/ is excluded to avoid false positives from security
 # findings text that intentionally references secret-like patterns.
+# Session-scoped handoff paths (.orchestrator/sessions/*/handoffs/) are also excluded.
 set -uo pipefail
 
 deny() {
@@ -22,8 +23,9 @@ deny() {
 if command -v gitleaks >/dev/null 2>&1; then
   # Build a temp ignore file for paths that produce intentional false positives.
   # handoffs/ files contain security findings text with secret-like patterns.
+  # Covers both flat layout and session-scoped layout.
   GL_IGNORE=$(mktemp /tmp/gitleaks-ignore-XXXXXX)
-  printf '.orchestrator/handoffs/**\n' > "$GL_IGNORE"
+  printf '.orchestrator/handoffs/**\n.orchestrator/sessions/*/handoffs/**\n' > "$GL_IGNORE"
 
   # Scan full git history from HEAD. --log-opts=HEAD covers all reachable commits,
   # catching secrets that were committed and later deleted from the working tree.

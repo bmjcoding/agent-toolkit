@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.8.0] - 2026-04-12
+
+### Added
+
+- `in-progress` status value recognized in Phase 4 carry-forward logic; rows with this status are retained across sessions alongside `open` and `blocked` (CLAUD-009).
+- `/backlog --sync` pull-only dedup protocol documented in Phase 5a dispatch instructions; doc-writer now receives `--sync` semantics for post-session backlog maintenance (CLAUD-002).
+
+### Changed
+
+- agents.log entries standardized to JSON via `jq -c` for machine-readable pipeline cost and status reporting (sre-005).
+
+### Security
+
+- SID path segments validated against `^[0-9]{8}T[0-9]{6}$` in hook resolution logic; malformed values fall back to flat `.orchestrator/` path (sre-high-2, sre-high-3).
+- `session.id` file added to protected-file list; agents may not overwrite it mid-run.
+
 ## [1.7.0] - 2026-04-12
 
 ### Added
@@ -86,7 +102,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.7.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.8.0...HEAD
+[1.8.0]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.7.0...frankenstein-v1.8.0
 [1.7.0]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.6.0...frankenstein-v1.7.0
 [1.6.0]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.5.0...frankenstein-v1.6.0
 [1.5.0]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.4.0...frankenstein-v1.5.0

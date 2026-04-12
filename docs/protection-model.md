@@ -41,7 +41,7 @@ The Claude Code control plane consists of files that govern agent behavior, perm
 | `~/.claude/agents/` (directory) | L1 (PROTECTED regex), L2 (implicit via hooks/ protection) | CLAUD-002, CLAUD-007 | Agent definitions modified to remove security boundaries, expand permissions, or inject persistent behavioral instructions |
 | `~/.claude/statusline-command.sh` | L1 (PROTECTED regex) | HB-009 | Status line script replaced with attacker-controlled command executing in every session |
 | `claude-toolkit/` (real path, all subdirs) | L1 (PROTECTED regex covers `claude-toolkit/`) | HB-010 | Symlink bypass: L1 v1 covered only `~/.claude/` symlink paths; real path not protected, allowing writes via resolved path to succeed silently |
-| `~/.orchestrator/logs/` | L1 (PROTECTED regex) | R-01 | Audit log truncated or replaced; security incident evidence destroyed; append-only guarantee violated |
+| `.orchestrator/sessions/<SESSION_ID>/logs/` | L1 (PROTECTED regex matching `sessions/[0-9]{8}T[0-9]{6}/logs/`) | R-01 | Audit log truncated or replaced; security incident evidence destroyed; append-only guarantee violated |
 | `hookify*.local.md` rule files | L1 (PROTECTED regex) | RT-MCP-014 | Injection via messaging channel creates hookify rule file that weakens hook enforcement persistently |
 
 ---
@@ -245,7 +245,7 @@ Follow this checklist when a new write-capable tool or technique is discovered t
 | CE-002 | HIGH | Deferred | — | `disableBypassPermissionsMode` must be added to settings.json; deferred to OS/filesystem phase per user directive |
 | CE-003 | MEDIUM | Resolved | L2 settings.json sandbox.denyRead | denyRead for `~/.ssh/*`, `~/.aws/*`, `~/.gnupg/*`, `~/.claude/hooks/*` added (ST-002) |
 | CE-004 | MEDIUM | Resolved | L3 rules/node.md | Never-pin guidance scoped to package.json version specifiers only; lockfile policy aligned with CLAUDE.md (ST-007) |
-| R-01 | HIGH | Resolved | L1 PROTECTED (`\.orchestrator/logs/`) | Orchestrator logs dir added to PROTECTED regex (ST-001) |
+| R-01 | HIGH | Resolved | L1 PROTECTED (`sessions/[0-9]{8}T[0-9]{6}/logs/`) | Orchestrator per-session logs dir added to PROTECTED regex (ST-001); updated to session-aware path 2026-04-12 |
 | RT-MSA-002 | MEDIUM | Partially Resolved | L2 WebFetch deny patterns | `/secrets*`, `/exfil*`, `*.ngrok.io/*` deny patterns added; full domain allowlist not achievable in current settings syntax (ST-002; see Known Coverage Gaps) |
 | RT-MSA-003 | HIGH | Resolved | L2 TeammateIdle integrity check | plan.json sha256 integrity check + agent matcher restriction added to TeammateIdle hook config (ST-002) |
 | RT-MSA-004 | HIGH | Resolved | hooks/pre-push-secrets.sh | gitleaks changed from `--no-git` (working-tree-only) to `--log-opts=HEAD` (full history scan); handoffs/ exclusion added (ST-003) |

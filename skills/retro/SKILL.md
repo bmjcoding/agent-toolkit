@@ -27,7 +27,7 @@ Determine what kind of run you're analyzing:
 
 | Run Type | Signal |
 |---|---|
-| **Orchestration** | `.orchestrator/` or similar state dir exists with plans, handoffs, agent logs |
+| **Orchestration** | `.orchestrator/sessions/$SID/` or similar state dir exists with plans, handoffs, agent logs |
 | **Custom pipeline** | Other coordination directories with state files, plans, or agent outputs |
 | **Subagent** | Conversation shows Agent tool calls spawning child agents |
 | **Single agent / skill** | One agent ran a task or skill directly |
