@@ -1,65 +1,65 @@
 {
-  "agent/frankenstein": {
+  "claude-code/agents/frankenstein": {
     "requires": [
-      "agent/planner",
-      "agent/plan-reviewer",
-      "agent/frontend-engineer",
-      "agent/backend-engineer",
-      "agent/staff-engineer",
-      "agent/integration-verifier",
-      "agent/design-architect",
-      "agent/security-engineer",
-      "agent/site-reliability-engineer",
-      "agent/quality-engineer",
-      "agent/release-gate",
-      "agent/release-engineer",
-      "agent/doc-writer",
-      "agent/autoresearch-analyst"
+      "claude-code/agents/planner",
+      "claude-code/agents/plan-reviewer",
+      "claude-code/agents/frontend-engineer",
+      "claude-code/agents/backend-engineer",
+      "claude-code/agents/staff-engineer",
+      "claude-code/agents/integration-verifier",
+      "claude-code/agents/design-architect",
+      "claude-code/agents/security-engineer",
+      "claude-code/agents/site-reliability-engineer",
+      "claude-code/agents/quality-engineer",
+      "claude-code/agents/release-gate",
+      "claude-code/agents/release-engineer",
+      "claude-code/agents/doc-writer",
+      "claude-code/agents/autoresearch-analyst"
     ],
     "note": "Frankenstein orchestrator dispatches to all sub-agents"
   },
-  "agent/autoresearch-analyst": {
+  "claude-code/agents/autoresearch-analyst": {
     "requires": [
-      "skill/retro",
-      "skill/improve",
-      "skill/review-skill"
+      "shared/skills/retro",
+      "shared/skills/improve",
+      "shared/skills/review-skill"
     ],
     "note": "autoresearch-analyst loads retro, improve, and review-skill skills"
   },
-  "agent/design-architect": {
+  "claude-code/agents/design-architect": {
     "requires": [
-      "skill/design-lint",
-      "skill/design-authority"
+      "shared/skills/design-lint",
+      "shared/skills/design-authority"
     ],
     "note": "design-architect loads design-lint (structural checks) and design-authority (UI/design reference) skills"
   },
-  "agent/frontend-engineer": {
+  "claude-code/agents/frontend-engineer": {
     "requires": [
-      "skill/design-authority"
+      "shared/skills/design-authority"
     ],
     "note": "frontend-engineer loads design-authority skill for design system awareness"
   },
-  "agent/release-gate": {
+  "claude-code/agents/release-gate": {
     "requires": [
-      "skill/prod-readiness"
+      "shared/skills/prod-readiness"
     ],
     "note": "release-gate runs prod-readiness checks"
   },
-  "agent/security-engineer": {
+  "claude-code/agents/security-engineer": {
     "requires": [
-      "skill/owasp-reference"
+      "shared/skills/owasp-reference"
     ],
     "note": "security-engineer loads owasp-reference skill for STRIDE/OWASP review"
   },
-  "agent/site-reliability-engineer": {
+  "claude-code/agents/site-reliability-engineer": {
     "requires": [
-      "skill/observability-patterns"
+      "shared/skills/observability-patterns"
     ],
     "note": "site-reliability-engineer loads observability-patterns skill"
   },
-  "agent/release-engineer": {
+  "claude-code/agents/release-engineer": {
     "requires": [
-      "skill/changelog"
+      "shared/skills/changelog"
     ],
     "note": "release-engineer loads changelog skill for pre-commit changelog generation"
   }
