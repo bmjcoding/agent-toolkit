@@ -25,11 +25,22 @@ while read local_ref local_sha remote_ref remote_sha; do
   fi
 
   # Check if CHANGELOG.md was modified in any commit in the range
-  changelog_modified=$(git diff --name-only "$range" 2>/dev/null | grep -c "CHANGELOG.md")
+  # Capture output and exit code separately to handle shallow-clone / network failures.
+  diff_output=$(git diff --name-only "$range" 2>/dev/null)
+  diff_exit=$?
+  if [ $diff_exit -ne 0 ]; then
+    echo ""
+    echo "WARNING: git diff --name-only failed (exit $diff_exit) for range $range."
+    echo "   This can happen in a shallow clone. Skipping changelog enforcement."
+    echo ""
+    exit 0
+  fi
+
+  changelog_modified=$(printf '%s\n' "$diff_output" | grep -c "CHANGELOG.md")
 
   if [ "$changelog_modified" -eq 0 ]; then
     echo ""
-    echo "⚠️  CHANGELOG.md was not updated in the commits being pushed."
+    echo "WARNING: CHANGELOG.md was not updated in the commits being pushed."
     echo ""
     echo "   Run the /changelog skill or dispatch the release-engineer agent"
     echo "   to generate changelog entries before pushing."
@@ -38,6 +49,34 @@ while read local_ref local_sha remote_ref remote_sha; do
     echo ""
     exit 1
   fi
+
+  # Format validation: each modified CHANGELOG.md must contain at least one
+  # valid Keep a Changelog 1.1.0 version header.
+  # Valid headers:
+  #   ## [Unreleased]
+  #   ## [X.Y.Z] - YYYY-MM-DD
+  # Rejected (old bracketless format):
+  #   ## X.Y.Z
+  #   ## X.Y.Z - YYYY-MM-DD
+  while IFS= read -r changelog_path; do
+    # Accept:  ## [Unreleased]
+    #          ## [X.Y.Z] - YYYY-MM-DD
+    #          ## [X.Y.Z] - YYYY-MM-DD [YANKED]
+    # Reject:  ## [X.Y.Z]  (missing date on a released version)
+    if ! git show "${local_sha}:${changelog_path}" 2>/dev/null | grep -qE '^## (\[Unreleased\]|\[[0-9]+\.[0-9]+\.[0-9]+\] - [0-9]{4}-[0-9]{2}-[0-9]{2})'; then
+      echo ""
+      echo "WARNING: CHANGELOG.md does not contain a valid Keep a Changelog header."
+      echo ""
+      echo "   Expected format: ## [X.Y.Z] - YYYY-MM-DD or ## [Unreleased]"
+      echo "   File: $changelog_path"
+      echo ""
+      echo "   Run the /changelog skill to convert to Keep a Changelog 1.1.0 format."
+      echo ""
+      echo "   To bypass: git push --no-verify"
+      echo ""
+      exit 1
+    fi
+  done < <(printf '%s\n' "$diff_output" | grep 'CHANGELOG.md')
 done
 
 exit 0

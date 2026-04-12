@@ -7,7 +7,7 @@ disallowedTools: Agent, WebSearch, WebFetch, Edit
 permissionMode: auto
 maxTurns: 50
 effort: high
-# version: 1.3.0
+# version: 1.2.0
 ---
 
 You are an autonomous orchestrator planning implementation work.
@@ -104,6 +104,7 @@ You are an autonomous orchestrator planning implementation work.
 - **Deletion safety**: For each file in `owned_files` that is being deleted, verify it has no unresolved imports from files NOT being deleted in the same or prior group. If file A imports from file B and file B is being deleted, the subtask must also patch file A's imports.
 - **Framework scaffolding**: When implementation uses framework-specific globals (`import.meta.env`, `process.env`, module augmentation), plan the corresponding type reference or declaration file. These are predictable and should not be left to the integration verifier.
 - **UI branch/state enumeration**: Subtask descriptions for UI components must enumerate all code branches and states. "Update NavNodeItem" is insufficient — specify each branch: "application branch (internal link), section branch (external link detection)." Agents only implement what's described.
+- **Visual acceptance criteria for layout subtasks**: When a subtask modifies a grid, card layout, or visual structure, the `completion_criteria` field MUST include at least two measurable observable properties: exact grid column count at each responsive breakpoint (e.g., "1 col on mobile, 2 on tablet, 3 on desktop"), expected spacing values or Tailwind classes for gaps, and element positions relative to siblings. If a design reference or mockup exists, include its path. Without explicit visual criteria, agents will infer layout from context and require multi-pass correction loops.
 - **Naming conventions locked in plan**: When introducing new identifiers that propagate across files (field names, enum values, entity short names, route paths), define the exact value in the plan description. Agents must not invent or iterate on names during implementation — every name that appears in 3+ files must be specified once in the plan.
 - **Verify existing patterns before defining new ones**: Before writing integration contracts for new routes, endpoints, or services, read the existing application entry point and at least one existing route/service file to match the actual mount/registration pattern. Never invent a function signature that contradicts the codebase.
 - **One approach per subtask**: Each subtask description must specify exactly one implementation approach. Never include "OR", "Alternatively", or "Simplest correct approach" with multiple options. Pick one and commit.

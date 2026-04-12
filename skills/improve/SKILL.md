@@ -131,14 +131,18 @@ After bumping the version, append a changelog entry to the component's own `CHAN
 
 Every component has its own `CHANGELOG.md` in its subdirectory. There are NO aggregated changelogs — do not write to `agents/CHANGELOG.md` or `commands/CHANGELOG.md` at the category root level.
 
-Changelog format (Claude Code style):
-```
-## VERSION
+Changelog format — Keep a Changelog 1.1.0 (see skills/changelog/SKILL.md for full spec):
 
-- Verb-prefixed one-liner description
+```
+## [VERSION] - YYYY-MM-DD
+
+### Category
+
+- Verb-prefixed one-liner
 ```
 
-No dates in headers. Flat bullets with verb prefixes (Added, Fixed, Improved, Changed, Removed).
+Categories in canonical order: Added, Changed, Deprecated, Removed, Fixed, Security.
+Omit empty categories. Dates are required on all released versions.
 
 If the changelog file doesn't exist, create it with a header line.
 
