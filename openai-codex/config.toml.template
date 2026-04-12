@@ -41,13 +41,56 @@ approval_policy = "auto"
 # ---------------------------------------------------------------------------
 
 [[skills.config]]
-# Example: load the shared changelog skill from this repo.
-# Adjust the path to match where you've cloned agent-toolkit.
-path = "shared/skills/changelog"
+path = "${AGENT_TOOLKIT_DIR}/skills/backend"
+description = "Lightweight backend workflow — implement with convention awareness, security review, and lint. Use when making backend-only changes without needing the full orchestrator pipeline."
 
-# Add more skills by duplicating the block above, e.g.:
-# [[skills.config]]
-# path = "shared/skills/<another-skill-name>"
+[[skills.config]]
+path = "${AGENT_TOOLKIT_DIR}/skills/changelog"
+description = "Canonical CHANGELOG.md standard: Keep a Changelog 1.1.0 + SemVer, required header, version sections, categories, per-component tags, comparison links, bump table. Use when creating or editing any CHANGELOG.md in the toolkit."
+
+[[skills.config]]
+path = "${AGENT_TOOLKIT_DIR}/skills/design-authority"
+description = "Design system guidance for generating and modifying frontend components. Provides token references, canonical patterns, and anti-convergence rules. Use when creating or editing React/Tailwind UI code."
+
+[[skills.config]]
+path = "${AGENT_TOOLKIT_DIR}/skills/design-lint"
+description = "Deterministic design system linting checks. Use when reviewing Tailwind CSS/React components for structural violations. Defines grep/regex patterns run by the design-linter agent."
+
+[[skills.config]]
+path = "${AGENT_TOOLKIT_DIR}/skills/frontend"
+description = "Lightweight frontend workflow — implement with design system enforcement, review, and lint. Use when making frontend-only changes without needing the full orchestrator pipeline."
+
+[[skills.config]]
+path = "${AGENT_TOOLKIT_DIR}/skills/git-ship"
+description = "Git shipping workflow — commit, push, open PRs, enable auto-merge, and clean up worktrees. Use when the user wants to ship code, open a PR, merge, or clean up branches."
+
+[[skills.config]]
+path = "${AGENT_TOOLKIT_DIR}/skills/improve"
+description = "Apply retro recommendations with automated verification. Use after /retro or anytime you want to improve a skill/agent. Supports --validate for autonomous improve-then-review validation cycles."
+
+[[skills.config]]
+path = "${AGENT_TOOLKIT_DIR}/skills/infra"
+description = "Lightweight infrastructure workflow — implement with SRE review for operational readiness. Use when making config, Docker, CI/CD, or infra changes without the full orchestrator pipeline."
+
+[[skills.config]]
+path = "${AGENT_TOOLKIT_DIR}/skills/observability-patterns"
+description = "Structured logging, health checks, metrics, and runbook patterns for SRE review and remediation. Use when reviewing services for operational readiness or remediating observability gaps."
+
+[[skills.config]]
+path = "${AGENT_TOOLKIT_DIR}/skills/owasp-reference"
+description = "OWASP Top 10, STRIDE threat modeling, and common vulnerability patterns for security review. Use when performing security review on backend code, APIs, or auth flows."
+
+[[skills.config]]
+path = "${AGENT_TOOLKIT_DIR}/skills/prod-readiness"
+description = "Full production readiness check — build, lint, audit, test, simplify, final validation, git verify, and ship verdict. Use when preparing code for production or before shipping."
+
+[[skills.config]]
+path = "${AGENT_TOOLKIT_DIR}/skills/retro"
+description = "Run a retrospective on any completed run — single agent, subagent, skill, or orchestration pipeline. Use when the user wants to debrief, analyze efficiency, or improve a workflow."
+
+[[skills.config]]
+path = "${AGENT_TOOLKIT_DIR}/skills/review-skill"
+description = "Review a skill or agent definition for quality and correctness. Use when evaluating a contribution before merging, after writing a new skill, or when a skill underperforms. Supports batch review of directories with parallel dispatch."
 
 # ---------------------------------------------------------------------------
 # MCP server configuration (optional)
