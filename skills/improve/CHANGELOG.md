@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.1.0] - 2026-04-11
 
+### Changed
+
+- Updated SKILL.md routing logic and eval test cases to reflect subdirectory layout
+
 ### Fixed
 
 - Changelog routing updated to use per-component subdirectory paths instead of aggregated category-level changelogs

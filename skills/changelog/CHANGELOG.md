@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-04-11
+
+### Added
+
+- Commit Logs vs. Changelog Entries section with explicit no-commit-log-dump rules and a good/bad comparison table
+- Drift-Prevention Enforcement section documenting Layer 1 (drift-check hook), Layer 2 (edit-reminder hook), and Layer 4 (/sync-toolkit command)
+
 ## [1.1.0] - 2026-04-11
 
 ### Added
@@ -19,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial changelog skill defining Keep a Changelog 1.1.0 + SemVer standard for all toolkit components
 
-[Unreleased]: https://github.com/bmjcoding/claude-toolkit/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/claude-toolkit/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/bmjcoding/claude-toolkit/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/bmjcoding/claude-toolkit/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/bmjcoding/claude-toolkit/releases/tag/v1.0.0

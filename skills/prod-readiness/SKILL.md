@@ -7,7 +7,7 @@ description: >
 disable-model-invocation: true
 argument-hint: "[--dry-run] [--ship [--draft] [--auto-merge]]"
 metadata:
-  version: 1.0.0
+  version: 1.1.0
 ---
 
 # Production Readiness

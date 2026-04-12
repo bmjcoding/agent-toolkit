@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-04-12
+
+### Added
+
+- blockedBy/parallel_group consistency self-validation rule — after writing plan.json, verify every subtask in group N>1 has at least one entry in blockedBy from a lower group; empty blockedBy with non-1 group is a scheduling ambiguity
+
 ## [1.3.0] - 2026-04-11
 
 ### Added
@@ -35,7 +41,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/claude-toolkit/compare/v1.3.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/claude-toolkit/compare/v1.4.0...HEAD
+[1.4.0]: https://github.com/bmjcoding/claude-toolkit/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/bmjcoding/claude-toolkit/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/bmjcoding/claude-toolkit/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/bmjcoding/claude-toolkit/compare/v1.0.0...v1.1.0
