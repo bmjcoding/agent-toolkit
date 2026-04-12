@@ -1,7 +1,56 @@
 {
+  "PreToolUse": [
+    {
+      "matcher": "Bash",
+      "script": "branch-guard.sh",
+      "description": "Block git push/commit directly to main or master branch. Prompts user to create a feature branch instead."
+    },
+    {
+      "matcher": "Bash",
+      "script": "pre-push-secrets.sh",
+      "description": "Scan for secrets before git push using gitleaks (preferred) or grep fallback. Denies the push if secrets are detected in git history or staged changes."
+    },
+    {
+      "matcher": "Bash",
+      "script": "protect-config.sh",
+      "description": "Block Bash commands that would write to control-plane files: ~/.claude/settings.json, hooks/, CLAUDE.md, agents/, orchestrator logs and session.id. Comprehensive write-op detection (redirects, cp, mv, interpreters, etc.)."
+    },
+    {
+      "matcher": "Edit|Write",
+      "script": "toolkit-edit-reminder.sh",
+      "description": "Remind agents editing agent-toolkit component files to update the component CHANGELOG.md per Keep a Changelog 1.1.0 before finishing. Advisory only — injects additionalContext, never blocks."
+    },
+    {
+      "matcher": "Edit|Write",
+      "script": "changelog-check.sh",
+      "description": "Validate that CHANGELOG.md was updated in commits being pushed, and that each modified CHANGELOG.md contains a valid KaC 1.1.0 version header. Note: originally a git pre-push hook; in Codex PreToolUse context, parse stdin for git push commands."
+    }
+  ],
+  "PostToolUse": [
+    {
+      "matcher": "Bash|Edit|Write",
+      "script": "integrity-warn.sh",
+      "description": "Run integrity-check.sh silently after tool use; emit a WARNING to stderr if toolkit file mismatches are found. Always exits 0, never blocks."
+    },
+    {
+      "matcher": "Bash|Edit|Write",
+      "script": "toolkit-drift-check.sh",
+      "description": "Warn (once per session) when agent-toolkit component files were edited without a paired CHANGELOG.md update. Advisory only — always exits 0."
+    }
+  ],
   "SessionStart": [],
-  "PreToolUse": [],
-  "PostToolUse": [],
-  "UserPromptSubmit": [],
-  "Stop": []
+  "UserPromptSubmit": [
+    {
+      "matcher": "*",
+      "script": "inject-context.sh",
+      "description": "Inject orchestrator project-brief and file-ownership constraints into each agent prompt. Reads .orchestrator/session.id for session-scoped layout; falls back to flat .orchestrator/ layout. Uncertainty: maps to UserPromptSubmit as closest Codex equivalent to Claude Code's SubagentStart."
+    }
+  ],
+  "Stop": [
+    {
+      "matcher": "*",
+      "script": "extract-handoff.sh",
+      "description": "Extract handoff JSON from the agent's final message (```handoff fences), validate against canonical schema, and write to .orchestrator/handoffs/<agent_id>.json. Also logs agent_stop event with token/tool usage. Uncertainty: maps to Stop as closest Codex equivalent to Claude Code's SubagentStop."
+    }
+  ]
 }
