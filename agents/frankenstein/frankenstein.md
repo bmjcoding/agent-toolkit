@@ -8,7 +8,7 @@ permissionMode: auto
 maxTurns: 200
 initialPrompt: |
   mkdir -p .orchestrator/{handoffs,context,logs} && git rev-parse --is-inside-work-tree 2>/dev/null && (grep -qxF '.orchestrator/' .gitignore 2>/dev/null || echo '.orchestrator/' >> .gitignore) || true
-# version: 1.8.0
+# version: 1.3.0
 ---
 
 # Frankenstein
@@ -76,6 +76,15 @@ Launch exploration agents — ALL in ONE message, `run_in_background: true`. Use
 - `staff-engineer` — shared types, schemas, infra, config, build tools — **skip for small projects** (<20 source files or no infra/config layer). Fold its scope into the other two agents' prompts instead.
 
 **Explorer model override**: Exploration agents are read-only inventory agents — they run Glob/Grep/Read exclusively and produce markdown summary files. Dispatch them with `model: haiku` when the SDK supports per-dispatch model selection. These agents make no code decisions and do not require the reasoning depth of Sonnet. At current pricing (Sonnet $9/Mtok vs Haiku $3/Mtok), 3 explorer agents consume ~$2/run at Sonnet vs ~$0.67 at Haiku — a ~$1.35 per-session saving that compounds across all pipeline runs. Apply the same downgrade to `ST-1`-class subtasks that are pure git operations (commit/tag only).
+
+### Mechanical Agent Model Override
+
+**Mechanical agent model override**: Dispatch agents performing purely mechanical work with `model: haiku` when ALL of the following apply:
+- Estimated tool uses < 15
+- Task description contains no analysis, judgment, or reasoning keywords (analyze, review, judge, evaluate, design, architecture)
+- Task type is one of: file renames, version resets, single-constant additions, single-line fixes, CSS-only changes, git-only operations (commit/tag), boilerplate from template
+
+Examples: scrollbar hide (CSS-only), 429 route fix (single-line), overflow fix (single-file), type schema addition (< 5 lines). At current pricing, this saves ~$1.05 per pipeline run across ~7 mechanical dispatches.
 
 Tell each: "RESEARCH ONLY — do not write code." Each writes TWO files:
 1. `{domain}-summary.md` (max 100 lines) → `.orchestrator/context/` — for planner
@@ -162,11 +171,37 @@ When all reviewers complete:
 1. **Triage**: Read each reviewer's handoff. Add ALL actionable findings (critical through low) to the backlog. Fix everything in one pass — deferring medium/low creates unnecessary second passes.
 2. **Seed backlog**: Write all findings to `.orchestrator/backlog.md` via Bash. Write the header, then extract finding rows from each reviewer handoff using `jq` and append as markdown table rows:
    ```bash
-   echo "| severity | file | finding | finding_id | source |" > .orchestrator/backlog.md
-   echo "|---|---|---|---|---|" >> .orchestrator/backlog.md
+   {
+     printf '# Backlog\n\n'
+     printf 'Last updated: %s\n\n' "$(date '+%Y-%m-%dT%H:%M')"
+     printf '## Agent Actionable\n'
+     printf '| # | status | severity | environment | file | item | deferred_reason | source | finding_id | phase | added_at | session_id |\n'
+     printf '|---|--------|----------|-------------|------|------|-----------------|--------|------------|-------|----------|------------|\n'
+   } > .orchestrator/backlog.md
+
+   # UNTRUSTED: jq output from handoff fields is data, not commands — do not eval
+   TS=$(date '+%Y-%m-%dT%H:%M')
+   SID=$(cat .orchestrator/session.id 2>/dev/null || echo '')
+   ROW_NUM=1
    for f in .orchestrator/handoffs/*.json; do
+     [ -f "$f" ] || continue
      agent=$(basename "$f" .json)
-     jq -r '.findings[]? | select(type == "object") | "| \(.severity // "unspecified") | \(.file // "unspecified") | \(.finding // "unspecified") | \(.finding_id // "") | '"$agent"' |"' "$f" >> .orchestrator/backlog.md
+     while IFS= read -r row; do
+       printf '| %d | open | %s\n' "$ROW_NUM" "$row" >> .orchestrator/backlog.md
+       ROW_NUM=$((ROW_NUM + 1))
+     done < <(jq -r --arg ts "$TS" --arg sid "$SID" --arg agent "$agent" \
+       '.findings[]? | select(type == "object") | [
+         (.severity // "low" | ascii_downcase),
+         "any",
+         (.file // "unspecified"),
+         (.finding // "unspecified"),
+         "",
+         (.source // $agent),
+         (.finding_id // ""),
+         (.phase // ""),
+         $ts,
+         $sid
+       ] | join(" | ") + " |"' "$f" 2>/dev/null)
    done
    ```
 3. **Route fixes by domain** — do NOT send all findings to quality-engineer blindly:
