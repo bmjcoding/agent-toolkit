@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.0] - 2026-04-12
+
+### Added
+
+- Failure Modes section with classifier outage fallback protocol — when three consecutive agent tool calls fail with classifier errors, emit user-facing recovery message and file user-applied handoff
+- Scope constraint instruction for Phase 3a review agents — SRE, security-engineer, and integration-verifier dispatches must include owned_files scope bound from current plan.json
+- Multi-repo branch staleness check in Phase 0 — fetch and status-b before creating secondary repo branch; prompt user if behind origin
+- Autoresearch scope checklist for multi-repo toolkit pipelines — five required confirmation items (hook paths, settings state, uncommitted changes, branch status, CHANGELOG versions) before planning
+- CHANGELOG backfill agents dispatch hint — template-following tasks use concise dispatch prompt; estimated $1.50 savings across 12-skill backfill batch
+- doc-writer dispatch hint for Phase 5a — mechanical documentation tasks receive scope-constraining prompt to reduce unnecessary elaboration
+
 ## [1.4.0] - 2026-04-11
 
 ### Added
@@ -47,7 +58,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/claude-toolkit/compare/v1.4.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/claude-toolkit/compare/v1.5.0...HEAD
+[1.5.0]: https://github.com/bmjcoding/claude-toolkit/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/bmjcoding/claude-toolkit/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/bmjcoding/claude-toolkit/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/bmjcoding/claude-toolkit/compare/v1.1.0...v1.2.0
