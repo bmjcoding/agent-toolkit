@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.10.0] - 2026-04-12
+
+### Added
+
+- Automatic personal-backlog close-out at pipeline end. Pipelines that ship work for finding_ids tracked in ~/.claude/backlog.md now mark those items as `resolved` with a PR reference, eliminating manual cleanup. (REC-19 from backlog-3-10 pipeline retro.)
+
 ## [1.9.0] - 2026-04-12
 
 ### Added
@@ -114,7 +120,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.9.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.10.0...HEAD
+[1.10.0]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.9.0...frankenstein-v1.10.0
 [1.9.0]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.8.0...frankenstein-v1.9.0
 [1.8.0]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.7.0...frankenstein-v1.8.0
 [1.7.0]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.6.0...frankenstein-v1.7.0
