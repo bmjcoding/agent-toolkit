@@ -3,9 +3,9 @@ name: staff-engineer
 model: inherit
 description: General-purpose engineer for subtasks that are not clearly frontend or backend — infrastructure, configuration, shared types, scripts, tooling, CI/CD setup. Use when neither frontend-engineer nor backend-engineer fits.
 tools: Read, Write, Edit, Glob, Grep, Bash
-disallowedTools: Agent, WebSearch, WebFetch
+disallowedTools: Agent
 permissionMode: auto
-maxTurns: 50
+maxTurns: 200
 effort: high
 # version: 1.1.0
 ---
