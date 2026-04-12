@@ -5,7 +5,7 @@ description: >
   pipeline. Use when the user wants to debrief, analyze efficiency, or improve a workflow.
 argument-hint: "[run-type or orchestrator-dir]"
 metadata:
-  version: 1.0.0
+  version: 1.1.0
 ---
 
 # Retrospective

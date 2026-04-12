@@ -20,11 +20,15 @@ Evaluate the plan as a first-class artifact. A bad plan poisons every downstream
 
 If `scripts/parse-metrics.py` was run, use the `plan_vs_outcome` section of its output to ground this analysis in data rather than impressions.
 
+**Plan inventory accuracy check**: When a plan lists specific file paths as migration targets (especially for changelog or stub migrations), verify whether the planner sampled actual file contents before writing the subtask. A plan that describes files as "single-version stubs" without reading them is speculative — if the described state doesn't match reality, the subtask will miss files and require an unplanned follow-on agent. When reviewing a plan, spot-check 2-3 listed files in high-volume migration subtasks to confirm the description matches the actual file state. If it doesn't, flag as a spec gap in 3.2.
+
 ---
 
 ## Coordination & Handoffs
 
 Analyze the information flow between agents.
+
+**Handoff schema contract**: The `files_written` field MUST be a JSON array of absolute file paths. Never an integer count. Agents that emit `"files_written": 14` (integer) instead of `"files_written": ["/path/to/file.md", ...]` (list) break `parse-metrics.py` and downstream agents that iterate over the field. When dispatching agents, include this in the handoff instructions: "The `files_written` field must be a JSON array of file paths, not a count."
 
 1. **Handoff completeness**: Did every agent produce a structured handoff? Were `files_written`, `notes`, and `recommendations` fields populated and accurate? Check `.orchestrator/handoffs/` — empty or minimal handoffs are a prompt gap in the producing agent.
 2. **Information degradation**: Did any downstream agent (integration-verifier, quality-engineer, design-architect) have to re-read source files because the upstream handoff was vague or missing context? Evidence: an agent's turn count is high relative to its file count, suggesting it spent turns on discovery rather than action.
@@ -66,6 +70,8 @@ Compare each agent's model against its actual task complexity. In a multi-agent 
 - **Design architect** — judgment-heavy review across architecture, API design, and visual coherence.
 - **Security engineer** — threat modeling requires reasoning about non-obvious attack surfaces.
 - **Quality engineer in remediation mode** — needs to understand the finding, the codebase context, and the fix holistically.
+
+**Security-engineer scope heuristic**: When dispatching security-engineer for a documentation-only or comment-only changeset (no new runtime code, no new dependencies, no schema changes), include this in the dispatch prompt: "If all changes are documentation or comments with no new runtime logic, limit scope to: (1) confirm no runtime code was modified, (2) scan new text content for embedded secrets or credentials, (3) skip full STRIDE/OWASP analysis. Exit early with a brief confirmation." Full STRIDE/OWASP on a docs-only change produces zero actionable findings and burns ~80K tokens unnecessarily.
 
 **How to recommend:**
 For each agent flagged as a downgrade candidate, produce a recommendation with `Where` pointing to the agent's `.md` file and the specific `model` frontmatter field. If the agent inherits its model, note the orchestrator's dispatch as the place to override.

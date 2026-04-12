@@ -99,6 +99,9 @@ def parse_handoffs(orch_dir):
 
         agent_id = fname.removesuffix(".json")
         files_written = data.get("files_written", data.get("files_modified", []))
+        # Defend against integer counts (e.g. "files_written": 14) -- treat as empty list
+        if isinstance(files_written, int):
+            files_written = []
         all_files_written.extend(files_written)
 
         for f in files_written:
@@ -308,6 +311,8 @@ def parse_quality_iterations(orch_dir):
         if not data:
             continue
         iteration = data.get("iteration", 0)
+        if not isinstance(iteration, int):
+            iteration = 0
         if iteration > max_iteration:
             max_iteration = iteration
         if "verdict" in data:
