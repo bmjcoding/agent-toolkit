@@ -22,6 +22,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Per-session dedup flag to suppress repeated warnings within a single Claude Code session
 - TOOLKIT_PATH env var override for non-standard toolkit install locations
 
-[Unreleased]: https://github.com/bmjcoding/claude-toolkit/compare/v1.0.1...HEAD
-[1.0.1]: https://github.com/bmjcoding/claude-toolkit/compare/v1.0.0...v1.0.1
-[1.0.0]: https://github.com/bmjcoding/claude-toolkit/releases/tag/v1.0.0
+[Unreleased]: https://github.com/bmjcoding/claude-toolkit/compare/toolkit-drift-check-v1.0.1...HEAD
+[1.0.1]: https://github.com/bmjcoding/claude-toolkit/compare/toolkit-drift-check-v1.0.0...toolkit-drift-check-v1.0.1
+[1.0.0]: https://github.com/bmjcoding/claude-toolkit/tree/toolkit-drift-check-v1.0.0
