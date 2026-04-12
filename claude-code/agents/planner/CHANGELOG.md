@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-04-12
+
+### Changed
+
+- BREAKING: moved to the agent-toolkit multi-tool layout. Files relocated:
+  - `agents/planner/` → `claude-code/agents/planner/`
+- CHANGELOG comparison URLs updated for repo rename `bmjcoding/claude-toolkit` → `bmjcoding/agent-toolkit`.
+
 ## [1.4.0] - 2026-04-12
 
 ### Added
@@ -41,7 +49,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/planner-v1.4.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/planner-v2.0.0...HEAD
+[2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/planner-v1.4.0...claude-code/planner-v2.0.0
 [1.4.0]: https://github.com/bmjcoding/agent-toolkit/compare/planner-v1.3.0...planner-v1.4.0
 [1.3.0]: https://github.com/bmjcoding/agent-toolkit/compare/planner-v1.2.0...planner-v1.3.0
 [1.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/planner-v1.1.0...planner-v1.2.0

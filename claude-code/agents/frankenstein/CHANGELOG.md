@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-04-12
+
+### Changed
+
+- BREAKING: moved to the agent-toolkit multi-tool layout. Files relocated:
+  - `agents/frankenstein/` → `claude-code/agents/frankenstein/`
+- CHANGELOG comparison URLs updated for repo rename `bmjcoding/claude-toolkit` → `bmjcoding/agent-toolkit`.
+
 ## [1.13.0] - 2026-04-12
 
 ### Added
@@ -149,7 +157,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/frankenstein-v1.13.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/frankenstein-v2.0.0...HEAD
+[2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/frankenstein-v1.13.0...claude-code/frankenstein-v2.0.0
 [1.13.0]: https://github.com/bmjcoding/agent-toolkit/compare/frankenstein-v1.12.0...frankenstein-v1.13.0
 [1.12.0]: https://github.com/bmjcoding/agent-toolkit/compare/frankenstein-v1.11.0...frankenstein-v1.12.0
 [1.11.0]: https://github.com/bmjcoding/agent-toolkit/compare/frankenstein-v1.10.0...frankenstein-v1.11.0
