@@ -12,8 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - PreToolUse hook that injects a CHANGELOG reminder when agents edit toolkit component files
-- Scope filter targets agents, skills, hooks, commands, and rules directories in claude-toolkit and ~/.claude
+- Scope filter targets agents, skills, hooks, commands, and rules directories in agent-toolkit and ~/.claude
 - No-op when editing CHANGELOG.md itself to avoid recursive reminders
 
-[Unreleased]: https://github.com/bmjcoding/claude-toolkit/compare/toolkit-edit-reminder-v1.0.0...HEAD
-[1.0.0]: https://github.com/bmjcoding/claude-toolkit/tree/toolkit-edit-reminder-v1.0.0
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/toolkit-edit-reminder-v1.0.0...HEAD
+[1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/toolkit-edit-reminder-v1.0.0

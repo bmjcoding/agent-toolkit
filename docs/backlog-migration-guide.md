@@ -2,7 +2,7 @@
 
 ## Overview
 
-The unified 12-column backlog schema replaces two incompatible formats that diverged across the claude-toolkit and Frankenstein pipeline: the 6-column slash command format (`.claude/backlog.md`) and the 5-column Frankenstein format (`.orchestrator/backlog.md`). This guide covers converting existing backlog files to the new 12-column format, handling data quality issues found in live files, and tracking migration status per repository. Both backlog file locations now use the same schema as defined in `${HOME}/Developer/git/claude-toolkit/commands/backlog/backlog.md` (version 2.0.0).
+The unified 12-column backlog schema replaces two incompatible formats that diverged across the agent-toolkit and Frankenstein pipeline: the 6-column slash command format (`.claude/backlog.md`) and the 5-column Frankenstein format (`.orchestrator/backlog.md`). This guide covers converting existing backlog files to the new 12-column format, handling data quality issues found in live files, and tracking migration status per repository. Both backlog file locations now use the same schema as defined in `${HOME}/Developer/git/agent-toolkit/commands/backlog/backlog.md` (version 2.0.0).
 
 ---
 

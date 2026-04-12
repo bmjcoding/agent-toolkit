@@ -149,18 +149,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.13.0...HEAD
-[1.13.0]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.12.0...frankenstein-v1.13.0
-[1.12.0]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.11.0...frankenstein-v1.12.0
-[1.11.0]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.10.0...frankenstein-v1.11.0
-[1.10.0]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.9.0...frankenstein-v1.10.0
-[1.9.0]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.8.0...frankenstein-v1.9.0
-[1.8.0]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.7.0...frankenstein-v1.8.0
-[1.7.0]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.6.0...frankenstein-v1.7.0
-[1.6.0]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.5.0...frankenstein-v1.6.0
-[1.5.0]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.4.0...frankenstein-v1.5.0
-[1.4.0]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.3.0...frankenstein-v1.4.0
-[1.3.0]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.2.0...frankenstein-v1.3.0
-[1.2.0]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.1.0...frankenstein-v1.2.0
-[1.1.0]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.0.0...frankenstein-v1.1.0
-[1.0.0]: https://github.com/bmjcoding/claude-toolkit/tree/frankenstein-v1.0.0
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/frankenstein-v1.13.0...HEAD
+[1.13.0]: https://github.com/bmjcoding/agent-toolkit/compare/frankenstein-v1.12.0...frankenstein-v1.13.0
+[1.12.0]: https://github.com/bmjcoding/agent-toolkit/compare/frankenstein-v1.11.0...frankenstein-v1.12.0
+[1.11.0]: https://github.com/bmjcoding/agent-toolkit/compare/frankenstein-v1.10.0...frankenstein-v1.11.0
+[1.10.0]: https://github.com/bmjcoding/agent-toolkit/compare/frankenstein-v1.9.0...frankenstein-v1.10.0
+[1.9.0]: https://github.com/bmjcoding/agent-toolkit/compare/frankenstein-v1.8.0...frankenstein-v1.9.0
+[1.8.0]: https://github.com/bmjcoding/agent-toolkit/compare/frankenstein-v1.7.0...frankenstein-v1.8.0
+[1.7.0]: https://github.com/bmjcoding/agent-toolkit/compare/frankenstein-v1.6.0...frankenstein-v1.7.0
+[1.6.0]: https://github.com/bmjcoding/agent-toolkit/compare/frankenstein-v1.5.0...frankenstein-v1.6.0
+[1.5.0]: https://github.com/bmjcoding/agent-toolkit/compare/frankenstein-v1.4.0...frankenstein-v1.5.0
+[1.4.0]: https://github.com/bmjcoding/agent-toolkit/compare/frankenstein-v1.3.0...frankenstein-v1.4.0
+[1.3.0]: https://github.com/bmjcoding/agent-toolkit/compare/frankenstein-v1.2.0...frankenstein-v1.3.0
+[1.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/frankenstein-v1.1.0...frankenstein-v1.2.0
+[1.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/frankenstein-v1.0.0...frankenstein-v1.1.0
+[1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/frankenstein-v1.0.0

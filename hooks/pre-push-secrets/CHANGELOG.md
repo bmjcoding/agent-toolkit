@@ -19,6 +19,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/claude-toolkit/compare/pre-push-secrets-v1.0.1...HEAD
-[1.0.1]: https://github.com/bmjcoding/claude-toolkit/compare/pre-push-secrets-v1.0.0...pre-push-secrets-v1.0.1
-[1.0.0]: https://github.com/bmjcoding/claude-toolkit/tree/pre-push-secrets-v1.0.0
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/pre-push-secrets-v1.0.1...HEAD
+[1.0.1]: https://github.com/bmjcoding/agent-toolkit/compare/pre-push-secrets-v1.0.0...pre-push-secrets-v1.0.1
+[1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/pre-push-secrets-v1.0.0

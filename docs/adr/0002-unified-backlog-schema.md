@@ -8,7 +8,7 @@ Accepted
 
 ## Context
 
-The claude-toolkit backlog system evolved independently in two places:
+The agent-toolkit backlog system evolved independently in two places:
 
 - The `/backlog` slash command wrote to `.claude/backlog.md` using a 6-column format: `# | Severity | File | Item | Phase | Added`
 - The Frankenstein orchestration pipeline seeded `.orchestrator/backlog.md` using a 5-column format: `severity | file | finding | finding_id | source`
