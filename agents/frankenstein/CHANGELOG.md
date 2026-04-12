@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.13.0] - 2026-04-12
+
+### Added
+
+- Phase 6a pre-stage version-bump step: before staging, release-engineer inspects CHANGELOG.md files in plan scope for non-empty `[Unreleased]` sections and promotes them to versioned headers using the SemVer bump table from the `/changelog` skill (MINOR for Added/Changed, PATCH for Fixed/Security, MAJOR for Removed/breaking — MAJOR requires one-line user confirmation). Sets CHANGELOG_PROMOTED=true to prevent double-write during Step 2 changelog generation. Multi-repo aware: scoped to the current repo root via `git rev-parse --show-toplevel`, runs per-repo when the pipeline spans multiple repos.
+
+### Fixed
+
+- Comparison link footer corrected for v1.12.0: `[Unreleased]` pointer updated from `frankenstein-v1.11.0...HEAD` to `frankenstein-v1.12.0...HEAD`; missing `[1.12.0]` link definition added.
+
+## [1.12.0] - 2026-04-12
+
+### Added
+
+- Phase 6a default-branch guard: release-engineer is now instructed to check whether the working directory is on the repo's default branch before staging. If on the default branch, a feature branch is created first (name inferred from plan.json context_summary). Prevents direct commits to main. (R1 from retro 2026-04-12T150000)
+- Retrospective Notes section recording changes sourced from retro sessions, with session ID and retro file path.
+
 ## [1.11.0] - 2026-04-12
 
 ### Changed
@@ -132,7 +149,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.11.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.13.0...HEAD
+[1.13.0]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.12.0...frankenstein-v1.13.0
+[1.12.0]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.11.0...frankenstein-v1.12.0
 [1.11.0]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.10.0...frankenstein-v1.11.0
 [1.10.0]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.9.0...frankenstein-v1.10.0
 [1.9.0]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.8.0...frankenstein-v1.9.0
