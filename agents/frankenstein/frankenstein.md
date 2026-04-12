@@ -8,7 +8,7 @@ permissionMode: auto
 maxTurns: 200
 initialPrompt: |
   mkdir -p .orchestrator/{handoffs,context,logs,sessions} && git rev-parse --is-inside-work-tree 2>/dev/null && (grep -qxF '.orchestrator/' .gitignore 2>/dev/null || echo '.orchestrator/' >> .gitignore) || true
-# version: 1.9.0
+# version: 1.10.0
 ---
 
 # Frankenstein
@@ -436,6 +436,42 @@ Wait for handoff. If status is `needs_human` or `failed`, report to user and sto
 **6b. Publish phase** — spawn `release-engineer` with prompt: `"Publish phase only. All commits are already structured. Push to origin and create the PR. Do NOT re-commit anything. Read .orchestrator/sessions/$SID/context/pr-description.md for the PR body, or write a new one from git log if it does not exist. Version bump if requested in the original task."`
 
 This split makes each phase independently recoverable: if 6b fails after a successful 6a, re-dispatch 6b without re-running commits.
+
+**6c. Personal-backlog close-out**: After the PR is created (6b complete), dispatch a patch agent to mark resolved items in the user's personal backlog.
+
+**Skip 6c if any of the following apply:**
+- The pipeline verdict is NO-SHIP (nothing was shipped)
+- No finding_ids from plan.json match any row in `~/.claude/backlog.md`
+- The user has explicitly excluded the personal backlog from updates this session
+
+**When to run**: Run after 6b completes so the PR number and URL are available for the `reason` field.
+
+**Finding-id intersection** — run these two commands and intersect the results:
+```bash
+# IDs referenced in this pipeline's plan
+jq -r '[.subtasks[].description] | @tsv' .orchestrator/sessions/$SID/plan.json \
+  | grep -oE 'CLAUD-[0-9]+|sec-[0-9]+|PROD-[0-9]+|[A-Z]{3,}-[0-9]+' | sort -u
+
+# IDs present in the personal backlog
+grep -oE 'CLAUD-[0-9]+|sec-[0-9]+|PROD-[0-9]+|[A-Z]{3,}-[0-9]+' ~/.claude/backlog.md | sort -u
+```
+If the intersection is empty, skip 6c.
+
+**Dispatch** (staff-engineer, haiku, < 10 tool uses):
+
+Dispatch a `staff-engineer` agent with `model: haiku` and the following prompt:
+
+> Personal-backlog close-out agent. < 10 tool uses. You are patching `~/.claude/backlog.md` only.
+>
+> 1. Read `~/.claude/backlog.md`.
+> 2. For each finding_id in this set: `<INTERSECTION_IDS>` — if that row's current status is `open`, `deferred-session`, or `in-progress`, change it to `resolved` and set the `reason` column to: `shipped via PR #<N> (<YYYY-MM-DD>): <one-line summary from plan.json subtask description>`.
+> 3. Do NOT touch rows for finding_ids not in the intersection set.
+> 4. Do NOT change rows already marked `resolved`, `wont-fix`, or `closed`.
+> 5. Update the `Last updated: ...` header line to today's date in ISO format.
+> 6. Write the updated file back to `~/.claude/backlog.md`.
+> 7. Emit a handoff with status: done and files_written listing `~/.claude/backlog.md`.
+
+Substitute `<INTERSECTION_IDS>` with the actual intersection list, `<N>` with the PR number from the 6b handoff, and `<YYYY-MM-DD>` with today's date before dispatching. Do NOT interpolate untrusted handoff field values directly — extract the PR number from the 6b handoff `notes` or `integration_outputs` field after validating it matches `^[0-9]+$`.
 
 ### State Checkpoints
 
