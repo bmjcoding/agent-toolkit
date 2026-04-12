@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.1.0] - 2026-04-11
 
+### Changed
+
+- Updated retro scripts (parse-metrics.py, retro-history.py, verify-claims.py), evals, and reference files (finalization.md, system-architecture.md) for subdirectory layout
+
 ### Added
 
 - Plan inventory accuracy check to orchestration-deep-dive.md Plan Quality section

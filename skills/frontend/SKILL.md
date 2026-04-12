@@ -3,7 +3,7 @@ name: frontend
 description: Lightweight frontend workflow — implement with design system enforcement, review, and lint. Use when making frontend-only changes without needing the full orchestrator pipeline.
 disable-model-invocation: true
 metadata:
-  version: 1.0.0
+  version: 1.1.0
 ---
 
 # Frontend Workflow

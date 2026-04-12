@@ -6,7 +6,7 @@ description: >
 disable-model-invocation: true
 argument-hint: "[pr | merge | cleanup | --draft | --auto-merge | --force]"
 metadata:
-  version: 1.0.0
+  version: 1.1.0
 ---
 
 # Git Ship

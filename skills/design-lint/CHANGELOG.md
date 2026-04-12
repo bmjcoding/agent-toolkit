@@ -7,11 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-04-11
+
+### Changed
+
+- Updated dark-mode-pairs check script to improve detection of missing `dark:` counterparts across component files.
+- Updated hex-colors check script to align with the OKLCH-only color enforcement rule.
+- Updated z-index check script to reflect the current z-scale definitions.
+
 ## [1.0.0] - 2026-04-11
 
 ### Added
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/claude-toolkit/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/claude-toolkit/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/bmjcoding/claude-toolkit/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/bmjcoding/claude-toolkit/releases/tag/v1.0.0
