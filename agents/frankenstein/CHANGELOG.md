@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.7.0] - 2026-04-12
+
+### Added
+
+- Diff-size guard for targeted-edit subtasks in Phase 2: after any subtask declared as footer-only, single-line-fix, or otherwise targeted completes, run `git diff --stat` on its owned files and compare the actual line delta against the declared budget; if the delta exceeds the budget by >50%, revert and re-dispatch with explicit budget constraints or surface to the user for approval (REC-10).
+
 ## [1.6.0] - 2026-04-12
 
 ### Added
@@ -80,7 +86,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.6.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.7.0...HEAD
+[1.7.0]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.6.0...frankenstein-v1.7.0
 [1.6.0]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.5.0...frankenstein-v1.6.0
 [1.5.0]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.4.0...frankenstein-v1.5.0
 [1.4.0]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.3.0...frankenstein-v1.4.0

@@ -8,7 +8,7 @@ permissionMode: auto
 maxTurns: 200
 initialPrompt: |
   mkdir -p .orchestrator/{handoffs,context,logs} && git rev-parse --is-inside-work-tree 2>/dev/null && (grep -qxF '.orchestrator/' .gitignore 2>/dev/null || echo '.orchestrator/' >> .gitignore) || true
-# version: 1.6.0
+# version: 1.7.0
 ---
 
 # Frankenstein
@@ -200,6 +200,18 @@ echo '{"agent_id":"<agent_id>","tokens":<tokens>,"tool_uses":<tool_uses>,"durati
 Extract `tokens`, `tool_uses`, and `duration_ms` from the `<usage>` block in the agent's return message. If any field is unavailable, write `null` for that field — do NOT omit the log line. This log is required for retro token-spend reporting (`parse-metrics.py` reads it).
 
 **Between EVERY group**: Spawn `integration-verifier` in structural mode — not just after backend groups. On failure, spawn `quality-engineer` in integration-repair mode (max 2 attempts).
+
+**Diff-size guard for targeted-edit subtasks**: When a subtask declares itself as targeted (footer-only, single-line-fix, single-constant-addition, etc.) and its dispatch prompt includes explicit "DO NOT modify X" constraints, after the subtask completes run:
+
+```bash
+jq -r --arg id "$SUBTASK_ID" '.subtasks[] | select(.id == $id) | .owned_files[]' .orchestrator/plan.json | xargs git diff --stat HEAD -- | tail -1
+```
+
+Parse the insertion + deletion total. If the total exceeds the expected budget (declared in the subtask's `notes` field or inferred from the subtask description), either:
+1. Revert the agent's changes (`git checkout HEAD -- <files>`) and re-dispatch with a tighter prompt making the budget explicit
+2. Surface the over-budget condition to the user for approval
+
+Rationale: The ST-7 and ST-8 backfill subtasks in the 2026-04-12 changelog-v2 pipeline violated explicit scope constraints and shipped ghost content. A mechanical diff-size guard catches scope-creep that prompt wording alone cannot prevent.
 
 **Truncated agent results**: If an agent's return message is truncated (ends mid-sentence, no handoff block), check `.orchestrator/handoffs/<agent-id>.json` first — the SubagentStop hook may have extracted it. Only fall back to file diffs if the handoff file is also missing.
 
