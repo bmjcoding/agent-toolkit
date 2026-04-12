@@ -10,6 +10,24 @@
 
 The current Agent Toolkit page at `/toolkit` is built exclusively around Claude Code: install paths reference `.claude/` directories, install commands use `claude skill install`, and the download dialog assumes a single tool audience. This redesign makes the toolkit page tool-agnostic by adding first-class support for GitHub Copilot (VS Code) and OpenAI Codex CLI alongside Claude Code. The goal is a unified catalog that surfaces the same components across all three tools — giving each tool equal visual weight, correct per-tool install paths, and a clear "shared vs tool-specific" badge system — without breaking the existing Claude Code experience. Users who only care about one tool should be able to filter to it and see exactly what applies to them; users who work across tools should be able to browse the full catalog and understand compatibility at a glance.
 
+**Current component counts** (as of 2026-04-12):
+
+| Type         | Tool            | Count |
+|--------------|-----------------|-------|
+| Agents       | Claude Code     | 15    |
+| Commands     | Claude Code     | 6     |
+| Hooks        | Claude Code     | 10    |
+| Agents       | GitHub Copilot  | 15    |
+| Instructions | GitHub Copilot  | 4     |
+| Prompts      | GitHub Copilot  | 6     |
+| Agents       | OpenAI Codex    | 15    |
+| Hooks        | OpenAI Codex    | 9     |
+| Skills       | Universal       | 13    |
+| Rules        | Universal       | 4     |
+
+Universal skills (`skill/<slug>-v<ver>`) and rules (`rule/<slug>-v<ver>`) live at the
+repository root (`/skills/`, `/rules/`) and are consumed by all three tools.
+
 ---
 
 ## 2. Design Principles
@@ -42,6 +60,7 @@ Items that work identically across all three tools (e.g., plain Markdown instruc
 - A tool chip (`claude-code`, `github-copilot`, `openai-codex`) signals: this item is adapted for this tool's format.
 - Items may carry multiple tool chips when the format is compatible but the install path differs.
 - The `namespace` field (see Section 3) captures this distinction in the data layer.
+- Universal skills use tag namespace `skill/<slug>-v<ver>`; universal rules use `rule/<slug>-v<ver>`. These are distinct from tool-specific tag namespaces.
 
 ---
 
@@ -296,14 +315,14 @@ Type-to-path mapping:
 agent        → .github/agents/<name>.agent.md
 instructions → .github/instructions/<name>.instructions.md
 prompt       → .github/prompts/<name>.prompt.md     (workspace scope only)
-skill        → .github/skills/<name>/SKILL.md
+skill        → .github/skills/<name>/SKILL.md       (via install-time symlink to /skills)
 rule         → .github/copilot-instructions.md       (repo-wide, single file — append, not copy)
 ```
 
 For `rule` items (append pattern), the snippet changes:
 ```bash
 # Append to existing copilot-instructions.md
-cat github-copilot/rules/<name>.md >> .github/copilot-instructions.md
+cat github-copilot/instructions/<name>.instructions.md >> .github/copilot-instructions.md
 ```
 
 ### 7.3 OpenAI Codex CLI Snippets
@@ -398,7 +417,13 @@ GET /api/v1/toolkit?tool=github-copilot&category=agent
 
 ### 8.3 Mock Data Update
 
-`src/mocks/toolkit.ts` (16 existing items) needs a data pass to populate `compatibleWith` and `namespace`. This is a Phase 5 task (see Section 9). For Phase 2 and 3, the frontend can default absent `compatibleWith` to `["claude-code"]` with a client-side fallback.
+`src/mocks/toolkit.ts` needs a data pass to populate `compatibleWith` and `namespace`. For Phase 2 and 3, the frontend can default absent `compatibleWith` to `["claude-code"]` with a client-side fallback.
+
+The updated item counts to target in mock data:
+- Claude Code: 15 agents, 6 commands, 10 hooks
+- GitHub Copilot: 15 agents, 4 instructions, 6 prompts
+- OpenAI Codex: 15 agents, 9 hooks
+- Universal: 13 skills (`namespace: "shared"`), 4 rules (`namespace: "shared"`)
 
 ---
 
@@ -439,7 +464,7 @@ The following phase order minimizes risk and allows each phase to ship independe
 - Frontend filtering: when `tool` param is set, filter the query result by `compatibleWith` (client-side for now; server-side filtering via Phase 1 backend is the long-term path).
 - Update `BundleCard` to show aggregate tool chips.
 
-**Completion signal:** Filtering by "Claude Code" shows all 16 existing items (all tagged `claude-code`); filtering by "GitHub Copilot" shows only items tagged accordingly.
+**Completion signal:** Filtering by "Claude Code" shows all 15 agents + 6 commands (tagged `claude-code`); filtering by "GitHub Copilot" shows 15 agents + 4 instructions + 6 prompts + 13 universal skills.
 
 ### Phase 4: Install-Snippet Generator
 
@@ -456,11 +481,12 @@ The following phase order minimizes risk and allows each phase to ship independe
 
 ### Phase 5: Migration + Bulk Data Update
 
-**Goal:** All 16 existing mock items (and backend data) tagged with correct `compatibleWith` / `namespace` values.
+**Goal:** All items (and backend data) tagged with correct `compatibleWith` / `namespace` values.
 
-- Audit each of the 16 items in `src/mocks/toolkit.ts` against the three tool formats.
-- Assign `compatibleWith` and `namespace` to each item.
+- Audit each item in `src/mocks/toolkit.ts` against the three tool formats.
+- Assign `compatibleWith` and `namespace` to each item using the counts in Section 8.3 as targets.
 - Items with AGENTS.md-compatible content (plain Markdown instruction files) get `namespace: "shared"` and `compatibleWith: ["claude-code", "github-copilot", "openai-codex"]`.
+- Universal skills (`/skills/`) and rules (`/rules/`) get `namespace: "shared"` with tag namespaces `skill/<slug>-v<ver>` and `rule/<slug>-v<ver>`.
 - Items with Claude Code-specific hook format get `compatibleWith: ["claude-code"]`.
 - Items with Copilot `.agent.md`-specific format get `compatibleWith: ["github-copilot"]`.
 - Update backend data source (or static mocks) to reflect the audit results.
@@ -484,7 +510,7 @@ The following items require stakeholder input before or during implementation.
 
 5. **Rule items and append-only install**: Rules for Copilot are appended to `copilot-instructions.md` rather than installed as a new file. This means there is no idempotent uninstall path. Should the UI surface a warning that the operation is append-only, and offer a diff preview before appending?
 
-6. **Codex TOML format for agents**: The existing agent content in the repo is in Claude Code's Markdown+YAML frontmatter format. Adapting an agent for Codex requires a TOML rewrite. Should Phase 5 include authored TOML ports for each agent, or should the catalog initially mark agents as `compatibleWith: ["claude-code"]` only and add Codex support incrementally as ports are authored?
+6. **Codex TOML format for agents**: The existing agent content in the repo is in Claude Code's Markdown+YAML frontmatter format. Adapting an agent for Codex requires a TOML rewrite. The full port is complete (15 TOML agents in `openai-codex/agents/`). The catalog should mark agents as `compatibleWith: ["claude-code", "openai-codex"]` now that ports are authored.
 
 7. **Bundle compatibility**: A bundle today contains items across all categories. If some items in a bundle are not compatible with the selected tool, should the bundle be hidden from the catalog when that tool filter is active, shown with a "partial support" indicator, or shown only when "All tools" is selected?
 

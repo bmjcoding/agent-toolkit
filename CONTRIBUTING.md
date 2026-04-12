@@ -4,10 +4,11 @@
 
 ```
 agent-toolkit/
+├── skills/          # Universal skills (13) — single source of truth for all tools
+├── rules/           # Universal rules (4: docker, logging, node, python)
 ├── claude-code/     # Claude Code agents, commands, hooks, bundles, docs, scripts
 ├── github-copilot/  # GitHub Copilot agents, prompts, instructions
 ├── openai-codex/    # OpenAI Codex CLI agents and config templates
-├── shared/          # Tool-agnostic skills and rules (single source of truth)
 ├── AGENTS.md        # Root agent instruction file (all tools)
 └── CLAUDE.md        # Claude Code bridge to AGENTS.md
 ```
@@ -16,19 +17,25 @@ agent-toolkit/
 
 - Work off `main`. Use short-lived feature branches (`feat/<slug>`).
 - Keep per-tool content inside its own subdirectory.
-- Keep shareable content (rules, skills) under `shared/`.
+- Keep shareable content (rules, skills) under the repo root `skills/` and `rules/` dirs.
 
 ## Commit style
 
 Follow [Conventional Commits](https://www.conventionalcommits.org/):
 `type(scope): short description`
 
-Common scopes: `claude-code`, `github-copilot`, `openai-codex`, `shared`, `docs`, `chore`.
+Common scopes: `claude-code`, `github-copilot`, `openai-codex`, `skills`, `rules`, `docs`, `chore`.
 
 ## Component versioning
 
 Each component has its own `CHANGELOG.md` and version.
-Tag format: `<tool>/<slug>-v<version>` (e.g. `claude-code/frankenstein-v3.1.0`).
+Tag format:
+- `claude-code/<slug>-v<version>` (e.g. `claude-code/frankenstein-v3.1.0`)
+- `skill/<slug>-v<version>` (e.g. `skill/changelog-v4.1.0`)
+- `rule/<slug>-v<version>` (e.g. `rule/docker-v1.1.0`)
+- `github-copilot/<slug>-v<version>` — Copilot-specific content
+- `openai-codex/<slug>-v<version>` — Codex-specific content
+
 Run the frankenstein agent (`claude-code/agents/frankenstein/frankenstein.md`) when bumping a component.
 
 ## Install scripts

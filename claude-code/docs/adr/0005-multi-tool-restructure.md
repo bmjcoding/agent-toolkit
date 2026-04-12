@@ -27,29 +27,28 @@ The GitHub repository is renamed from `claude-toolkit` to `agent-toolkit`. This 
 
 ```
 agent-toolkit/
+├── skills/               # Universal skills (13) — single source of truth
+├── rules/                # Universal rules (4) — docker, logging, node, python
 ├── claude-code/          # All Claude Code-specific content
-│   ├── agents/
-│   ├── commands/
+│   ├── agents/           # 15 agents
+│   ├── commands/         # 6 slash commands
 │   ├── docs/
-│   ├── hooks/
-│   ├── rules/
+│   ├── hooks/            # 10 hooks
 │   └── scripts/
-├── github-copilot/       # GitHub Copilot VS Code IDE only
-│   ├── agents/
-│   ├── mcp/
-│   ├── scripts/
-│   └── skills/
-├── openai-codex/         # OpenAI Codex CLI
-│   ├── agents/
-│   ├── config.toml.template
-│   ├── hooks/
+├── github-copilot/       # GitHub Copilot VS Code IDE
+│   ├── agents/           # 15 .agent.md definitions
+│   ├── instructions/     # 4 path-specific instruction files
+│   ├── prompts/          # 6 .prompt.md files
+│   ├── skills/           # changelog wrapper
 │   └── scripts/
-└── shared/               # Tool-agnostic content (single source of truth)
-    ├── skills/
-    └── rules/
+└── openai-codex/         # OpenAI Codex CLI
+    ├── agents/           # 15 .toml agent definitions
+    ├── hooks/            # 9 .sh scripts + hooks.json
+    ├── config.toml.template  # 13 [[skills.config]] entries
+    └── scripts/
 ```
 
-Each tool directory is self-contained. Cross-tool content that would otherwise be duplicated (skills, generic rules) lives under `shared/`.
+Each tool directory is self-contained. Cross-tool content that works identically across all three tools (skills, generic rules) lives at the repository root under `skills/` and `rules/`.
 
 ### 3. AGENTS.md at repo root
 
@@ -65,9 +64,9 @@ Claude Code does not natively read `AGENTS.md`. To avoid duplicating the shared 
 
 This is Claude Code's documented @-import syntax. It instructs Claude Code to read `AGENTS.md` first, then apply any Claude Code-specific additions that follow in `CLAUDE.md`. This is the bridge pattern — not a symlink (see Alternatives Considered).
 
-### 5. Skills remain in shared/skills/ as single source of truth
+### 5. Skills and rules at repo root as single source of truth
 
-Skills previously lived under `skills/` at the repo root. They are moved to `shared/skills/`. Claude Code users access them via the updated `~/.claude/skills` symlink pointing to `agent-toolkit/shared/skills`. Codex CLI and Copilot users reference them from the same source location.
+Skills and rules live at the repository root (`/skills/`, `/rules/`). Claude Code users access them via updated symlinks: `~/.claude/skills → agent-toolkit/skills` and `~/.claude/rules → agent-toolkit/rules`. GitHub Copilot users install them via `.github/skills` symlink at install time. Codex CLI users reference them via `[[skills.config]]` entries in `config.toml` or `.agents/skills/` symlink.
 
 ### 6. Version bumps
 
@@ -75,7 +74,12 @@ All 48 components receive a `v2.0.0` major version bump to mark the breaking lay
 
 ### 7. New tag format
 
-Tags use the format `<tool>/<slug>-v<version>` (e.g., `claude-code/frankenstein-v2.0.0`, `shared/changelog-v2.0.0`). The tool prefix disambiguates components that share a slug across tool directories.
+Tags use the format `<namespace>/<slug>-v<version>`:
+- `claude-code/<slug>-v<ver>` for Claude Code agents, commands, hooks
+- `skill/<slug>-v<ver>` for universal skills under `skills/`
+- `rule/<slug>-v<ver>` for universal rules under `rules/`
+- `github-copilot/<slug>-v<ver>` for Copilot-specific content
+- `openai-codex/<slug>-v<ver>` for Codex-specific content
 
 ### 8. GitHub Copilot scope
 
@@ -93,7 +97,7 @@ Users with the v1 install have symlinks pointing into the old root-level directo
 # etc.
 ```
 
-After the restructure, these paths no longer exist. Running `claude-code/scripts/install.sh` retargets all six symlinks atomically to the new paths under `claude-code/` and `shared/`. The script is idempotent and supports `--dry-run` and `--check` flags. Users must run this script to restore a working install. See `claude-code/docs/migration-v2.md` for the full upgrade procedure.
+After the restructure, these paths no longer exist. Running `claude-code/scripts/install.sh` retargets all six symlinks atomically to the new paths under `claude-code/`, `skills/`, and `rules/`. The script is idempotent and supports `--dry-run` and `--check` flags. Users must run this script to restore a working install. See `claude-code/docs/migration-v2.md` for the full upgrade procedure.
 
 ### Bulk reference update
 
@@ -104,12 +108,12 @@ The 58 files containing the `claude-toolkit` literal string required updates. Th
 Three hook scripts required regex updates for the new directory structure:
 
 - `protect-config.sh`: the `PROTECTED` path regex updated from `claude-toolkit/` to `agent-toolkit/`.
-- `toolkit-drift-check.sh`: the `COMPONENT_PATTERN` updated from `^(agents|skills|hooks|commands|rules)/[^/]+/[^/]+` to `^(claude-code/(agents|hooks|commands|rules)|shared/skills|shared/rules)/[^/]+/[^/]+` to match components at their new nested paths.
+- `toolkit-drift-check.sh`: the `COMPONENT_PATTERN` updated to match components at their new nested paths under `claude-code/`, `skills/`, and `rules/`.
 - `toolkit-edit-reminder.sh`: both the grep pattern and the displayed reminder message updated to reference `agent-toolkit` and the new path conventions.
 
 ### Tag lineage
 
-The tag format change (`<tool>/<slug>-v<version>`) means that existing tags like `frankenstein-v1.5.0` do not roll forward to `claude-code/frankenstein-v2.0.0` automatically. `scripts/backfill-changelog-tags.sh` handles creation of the new-format tags. Old-format tags remain in the repository and are not deleted.
+The tag format change means that existing tags like `frankenstein-v1.5.0` do not roll forward to `claude-code/frankenstein-v2.0.0` automatically. `scripts/backfill-changelog-tags.sh` handles creation of the new-format tags. Old-format tags remain in the repository and are not deleted.
 
 ## Alternatives Considered
 
@@ -132,3 +136,30 @@ Symlink one file to the other so they stay in sync. Rejected because neither too
 - Migration guide: `claude-code/docs/migration-v2.md`
 - Install script: `claude-code/scripts/install.sh`
 - Drift check hook: `claude-code/hooks/toolkit-drift-check/toolkit-drift-check.sh`
+
+---
+
+## Addendum 2026-04-12: Full Port + /skills + /rules Root Relocation
+
+After the initial v2.0.0 restructure (above), the layout underwent a second wave of changes to complete full parity across all three tool surfaces and to relocate shared content from `shared/` to the repository root.
+
+### Scope of changes
+
+**Root relocation of shared content**: `shared/skills/` and `shared/rules/` moved to `/skills/` and `/rules/` at the repository root. The `shared/` directory is removed entirely. This change makes universal content more discoverable and simplifies the install script logic — there is no longer a `shared/` indirection layer. Symlink targets updated from `shared/skills` and `shared/rules` to `skills` and `rules` directly.
+
+**Full GitHub Copilot port**: The `github-copilot/` subtree now contains full parity content:
+- 15 agents (`.agent.md` format for VS Code, `.md` for cloud)
+- 4 instruction files under `github-copilot/instructions/` — one per universal rule (docker, logging, node, python) adapted to Copilot `applyTo` frontmatter
+- 6 prompt files under `github-copilot/prompts/` — direct equivalents of the 6 Claude Code slash commands
+- `github-copilot/skills/` retains the `changelog` wrapper; other skills are discoverable via install-time symlink `.github/skills → /skills`
+
+**Full OpenAI Codex CLI port**: The `openai-codex/` subtree now contains:
+- 15 agents in TOML format
+- 9 hook shell scripts plus `hooks.json` in `openai-codex/hooks/`
+- `config.toml.template` with 13 `[[skills.config]]` entries covering all universal skills
+
+**Tag namespace update**: The `shared/<slug>-v<ver>` tag namespace is replaced by:
+- `skill/<slug>-v<ver>` for universal skills
+- `rule/<slug>-v<ver>` for universal rules
+
+Existing `shared/` tags remain in the repository for lineage but are not used for new releases.

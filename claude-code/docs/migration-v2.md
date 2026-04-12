@@ -23,18 +23,25 @@ Your `~/.claude/` symlinks pointed into the root of the `claude-toolkit` repo:
 
 All six directories lived at the repo root.
 
-### After (v2)
+### After (v2 — current)
 
-The repository is renamed to `agent-toolkit`. Claude Code-specific content moves to `claude-code/`. Skills move to `shared/skills/` (single source of truth shared across tools).
+The repository is renamed to `agent-toolkit`. Claude Code-specific content moves to
+`claude-code/`. Skills and rules move to the repository root (`/skills/`, `/rules/`) as
+universal content shared across all three tools.
 
 ```
 ~/.claude/agents    -> /path/to/agent-toolkit/claude-code/agents
 ~/.claude/commands  -> /path/to/agent-toolkit/claude-code/commands
 ~/.claude/docs      -> /path/to/agent-toolkit/claude-code/docs
 ~/.claude/hooks     -> /path/to/agent-toolkit/claude-code/hooks
-~/.claude/rules     -> /path/to/agent-toolkit/claude-code/rules
-~/.claude/skills    -> /path/to/agent-toolkit/shared/skills
+~/.claude/rules     -> /path/to/agent-toolkit/rules
+~/.claude/skills    -> /path/to/agent-toolkit/skills
 ```
+
+> **Note:** An earlier iteration of v2 placed skills and rules under `shared/skills/`
+> and `shared/rules/`. That intermediate layout was superseded — the current paths are
+> `/skills/` and `/rules/` directly at the repo root. If your install still points to
+> `shared/skills` or `shared/rules`, re-run `install.sh` to retarget.
 
 ---
 
@@ -63,6 +70,7 @@ The install script retargets all six symlinks atomically. It is idempotent: runn
 |---|---|
 | `--dry-run` | Print planned changes without writing anything. |
 | `--check` | Verify all symlinks exist and point to valid targets. Exit non-zero if any are missing or broken. |
+| `--tool <name>` | Install only for the specified tool (`claude-code`, `github-copilot`, `openai-codex`). Default: `claude-code`. |
 | `AGENT_TOOLKIT_DIR=/path/to/repo` | Override the repo root path (default: auto-detected from the script's own location). |
 
 **Preview first (recommended):**
@@ -89,34 +97,52 @@ bash claude-code/scripts/install.sh --check
 
 ### Step 3 — GitHub Copilot users (optional)
 
-If you use GitHub Copilot in VS Code, manually wire the Copilot instruction files into your project's `.github/` directory:
+If you use GitHub Copilot in VS Code, wire the Copilot content into your project's `.github/` directory using the Copilot install script or manually:
 
 ```bash
-# From your project root:
-cp /path/to/agent-toolkit/github-copilot/instructions/*.md .github/instructions/
-```
+# Using the install script
+bash github-copilot/scripts/install.sh --dry-run
+bash github-copilot/scripts/install.sh
 
-Or add a symlink if you want live updates:
-
-```bash
-ln -sf /path/to/agent-toolkit/github-copilot/instructions .github/copilot-instructions
+# Or manually symlink each directory
+ln -s "$(pwd)/github-copilot/agents"       .github/agents
+ln -s "$(pwd)/github-copilot/instructions" .github/instructions
+ln -s "$(pwd)/github-copilot/prompts"      .github/prompts
+ln -s "$(pwd)/skills"                      .github/skills
 ```
 
 The `github-copilot/` content targets VS Code IDE integration only. It does not apply to the GitHub Copilot cloud agent or CLI surfaces.
 
+### Full Copilot port (v2 new content)
+
+GitHub Copilot now has full parity content:
+- **15 agents** in `.github/agents/` — `.agent.md` format for VS Code
+- **4 instructions** in `.github/instructions/` — docker, logging, node, python rules adapted for Copilot `applyTo` frontmatter
+- **6 prompts** in `.github/prompts/` — equivalents of the 6 Claude Code slash commands
+- **Universal skills** discoverable via `.github/skills → /skills` symlink
+
 ### Step 4 — OpenAI Codex CLI users (optional)
 
-If you use the OpenAI Codex CLI, copy (or symlink) the agent TOML files into your Codex agents directory:
+If you use the OpenAI Codex CLI, use the Codex install script or wire manually:
 
 ```bash
-cp /path/to/agent-toolkit/openai-codex/agents/*.toml ~/.codex/agents/
+# Using the install script
+bash openai-codex/scripts/install.sh --dry-run
+bash openai-codex/scripts/install.sh
+
+# Or manually
+cp openai-codex/agents/*.toml ~/.codex/agents/
+cp openai-codex/hooks/hooks.json .codex/hooks.json
+cp openai-codex/config.toml.template .codex/config.toml
+ln -s "$(pwd)/skills" .agents/skills
 ```
 
-Or to keep them in sync with the repo:
+### Full Codex port (v2 new content)
 
-```bash
-ln -sf /path/to/agent-toolkit/openai-codex/agents ~/.codex/agents/agent-toolkit
-```
+OpenAI Codex CLI now has full parity content:
+- **15 agents** in TOML format under `openai-codex/agents/`
+- **9 hooks** (shell scripts) plus `hooks.json` manifest under `openai-codex/hooks/`
+- **`config.toml.template`** with 13 `[[skills.config]]` entries — one per universal skill
 
 ---
 
@@ -155,6 +181,17 @@ find ~/.claude -maxdepth 1 -type l | while read link; do
 done
 ```
 
+### Skills pointing to `shared/skills` (intermediate path)
+
+If `readlink ~/.claude/skills` returns a path ending in `shared/skills`, your install is
+pointing to the now-removed intermediate layout. Re-run the install script:
+
+```bash
+bash claude-code/scripts/install.sh
+```
+
+Expected output after fix: path ends in `/skills` (no `shared/` segment).
+
 ### Missing `claude-code/scripts/install.sh`
 
 If the install script is not present after `git pull`, confirm you are on the correct branch or that your local clone fully pulled:
@@ -169,13 +206,13 @@ If `install.sh` is absent, your pull may have stalled or the file may be listed 
 
 ### Skills not loading in Claude Code
 
-If Claude Code cannot find skills after migration, verify the `~/.claude/skills` symlink points to `agent-toolkit/shared/skills` and not to the old `claude-toolkit/skills` path:
+If Claude Code cannot find skills after migration, verify the `~/.claude/skills` symlink points to `agent-toolkit/skills` (not `agent-toolkit/shared/skills`):
 
 ```bash
 readlink ~/.claude/skills
 ```
 
-Expected output: `/path/to/agent-toolkit/shared/skills`
+Expected output: `/path/to/agent-toolkit/skills`
 
 If it still points to the old location, re-run `bash claude-code/scripts/install.sh`.
 
@@ -185,13 +222,7 @@ After the restructure, hook scripts reference `agent-toolkit` paths internally. 
 
 ### `toolkit-drift-check` warnings about unrecognized paths
 
-The `COMPONENT_PATTERN` in `toolkit-drift-check.sh` was updated to match the new nested paths:
-
-```
-^(claude-code/(agents|hooks|commands|rules)|shared/skills|shared/rules)/[^/]+/[^/]+
-```
-
-If you see false-positive drift warnings, confirm your local clone has the latest version of `claude-code/hooks/toolkit-drift-check/toolkit-drift-check.sh`.
+The `COMPONENT_PATTERN` in `toolkit-drift-check.sh` was updated to match the new nested paths including root-level `skills/` and `rules/`. If you see false-positive drift warnings, confirm your local clone has the latest version of `claude-code/hooks/toolkit-drift-check/toolkit-drift-check.sh`.
 
 ---
 
@@ -218,7 +249,12 @@ Verify the result with `bash claude-code/scripts/install.sh --check` against the
 
 ## Version Notes
 
-All 48 components received a `v2.0.0` major version bump to mark this breaking layout change. Component changelogs and tag lineage continue under the new tag format `<tool>/<slug>-v<version>` (e.g., `claude-code/frankenstein-v2.0.0`, `shared/changelog-v2.0.0`). See [ADR 0004](adr/0004-per-component-changelog-tag-format.md) for the tag format rationale.
+All 48 components received a `v2.0.0` major version bump to mark this breaking layout change. Component changelogs and tag lineage continue under the updated tag format:
+- `claude-code/<slug>-v<version>` (e.g., `claude-code/frankenstein-v2.0.0`)
+- `skill/<slug>-v<version>` (e.g., `skill/changelog-v2.0.0`)
+- `rule/<slug>-v<version>` (e.g., `rule/docker-v2.0.0`)
+
+The prior `shared/<slug>-v<version>` namespace is retired. See [ADR 0004](adr/0004-per-component-changelog-tag-format.md) for the tag format rationale and [ADR 0005](adr/0005-multi-tool-restructure.md) for the full restructure decision record.
 
 ---
 

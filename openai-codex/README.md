@@ -1,13 +1,43 @@
 # openai-codex/
 
-This directory contains **OpenAI Codex CLI-specific content** — agents and configuration formatted for the Codex CLI (Rust client, v0.120.0+).
+This directory contains **OpenAI Codex CLI-specific content** — agents, hooks, and configuration formatted for the Codex CLI (Rust client, v0.120.0+).
 
-## What Goes Here
+## Subdirectory Layout
 
 ```
 openai-codex/
-  agents/   # Custom agent definitions (TOML format: <name>.toml)
-  config/   # Project-level Codex config (.codex/config.toml equivalent stubs)
+  agents/              # 15 custom agent definitions (TOML format: <name>.toml)
+  hooks/               # 9 shell scripts + hooks.json manifest
+    branch-guard.sh
+    changelog-check.sh
+    extract-handoff.sh
+    inject-context.sh
+    integrity-warn.sh
+    pre-push-secrets.sh
+    protect-config.sh
+    toolkit-drift-check.sh
+    toolkit-edit-reminder.sh
+    hooks.json           # Hook manifest wiring all 9 scripts to Codex events
+  config.toml.template # Project config template with 13 [[skills.config]] entries
+  scripts/
+    install.sh         # Wire openai-codex/ content into .codex/ and .agents/
+```
+
+Universal skills (13) live at the **repository root** under `skills/`. Codex reads
+them via `.agents/skills/` symlink or `[[skills.config]]` entries in `config.toml`.
+
+## Install
+
+```sh
+# Using the install script (recommended)
+bash openai-codex/scripts/install.sh --dry-run
+bash openai-codex/scripts/install.sh
+
+# Or manually
+cp openai-codex/agents/*.toml ~/.codex/agents/
+cp openai-codex/hooks/hooks.json .codex/hooks.json
+cp openai-codex/config.toml.template .codex/config.toml
+ln -s /path/to/agent-toolkit/skills .agents/skills
 ```
 
 ## AGENTS.md Integration
@@ -32,14 +62,44 @@ Your agent instructions here.
 
 See `openai-codex/agents/planner.toml` for a canonical example with inline documentation of each field and the mapping from Claude Code frontmatter keys.
 
-## Hooks (Experimental)
+## Hooks
 
-Codex CLI supports project-level hooks via `~/.codex/hooks.json` or `<repo>/.codex/hooks.json`. Hooks are **experimental** and require `features.codex_hooks = true` in `config.toml`. Currently Bash-only; `PreToolUse` and `PostToolUse` events supported. Disabled on Windows.
+Codex CLI hooks are configured via `hooks.json` and are **experimental** — they require `features.codex_hooks = true` in `config.toml`. Currently Bash-only; `PreToolUse` and `PostToolUse` events supported. Disabled on Windows.
+
+The 9 hooks in `openai-codex/hooks/`:
+
+| Script | Event | Purpose |
+|---|---|---|
+| `branch-guard.sh` | PreToolUse | Prevent destructive operations on protected branches |
+| `changelog-check.sh` | PreToolUse | Enforce changelog entry before commit |
+| `extract-handoff.sh` | PostToolUse | Extract agent handoff JSON from output |
+| `inject-context.sh` | PreToolUse | Inject session context into agent runs |
+| `integrity-warn.sh` | PostToolUse | Warn when output integrity checks fail |
+| `pre-push-secrets.sh` | PreToolUse | Scan for secrets before push |
+| `protect-config.sh` | PreToolUse | Block writes to protected config files |
+| `toolkit-drift-check.sh` | PostToolUse | Detect uncommitted drift in toolkit components |
+| `toolkit-edit-reminder.sh` | PostToolUse | Remind to update changelog after toolkit edits |
 
 ## Skills
 
-Codex CLI reads skills from `.agents/skills/` (note: `.agents/`, not `.claude/`). During the restructure, a `.agents/skills/` directory at repo root may be added as a symlink or copy target pointing to `shared/skills/`.
+The `config.toml.template` includes 13 `[[skills.config]]` entries — one per universal
+skill — pointing to `skills/<slug>/SKILL.md` at the repo root. Copy the template to
+`.codex/config.toml` and adjust the base path to match your checkout location.
+
+Codex can also discover skills via `.agents/skills/` symlink:
+
+```sh
+ln -s /path/to/agent-toolkit/skills .agents/skills
+```
 
 ## Config Location
 
 Project config: `.codex/config.toml` (loaded only from trusted repos). Global config: `~/.codex/config.toml`. MCP servers are declared as `[mcp_servers.<id>]` tables in config.toml.
+
+## Tag Format
+
+```
+openai-codex/<slug>-v<major>.<minor>.<patch>
+```
+
+Example: `openai-codex/frankenstein-v1.0.0`
