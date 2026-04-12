@@ -8,6 +8,28 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Changed
+
+- `refactor(layout): move skills + rules to repo root; drop shared/ dir (285f27f)` —
+  `skills/` and `rules/` previously under `shared/` are now at the repository root.
+  The `shared/` directory is removed. Symlink targets updated: `~/.claude/skills →
+  <repo>/skills`, `~/.claude/rules → <repo>/rules`.
+
+### Added
+
+- `feat(github-copilot): full port — 15 agents, 4 instructions, 6 prompts` — Complete
+  GitHub Copilot surface port across multiple commits. Agents cover all 15 toolkit roles
+  in `.agent.md` format. Instructions adapt the 4 universal rules for Copilot's
+  `applyTo` frontmatter. Prompts provide direct Copilot equivalents of the 6 slash
+  commands.
+- `feat(openai-codex): full port — 15 agents, 9 hooks + hooks.json, 13 skills.config
+  entries` — Complete OpenAI Codex CLI surface port. Agents cover all 15 toolkit roles
+  in TOML format. Hooks include 9 shell scripts plus `hooks.json` manifest.
+  `config.toml.template` exposes all 13 universal skills via `[[skills.config]]` entries.
+- `feat(scripts): install.sh expanded for all 3 tools` — Install scripts updated to
+  handle root-level skills and rules paths and tool-specific wiring for GitHub Copilot
+  and OpenAI Codex CLI (from ST-D1).
+
 ### Fixed
 
 - Shell script hardening in `claude-code/scripts/install.sh`,
@@ -17,7 +39,7 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
   based on security, SRE, and design-architect review findings (phase 4-a).
 - Documentation corrections to `AGENTS.md`, `CLAUDE.md`, `README.md`,
   ADR 0005, `claude-code/docs/migration-v2.md`, UX design doc,
-  `openai-codex/README.md`, and `shared/skills/changelog/SKILL.md`
+  `openai-codex/README.md`, and `skills/changelog/SKILL.md`
   based on design-architect and SRE review findings (phase 4-b).
 - Minor inline corrections to `CHANGELOG.md` and
   `claude-code/agents/frankenstein/frankenstein.md`

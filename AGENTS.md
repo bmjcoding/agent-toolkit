@@ -12,10 +12,11 @@ Directory layout:
 
 ```
 agent-toolkit/
-  shared/          # Tool-agnostic content (skills, rules) — single source of truth
+  skills/          # Universal skills (13) — single source of truth for all tools
+  rules/           # Universal rules (4) — docker, logging, node, python
   claude-code/     # Claude Code-specific agents, commands, hooks, bundles
-  github-copilot/  # GitHub Copilot-specific agents and instructions
-  openai-codex/    # OpenAI Codex CLI-specific agents and config
+  github-copilot/  # GitHub Copilot-specific agents, instructions, prompts
+  openai-codex/    # OpenAI Codex CLI-specific agents, hooks, and config
 ```
 
 ---
@@ -83,9 +84,12 @@ Global git config enforces `gpgsign=true` — all commits must be GPG-signed. Pl
 
 All components follow **SemVer 2.0.0** with **Keep a Changelog 1.1.0** format.
 
-- Tag format: `<tool>/<slug>-v<major>.<minor>.<patch>` (e.g., `claude-code/frankenstein-v1.11.0`, `shared/changelog-v4.0.0`)
-  - Use `claude-code/<slug>-v<ver>` for agents, commands, hooks, and rules under `claude-code/`
-  - Use `shared/<slug>-v<ver>` for skills and rules under `shared/`
+- Tag format: `<namespace>/<slug>-v<major>.<minor>.<patch>`
+  - `claude-code/<slug>-v<ver>` — Claude Code agents, commands, hooks
+  - `skill/<slug>-v<ver>` — universal skills under `skills/`
+  - `rule/<slug>-v<ver>` — universal rules under `rules/`
+  - `github-copilot/<slug>-v<ver>` — Copilot-specific agents, instructions, prompts
+  - `openai-codex/<slug>-v<ver>` — Codex-specific agents, hooks, config
 - Bump rules:
   - **PATCH**: wording fixes, ≤5 line changes, no new sections
   - **MINOR**: new sections or capabilities

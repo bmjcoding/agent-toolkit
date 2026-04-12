@@ -14,6 +14,9 @@ The following slash commands are available in this toolkit (defined in `claude-c
 - `/backlog` — view and manage the pipeline backlog
 - `/sync-toolkit` — deploy toolkit components to `~/.claude/`
 
+Skills are loaded from `skills/` (repo root) via the `~/.claude/skills` symlink.
+Rules are loaded from `rules/` (repo root) via the `~/.claude/rules` symlink.
+
 For all of the above commands, scope resolution and autonomous execution rules are defined in `AGENTS.md` under "Command Scope Resolution" and "Autonomous Execution".
 
 ## Subagent Tool Restrictions
