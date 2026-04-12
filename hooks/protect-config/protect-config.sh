@@ -27,15 +27,17 @@ deny() {
   exit 0
 }
 
-MSG="Write to control-plane files is blocked. Protected paths (settings.json, hooks/, CLAUDE.md, agents/, statusline-command.sh, orchestrator logs, hookify rules) require direct user action to modify."
+MSG="Write to control-plane files is blocked. Protected paths (settings.json, hooks/, CLAUDE.md, agents/, statusline-command.sh, orchestrator logs, orchestrator session.id, hookify rules) require direct user action to modify."
 
 # ------------------------------------------------------------------
 # PROTECTED path fragments (v2 -- HB-009, HB-010, R-01, RT-MCP-014, CLAUD-002)
 # Covers: settings.json, hooks/, CLAUDE.md, agents/, statusline-command.sh,
 #         claude-toolkit/ real-path equivalents, orchestrator/logs/,
+#         orchestrator/sessions/<timestamp>/logs/ (timestamp-validated to prevent
+#         path-traversal SIDs), orchestrator/session.id (prevents session hijacking),
 #         hookify*.local.md rule files
 # ------------------------------------------------------------------
-PROTECTED='(\.claude/(settings\.json|hooks/|CLAUDE\.md|agents/|statusline-command\.sh)|claude-toolkit/|\.orchestrator/logs/|hookify[^/]*\.local\.md)'
+PROTECTED='(\.claude/(settings\.json|hooks/|CLAUDE\.md|agents/|statusline-command\.sh)|claude-toolkit/|\.orchestrator/(logs/|sessions/[0-9]{8}T[0-9]{6}/logs/|session\.id)|hookify[^/]*\.local\.md)'
 
 # ------------------------------------------------------------------
 # WRITE_OPS (v2 -- comprehensive write-intent operator detection)
