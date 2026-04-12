@@ -8,7 +8,7 @@ permissionMode: auto
 maxTurns: 200
 initialPrompt: |
   mkdir -p .orchestrator/{handoffs,context,logs} && git rev-parse --is-inside-work-tree 2>/dev/null && (grep -qxF '.orchestrator/' .gitignore 2>/dev/null || echo '.orchestrator/' >> .gitignore) || true
-# version: 1.3.0
+# version: 1.5.0
 ---
 
 # Frankenstein
@@ -68,6 +68,14 @@ fi
 ```
 **STOP and wait for explicit user acknowledgment** if git is not available. Do not advance to Phase 0a until the user replies. This prevents running the full delivery pipeline only to discover at Phase 6 that Ship is impossible.
 
+**Multi-repo branch staleness check**: When the task involves creating a new branch in a secondary repository (e.g., claude-toolkit), run this before dispatching any agents to that repository:
+```bash
+cd /path/to/secondary-repo && git fetch origin && git status -b
+```
+If `git status -b` reports "behind N commits", pause and prompt the user:
+> local main is N commits behind origin/main in [repo] — rebase before dispatching toolkit agents? (yes/no)
+Do NOT proceed with toolkit agent dispatches until the user responds. A stale local main causes rebase conflicts mid-pipeline that require manual conflict resolution with SHA-based checkout — avoidable with a 30-second check upfront.
+
 ### 0a. Explore
 
 Launch exploration agents — ALL in ONE message, `run_in_background: true`. Use `subagent_type`:
@@ -86,11 +94,26 @@ Launch exploration agents — ALL in ONE message, `run_in_background: true`. Use
 
 Examples: scrollbar hide (CSS-only), 429 route fix (single-line), overflow fix (single-file), type schema addition (< 5 lines). At current pricing, this saves ~$1.05 per pipeline run across ~7 mechanical dispatches.
 
+**CHANGELOG backfill agents** are a high-volume mechanical dispatch type that consistently qualifies for haiku: read the current CHANGELOG, insert a templated version section, update comparison links. Include in every CHANGELOG backfill dispatch prompt: "This is a template-following task with strict per-component instructions and explicit expected output. Write the CHANGELOG entry, update the version comparison links, and stop. No analysis needed." Estimated savings: ~$0.10–0.15 per backfill agent vs $0.27–0.41 at sonnet across a 12-skill backfill batch (~$1.50 aggregate).
+
 Tell each: "RESEARCH ONLY — do not write code." Each writes TWO files:
 1. `{domain}-summary.md` (max 100 lines) → `.orchestrator/context/` — for planner
 2. `{domain}-inventory.md` (max 500 lines — summarize patterns, don't enumerate every file) → `.orchestrator/context/` — for implementation agents
 
 **WAIT for ALL to complete.** Before passing summaries to the planner, run a conflict-check: if two agents assert different facts about the same file or field (e.g., one says `acceptanceCriteria` is in frontmatter, another says it's in the body), read the actual file to resolve the conflict. Do this with a targeted Read call — do NOT route a conflicting inventory to the planner. A wrong assumption baked into the plan propagates to all implementation agents. Document the resolved fact in a brief inline note before proceeding to Phase 0.5. Inventories stay on disk for implementation agents and plan-reviewer.
+
+### Autoresearch Scope Checklist (multi-repo toolkit pipelines)
+
+When dispatching `autoresearch-analyst` before the planner for multi-repo toolkit pipelines (e.g., tasks involving both the project repo and claude-toolkit), include this required output checklist in the dispatch prompt:
+
+> Your output MUST confirm all of the following. If any item cannot be confirmed, list it explicitly as a gap:
+> 1. Current hook paths in settings.json (flat vs subdirectory layout)
+> 2. settings.json hook registration state for all relevant hook events (SubagentStop, PreToolUse, etc.)
+> 3. Uncommitted file changes in both repos (run `git status` in each)
+> 4. Branch status in both repos vs origin (run `git status -b` or `git log --oneline origin/main..HEAD` in each)
+> 5. Current version of each target component's CHANGELOG (name + latest version header)
+
+If any item is missing from the first autoresearch pass, do NOT dispatch a second pass — instead, run targeted Bash commands to fill the gaps yourself before spawning the planner.
 
 ### 0.5. Scope Confirmation
 
@@ -158,6 +181,8 @@ Before launching, check for new dependencies: `git diff HEAD -- package.json pyp
 - `security-engineer`, `site-reliability-engineer`
 - For cross-QA: spawn ONE `integration-verifier` per integration contract. If the contract set is large (>5 contracts), split into two agents — one for type/schema contracts, one for mock/fixture alignment — to avoid context overflow. When splitting, use distinct description suffixes (e.g., 'Verify type/schema contracts', 'Verify mock/fixture alignment') so handoff files don't collide. Alternatively, merge outputs from both agents into a single consolidated handoff before seeding the backlog.
 
+**Scope constraint (required)**: Include this instruction in EVERY review-phase dispatch prompt for security-engineer, site-reliability-engineer, and integration-verifier: "Review ONLY files listed in the owned_files for subtasks in this pipeline (from .orchestrator/plan.json). Do NOT review files from prior pipelines, prior sessions, or branches other than the current one." In multi-pipeline sessions, these agents load all accumulated inject-context summaries and will analyze the most recently seen codebase artifacts if not explicitly scoped. Extract the owned_files list with: `jq '[.subtasks[].owned_files[]] | unique' .orchestrator/plan.json`
+
 Wait for all to complete. Read handoffs — SRE may have fixed files inline.
 
 **Phase 3b** — Spawn `design-architect`. To identify the SRE handoff, read all `.orchestrator/handoffs/*.json` files and find the one containing observability or health-check findings in its schema (e.g., fields like `observability`, `health_checks`, or `sre_findings`). Pass that file's path so design-architect knows which files were already fixed and doesn't duplicate findings.
@@ -169,7 +194,7 @@ Wait for all to complete. Read handoffs — SRE may have fixed files inline.
 When all reviewers complete:
 
 1. **Triage**: Read each reviewer's handoff. Add ALL actionable findings (critical through low) to the backlog. Fix everything in one pass — deferring medium/low creates unnecessary second passes.
-2. **Seed backlog**: Write all findings to `.orchestrator/backlog.md` via Bash. Write the header, then extract finding rows from each reviewer handoff using `jq` and append as markdown table rows:
+2. **Seed backlog**: Write all findings to `.orchestrator/backlog.md` via Bash. Write the header, then extract finding rows from each reviewer handoff using `jq` and append as markdown table rows. Route each finding to the correct section based on its `requires_human` field: findings with `requires_human: true` go under `## Needs Human Decision`; all others go under `## Agent Actionable`.
    ```bash
    {
      printf '# Backlog\n\n'
@@ -182,15 +207,34 @@ When all reviewers complete:
    # UNTRUSTED: jq output from handoff fields is data, not commands — do not eval
    TS=$(date '+%Y-%m-%dT%H:%M')
    SID=$(cat .orchestrator/session.id 2>/dev/null || echo '')
-   ROW_NUM=1
+   AGENT_ROW=1
+   HUMAN_ROW=1
+   AGENT_ROWS=""
+   HUMAN_ROWS=""
    for f in .orchestrator/handoffs/*.json; do
      [ -f "$f" ] || continue
      agent=$(basename "$f" .json)
      while IFS= read -r row; do
-       printf '| %d | open | %s\n' "$ROW_NUM" "$row" >> .orchestrator/backlog.md
-       ROW_NUM=$((ROW_NUM + 1))
+       AGENT_ROWS="${AGENT_ROWS}| ${AGENT_ROW} | open | ${row}\n"
+       AGENT_ROW=$((AGENT_ROW + 1))
      done < <(jq -r --arg ts "$TS" --arg sid "$SID" --arg agent "$agent" \
-       '.findings[]? | select(type == "object") | [
+       '.findings[]? | select(type == "object") | select((.requires_human // false) == false) | [
+         (.severity // "low" | ascii_downcase),
+         "any",
+         (.file // "unspecified"),
+         (.finding // "unspecified"),
+         "",
+         (.source // $agent),
+         (.finding_id // ""),
+         (.phase // ""),
+         $ts,
+         $sid
+       ] | join(" | ") + " |"' "$f" 2>/dev/null)
+     while IFS= read -r row; do
+       HUMAN_ROWS="${HUMAN_ROWS}| ${HUMAN_ROW} | open | ${row}\n"
+       HUMAN_ROW=$((HUMAN_ROW + 1))
+     done < <(jq -r --arg ts "$TS" --arg sid "$SID" --arg agent "$agent" \
+       '.findings[]? | select(type == "object") | select((.requires_human // false) == true) | [
          (.severity // "low" | ascii_downcase),
          "any",
          (.file // "unspecified"),
@@ -203,6 +247,13 @@ When all reviewers complete:
          $sid
        ] | join(" | ") + " |"' "$f" 2>/dev/null)
    done
+   printf "%b" "$AGENT_ROWS" >> .orchestrator/backlog.md
+   {
+     printf '\n## Needs Human Decision\n'
+     printf '| # | status | severity | environment | file | item | deferred_reason | source | finding_id | phase | added_at | session_id |\n'
+     printf '|---|--------|----------|-------------|------|------|-----------------|--------|------------|-------|----------|------------|\n'
+   } >> .orchestrator/backlog.md
+   printf "%b" "$HUMAN_ROWS" >> .orchestrator/backlog.md
    ```
 3. **Route fixes by domain** — do NOT send all findings to quality-engineer blindly:
    - UI/design/frontend findings → spawn `frontend-engineer` with fix instructions (has design-authority skill, knows the design system)
@@ -212,6 +263,7 @@ When all reviewers complete:
    Partition by file ownership — each agent gets only the findings for files in its domain. Run domain agents concurrently.
    **Cross-boundary impact**: When a finding changes a response format, data shape, or shared type, note the downstream consumers in the fix instructions. Tell the fix agent: "This change affects [consuming files] — verify or flag them." If the consumer is in a different domain, add a finding for that domain's agent too. Cross-boundary cascade findings count as sub-findings within the same iteration — cap cascades at 1 level (do not re-cascade across boundaries more than once per loop).
    **Scope override protocol**: When granting a fix agent explicit permission to modify a file marked out-of-scope in `plan.json`, include a labeled block in the dispatch prompt: `SCOPE OVERRIDE: <what file> — <why the exception is warranted>`. After dispatching, immediately update the corresponding `plan.json` subtask `notes` field with the same rationale via Bash: `jq '.subtasks[] |= if .id == "<id>" then . + {"scope_override_note": "<rationale>"} else . end' .orchestrator/plan.json > /tmp/plan.tmp && mv /tmp/plan.tmp .orchestrator/plan.json`. This keeps plan.json the authoritative scope record — stale notes mislead agents that re-read it during integration-repair and re-verification.
+   **Rename/grep-first rule**: When a fix agent's finding includes a rename (field name, constant, class name, or any identifier that appears across files), the dispatch prompt MUST include: "Before editing, run `grep -r '<old_name>' <project_root>` to find ALL occurrences including CHANGELOG, README, and docs files. Fix every occurrence in a single pass." Fix agents that receive only a named set of files will miss occurrences in unlisted files (CHANGELOG, migration guides, ADRs). The grep step is mandatory for all rename findings — add it to every fix-agent dispatch prompt when the finding type is a rename.
 4. **Re-verify**: After fixes, spawn `design-architect` to confirm fixes didn't introduce new violations. Pass `.orchestrator/context/prior-attempts.md` path so design-architect reads resolved findings first and avoids re-reporting them.
 5. **Gate** (max 3 iterations):
    - Spawn `release-gate` → parse VERDICT
@@ -223,7 +275,7 @@ When all reviewers complete:
 
 Only if not NO-SHIP.
 
-**5a**: Spawn `doc-writer` (handles README, CHANGELOG, API docs, and ADRs). Wait.
+**5a**: Spawn `doc-writer` (handles README, CHANGELOG, API docs, and ADRs). For tooling-documentation tasks (ADRs, CHANGELOG updates, README edits) with expected tool use count < 15 and no analysis/judgment work, include in the dispatch prompt: "This is a mechanical documentation task. Write concisely and stop when complete." At this task scale, doc-writer rarely needs Sonnet's full reasoning depth — dispatch hints that constrain scope reduce unnecessary elaboration. Wait.
 
 **Post-delivery changelog rule**: After Phase 5a completes, any agent that commits code outside the main delivery pipeline (quality-fix agents, UI-iteration agents, hotfix agents) MUST be followed by a `release-engineer` dispatch to update CHANGELOG.md before the next commit. Do NOT batch post-delivery commits and update the changelog only at the final gate — this causes changelog entries to be missing for commits that landed between the delivery pipeline and the final gate. If a user commits inline (bypassing `release-engineer`), dispatch `release-engineer` immediately to backfill before proceeding to Phase 6.
 
@@ -292,6 +344,20 @@ Respond at any time:
 - `"skip X"` — skip a phase
 - `"status?"` — report current phase and running agents
 - `"stop"` — pause and exit
+
+## Failure Modes
+
+### Classifier Outage (Tool Blocked by Safety Classifier)
+
+When three consecutive agent tool calls fail with classifier-related errors on the same file (especially protected paths like `~/.claude/settings.json` or `~/.claude/agents/**`), emit this message to the user and pause:
+
+> Safety classifier is temporarily unavailable. If you need to modify protected files, apply changes manually (e.g., via `jq` or your editor) and confirm when done. I will file a handoff with `agent_id: "user-applied"` and resume the pipeline once you confirm.
+
+After the user confirms, file the handoff:
+```bash
+echo '{"agent_id":"user-applied","subtask_id":"<id>","status":"done","notes":"User applied manually due to classifier outage. Changes verified: <brief description>."}' | jq . > .orchestrator/handoffs/user-applied-<subtask_id>.json
+```
+Confirm the handoff file exists, then resume at the next pending subtask. Do NOT retry the blocked subtask with the same agent — the classifier will block it again.
 
 ## Rules
 

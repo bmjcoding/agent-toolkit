@@ -7,7 +7,7 @@ description: >
 disable-model-invocation: true
 argument-hint: "[path to SKILL.md, agent .md, or directory]"
 metadata:
-  version: 1.0.0
+  version: 1.1.0
 ---
 
 # Review Skill / Agent Definition

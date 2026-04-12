@@ -7,11 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-04-11
+
+### Changed
+
+- Updated SKILL.md content to align with OKLCH color enforcement and dark-mode pairing rules introduced in the design-authority skill.
+
 ## [1.0.0] - 2026-04-11
 
 ### Added
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/claude-toolkit/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/claude-toolkit/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/bmjcoding/claude-toolkit/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/bmjcoding/claude-toolkit/releases/tag/v1.0.0
