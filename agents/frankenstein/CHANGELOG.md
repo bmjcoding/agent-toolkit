@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.6.0] - 2026-04-12
+
+### Added
+
+- Pre-flight WIP audit in Phase 0: run `git status --short` before dispatching any agents; surface untracked and tracked-modified files not related to the current task; block planning until the user acknowledges or stashes prior-session WIP (REC-3).
+- Post-truncation git status audit: after any agent returns without a handoff file, immediately run `git status --short`; if files outside the agent's `owned_files` are modified, stash or revert before continuing (REC-2).
+- Haiku-eligible role roster: explicit table of 7 confirmed subtask roles (explore-skill, rules-backfill, integration-repair, doc-writer, quality-fix-targeted, subtask-repair, post-validation) that dispatch with `model: haiku` by default, based on pipeline performance data (REC-7).
+
 ## [1.5.0] - 2026-04-12
 
 ### Added
@@ -58,10 +66,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/claude-toolkit/compare/v1.5.0...HEAD
-[1.5.0]: https://github.com/bmjcoding/claude-toolkit/compare/v1.4.0...v1.5.0
-[1.4.0]: https://github.com/bmjcoding/claude-toolkit/compare/v1.3.0...v1.4.0
-[1.3.0]: https://github.com/bmjcoding/claude-toolkit/compare/v1.2.0...v1.3.0
-[1.2.0]: https://github.com/bmjcoding/claude-toolkit/compare/v1.1.0...v1.2.0
-[1.1.0]: https://github.com/bmjcoding/claude-toolkit/compare/v1.0.0...v1.1.0
-[1.0.0]: https://github.com/bmjcoding/claude-toolkit/releases/tag/v1.0.0
+[Unreleased]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.6.0...HEAD
+[1.6.0]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.5.0...frankenstein-v1.6.0
+[1.5.0]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.4.0...frankenstein-v1.5.0
+[1.4.0]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.3.0...frankenstein-v1.4.0
+[1.3.0]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.2.0...frankenstein-v1.3.0
+[1.2.0]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.1.0...frankenstein-v1.2.0
+[1.1.0]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.0.0...frankenstein-v1.1.0
+[1.0.0]: https://github.com/bmjcoding/claude-toolkit/tree/frankenstein-v1.0.0
