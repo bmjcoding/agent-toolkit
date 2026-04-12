@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-04-12
+
+### Changed
+
+- BREAKING: moved to the agent-toolkit multi-tool layout. Files relocated:
+  - `skills/design-authority/` → `shared/skills/design-authority/`
+- CHANGELOG comparison URLs updated for repo rename `bmjcoding/claude-toolkit` → `bmjcoding/agent-toolkit`.
+
 ## [1.1.0] - 2026-04-11
 
 ### Changed
@@ -23,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/design-authority-v1.1.0...HEAD
-[1.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/design-authority-v1.0.0...design-authority-v1.1.0
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/shared/design-authority-v2.0.0...HEAD
+[2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/shared/design-authority-v1.1.0...shared/design-authority-v2.0.0
+[1.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/shared/design-authority-v1.0.0...shared/design-authority-v1.1.0
 [1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/design-authority-v1.0.0
