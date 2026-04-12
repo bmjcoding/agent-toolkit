@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.3.0] - 2026-04-12
+
+### Changed
+
+- `--clear-resolved` and `--cleanup` now operate on BOTH `.claude/backlog.md` and `.orchestrator/backlog.md` (when the pipeline backlog exists in CWD). Previously only `.claude/backlog.md` was cleared. Enables housekeeping for the pipeline's accumulating cross-session backlog.
+- Sync Protocol docs updated to reflect `.orchestrator/backlog.md` accumulation semantics (frankenstein v1.11.0 introduces append-with-dedup + Phase 6c auto-resolve).
+
 ## [2.2.0] - 2026-04-12
 
 ### Added
@@ -67,7 +74,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/claude-toolkit/compare/backlog-v2.2.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/claude-toolkit/compare/backlog-v2.3.0...HEAD
+[2.3.0]: https://github.com/bmjcoding/claude-toolkit/compare/backlog-v2.2.0...backlog-v2.3.0
 [2.2.0]: https://github.com/bmjcoding/claude-toolkit/compare/backlog-v2.1.0...backlog-v2.2.0
 [2.1.0]: https://github.com/bmjcoding/claude-toolkit/compare/backlog-v2.0.0...backlog-v2.1.0
 [2.0.0]: https://github.com/bmjcoding/claude-toolkit/compare/backlog-v1.0.1...backlog-v2.0.0
