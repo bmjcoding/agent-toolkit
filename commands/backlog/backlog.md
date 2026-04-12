@@ -4,9 +4,9 @@ description: >
   View, resolve, retriage, or clear items in the pipeline backlog. Use when the user wants to
   check the backlog, resolve items, or manage deferred findings.
 disable-model-invocation: true
-argument-hint: "[--resolve N] [--resolve N --wont-fix \"reason\"] [--defer N --env ENV \"reason\"] [--defer N --session \"reason\"] [--retriage] [--clear-resolved] [--agent] [--human] [--env ENV] [--open] [--sync]"
+argument-hint: "[--resolve N] [--resolve N --wont-fix \"reason\"] [--defer N --env ENV \"reason\"] [--defer N --session \"reason\"] [--retriage] [--clear-resolved] [--agent] [--human] [--env ENV] [--open] [--sync] [--cleanup] [--dry-run]"
 metadata:
-  version: 2.0.0
+  version: 2.2.0
 ---
 
 Manage the pipeline backlog at `.claude/backlog.md`. Scope resolution and autonomy rules are defined in CLAUDE.md.
@@ -25,12 +25,14 @@ Read and display `.claude/backlog.md`. If it doesn't exist, report "No backlog i
 - **`--defer <N> --env <env> "<reason>"`** — mark item #N as `deferred-env`, set environment=<env>, reason=<reason>
 - **`--defer <N> --session "<reason>"`** — mark item #N as `deferred-session`, reason=<reason>
 - **`--retriage`** — re-check all Agent Actionable open/in-progress/blocked items against the current codebase. If an item has already been fixed, mark it resolved. Report what changed.
-- **`--clear-resolved`** — remove all rows with status=`resolved` or status=`wont-fix`. Renumber the `#` column sequentially after removal.
+- **`--clear-resolved`** — remove all rows with status=`resolved` or status=`wont-fix`. Renumber the `#` column sequentially after removal. Also prune stale `## Known context` subsections: for any `### <title> (items X, Y-Z)` or `### <title> (item X)` subsection, if ALL referenced item numbers are in the set being cleared, the subsection is deleted. If any referenced item remains (open/blocked/in-progress), the subsection is preserved as-is (item-number references in preserved subsections may become stale after renumber — the user may update them manually).
 - **`--agent`** — show only Agent Actionable section, only open/blocked rows
 - **`--human`** — show only Needs Human Decision section, only open/blocked rows
 - **`--env <env>`** — filter rows where environment matches `<env>` or `any`
 - **`--open`** — show only rows with status=`open`, status=`in-progress`, or status=`blocked`
 - **`--sync`** — pull new findings from `.orchestrator/backlog.md` into `.claude/backlog.md`. See [Sync Protocol](#sync-protocol) for deduplication and routing rules. Reports: N items imported, M items skipped (already present), K items skipped (status=resolved/wont-fix). Pull-only — does not write to `.orchestrator/backlog.md`.
+- **`--cleanup`** — full housekeeping pass. Equivalent to `--clear-resolved` plus: refresh `Last updated:` header to current timestamp, emit a summary report `(N rows cleared, M Known context subsections pruned, timestamp refreshed)`. Use this as the one-stop cleanup after reviewing resolved items.
+- **`--dry-run`** — modifier compatible with `--clear-resolved`, `--cleanup`, `--retriage`, `--sync`. Prints the planned changes (rows to remove, subsections to prune, findings to import) but does NOT write to the file. Use to preview before executing.
 
 ## Backlog format
 
@@ -84,6 +86,7 @@ Last updated: YYYY-MM-DDTHH:MM
 ## Known limitations
 
 - `.orchestrator/backlog.md` (written by the Frankenstein pipeline) uses the same 12-column schema but is a SEPARATE file. Items in `.orchestrator/backlog.md` are not visible to `--resolve`, `--defer`, or `--retriage`. To act on pipeline findings, run `--sync` to pull new findings into `.claude/backlog.md`. See [Sync Protocol](#sync-protocol) for deduplication rules and import filters. Sync is manual and pull-only — pipeline runs never modify `.claude/backlog.md` automatically.
+- **`--clear-resolved` context pruning is conservative**: subsections under `## Known context` are only deleted when ALL referenced item numbers are being cleared. If a subsection references items that remain active (e.g., "items 1-5" where items 3-5 are cleared but 1-2 remain), the subsection is preserved and may contain stale number references. Use `--cleanup --dry-run` to preview and manually edit if full section removal is desired.
 
 ## Sync Protocol
 
