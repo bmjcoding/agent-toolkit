@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-04-12
+
+### Changed
+
+- BREAKING: moved to the agent-toolkit multi-tool layout. Files relocated:
+  - `agents/integration-verifier/` → `claude-code/agents/integration-verifier/`
+- CHANGELOG comparison URLs updated for repo rename `bmjcoding/claude-toolkit` → `bmjcoding/agent-toolkit`.
+
 ## [1.3.0] - 2026-04-12
 
 ### Added
@@ -39,7 +47,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/integration-verifier-v1.3.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/integration-verifier-v2.0.0...HEAD
+[2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/integration-verifier-v1.3.0...claude-code/integration-verifier-v2.0.0
 [1.3.0]: https://github.com/bmjcoding/agent-toolkit/compare/integration-verifier-v1.2.0...integration-verifier-v1.3.0
 [1.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/integration-verifier-v1.1.0...integration-verifier-v1.2.0
 [1.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/integration-verifier-v1.0.0...integration-verifier-v1.1.0
