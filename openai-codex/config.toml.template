@@ -1,0 +1,62 @@
+# Codex CLI project configuration template
+# Version: Codex CLI v0.120.0
+#
+# Usage:
+#   Copy this file to .codex/config.toml in a trusted project repo.
+#   Global config lives at ~/.codex/config.toml.
+#   Project config is only loaded from trusted repos (codex trust <dir>).
+
+# ---------------------------------------------------------------------------
+# Core settings
+# ---------------------------------------------------------------------------
+
+# Default model for all sessions (override per-agent in ~/.codex/agents/<n>.toml)
+model = "codex-mini-latest"
+
+# Sandbox mode controls filesystem and network access.
+# Values: "workspace-write" | "read-only" | "full-network" | "danger-full-access"
+sandbox_mode = "workspace-write"
+
+# Approval policy for tool calls.
+# Values: "auto" | "suggest" | "full-auto"
+# "auto"       — approves safe read-only actions; prompts for writes/deletes
+# "suggest"    — prompts before every tool call (safest)
+# "full-auto"  — approves all tool calls without prompting (use with caution)
+approval_policy = "auto"
+
+# ---------------------------------------------------------------------------
+# Skills configuration
+#
+# NOTE: skills.config[].path points to an individual skill folder, not a
+# parent directory. Duplicate this [[skills.config]] block for each skill
+# you want loaded.
+#
+# Codex discovers skills from (in order):
+#   1. paths listed in [[skills.config]] entries below
+#   2. .agents/skills/ at the repo root
+#   3. $HOME/.agents/skills/
+#   4. /etc/codex/skills/
+#   5. bundled skills
+#
+# ---------------------------------------------------------------------------
+
+[[skills.config]]
+# Example: load the shared changelog skill from this repo.
+# Adjust the path to match where you've cloned agent-toolkit.
+path = "shared/skills/changelog"
+
+# Add more skills by duplicating the block above, e.g.:
+# [[skills.config]]
+# path = "shared/skills/<another-skill-name>"
+
+# ---------------------------------------------------------------------------
+# MCP server configuration (optional)
+# ---------------------------------------------------------------------------
+# Declare MCP servers as [mcp_servers.<id>] tables.
+# Each server runs as a subprocess exposing tools to Codex sessions.
+#
+# Example:
+# [mcp_servers.filesystem]
+# command = "npx"
+# args = ["-y", "@modelcontextprotocol/server-filesystem", "/tmp"]
+# env = {}
