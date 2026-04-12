@@ -17,7 +17,7 @@ Scans for secrets before commits and pushes. Uses [gitleaks](https://github.com/
 ### `extract-handoff.sh`
 **Event:** `SubagentStop`
 
-Extracts structured handoff JSON from a subagent's final message (fenced in ` ```handoff ` blocks) and writes it to `.orchestrator/handoffs/<agent_id>.json`. Also logs agent stop events with token/turn/duration metrics to `.orchestrator/logs/agents.log`. Exits silently when not in an orchestrator context.
+Extracts structured handoff JSON from a subagent's final message (fenced in ` ```handoff ` blocks) and writes it to `.orchestrator/handoffs/<agent_id>.json`. Also logs agent stop events with token/turn/duration metrics to `.orchestrator/sessions/<SESSION_ID>/logs/agents.log` (where `SESSION_ID` is resolved from `.orchestrator/session.id` via `$ORCH_BASE`). Exits silently when not in an orchestrator context.
 
 ### `inject-context.sh`
 **Event:** `SubagentStart`
