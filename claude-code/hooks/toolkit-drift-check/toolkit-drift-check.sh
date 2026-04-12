@@ -46,7 +46,7 @@ _INPUT_CONSUMED="$INPUT"
 # ---------------------------------------------------------------------------
 # Pattern matching component paths: (TYPE)/(name)/(file) — used for both
 # filtering modified paths and as documentation of what counts as a component.
-COMPONENT_PATTERN='^(claude-code/(agents|hooks|commands|rules)|shared/skills|shared/rules)/[^/]+/[^/]+'
+COMPONENT_PATTERN='^(claude-code/(agents|hooks|commands)|skills|rules)/[^/]+/[^/]+'
 
 # Capture git status output; gracefully handle non-git directories.
 GIT_STATUS="$(git -C "$TOOLKIT" status --porcelain 2>/dev/null)" || exit 0

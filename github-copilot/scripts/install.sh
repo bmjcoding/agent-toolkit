@@ -13,9 +13,19 @@
 # Copilot agent discovery path (VS Code):
 #   .github/agents/<name>.agent.md
 #
+# Copilot instructions discovery path (VS Code):
+#   .github/instructions/<file>.instructions.md
+#
+# Copilot prompts discovery path (VS Code):
+#   .github/prompts/<file>.prompt.md
+#
 # This script symlinks from the above discovery paths into github-copilot/.
 # Agents already in claude-code/ that are shared across surfaces are NOT
 # symlinked by this script — use claude-code/scripts/install.sh for those.
+#
+# NOTE: Some target directories (instructions/, prompts/) may not exist yet;
+# they will be populated in later pipeline phases. Entries whose source does
+# not exist are skipped gracefully — re-run after those directories are added.
 #
 # Usage:
 #   ./github-copilot/scripts/install.sh [--dry-run] [--check] [--help]
@@ -80,16 +90,31 @@ esac
 
 COPILOT_DIR="$REPO_ROOT/github-copilot"
 GITHUB_DIR="$REPO_ROOT/.github"
+SKILLS_DIR="$REPO_ROOT/skills"   # universal skills, repo root
 
 # ---------------------------------------------------------------------------
-# Symlink map: target (source) -> link (destination)
-# Each entry: LINK_PATH SOURCE_PATH
+# Symlink map: LINK_PATH SOURCE_PATH (pairs)
+#
+# Layout:
+#   .github/skills   -> <repo>/skills        (universal skills dir, repo-root)
+#   .github/agents   -> <repo>/github-copilot/agents
+#   .github/prompts  -> <repo>/github-copilot/prompts   (populated in G2c)
+#   .github/instructions -> <repo>/github-copilot/instructions  (populated in G3a)
+#
+# Directory-level symlinks are used where possible (one ln per surface area)
+# rather than per-file symlinks, so new skills/agents are automatically visible.
+#
+# Entries whose source directory does not exist yet are SKIPPED gracefully.
 # ---------------------------------------------------------------------------
 declare -a SYMLINKS=(
-  # Skills
-  "$GITHUB_DIR/skills/changelog/SKILL.md"  "$COPILOT_DIR/skills/changelog/SKILL.md"
+  # Universal skills directory (repo-root /skills is canonical source)
+  "$GITHUB_DIR/skills"                  "$SKILLS_DIR"
   # Agents
-  "$GITHUB_DIR/agents/planner.agent.md"    "$COPILOT_DIR/agents/planner.agent.md"
+  "$GITHUB_DIR/agents"                  "$COPILOT_DIR/agents"
+  # Prompts — directory will be populated in G2c; skipped until then
+  "$GITHUB_DIR/prompts"                 "$COPILOT_DIR/prompts"
+  # Instructions — directory will be populated in G3a; skipped until then
+  "$GITHUB_DIR/instructions"            "$COPILOT_DIR/instructions"
 )
 
 # ---------------------------------------------------------------------------
@@ -112,7 +137,13 @@ if [[ "$CHECK_ONLY" == "true" ]]; then
   for (( i=0; i<${#SYMLINKS[@]}; i+=2 )); do
     link="${SYMLINKS[$i]}"
     target="${SYMLINKS[$((i+1))]}"
-    # sre-7: correct order — (1) not a symlink, (2) wrong target, (3) broken symlink
+
+    # Skip entries whose source does not exist yet
+    if [[ ! -d "$target" ]]; then
+      echo "SKIP (source not yet present): $link -> $target"
+      continue
+    fi
+
     if [[ ! -L "$link" ]]; then
       echo "MISSING symlink: $link" >&2
       (( ERRORS++ )) || true
@@ -130,7 +161,7 @@ if [[ "$CHECK_ONLY" == "true" ]]; then
     echo "$ERRORS error(s) found." >&2
     exit 1
   fi
-  echo "All symlinks OK."
+  echo "All present symlinks OK."
   exit 0
 fi
 
@@ -142,10 +173,11 @@ for (( i=0; i<${#SYMLINKS[@]}; i+=2 )); do
   target="${SYMLINKS[$((i+1))]}"
   link_dir="$(dirname "$link")"
 
-  # Verify source exists
-  if [[ ! -f "$target" ]]; then
-    echo "ERROR: Source file does not exist: $target" >&2
-    exit 1
+  # Skip entries whose source does not exist yet (graceful — will populate later)
+  if [[ ! -d "$target" ]]; then
+    echo "SKIP (source not yet present): $target"
+    echo "  Re-run this script after $(basename "$target")/ is added."
+    continue
   fi
 
   if [[ "$DRY_RUN" == "true" ]]; then
