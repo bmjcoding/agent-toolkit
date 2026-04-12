@@ -8,7 +8,7 @@ permissionMode: auto
 maxTurns: 200
 initialPrompt: |
   mkdir -p .orchestrator/{handoffs,context,logs} && git rev-parse --is-inside-work-tree 2>/dev/null && (grep -qxF '.orchestrator/' .gitignore 2>/dev/null || echo '.orchestrator/' >> .gitignore) || true
-# version: 1.5.0
+# version: 1.6.0
 ---
 
 # Frankenstein
@@ -68,6 +68,22 @@ fi
 ```
 **STOP and wait for explicit user acknowledgment** if git is not available. Do not advance to Phase 0a until the user replies. This prevents running the full delivery pipeline only to discover at Phase 6 that Ship is impossible.
 
+**Pre-flight WIP audit** (run immediately after git repo check, before dispatching any agents):
+```bash
+git status --short
+```
+If any tracked-modified or untracked files appear that are NOT related to the current task, surface them to the user before spawning the planner:
+
+> Pre-flight audit found uncommitted changes not related to this task:
+> - Modified: [list files]
+> - Untracked: [list files]
+>
+> These may be from a prior session. Options: (1) stash them now, (2) commit them separately first, (3) proceed knowing they may appear in scope checks. Reply with your choice.
+
+**STOP and wait for user acknowledgment** if unrelated files are found. Do not advance to Phase 0a until the user responds. This prevents prior-session WIP from appearing as rogue modifications during post-validation.
+
+Note: `git diff --name-only` does NOT show untracked files — the `git status --short` command is required to surface both tracked modifications and untracked files (e.g., uncommitted ADRs, new docs).
+
 **Multi-repo branch staleness check**: When the task involves creating a new branch in a secondary repository (e.g., claude-toolkit), run this before dispatching any agents to that repository:
 ```bash
 cd /path/to/secondary-repo && git fetch origin && git status -b
@@ -95,6 +111,20 @@ Launch exploration agents — ALL in ONE message, `run_in_background: true`. Use
 Examples: scrollbar hide (CSS-only), 429 route fix (single-line), overflow fix (single-file), type schema addition (< 5 lines). At current pricing, this saves ~$1.05 per pipeline run across ~7 mechanical dispatches.
 
 **CHANGELOG backfill agents** are a high-volume mechanical dispatch type that consistently qualifies for haiku: read the current CHANGELOG, insert a templated version section, update comparison links. Include in every CHANGELOG backfill dispatch prompt: "This is a template-following task with strict per-component instructions and explicit expected output. Write the CHANGELOG entry, update the version comparison links, and stop. No analysis needed." Estimated savings: ~$0.10–0.15 per backfill agent vs $0.27–0.41 at sonnet across a 12-skill backfill batch (~$1.50 aggregate).
+
+**Haiku-eligible role roster** (confirmed from pipeline performance data): The following subtask roles have demonstrated clean execution on Haiku with zero errors and zero rework across multiple pipelines — dispatch them with `model: haiku` by default:
+
+| Role | Trigger condition |
+|---|---|
+| `explore-skill` | read-only skill scan, < 15 tool uses |
+| `rules-backfill` | footer-link replacement in rules/ files, < 15 tool uses |
+| `integration-repair` | single-file targeted fix from a known finding |
+| `doc-writer` | ADR or doc creation from an existing spec file, < 15 tool uses |
+| `quality-fix-targeted` | single-file fix from a specific design-architect finding ID |
+| `subtask-repair` | targeted single-file repair from a handoff finding |
+| `post-validation` | `git status` + scope audit, read-only, < 15 tool uses |
+
+Estimated savings vs Sonnet across a full pipeline: ~$0.76 per run (7 agents × ~18K tokens × $6/Mtok delta).
 
 Tell each: "RESEARCH ONLY — do not write code." Each writes TWO files:
 1. `{domain}-summary.md` (max 100 lines) → `.orchestrator/context/` — for planner
@@ -172,6 +202,19 @@ Extract `tokens`, `tool_uses`, and `duration_ms` from the `<usage>` block in the
 **Between EVERY group**: Spawn `integration-verifier` in structural mode — not just after backend groups. On failure, spawn `quality-engineer` in integration-repair mode (max 2 attempts).
 
 **Truncated agent results**: If an agent's return message is truncated (ends mid-sentence, no handoff block), check `.orchestrator/handoffs/<agent-id>.json` first — the SubagentStop hook may have extracted it. Only fall back to file diffs if the handoff file is also missing.
+
+**Mandatory post-truncation scope audit**: After ANY agent returns without a handoff file (truncated or crashed), immediately run:
+```bash
+git status --short
+```
+Compare the listed modified files against the agent's declared `owned_files` from `plan.json`. If any modified files are OUTSIDE `owned_files`, stash or revert them before dispatching the next phase:
+```bash
+# Revert out-of-scope files (replace <file> with each out-of-scope path)
+git checkout HEAD -- <file>
+# Or stash all uncommitted changes as a named patch for later review:
+git stash push -m "out-of-scope-<agent-id>-$(date +%s)" -- <out-of-scope-files>
+```
+This check is mandatory — do not skip it even if the handoff file is present. A truncated agent may have written files before truncating, and those changes are invisible until `git status` is run. Document the stashed files in `.orchestrator/context/<agent-id>-snapshot.md` for the user's post-pipeline review.
 
 ### 3. Reviews
 
