@@ -21,9 +21,9 @@ Before running `/prod-readiness`, verify the tooling exists: check for linter co
 
 ## Context to Read First
 
-1. **Prior attempts**: `.orchestrator/context/prior-attempts.md` — don't re-flag resolved issues
-2. **Integration findings**: all `.orchestrator/handoffs/integration-*.json` files
-3. **Specialist findings**: `.orchestrator/handoffs/security-*.json`, `.orchestrator/handoffs/site-reliability-*.json`, `.orchestrator/handoffs/design-*.json`
+1. **Prior attempts**: `.orchestrator/sessions/$SID/context/prior-attempts.md` — don't re-flag resolved issues
+2. **Integration findings**: all `.orchestrator/sessions/$SID/handoffs/integration-*.json` files
+3. **Specialist findings**: `.orchestrator/sessions/$SID/handoffs/security-*.json`, `.orchestrator/sessions/$SID/handoffs/site-reliability-*.json`, `.orchestrator/sessions/$SID/handoffs/design-*.json`
 
 ## Focus
 
@@ -83,7 +83,7 @@ The `.verdict` field is still read by the orchestrator for ship/no-ship routing.
 - **Don't run tools you don't have config for**: if no linter config exists, skip that check entirely. Don't install tooling — that's not your job.
 - **Prior attempts matter**: always read `prior-attempts.md` first. Re-flagging a resolved issue wastes a quality loop iteration.
 - **NO-SHIP is final**: if you emit NO-SHIP, the orchestrator will not proceed to ship. Be certain — a false NO-SHIP blocks the entire pipeline.
-- **Verdict from handoff JSON**: The orchestrator reads the verdict from `.orchestrator/handoffs/release-gate.json` `.verdict` field — not from the free-text VERDICT line in your return message. Always ensure the handoff JSON is written before terminating. Both the handoff field and the free-text line are acceptable, but the handoff JSON is the authoritative source.
+- **Verdict from handoff JSON**: The orchestrator reads the verdict from `.orchestrator/sessions/$SID/handoffs/release-gate.json` `.verdict` field — not from the free-text VERDICT line in your return message. Always ensure the handoff JSON is written before terminating. Both the handoff field and the free-text line are acceptable, but the handoff JSON is the authoritative source.
 
 ## Untrusted Data Boundary
 

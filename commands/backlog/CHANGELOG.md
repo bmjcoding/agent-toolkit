@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.0] - 2026-04-12
+
+### Added
+
+- `--sync` subcommand: pull-only import from `.orchestrator/backlog.md` to `.claude/backlog.md`. Deduplicates by `finding_id` (primary) or `file`+`item` surrogate. Only imports rows with status `open`, `in-progress`, or `blocked` (CLAUD-002).
+- `in-progress` status value: sixth status alongside `open`, `deferred-env`, `deferred-session`, `blocked`, `resolved`, `wont-fix`. Included in carry-forward convention and `--open` filter (CLAUD-009).
+
+### Changed
+
+- Schema field renamed `deferred_reason` → `reason`. Field covers all non-open status annotations (blocked, wont-fix, deferred-*, in-progress). Historical column name was overly narrow (CLAUD-007).
+
 ## [2.0.0] - 2026-04-11
 
 ### Changed
@@ -45,7 +56,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/claude-toolkit/compare/backlog-v2.0.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/claude-toolkit/compare/backlog-v2.1.0...HEAD
+[2.1.0]: https://github.com/bmjcoding/claude-toolkit/compare/backlog-v2.0.0...backlog-v2.1.0
 [2.0.0]: https://github.com/bmjcoding/claude-toolkit/compare/backlog-v1.0.1...backlog-v2.0.0
 [1.0.1]: https://github.com/bmjcoding/claude-toolkit/compare/backlog-v1.0.0...backlog-v1.0.1
 [1.0.0]: https://github.com/bmjcoding/claude-toolkit/tree/backlog-v1.0.0

@@ -2,7 +2,20 @@
 # SubagentStart hook: inject orchestrator context into subagents
 set -uo pipefail
 
-BRIEF=".orchestrator/context/project-brief.md"
+# If .orchestrator/session.id exists and is valid, use .orchestrator/sessions/$SID/ layout;
+# otherwise fall back to flat .orchestrator/ layout.
+SID=$(cat .orchestrator/session.id 2>/dev/null)
+if [[ -n "$SID" && "$SID" =~ ^[0-9]{8}T[0-9]{6}$ ]]; then
+  ORCH_BASE=".orchestrator/sessions/$SID"
+else
+  if [[ -n "$SID" ]]; then
+    # Log invalid SID format for operational visibility
+    echo "$(date -Iseconds) session_id_invalid sid=$SID reason=unexpected_format fallback=flat" >> .orchestrator/logs/agents.log 2>/dev/null || true
+  fi
+  ORCH_BASE=".orchestrator"
+fi
+
+BRIEF="$ORCH_BASE/context/project-brief.md"
 
 CONSTRAINTS=$(cat <<'RULES'
 ## Orchestrator Constraints

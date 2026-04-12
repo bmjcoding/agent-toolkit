@@ -1,9 +1,21 @@
 #!/usr/bin/env bash
 # SubagentStop hook: extract handoff JSON from agent's final message
-# Writes to .orchestrator/handoffs/<agent_id>.json
+# Writes to .orchestrator/handoffs/<agent_id>.json (or session-scoped equivalent)
 set -uo pipefail
 
-HANDOFF_DIR=".orchestrator/handoffs"
+# Resolve ORCH_BASE: session-scoped if session.id exists and is valid, else flat
+SID=$(cat .orchestrator/session.id 2>/dev/null)
+if [[ -n "$SID" && "$SID" =~ ^[0-9]{8}T[0-9]{6}$ ]]; then
+  ORCH_BASE=".orchestrator/sessions/$SID"
+else
+  if [[ -n "$SID" ]]; then
+    # Log invalid SID format for operational visibility
+    echo "$(date -Iseconds) session_id_invalid sid=$SID reason=unexpected_format fallback=flat" >> .orchestrator/logs/agents.log 2>/dev/null || true
+  fi
+  ORCH_BASE=".orchestrator"
+fi
+
+HANDOFF_DIR="$ORCH_BASE/handoffs"
 [[ -d "$HANDOFF_DIR" ]] || exit 0
 
 # Read event data from stdin (documented hook input protocol)
@@ -24,8 +36,8 @@ TYPE=$(echo "$JSON" | jq -r 'type' 2>/dev/null)
 if [ "$TYPE" != "object" ]; then
   mkdir -p "$HANDOFF_DIR/rejected"
   echo "$JSON" > "$HANDOFF_DIR/rejected/${AGENT_ID}-$(date +%s)-$(openssl rand -hex 4 2>/dev/null || echo 0000).json"
-  mkdir -p .orchestrator/logs
-  echo "$(date -Iseconds) handoff_rejected agent=${AGENT_ID} reason=non-object type=${TYPE}" >> .orchestrator/logs/agents.log
+  mkdir -p "$ORCH_BASE/logs"
+  echo "$(date -Iseconds) handoff_rejected agent=${AGENT_ID} reason=non-object type=${TYPE}" >> "$ORCH_BASE/logs/agents.log"
   exit 0
 fi
 
@@ -40,7 +52,7 @@ fi
 validate_handoff() {
   local json="$1"
   local log_prefix="$(date -Iseconds)"
-  mkdir -p .orchestrator/logs
+  mkdir -p "$ORCH_BASE/logs"
 
   # Extract agent_id from handoff JSON for use in reject filenames and log lines.
   # Fall back to the hook-level AGENT_ID if the field is missing.
@@ -54,7 +66,7 @@ validate_handoff() {
     local reason="$1"
     mkdir -p "$HANDOFF_DIR/rejected"
     echo "$json" > "$HANDOFF_DIR/rejected/${hid}-$(date +%s)-$(openssl rand -hex 4 2>/dev/null || echo 0000).json"
-    echo "${log_prefix} handoff_rejected agent=${hid} ${reason}" >> .orchestrator/logs/agents.log
+    echo "${log_prefix} handoff_rejected agent=${hid} ${reason}" >> "$ORCH_BASE/logs/agents.log"
     return 1
   }
 
@@ -94,7 +106,7 @@ validate_handoff() {
 
   if [ "$has_findings" != "true" ]; then
     if [ "$has_findings_resolved" = "true" ]; then
-      echo "${log_prefix} handoff_legacy_format agent=${hid} format=findings_resolved" >> .orchestrator/logs/agents.log
+      echo "${log_prefix} handoff_legacy_format agent=${hid} format=findings_resolved" >> "$ORCH_BASE/logs/agents.log"
       # Accept legacy handoff — skip findings item validation
       return 0
     fi
@@ -164,15 +176,10 @@ fi
 
 # Log agent_stop event (merged from SubagentStop inline hook — stdin already consumed above)
 # SRE-LOG-CORRELATION: emit both agent_id= and agent_type= so operators can grep either field
-mkdir -p .orchestrator/logs
+# Format: JSON object to match dispatcher-written format (parse-metrics.py compatible)
+mkdir -p "$ORCH_BASE/logs"
 AGENT_TYPE=$(echo "$INPUT" | jq -r '.agent_type // .agent_id // "unknown"' 2>/dev/null)
-LOG_LINE=$(echo "$INPUT" | jq -r --arg aid "$AGENT_ID" \
-  '[env.TS // now | todate, "agent_stop",
-    "agent_id=" + $aid,
-    "agent_type=" + (.agent_type // .agent_id // "unknown"),
-    "tokens=" + ((.usage.total_tokens // 0) | tostring),
-    "turns="  + ((.usage.tool_uses    // 0) | tostring),
-    "ms="     + ((.usage.duration_ms  // 0) | tostring)
-  ] | join(" ")' 2>/dev/null) \
-  || LOG_LINE="$(date -Iseconds) agent_stop agent_id=${AGENT_ID} agent_type=${AGENT_TYPE:-unknown}"
-echo "$LOG_LINE" >> .orchestrator/logs/agents.log
+LOG_LINE=$(echo "$INPUT" | jq -c --arg ts "$(date -Iseconds)" --arg aid "$AGENT_ID" \
+  '{agent_id: $aid, agent_type: (.agent_type // .agent_id // "unknown"), tokens: (.usage.total_tokens // null), tool_uses: (.usage.tool_uses // null), duration_ms: (.usage.duration_ms // null), timestamp: $ts}' 2>/dev/null) \
+  || LOG_LINE="{\"agent_id\":\"${AGENT_ID}\",\"agent_type\":\"${AGENT_TYPE:-unknown}\",\"tokens\":null,\"tool_uses\":null,\"duration_ms\":null,\"timestamp\":\"$(date -Iseconds)\"}"
+echo "$LOG_LINE" >> "$ORCH_BASE/logs/agents.log"

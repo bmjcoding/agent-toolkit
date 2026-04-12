@@ -2,7 +2,7 @@
 
 ## Overview
 
-The unified 12-column backlog schema replaces two incompatible formats that diverged across the claude-toolkit and Frankenstein pipeline: the 6-column slash command format (`.claude/backlog.md`) and the 5-column Frankenstein format (`.orchestrator/backlog.md`). This guide covers converting existing backlog files to the new 12-column format, handling data quality issues found in live files, and tracking migration status per repository. Both backlog file locations now use the same schema as defined in `/Users/bmj/Developer/git/claude-toolkit/commands/backlog/backlog.md` (version 2.0.0).
+The unified 12-column backlog schema replaces two incompatible formats that diverged across the claude-toolkit and Frankenstein pipeline: the 6-column slash command format (`.claude/backlog.md`) and the 5-column Frankenstein format (`.orchestrator/backlog.md`). This guide covers converting existing backlog files to the new 12-column format, handling data quality issues found in live files, and tracking migration status per repository. Both backlog file locations now use the same schema as defined in `${HOME}/Developer/git/claude-toolkit/commands/backlog/backlog.md` (version 2.0.0).
 
 ---
 
@@ -20,7 +20,7 @@ The unified 12-column backlog schema replaces two incompatible formats that dive
 | (none) | `source` | `source` | Retain agent-role labels; replace commit hash values with `unknown` |
 | (none) | (none) | `status` | Set to `open` for all existing rows |
 | (none) | (none) | `environment` | Set to `any` for all existing rows |
-| (none) | (none) | `deferred_reason` | Empty string for all existing rows |
+| (none) | (none) | `reason` | Empty string for all existing rows |
 | (none) | (none) | `session_id` | Empty string for all existing rows |
 
 ---
@@ -30,13 +30,13 @@ The unified 12-column backlog schema replaces two incompatible formats that dive
 1. Back up the file before making any changes: `cp backlog.md backlog.md.bak`
 2. Replace the old column header in each section table with the new 12-column header:
    ```
-   | # | status | severity | environment | file | item | deferred_reason | source | finding_id | phase | added_at | session_id |
-   |---|--------|----------|-------------|------|------|-----------------|--------|------------|-------|----------|------------|
+   | # | status | severity | environment | file | item | reason | source | finding_id | phase | added_at | session_id |
+   |---|--------|----------|-------------|------|------|--------|--------|------------|-------|----------|------------|
    ```
 3. For each data row, insert the new columns in the correct positions:
    - Insert `status=open` after `#`
    - Insert `environment=any` after `severity`
-   - Insert `deferred_reason=` (empty string) after `item`
+   - Insert `reason=` (empty string) after `item`
    - Append `phase=`, `added_at=<value>`, `session_id=` (empty string) at the end
 4. Normalize severity to lowercase: `CRITICAL` → `critical`, `HIGH` → `high`, `MEDIUM` → `medium`, `LOW` → `low`.
 5. Rename the column header `finding` to `item` (column header text only — row values are unchanged).
@@ -53,12 +53,12 @@ The toolkit command schema (`# | Severity | File | Item | Phase | Added`) has tw
 - The **6 new columns to INSERT** (in the positions required by the unified schema) are:
   - `status` — default: `open`
   - `environment` — default: `any`
-  - `deferred_reason` — empty string
+  - `reason` — empty string
   - `source` — default: `prod-readiness`
   - `finding_id` — empty string
   - `session_id` — empty string
 
-The resulting per-row column order is: `# | status | severity | environment | file | item | deferred_reason | source | finding_id | phase | added_at | session_id`
+The resulting per-row column order is: `# | status | severity | environment | file | item | reason | source | finding_id | phase | added_at | session_id`
 
 ---
 
@@ -70,7 +70,7 @@ Rows where severity, file, and item (or finding) are all `unspecified` are artif
 
 **Exception**: if a ghost row has a non-empty `finding_id`, retain a placeholder row rather than deleting it, so that any external references to the `finding_id` remain resolvable:
 - Set `status=wont-fix`
-- Set `deferred_reason=ghost row from failed agent run`
+- Set `reason=ghost row from failed agent run`
 - Set all other fields to their empty/default values
 
 ---
@@ -79,13 +79,13 @@ Rows where severity, file, and item (or finding) are all `unspecified` are artif
 
 | File | Current schema | Migration status |
 |---|---|---|
-| `/Users/bmj/.claude/.orchestrator/backlog.md` | frankenstein v1 (4-col: severity, file, finding, source — no finding_id) | Needs migration |
-| `/Users/bmj/Developer/git/ftb-automation/.orchestrator/backlog.md` | frankenstein v1 (5-col: severity, file, finding, finding_id, source) | Needs migration |
-| `/Users/bmj/Developer/git/ftb-automation/.orchestrator/backlog.prior-session.md` | frankenstein v1 (5-col, archival) | Needs migration or archive as-is |
-| `/Users/bmj/Developer/git/alt-central/.orchestrator/backlog.md` | frankenstein v1 (5-col, commit-hash source, ~7 ghost rows) | Needs migration — remove ghost rows and normalize source (commit hash → `unknown`) first. **NOTE: live session active — do not migrate until session complete.** |
-| `/Users/bmj/Developer/git/alt-central/.claude/backlog.md` | toolkit command schema (5-col, closest to canonical spec) | Needs migration — add 7 new columns. **NOTE: live session active — do not migrate until session complete.** |
+| `~/.claude/.orchestrator/backlog.md` | frankenstein v1 (4-col: severity, file, finding, source — no finding_id) | Needs migration |
+| `~/Developer/git/ftb-automation/.orchestrator/backlog.md` | frankenstein v1 (5-col: severity, file, finding, finding_id, source) | Needs migration |
+| `~/Developer/git/ftb-automation/.orchestrator/backlog.prior-session.md` | frankenstein v1 (5-col, archival) | Needs migration or archive as-is |
+| `~/Developer/git/alt-central/.orchestrator/backlog.md` | frankenstein v1 (5-col, commit-hash source, ~7 ghost rows) | Needs migration — remove ghost rows and normalize source (commit hash → `unknown`) first. **NOTE: live session active — do not migrate until session complete.** |
+| `~/Developer/git/alt-central/.claude/backlog.md` | toolkit command schema (5-col, closest to canonical spec) | Needs migration — add 7 new columns. **NOTE: live session active — do not migrate until session complete.** |
 
-> **Note on claude-code-prod-pipeline**: `/Users/bmj/Developer/git/claude-code-prod-pipeline/commands/quality/backlog.md` is an outdated duplicate of the toolkit command at `commands/backlog/backlog.md`. It defines the same schema but has not been updated to v2.0.0. This file is out of scope for the current migration and will require a separate update pass to align with the unified schema.
+> **Note on claude-code-prod-pipeline**: `~/Developer/git/claude-code-prod-pipeline/commands/quality/backlog.md` is an outdated duplicate of the toolkit command at `commands/backlog/backlog.md`. It defines the same schema but has not been updated to v2.0.0. This file is out of scope for the current migration and will require a separate update pass to align with the unified schema.
 
 ---
 
@@ -94,6 +94,8 @@ Rows where severity, file, and item (or finding) are all `unspecified` are artif
 The following awk snippet converts a 5-column frankenstein backlog (the most common live format) to the 12-column unified schema.
 
 **ADVISORY: test this on a copy before running on live files. The snippet makes assumptions about column structure that may not hold for all variants. Review the output file before replacing the original.**
+
+**NOTE: The awk snippet below uses `|` as a field separator; finding text containing a literal pipe character will corrupt column alignment. For data with pipes, escape them before processing.**
 
 ```bash
 # ADVISORY: test this on a copy before running on live files
@@ -109,11 +111,11 @@ awk -v ts="$TS" '
   /^Last updated/ { print; next }
   /^## / { print; next }
   /^\| severity/ {
-    print "| # | status | severity | environment | file | item | deferred_reason | source | finding_id | phase | added_at | session_id |"
+    print "| # | status | severity | environment | file | item | reason | source | finding_id | phase | added_at | session_id |"
     next
   }
   /^\|---/ {
-    print "|---|--------|----------|-------------|------|------|-----------------|--------|------------|-------|----------|------------|"
+    print "|---|--------|----------|-------------|------|------|--------|--------|------------|-------|----------|------------|"
     next
   }
   /^\|/ {
@@ -137,13 +139,13 @@ awk -v ts="$TS" '
 echo "Review .orchestrator/backlog.md.new before replacing the original."
 ```
 
-For the 4-column `.claude/.orchestrator/backlog.md` variant (which has no `finding_id` column), adjust the `split` field indices: `fid=""` and `src = f[5]`.
+For the 4-column `~/.claude/.orchestrator/backlog.md` variant (which has no `finding_id` column), adjust the `split` field indices: `fid=""` and `src = f[5]`.
 
 For the toolkit command schema (5-col: `# | Severity | File | Item | Phase | Added`), the column order differs. Use the manual migration steps above rather than this snippet.
 
 ---
 
-## Future Work
+## Completed Work
 
-- **CLAUD-005**: Wire SESSION_ID generation into Frankenstein Phase 0. Currently, `.orchestrator/session.id` is not created at pipeline startup, which means all pipeline-seeded rows carry an empty `session_id`. Phase 0 should run `SESSION_ID=$(date '+%Y%m%dT%H%M%S') && echo "$SESSION_ID" > .orchestrator/session.id` before dispatching agents.
-- **CLAUD-006**: Implement v2 per-session directory layout and merge protocol. Each Frankenstein session should write findings to `.orchestrator/sessions/<SESSION_ID>/backlog.md` and merge back into `.orchestrator/backlog.md` at Phase 4 completion, following the four-step merge protocol defined in the session isolation spec.
+- **CLAUD-005** (implemented 2026-04-12): SESSION_ID generation wired into Frankenstein Phase 0. Phase 0 now runs `SESSION_ID=$(date '+%Y%m%dT%H%M%S') && printf '%s' "$SESSION_ID" > .orchestrator/session.id` before dispatching agents. Cross-reference: frankenstein.md Phase 0 and the 4 updated hooks.
+- **CLAUD-006** (implemented 2026-04-12): Per-session directory layout and merge protocol implemented. Each Frankenstein session writes findings to `.orchestrator/sessions/<SESSION_ID>/backlog.md` and merges back into `.orchestrator/backlog.md` at Phase 4 completion, following the four-step merge protocol defined in the session isolation spec.
