@@ -7,7 +7,7 @@ description: >
   writing any CHANGELOG.md in the toolkit.
 disable-model-invocation: true
 metadata:
-  version: 1.1.0
+  version: 1.2.0
 ---
 
 # Changelog Standard
@@ -162,6 +162,20 @@ use that component's `CHANGELOG.md`, not a separate one.
 
 ---
 
+## Drift-Prevention Enforcement
+
+Three layers enforce CHANGELOG hygiene across the toolkit:
+
+**Layer 1 — Drift-check hook (SubagentStop)**: After each subagent completes, `toolkit-drift-check.sh` checks whether any modified component files have a paired CHANGELOG.md update. If not, it prints an advisory to stderr listing the drifted components. Non-blocking. Per-session dedup prevents repeated warnings.
+
+**Layer 2 — Edit-reminder hook (PreToolUse)**: When an agent begins writing or editing a toolkit component file, `toolkit-edit-reminder.sh` injects a reminder into the agent context reinforcing the user-facing summary requirement and the SemVer bump table.
+
+**Layer 4 — /sync-toolkit command**: The `/sync-toolkit` slash command orchestrates full synchronization: detects changes, spawns per-component agents to generate user-facing CHANGELOG entries, bumps versions, copies to ~/.claude, and commits per-component. The command body explicitly prohibits commit-log dumps in every spawned agent prompt.
+
+(Layer 3 — agent-level rules — is planned for a future release.)
+
+---
+
 ## Version Renumbering
 
 When compressing version gaps (e.g., renumbering 1.0.0 → 1.5.0 down to 1.0.0 → 1.3.0), follow these steps in order:
@@ -189,6 +203,27 @@ When compressing version gaps (e.g., renumbering 1.0.0 → 1.5.0 down to 1.0.0 �
 | Lumping unrelated changes | One bullet = one idea; avoid "and also fixed X" entries |
 | `## [1.0.1] - 2025-04-11 [YANKED]` without explanation | Yanked releases must explain why in the section body |
 | Version comment in definition file not updated after renumbering | Leaves definition file reporting a version that does not match the CHANGELOG — follow the Version Renumbering steps above |
+
+---
+
+## Commit Logs vs. Changelog Entries
+
+The Keep a Changelog specification explicitly states: **do not use commit logs as changelogs**. This rule applies to all automated CHANGELOG generation in the toolkit.
+
+| Bad (commit-log dump) | Good (user-facing summary) |
+|---|---|
+| `Updated SKILL.md lines 40-55` | `Enforced OKLCH-only color notation for all utility classes` |
+| `Modified dark-mode-pairs.sh` | `Updated dark-mode lint check to catch missing OKLCH dark counterparts` |
+| `feat(f0eda66): restructure toolkit` | `Restructured toolkit into per-component subdirectories` |
+| `Added 3 bullets to Section 2` | `Added guidance on post-change compile verification` |
+
+**Rules for automated generation:**
+- Do NOT list file names or line numbers in changelog entries
+- Do NOT copy commit message titles verbatim
+- Do NOT dump raw git diff output
+- DO summarize the user-meaningful outcome of a change
+- DO aggregate multiple related commits into a single entry
+- DO use verb-prefixed one-liners (Added, Changed, Fixed, Removed)
 
 ---
 
