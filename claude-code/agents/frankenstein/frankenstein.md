@@ -528,7 +528,7 @@ fi
 
 Before staging any files, check whether any CHANGELOG.md files in the plan's touched component scope have a non-empty ## [Unreleased] section.
 
-Reference skill: /Users/bmj/Developer/git/agent-toolkit/skills/changelog/SKILL.md (also available at ~/.claude/skills/changelog/SKILL.md). Load it to apply the canonical SemVer bump table and 4-step [Unreleased] promotion workflow.
+Reference skill: /Users/bmj/Developer/git/agent-toolkit/shared/skills/changelog/SKILL.md (also available at ~/.claude/skills/changelog/SKILL.md). Load it to apply the canonical SemVer bump table and 4-step [Unreleased] promotion workflow.
 
 ```bash
 # Identify CHANGELOG.md files in owned scope from plan.json

@@ -51,5 +51,5 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 3. Re-run the install script: `./claude-code/scripts/install.sh`.
 4. Verify: `./claude-code/scripts/install.sh --check`.
 
-[Unreleased]: https://github.com/bmjcoding/claude-toolkit/compare/v2.0.0...HEAD
-[2.0.0]: https://github.com/bmjcoding/claude-toolkit/releases/tag/v2.0.0
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/bmjcoding/agent-toolkit/releases/tag/v2.0.0
