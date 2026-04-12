@@ -7,7 +7,7 @@ description: >
   writing any CHANGELOG.md in the toolkit.
 disable-model-invocation: true
 metadata:
-  version: 1.0.0
+  version: 1.1.0
 ---
 
 # Changelog Standard
@@ -162,6 +162,20 @@ use that component's `CHANGELOG.md`, not a separate one.
 
 ---
 
+## Version Renumbering
+
+When compressing version gaps (e.g., renumbering 1.0.0 → 1.5.0 down to 1.0.0 → 1.3.0), follow these steps in order:
+
+1. Rewrite the version headers in `CHANGELOG.md` using the new numbering.
+2. Update the comparison links at the bottom of `CHANGELOG.md` to match the new versions.
+3. **Required**: Search the component directory for definition files (`*.md`) and update any `# version:` comment to match the new highest released version. The version comment is the single source of truth visible to agents loading the definition — a mismatch causes confusion about which feature set is loaded.
+   ```bash
+   grep -l "# version:" agents/{name}/*.md skills/{name}/*.md 2>/dev/null
+   ```
+4. Verify: `grep "# version:" <definition-file>` matches the highest `## [X.Y.Z]` header in the CHANGELOG.
+
+---
+
 ## Anti-patterns
 
 | Anti-pattern | Why it fails |
@@ -174,9 +188,7 @@ use that component's `CHANGELOG.md`, not a separate one.
 | Commit-log dumps (`git log`) | Noise; conflates internal churn with user-facing change |
 | Lumping unrelated changes | One bullet = one idea; avoid "and also fixed X" entries |
 | `## [1.0.1] - 2025-04-11 [YANKED]` without explanation | Yanked releases must explain why in the section body |
-| Version comment in definition file not updated after renumbering | Leaves definition file reporting a version that does not match the CHANGELOG |
-
-When renumbering versions to eliminate gaps (e.g., compressing 1.0.0 → 1.5.0 down to 1.0.0 → 1.3.0), also update any `# version:` comment in the component's definition file (e.g., `frankenstein.md`, `planner.md`) to match the new latest version. The version comment is the single source of truth visible to agents loading the definition — a mismatch between it and the CHANGELOG causes confusion about which feature set is loaded.
+| Version comment in definition file not updated after renumbering | Leaves definition file reporting a version that does not match the CHANGELOG — follow the Version Renumbering steps above |
 
 ---
 
