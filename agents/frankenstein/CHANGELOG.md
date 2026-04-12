@@ -13,6 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - SESSION_ID generation in Phase 0: `date '+%Y%m%dT%H%M%S'` written via `printf '%s'` to `.orchestrator/session.id` at startup (CLAUD-005).
 - Per-session directory isolation: all runtime paths now resolve under `.orchestrator/sessions/<SESSION_ID>/` when `session.id` is present. Handoffs, context, and logs are session-scoped (CLAUD-006).
+- Pre-flight WIP audit in Phase 0: run `git status --short` before dispatching any agents; surface untracked and tracked-modified files not related to the current task; block planning until the user acknowledges or stashes prior-session WIP (REC-3).
+- Post-truncation git status audit: after any agent returns without a handoff file, immediately run `git status --short`; if files outside the agent's `owned_files` are modified, stash or revert before continuing (REC-2).
+- Haiku-eligible role roster: explicit table of 7 confirmed subtask roles (explore-skill, rules-backfill, integration-repair, doc-writer, quality-fix-targeted, subtask-repair, post-validation) that dispatch with `model: haiku` by default, based on pipeline performance data (REC-7).
 
 ### Changed
 

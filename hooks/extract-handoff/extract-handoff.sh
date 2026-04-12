@@ -66,7 +66,8 @@ validate_handoff() {
   fi
 
   # 2. status must be one of the allowed enum values
-  local valid_statuses="done partial needs_human failed verification_only"
+  # Note: approve and revise are valid for plan-reviewer verdict handoffs
+  local valid_statuses="done partial needs_human failed verification_only approve revise"
   local status_val
   status_val=$(echo "$json" | jq -r '.status // ""' 2>/dev/null)
   local status_ok=false
