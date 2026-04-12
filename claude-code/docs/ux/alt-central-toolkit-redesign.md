@@ -28,7 +28,7 @@ Every catalog card and detail page shows the install location for the **currentl
 | Tool | Project scope | Global scope |
 |---|---|---|
 | Claude Code | `.claude/<type>/` | `~/.claude/<type>/` |
-| GitHub Copilot (VS Code) | `.github/<type>/` | `~/.copilot/<type>/` |
+| GitHub Copilot (VS Code) | `.github/<type>/` | VS Code user profile settings (no global filesystem path) |
 | Copilot Cloud Agent | `.github/agents/` or `.github/instructions/` | N/A |
 | OpenAI Codex | `.codex/<type>/` | `~/.codex/<type>/` |
 
@@ -284,7 +284,7 @@ Note: hooks are not file-copy installs — they require editing `settings.json`.
 
 ### 7.2 GitHub Copilot (VS Code) Snippets
 
-Copilot install is a file-copy into `.github/<type>/` (project scope) or `~/.copilot/<type>/` (personal scope):
+Copilot install is a file-copy into `.github/<type>/` (project scope). GitHub Copilot (VS Code) discovers instructions and agents from `.github/**` in the workspace; there is no user-global `~/.copilot/` discovery directory. User-global equivalents are managed through VS Code settings UI, not the filesystem.
 
 ```bash
 # Project scope
@@ -293,11 +293,11 @@ cp github-copilot/<type>/<name>.* .github/<type>/
 
 Type-to-path mapping:
 ```
-agent       → .github/agents/<name>.agent.md       | ~/.copilot/agents/<name>.agent.md
-instructions → .github/instructions/<name>.instructions.md | ~/.copilot/instructions/<name>.instructions.md
-prompt      → .github/prompts/<name>.prompt.md     | (VS Code only, no global equivalent)
-skill       → .github/skills/<name>/SKILL.md        | ~/.copilot/skills/<name>/SKILL.md
-rule        → .github/copilot-instructions.md       | (repo-wide, single file — append, not copy)
+agent        → .github/agents/<name>.agent.md
+instructions → .github/instructions/<name>.instructions.md
+prompt       → .github/prompts/<name>.prompt.md     (workspace scope only)
+skill        → .github/skills/<name>/SKILL.md
+rule         → .github/copilot-instructions.md       (repo-wide, single file — append, not copy)
 ```
 
 For `rule` items (append pattern), the snippet changes:

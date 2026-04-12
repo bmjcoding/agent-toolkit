@@ -21,14 +21,16 @@ For a global override that applies across all repos, users place content in `~/.
 Codex CLI custom agents are defined in TOML and placed at `~/.codex/agents/<name>.toml` (global) or `.codex/agents/<name>.toml` (project-scoped, trusted repos only):
 
 ```toml
-[agent]
-name = "<agent-name>"
+name        = "<agent-name>"
 description = "<one-liner>"
-model = "codex-mini-latest"   # or o4-mini, o3, etc.
-instructions = """
+model       = "codex-mini-latest"   # or o4-mini, o3, etc.
+
+developer_instructions = """
 Your agent instructions here.
 """
 ```
+
+See `openai-codex/agents/planner.toml` for a canonical example with inline documentation of each field and the mapping from Claude Code frontmatter keys.
 
 ## Hooks (Experimental)
 

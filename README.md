@@ -70,7 +70,7 @@ Symlink map:
 ~/.claude/commands -> <repo>/claude-code/commands
 ~/.claude/docs     -> <repo>/claude-code/docs
 ~/.claude/hooks    -> <repo>/claude-code/hooks
-~/.claude/rules    -> <repo>/shared/rules
+~/.claude/rules    -> <repo>/claude-code/rules
 ~/.claude/skills   -> <repo>/shared/skills
 ```
 

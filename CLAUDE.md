@@ -4,7 +4,7 @@
 
 ## Claude Code Skills and Commands
 
-The following slash commands are available in this toolkit (defined in `claude-code/commands/` after restructure, currently in `commands/`):
+The following slash commands are available in this toolkit (defined in `claude-code/commands/`):
 
 - `/lint` — lint changed files on the current branch
 - `/audit` — security audit of changed files
