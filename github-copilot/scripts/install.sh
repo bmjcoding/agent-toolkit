@@ -53,6 +53,12 @@ for arg in "$@"; do
   esac
 done
 
+# Mutex: --dry-run and --check are mutually exclusive (da-10)
+if [[ "$DRY_RUN" == "true" && "$CHECK_ONLY" == "true" ]]; then
+  echo "ERROR: --dry-run and --check are mutually exclusive" >&2
+  exit 1
+fi
+
 # ---------------------------------------------------------------------------
 # Repo root resolution
 # ---------------------------------------------------------------------------
@@ -106,6 +112,7 @@ if [[ "$CHECK_ONLY" == "true" ]]; then
   for (( i=0; i<${#SYMLINKS[@]}; i+=2 )); do
     link="${SYMLINKS[$i]}"
     target="${SYMLINKS[$((i+1))]}"
+    # sre-7: correct order — (1) not a symlink, (2) wrong target, (3) broken symlink
     if [[ ! -L "$link" ]]; then
       echo "MISSING symlink: $link" >&2
       (( ERRORS++ )) || true

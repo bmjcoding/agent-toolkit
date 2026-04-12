@@ -19,6 +19,36 @@
 
 set -euo pipefail
 
+# ---------------------------------------------------------------------------
+# Argument parsing — sre-8: accept --dry-run, --check, --help for CLI consistency
+# ---------------------------------------------------------------------------
+for arg in "$@"; do
+  case "$arg" in
+    --help|-h)
+      echo "Usage: $(basename "$0") [--dry-run] [--check] [--help]"
+      echo ""
+      echo "Options:"
+      echo "  --dry-run   (no-op) This is a documentation-only stub."
+      echo "  --check     (no-op) This is a documentation-only stub."
+      echo "  --help      Show this message and exit."
+      echo ""
+      echo "This is a documentation-only stub. Codex CLI setup requires manual steps."
+      echo "See openai-codex/README.md for full instructions."
+      exit 0
+      ;;
+    --dry-run|--check)
+      echo "Note: $arg passed — this is a documentation-only stub. No actions are taken."
+      echo "See openai-codex/README.md for manual setup steps."
+      exit 0
+      ;;
+    *)
+      echo "Unknown option: $arg" >&2
+      echo "Run with --help for usage." >&2
+      exit 1
+      ;;
+  esac
+done
+
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 SKILLS_SRC="${REPO_ROOT}/shared/skills"
 AGENTS_SKILLS_DIR="${REPO_ROOT}/.agents/skills"

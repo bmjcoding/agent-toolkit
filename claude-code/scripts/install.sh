@@ -74,6 +74,14 @@ fi
 _default_repo_dir="$(cd "$(dirname "$0")/../.." && pwd)"
 REPO_DIR="${AGENT_TOOLKIT_DIR:-$_default_repo_dir}"
 
+# Reject path-traversal in env-var override (sec-2)
+case "$REPO_DIR" in
+  *..*)
+    echo "ERROR: REPO_DIR contains '..' segments — refusing for safety" >&2
+    exit 1
+    ;;
+esac
+
 # ---------------------------------------------------------------------------
 # Validate REPO_DIR looks like the right repo (sanity check)
 # ---------------------------------------------------------------------------
@@ -239,11 +247,18 @@ for entry in "${SYMLINKS[@]}"; do
   abs_target="${REPO_DIR}/${rel_target}"
   link_path="${CLAUDE_HOME}/${name}"
 
+  # Guard: abort if a real file/directory already occupies the link path (sre-1)
+  # ln -sfn on macOS creates the symlink INSIDE an existing directory rather than
+  # replacing it, silently producing wrong topology.
+  if [[ -e "${link_path}" && ! -L "${link_path}" ]]; then
+    err "${link_path} is a real directory/file, not a symlink."
+    err "Remove it manually before running this script, or pass --force to remove and recreate."
+    exit 1
+  fi
+
   # Capture before state
   if [[ -L "${link_path}" ]]; then
     before="$(readlink "${link_path}")"
-  elif [[ -e "${link_path}" ]]; then
-    before="(non-symlink exists)"
   else
     before="(none)"
   fi
@@ -266,25 +281,41 @@ for entry in "${SYMLINKS[@]}"; do
 done
 
 # ---------------------------------------------------------------------------
-# Smoke test: verify ~/.claude/agents resolves to a real directory
+# Smoke test: verify all 6 symlinks resolve to real directories with expected targets (sre-9)
 # ---------------------------------------------------------------------------
 
 echo "Smoke test..."
-agents_path="${CLAUDE_HOME}/agents"
-if [[ -d "${agents_path}" ]]; then
-  agent_count="$(find "${agents_path}" -maxdepth 1 -mindepth 1 | wc -l | tr -d ' ')"
-  printf '  ~/.claude/agents  resolves OK (%s entries)\n' "${agent_count}"
-else
-  err "Smoke test FAILED: ${agents_path} does not resolve to a directory."
-  exit 1
-fi
+smoke_ok=true
+for entry in "${SYMLINKS[@]}"; do
+  name="${entry%%|*}"
+  rel_target="${entry##*|}"
+  abs_target="${REPO_DIR}/${rel_target}"
+  link_path="${CLAUDE_HOME}/${name}"
 
-skills_path="${CLAUDE_HOME}/skills"
-if [[ -d "${skills_path}" ]]; then
-  skill_count="$(find "${skills_path}" -maxdepth 1 -mindepth 1 | wc -l | tr -d ' ')"
-  printf '  ~/.claude/skills  resolves OK (%s entries)\n' "${skill_count}"
-else
-  err "Smoke test FAILED: ${skills_path} does not resolve to a directory."
+  if [[ ! -L "${link_path}" ]]; then
+    err "Smoke test FAILED: ${link_path} is not a symlink."
+    smoke_ok=false
+    continue
+  fi
+
+  actual_target="$(readlink "${link_path}")"
+  if [[ "${actual_target}" != "${abs_target}" ]]; then
+    err "Smoke test FAILED: ${link_path} -> ${actual_target} (expected ${abs_target})"
+    smoke_ok=false
+    continue
+  fi
+
+  if [[ ! -d "${link_path}" ]]; then
+    err "Smoke test FAILED: ${link_path} does not resolve to a directory."
+    smoke_ok=false
+    continue
+  fi
+
+  entry_count="$(find "${link_path}" -maxdepth 1 -mindepth 1 | wc -l | tr -d ' ')"
+  printf '  ~/.claude/%-10s  resolves OK (%s entries)\n' "${name}" "${entry_count}"
+done
+
+if [[ "$smoke_ok" != "true" ]]; then
   exit 1
 fi
 
