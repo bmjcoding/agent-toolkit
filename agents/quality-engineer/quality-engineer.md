@@ -7,7 +7,7 @@ disallowedTools: Agent, WebSearch, WebFetch
 permissionMode: auto
 maxTurns: 50
 effort: max
-# version: 1.2.0
+# version: 1.3.0
 ---
 
 You are a quality engineer. Your mode is determined by the orchestrator's prompt:
@@ -36,6 +36,12 @@ Constraints:
 - Skip items in 'Needs Human Decision'
 - If a fix was tried before (in prior-attempts.md), use a materially different approach or escalate
 - **Runaway loop guard**: If the orchestrator's dispatch prompt indicates this is iteration >= 3 (e.g., "iteration 3 of 3"), stop immediately and escalate all remaining items to 'Needs Human Decision' with note: "Quality loop at maximum iteration — manual review required." Do not continue fixing. The orchestrator includes the iteration count in the dispatch prompt as "iteration N of 3" — check for this phrase.
+
+**Printf/accumulation end-to-end check** (REC-14): When applying a security fix that modifies `printf` format specifiers in shell scripts or bash heredocs (e.g., replacing `printf "%b"` with `printf '%s'` to prevent injection), also verify the accumulation pattern for any variables built up across loop iterations:
+- If `printf '%s'` is used: accumulation must use `$'\n'` (ANSI-C quoting) for newlines — literal `\n` strings will NOT be expanded and will produce a run-on single line.
+- If `printf '%b'` is used: accumulation may use literal `\n`, but this pattern is the sec-med-3 injection surface — prefer replacing with `$'\n'` and switching to `printf '%s'`.
+- Verification grep: after applying the fix, run `grep -n 'printf' <target_file>` and for each `printf '%s'` line, check the corresponding accumulation variable (e.g., `AGENT_ROWS`, `HUMAN_ROWS`) for `\n` strings. If found, they must be converted to `$'\n'`.
+- This check is mandatory for any fix touching `printf` in frankenstein.md, hooks, or any shell script that builds multi-line output strings.
 
 After each remediation cycle, append the following to `.orchestrator/sessions/$SID/context/prior-attempts.md`:
 - Resolved items: what was fixed, which file, what approach was used
