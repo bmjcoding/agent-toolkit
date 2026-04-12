@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.6.0] - 2026-04-12
+
+### Added
+
+- SESSION_ID generation in Phase 0: `date '+%Y%m%dT%H%M%S'` written via `printf '%s'` to `.orchestrator/session.id` at startup (CLAUD-005).
+- Per-session directory isolation: all runtime paths now resolve under `.orchestrator/sessions/<SESSION_ID>/` when `session.id` is present. Handoffs, context, and logs are session-scoped (CLAUD-006).
+
+### Changed
+
+- Phase 4 backlog seed normalizes `source` field to lowercase (`ascii_downcase` + whitespace strip) before writing rows (CLAUD-008).
+- SID format validated by regex `^[0-9]{8}T[0-9]{6}$` in Phase 4; malformed value logs a warning and falls back to empty string (sre-008/da-08).
+- Phase 2 pre-flight checks for missing `session.id` and warns before group dispatch (sre-007).
+- Phase 4 jq extraction validates each handoff file with `jq empty` before parsing; malformed JSON is skipped with `reason=malformed_json` logged to agents.log (sre-004).
+
+### Fixed
+
+- `eval echo` in retro file path replaced with safe `${retro_file/#\~/$HOME}` tilde expansion, eliminating shell injection risk (sec-high-1).
+- `printf "%b"` in Phase 4 seed replaced with `printf '%s'` to prevent markdown row injection via `\n` in untrusted finding text (sec-med-3).
+
 ## [1.5.0] - 2026-04-12
 
 ### Added
@@ -58,10 +77,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/claude-toolkit/compare/v1.5.0...HEAD
-[1.5.0]: https://github.com/bmjcoding/claude-toolkit/compare/v1.4.0...v1.5.0
-[1.4.0]: https://github.com/bmjcoding/claude-toolkit/compare/v1.3.0...v1.4.0
-[1.3.0]: https://github.com/bmjcoding/claude-toolkit/compare/v1.2.0...v1.3.0
-[1.2.0]: https://github.com/bmjcoding/claude-toolkit/compare/v1.1.0...v1.2.0
-[1.1.0]: https://github.com/bmjcoding/claude-toolkit/compare/v1.0.0...v1.1.0
-[1.0.0]: https://github.com/bmjcoding/claude-toolkit/releases/tag/v1.0.0
+[Unreleased]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.6.0...HEAD
+[1.6.0]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.5.0...frankenstein-v1.6.0
+[1.5.0]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.4.0...frankenstein-v1.5.0
+[1.4.0]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.3.0...frankenstein-v1.4.0
+[1.3.0]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.2.0...frankenstein-v1.3.0
+[1.2.0]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.1.0...frankenstein-v1.2.0
+[1.1.0]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.0.0...frankenstein-v1.1.0
+[1.0.0]: https://github.com/bmjcoding/claude-toolkit/tree/frankenstein-v1.0.0
