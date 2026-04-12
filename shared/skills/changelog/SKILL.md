@@ -69,13 +69,13 @@ which is incorrect.
 
 Canonical tag format: `{component-slug}-v{version}`
 
-| Component path            | Tag slug         | Example tag          |
-|---------------------------|------------------|----------------------|
-| `skills/changelog/`       | `changelog`      | `changelog-v3.0.0`   |
-| `agents/frankenstein/`    | `frankenstein`   | `frankenstein-v1.5.0`|
-| `commands/sync-toolkit/`  | `sync-toolkit`   | `sync-toolkit-v1.0.0`|
-| `hooks/branch-guard/`     | `branch-guard`   | `branch-guard-v1.0.0`|
-| `rules/docker/`           | `docker`         | `docker-v1.0.0`      |
+| Component path                         | Tag slug         | Example tag                        |
+|----------------------------------------|------------------|------------------------------------|
+| `shared/skills/changelog/`             | `changelog`      | `shared/changelog-v3.0.0`          |
+| `claude-code/agents/frankenstein/`     | `frankenstein`   | `claude-code/frankenstein-v1.5.0`  |
+| `claude-code/commands/sync-toolkit/`  | `sync-toolkit`   | `claude-code/sync-toolkit-v1.0.0`  |
+| `claude-code/hooks/branch-guard/`     | `branch-guard`   | `claude-code/branch-guard-v1.0.0`  |
+| `claude-code/rules/docker/`           | `docker`         | `claude-code/docker-v1.0.0`        |
 
 Rules:
 - The slug is the component's directory name (the `{name}` segment in `skills/{name}/`).
@@ -155,21 +155,23 @@ When a single update triggers multiple levels, use the highest applicable bump.
 
 ## Routing Rules
 
-Each toolkit component has its own `CHANGELOG.md` in its subdirectory:
+Each toolkit component has its own `CHANGELOG.md` in its subdirectory. Paths use the
+new per-tool layout (ADR 0005):
 
-- `agents/{name}/CHANGELOG.md`
-- `skills/{name}/CHANGELOG.md`
-- `commands/{name}/CHANGELOG.md`
-- `hooks/{name}/CHANGELOG.md`
-- `rules/{name}/CHANGELOG.md`
+- `claude-code/agents/{name}/CHANGELOG.md`
+- `claude-code/commands/{name}/CHANGELOG.md`
+- `claude-code/hooks/{name}/CHANGELOG.md`
+- `claude-code/rules/{name}/CHANGELOG.md`
+- `shared/skills/{name}/CHANGELOG.md`
+- `github-copilot/skills/{name}/CHANGELOG.md`
 
 Reference files and scripts inside a component directory (e.g.,
-`skills/{name}/references/`) use that component's `CHANGELOG.md` — no separate
+`shared/skills/{name}/references/`) use that component's `CHANGELOG.md` — no separate
 changelog per subdirectory.
 
 **Aggregated changelogs at the category root are forbidden.** Do not create or write to
-`agents/CHANGELOG.md`, `skills/CHANGELOG.md`, etc. Each component is versioned
-independently using the per-component tag format.
+`claude-code/agents/CHANGELOG.md`, `shared/skills/CHANGELOG.md`, etc. Each component is
+versioned independently using the per-component tag format.
 
 ## Gotchas
 

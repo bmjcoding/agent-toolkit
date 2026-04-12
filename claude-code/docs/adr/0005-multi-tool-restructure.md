@@ -35,10 +35,15 @@ agent-toolkit/
 │   ├── rules/
 │   └── scripts/
 ├── github-copilot/       # GitHub Copilot VS Code IDE only
-│   ├── instructions/
-│   └── rules/
+│   ├── agents/
+│   ├── mcp/
+│   ├── scripts/
+│   └── skills/
 ├── openai-codex/         # OpenAI Codex CLI
-│   └── agents/
+│   ├── agents/
+│   ├── config.toml.template
+│   ├── hooks/
+│   └── scripts/
 └── shared/               # Tool-agnostic content (single source of truth)
     ├── skills/
     └── rules/

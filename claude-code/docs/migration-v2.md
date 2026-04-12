@@ -57,6 +57,14 @@ git remote set-url origin https://github.com/bmjcoding/agent-toolkit.git
 
 The install script retargets all six symlinks atomically. It is idempotent: running it multiple times is safe and produces the same result.
 
+**Install script flags and env vars:**
+
+| Flag / Env var | Effect |
+|---|---|
+| `--dry-run` | Print planned changes without writing anything. |
+| `--check` | Verify all symlinks exist and point to valid targets. Exit non-zero if any are missing or broken. |
+| `AGENT_TOOLKIT_DIR=/path/to/repo` | Override the repo root path (default: auto-detected from the script's own location). |
+
 **Preview first (recommended):**
 
 ```bash
@@ -114,6 +122,22 @@ ln -sf /path/to/agent-toolkit/openai-codex/agents ~/.codex/agents/agent-toolkit
 
 ## Troubleshooting
 
+### `~/.claude/agents` (or other entry) is a real directory, not a symlink
+
+If one of the `~/.claude/` entries was previously created as a real directory (rather than a symlink), `install.sh` will refuse to overwrite it to avoid data loss. You will see an error such as:
+
+```
+ERROR: ~/.claude/agents exists and is not a symlink. Remove it manually first.
+```
+
+To resolve:
+
+1. Back up the contents if needed: `cp -r ~/.claude/agents ~/agents-backup`
+2. Remove the real directory: `rm -rf ~/.claude/agents`
+3. Re-run the install script: `bash claude-code/scripts/install.sh`
+
+The script will then create the correct symlink pointing into the repo.
+
 ### Broken symlinks after pulling
 
 If `ls -la ~/.claude/` shows symlinks with red highlighting or `-> /path/to/claude-toolkit/...` (old paths), the install script has not been run yet. Run Step 2 above.
@@ -168,6 +192,27 @@ The `COMPONENT_PATTERN` in `toolkit-drift-check.sh` was updated to match the new
 ```
 
 If you see false-positive drift warnings, confirm your local clone has the latest version of `claude-code/hooks/toolkit-drift-check/toolkit-drift-check.sh`.
+
+---
+
+## Rollback
+
+If you need to revert to the v1 layout (e.g., to use a `claude-toolkit` checkout that predates the restructure), restore the six symlinks to their old targets:
+
+```bash
+OLDREPO=/path/to/claude-toolkit   # adjust to your v1 checkout path
+
+ln -sfn "$OLDREPO/agents"   ~/.claude/agents
+ln -sfn "$OLDREPO/commands" ~/.claude/commands
+ln -sfn "$OLDREPO/docs"     ~/.claude/docs
+ln -sfn "$OLDREPO/hooks"    ~/.claude/hooks
+ln -sfn "$OLDREPO/rules"    ~/.claude/rules
+ln -sfn "$OLDREPO/skills"   ~/.claude/skills
+```
+
+Verify the result with `bash claude-code/scripts/install.sh --check` against the old repo, or inspect with `ls -la ~/.claude/`.
+
+**Note:** the v1 layout no longer receives updates. Rolling back means you will not receive new agents, skills, or bug fixes added after the v2 restructure.
 
 ---
 

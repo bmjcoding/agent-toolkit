@@ -16,8 +16,6 @@ agent-toolkit/
   claude-code/     # Claude Code-specific agents, commands, hooks, bundles
   github-copilot/  # GitHub Copilot-specific agents and instructions
   openai-codex/    # OpenAI Codex CLI-specific agents and config
-  docs/            # ADRs, migration guides, protection model
-  scripts/         # Utility shell scripts
 ```
 
 ---
@@ -31,7 +29,6 @@ These rules apply to all AI tools operating in this repository.
 - Dev server ports must read from the `$PORT_BASE` env var (set by the `cw` alias), never hardcoded.
 - Multi-service setups: offset from `$PORT_BASE` (+0, +1, +2, etc.).
 - On first run in a project: patch any hardcoded ports to use `$PORT_BASE` before starting servers.
-- Ensure `.claude/launch.json` has `"autoPort": true`.
 
 ### Command Scope Resolution
 
@@ -86,7 +83,9 @@ Global git config enforces `gpgsign=true` — all commits must be GPG-signed. Pl
 
 All components follow **SemVer 2.0.0** with **Keep a Changelog 1.1.0** format.
 
-- Tag format: `{slug}-v{major}.{minor}.{patch}` (e.g., `frankenstein-v1.11.0`)
+- Tag format: `<tool>/<slug>-v<major>.<minor>.<patch>` (e.g., `claude-code/frankenstein-v1.11.0`, `shared/changelog-v4.0.0`)
+  - Use `claude-code/<slug>-v<ver>` for agents, commands, hooks, and rules under `claude-code/`
+  - Use `shared/<slug>-v<ver>` for skills and rules under `shared/`
 - Bump rules:
   - **PATCH**: wording fixes, ≤5 line changes, no new sections
   - **MINOR**: new sections or capabilities
@@ -107,6 +106,6 @@ export TOOLKIT_PATH=/path/to/your/agent-toolkit
 
 ## Explanations and Diagrams
 
-- Complex multi-step scenarios: render a Mermaid diagram via `npx @mermaid-js/mermaid-cli -i /tmp/<name>.mmd -o /tmp/<name>.png -b "#0f172a" -s 3 -c ~/.claude/mmdc-config.json`
+- Complex multi-step scenarios: render a Mermaid diagram (tool-specific invocation path varies per AI assistant).
 - Simple questions: answer directly without a diagram.
 - Docs with diagrams: include a diagram index table at the top.
