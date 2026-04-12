@@ -8,6 +8,21 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+- Shell script hardening in `claude-code/scripts/install.sh`,
+  `github-copilot/scripts/install.sh`, `openai-codex/scripts/install.sh`,
+  `claude-code/hooks/protect-config/protect-config.sh`, and
+  `claude-code/hooks/toolkit-edit-reminder/toolkit-edit-reminder.sh`
+  based on security, SRE, and design-architect review findings (phase 4-a).
+- Documentation corrections to `AGENTS.md`, `CLAUDE.md`, `README.md`,
+  ADR 0005, `claude-code/docs/migration-v2.md`, UX design doc,
+  `openai-codex/README.md`, and `shared/skills/changelog/SKILL.md`
+  based on design-architect and SRE review findings (phase 4-b).
+- Minor inline corrections to `CHANGELOG.md` and
+  `claude-code/agents/frankenstein/frankenstein.md`
+  from integration-verifier review (phase 3a).
+
 ## [2.0.0] - 2026-04-12
 
 ### Changed — Breaking
