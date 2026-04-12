@@ -12,15 +12,15 @@
 #   ~/.claude/commands ->  <REPO>/claude-code/commands
 #   ~/.claude/docs     ->  <REPO>/claude-code/docs
 #   ~/.claude/hooks    ->  <REPO>/claude-code/hooks
-#   ~/.claude/rules    ->  <REPO>/claude-code/rules
-#   ~/.claude/skills   ->  <REPO>/shared/skills   (shared across tools — not claude-code/skills)
+#   ~/.claude/rules    ->  <REPO>/rules             (universal — not claude-code/rules)
+#   ~/.claude/skills   ->  <REPO>/skills            (universal — not shared/skills)
 #
 # IDEMPOTENT: uses `ln -sfn` so re-running is always safe.
 #
 # REFERENCES:
 #   - AGENTS.md: top-level agent roster and surface overview
 #   - docs/adr/0004-per-component-changelog-tag-format.md: restructure ADR
-#     that established the claude-code/ and shared/ layout
+#     that established the claude-code/, rules/, and skills/ layout
 #
 # USAGE:
 #   ./install.sh              # apply symlinks
@@ -92,12 +92,6 @@ if [[ ! -d "${REPO_DIR}/claude-code" ]]; then
   exit 1
 fi
 
-if [[ ! -d "${REPO_DIR}/shared" ]]; then
-  echo "ERROR: REPO_DIR '${REPO_DIR}' does not contain shared/ subdirectory." >&2
-  echo "       Set AGENT_TOOLKIT_DIR to the correct repo root." >&2
-  exit 1
-fi
-
 # ---------------------------------------------------------------------------
 # Verify ~/.claude/ exists (never create it — user owns it)
 # ---------------------------------------------------------------------------
@@ -120,8 +114,8 @@ declare -a SYMLINKS=(
   "commands|claude-code/commands"
   "docs|claude-code/docs"
   "hooks|claude-code/hooks"
-  "rules|claude-code/rules"
-  "skills|shared/skills"
+  "rules|rules"
+  "skills|skills"
 )
 
 # ---------------------------------------------------------------------------
