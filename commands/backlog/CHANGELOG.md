@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Unified backlog schema: replaced 6-column format (`# | Severity | File | Item | Phase | Added`) with 12-column format (`# | status | severity | environment | file | item | deferred-reason | source | finding_id | phase | added_at | session_id`).
+- Unified backlog schema: replaced 6-column format (`# | Severity | File | Item | Phase | Added`) with 12-column format (`# | status | severity | environment | file | item | deferred_reason | source | finding_id | phase | added_at | session_id`).
 - `--resolve N` now marks status=`resolved` and retains the row instead of deleting it. Item numbers are stable until `--clear-resolved` runs.
 - `argument-hint` updated to reflect all new argument forms.
 
@@ -19,7 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `status` column with six values: `open`, `deferred-env`, `deferred-session`, `blocked`, `resolved`, `wont-fix`.
 - `environment` column (`any`, `work`, `personal`) for environment-aware filtering.
-- `deferred-reason` column populated when status is deferred, blocked, or wont-fix.
+- `deferred_reason` column populated when status is deferred, blocked, or wont-fix.
 - `source` column recording the agent role or user label that added the item.
 - `finding_id` column for stable cross-reference IDs (`<prefix>-NNN` format).
 - `added_at` column using ISO-8601 timestamp truncated to minute (`YYYY-MM-DDTHH:MM`).
