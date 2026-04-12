@@ -8,7 +8,7 @@ disable-model-invocation: true
 model: sonnet
 argument-hint: "[retro-output or recommendation] [--validate] [--skip-validation]"
 metadata:
-  version: 1.1.0
+  version: 1.2.0
 ---
 
 # Improve
@@ -72,21 +72,7 @@ Compare Q-warnings before and after the change. If the change introduced a NEW Q
 This prevents progressive quality degradation across improve cycles.
 
 **Eval smoke test** (if test cases exist):
-Look for `evals/evals.json` in the skill directory. If found, pick ONE test case — the one most relevant to the finding being fixed. Use this matching heuristic to select the right test case:
-- Finding mentions "revert" or "structural" → pick id=2 (`revert-on-structural-failure`)
-- Finding mentions "pattern" or "memory" → pick id=3 (`short-circuit-patterns-only`)
-- Finding mentions "rewrite" or "threshold" → pick id=4 (`rewrite-threshold`)
-- Finding mentions "p0" or "carve-out" → pick id=5 (`p0-carve-out`)
-- Finding mentions "validate" or "--validate" AND ("rewrite" or "stops") → pick id=7 (`validate-stops-on-rewrite`)
-- Finding mentions "validate" or "--validate" AND ("version" or "bump") → pick id=8 (`validate-no-double-version-bump`)
-- Finding mentions "validate" or "--validate" AND ("pattern" or "short-circuit") → pick id=9 (`validate-all-patterns-short-circuit`)
-- Finding mentions "validate" or "--validate" AND ("skip" or "heuristic") → pick id=10 (`validate-skip-heuristic`)
-- Finding mentions "validate" or "--validate" (no further qualifier) → pick id=6 (`validate-converges`)
-- Otherwise → pick id=1 (`apply-fix-recommendation`)
-
-Run the matched test case and check if assertions pass. Do NOT run the full eval suite — this is a smoke test, not a regression suite. Cap at 2 minutes.
-
-**Note**: This heuristic is for operational smoke tests — it verifies the skill's behavior, not the correctness of the specific change. If the finding modifies the threshold or carve-out logic itself (e.g., changing how the rewrite threshold fires), the matched eval may not validate the edit; in that case accept on structural-pass alone and document this in the report as `eval: not applicable`.
+If `evals/evals.json` exists in the skill directory, pick ONE test case using the first-match-wins keyword heuristic in `references/eval-matching.md`. Run only the matched case — not the full suite. Cap at 2 minutes. The reference also documents the `eval: not applicable` branch (when the finding modifies the matched rule itself) and the `eval: stale` branch (when the eval fixture references files that no longer exist).
 
 **Semantic spot-check** (for agent definitions):
 If the change modifies an agent prompt, verify the new instruction doesn't contradict other instructions in the same file. Search for conflicting directives (e.g., "always do X" in one section and "never do X" in another).
@@ -105,17 +91,7 @@ If reverted: restore the file to its pre-change state, note the recommendation a
 
 #### e. Version bump (accepted changes only)
 
-After all fixes for a given file are accepted, bump the version in its frontmatter `metadata.version` field. If no version exists, initialize at `1.0.0` then apply the bump.
-
-| Signal | Bump | Examples |
-|---|---|---|
-| ≤5 lines changed, no new sections or files | **PATCH** | Gotcha added, wording fix, description tweak |
-| New section, new reference file, new script, new capability | **MINOR** | Added model selection analysis, new gotchas section |
-| Structural rewrite, output format change, handoff schema change | **MAJOR** | Rewrote workflow, changed recommendation table columns |
-
-**Tiebreaker**: When a single improve run applies multiple changes of different magnitudes to the same file, use the highest applicable bump (MINOR beats PATCH, MAJOR beats MINOR).
-
-Record the old and new version for each file in the report and outcome JSON.
+After all fixes for a given file are accepted, apply a SemVer bump to `metadata.version` in the frontmatter. Rules, examples, and the tiebreaker (highest applicable bump wins) are in `references/version-bump.md`. If no version exists, initialize at `1.0.0` then apply the computed bump. Record old→new for each file in the report summary table and the outcome JSON.
 
 #### f. Changelog entry (accepted changes only)
 
@@ -274,7 +250,6 @@ This lets future retros answer: "Were the last retro's recommendations applied? 
 - **Don't rewrite, patch.** The smallest edit that addresses the finding is the right edit. Rewriting a section to "improve clarity" while fixing a bug conflates two changes and makes revert harder.
 - **Respect protected files.** Do not modify lockfiles, CI configs, migration files, or auth modules (per CLAUDE.md auto-fix safety rules). Report these as `skipped: protected file` in the summary.
 - **Memory deduplication matters.** Before writing a new memory file, grep existing memories for the key concept. Duplicate memories cause contradictory guidance in future sessions.
-- **Eval test cases may be stale.** If the eval file references files or patterns that no longer exist, skip the eval and note it as `eval: stale`. Don't fail the change because of a broken test fixture.
 - **Validation loop is post-improve only.** The `--validate` loop runs AFTER the main improve workflow finishes — it does not replace the per-change verification in step 2c. The per-change checks catch individual regressions; the validation loop catches definition-level quality gaps.
 - **No double version bumps.** Validation iterations must NOT call step 2e (version bump). The initial pass owns versioning. If you're in iteration N>0 of the validation loop, skip version bump. For changelog: append a sub-entry under the existing version header, not a new header.
 - **Single outcome file.** The validation loop updates the existing outcome JSON from step 7 — it does not create additional outcome files. One improve run = one outcome file, regardless of validation iterations.
