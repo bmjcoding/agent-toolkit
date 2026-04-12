@@ -12,7 +12,7 @@ metadata:
 
 # Changelog Standard
 
-Canonical definition of `CHANGELOG.md` format for every component in the claude-toolkit
+Canonical definition of `CHANGELOG.md` format for every component in the agent-toolkit
 ecosystem (agents, skills, commands, hooks, rules). Read this before creating or editing
 any `CHANGELOG.md`.
 

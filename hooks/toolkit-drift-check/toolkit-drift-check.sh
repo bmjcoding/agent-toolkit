@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# SubagentStop hook: warn when claude-toolkit component files were edited without a paired CHANGELOG.md update
+# SubagentStop hook: warn when agent-toolkit component files were edited without a paired CHANGELOG.md update
 # version: 1.0.1
 set -uo pipefail
 
@@ -22,10 +22,10 @@ if [[ -f "$FLAG" ]]; then
 fi
 
 # ---------------------------------------------------------------------------
-# Locate the claude-toolkit root.
+# Locate the agent-toolkit root.
 # Honour $TOOLKIT_PATH override; fall back to the canonical install location.
 # ---------------------------------------------------------------------------
-TOOLKIT="${TOOLKIT_PATH:-/Users/bmj/Developer/git/claude-toolkit}"
+TOOLKIT="${TOOLKIT_PATH:-/Users/bmj/Developer/git/agent-toolkit}"
 
 if [[ ! -d "$TOOLKIT" ]]; then
   exit 0
@@ -46,7 +46,7 @@ _INPUT_CONSUMED="$INPUT"
 # ---------------------------------------------------------------------------
 # Pattern matching component paths: (TYPE)/(name)/(file) — used for both
 # filtering modified paths and as documentation of what counts as a component.
-COMPONENT_PATTERN='^(agents|skills|hooks|commands|rules)/[^/]+/[^/]+'
+COMPONENT_PATTERN='^(claude-code/(agents|hooks|commands|rules)|shared/skills|shared/rules)/[^/]+/[^/]+'
 
 # Capture git status output; gracefully handle non-git directories.
 GIT_STATUS="$(git -C "$TOOLKIT" status --porcelain 2>/dev/null)" || exit 0

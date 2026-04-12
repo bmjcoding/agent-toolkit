@@ -73,7 +73,7 @@ fi
 
 **Stale toolkit artifact warning** (REC-12): If the toolkit repo contains a `.orchestrator/plan.json` from a prior session, agents dispatched in this session may read the wrong plan. Check immediately after writing session.id:
 ```bash
-TOOLKIT_PLAN="/Users/bmj/Developer/git/claude-toolkit/.orchestrator/plan.json"
+TOOLKIT_PLAN="${TOOLKIT_PATH:-/Users/bmj/Developer/git/agent-toolkit}/.orchestrator/plan.json"
 if [ -f "$TOOLKIT_PLAN" ]; then
   STALE_SID=$(jq -r '.session_id // empty' "$TOOLKIT_PLAN" 2>/dev/null || echo "")
   if [ -n "$STALE_SID" ] && [ "$STALE_SID" != "$SESSION_ID" ]; then
@@ -112,7 +112,7 @@ If any tracked-modified or untracked files appear that are NOT related to the cu
 
 Note: `git diff --name-only` does NOT show untracked files — the `git status --short` command is required to surface both tracked modifications and untracked files (e.g., uncommitted ADRs, new docs).
 
-**Multi-repo branch staleness check**: When the task involves creating a new branch in a secondary repository (e.g., claude-toolkit), run this before dispatching any agents to that repository:
+**Multi-repo branch staleness check**: When the task involves creating a new branch in a secondary repository (e.g., agent-toolkit), run this before dispatching any agents to that repository:
 ```bash
 cd /path/to/secondary-repo && git fetch origin && git status -b
 ```
@@ -167,7 +167,7 @@ Tell each: "RESEARCH ONLY — do not write code." Each writes TWO files:
 
 ### Autoresearch Scope Checklist (multi-repo toolkit pipelines)
 
-When dispatching `autoresearch-analyst` before the planner for multi-repo toolkit pipelines (e.g., tasks involving both the project repo and claude-toolkit), include this required output checklist in the dispatch prompt:
+When dispatching `autoresearch-analyst` before the planner for multi-repo toolkit pipelines (e.g., tasks involving both the project repo and agent-toolkit), include this required output checklist in the dispatch prompt:
 
 > Your output MUST confirm all of the following. If any item cannot be confirmed, list it explicitly as a gap:
 > 1. Current hook paths in settings.json (flat vs subdirectory layout)
@@ -528,7 +528,7 @@ fi
 
 Before staging any files, check whether any CHANGELOG.md files in the plan's touched component scope have a non-empty ## [Unreleased] section.
 
-Reference skill: /Users/bmj/Developer/git/claude-toolkit/skills/changelog/SKILL.md (also available at ~/.claude/skills/changelog/SKILL.md). Load it to apply the canonical SemVer bump table and 4-step [Unreleased] promotion workflow.
+Reference skill: /Users/bmj/Developer/git/agent-toolkit/skills/changelog/SKILL.md (also available at ~/.claude/skills/changelog/SKILL.md). Load it to apply the canonical SemVer bump table and 4-step [Unreleased] promotion workflow.
 
 ```bash
 # Identify CHANGELOG.md files in owned scope from plan.json
@@ -554,7 +554,7 @@ For each CHANGELOG.md found:
 
 **Scope constraint:** Only process CHANGELOG.md files whose parent component directory appears in plan.json owned_files. Do not touch unrelated component CHANGELOGs.
 
-**Multi-repo awareness:** When the task touches multiple repos (e.g., alt-central and claude-toolkit), run this version-bump step per repo — not once globally. Derive each repo root via `git rev-parse --show-toplevel` from within the working directory of each repo before processing its CHANGELOGs.
+**Multi-repo awareness:** When the task touches multiple repos (e.g., alt-central and agent-toolkit), run this version-bump step per repo — not once globally. Derive each repo root via `git rev-parse --show-toplevel` from within the working directory of each repo before processing its CHANGELOGs.
 
 **First-release fallback:** If no prior ## [X.Y.Z] header exists in the file (first release of this component), use `tree/{slug}-v{X.Y.Z}` format for the version link instead of the compare format.
 

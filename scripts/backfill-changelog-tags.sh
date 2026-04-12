@@ -4,7 +4,7 @@
 #
 # PURPOSE:
 #   Retroactively create per-component git tags for all historical versions
-#   across all 47 components in the claude-toolkit monorepo.
+#   across all 47 components in the agent-toolkit monorepo.
 #
 # SAFETY — EMIT-ONLY, NEVER EXECUTES:
 #   This script ONLY PRINTS git tag commands to stdout. It never runs them.

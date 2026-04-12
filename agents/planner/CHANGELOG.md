@@ -41,9 +41,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/claude-toolkit/compare/planner-v1.4.0...HEAD
-[1.4.0]: https://github.com/bmjcoding/claude-toolkit/compare/planner-v1.3.0...planner-v1.4.0
-[1.3.0]: https://github.com/bmjcoding/claude-toolkit/compare/planner-v1.2.0...planner-v1.3.0
-[1.2.0]: https://github.com/bmjcoding/claude-toolkit/compare/planner-v1.1.0...planner-v1.2.0
-[1.1.0]: https://github.com/bmjcoding/claude-toolkit/compare/planner-v1.0.0...planner-v1.1.0
-[1.0.0]: https://github.com/bmjcoding/claude-toolkit/tree/planner-v1.0.0
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/planner-v1.4.0...HEAD
+[1.4.0]: https://github.com/bmjcoding/agent-toolkit/compare/planner-v1.3.0...planner-v1.4.0
+[1.3.0]: https://github.com/bmjcoding/agent-toolkit/compare/planner-v1.2.0...planner-v1.3.0
+[1.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/planner-v1.1.0...planner-v1.2.0
+[1.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/planner-v1.0.0...planner-v1.1.0
+[1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/planner-v1.0.0

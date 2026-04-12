@@ -71,9 +71,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial changelog skill defining Keep a Changelog 1.1.0 + SemVer standard for all toolkit components
 
-[Unreleased]: https://github.com/bmjcoding/claude-toolkit/compare/changelog-v3.0.0...HEAD
-[3.0.0]: https://github.com/bmjcoding/claude-toolkit/compare/changelog-v2.0.0...changelog-v3.0.0
-[2.0.0]: https://github.com/bmjcoding/claude-toolkit/compare/changelog-v1.2.0...changelog-v2.0.0
-[1.2.0]: https://github.com/bmjcoding/claude-toolkit/compare/changelog-v1.1.0...changelog-v1.2.0
-[1.1.0]: https://github.com/bmjcoding/claude-toolkit/compare/changelog-v1.0.0...changelog-v1.1.0
-[1.0.0]: https://github.com/bmjcoding/claude-toolkit/tree/changelog-v1.0.0
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/changelog-v3.0.0...HEAD
+[3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/changelog-v2.0.0...changelog-v3.0.0
+[2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/changelog-v1.2.0...changelog-v2.0.0
+[1.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/changelog-v1.1.0...changelog-v1.2.0
+[1.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/changelog-v1.0.0...changelog-v1.1.0
+[1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/changelog-v1.0.0

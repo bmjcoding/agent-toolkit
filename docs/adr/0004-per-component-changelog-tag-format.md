@@ -8,7 +8,7 @@ Accepted
 
 ## Context
 
-claude-toolkit is a monorepo with 47 components (agents, hooks, skills, commands, rules), each maintaining its own CHANGELOG.md and independent semantic version. The original changelog skill generated footer compare links using monolithic `vX.Y.Z` repo tags — tags that were never created, causing every CHANGELOG footer link to 404. Separately, users deploy this toolkit across mixed git hosting environments: GitHub (public work), Bitbucket Datacenter (enterprise), GitLab, and Bitbucket Cloud. A single URL strategy fails across all four platforms without an abstraction layer.
+agent-toolkit is a monorepo with 47 components (agents, hooks, skills, commands, rules), each maintaining its own CHANGELOG.md and independent semantic version. The original changelog skill generated footer compare links using monolithic `vX.Y.Z` repo tags — tags that were never created, causing every CHANGELOG footer link to 404. Separately, users deploy this toolkit across mixed git hosting environments: GitHub (public work), Bitbucket Datacenter (enterprise), GitLab, and Bitbucket Cloud. A single URL strategy fails across all four platforms without an abstraction layer.
 
 ## Decision
 

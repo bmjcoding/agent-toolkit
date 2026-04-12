@@ -25,7 +25,7 @@ Scope resolution and `--dry-run` rules are defined in CLAUDE.md.
 
 ## Phase 0: Detect changes
 
-Resolve toolkit root: use `$TOOLKIT_PATH` env var if set, otherwise `/Users/bmj/Developer/git/claude-toolkit`.
+Resolve toolkit root: use `$TOOLKIT_PATH` env var if set, otherwise `/Users/bmj/Developer/git/agent-toolkit`.
 
 Run: `git -C $TOOLKIT status --porcelain`
 
@@ -105,5 +105,5 @@ List any skipped files (protected paths) below the table.
 - **Changelog bracket format**: all `CHANGELOG.md` entries must use `## [X.Y.Z] - YYYY-MM-DD` bracket format. Bare `## X.Y.Z` headers fail the changelog-check pre-push hook.
 - **Dry-run forwarding**: if `--dry-run` is passed, forward it explicitly to all subagents. No files written, no commits, no copies.
 - **Version source of truth**: the version comment in the definition file (`# version: X.Y.Z` in frontmatter or YAML) must be updated to match the new CHANGELOG version.
-- **Toolkit repo path**: resolve from `$TOOLKIT_PATH` env var if set; otherwise default to `/Users/bmj/Developer/git/claude-toolkit`.
+- **Toolkit repo path**: resolve from `$TOOLKIT_PATH` env var if set; otherwise default to `/Users/bmj/Developer/git/agent-toolkit`.
 - **Commits route through release-engineer**: do not run `git commit` inline in this command. Phase 4 delegates to `release-engineer` per the frankenstein Ship phase rule.

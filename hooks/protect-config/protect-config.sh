@@ -17,10 +17,10 @@ CMD=$(echo "$INPUT" | jq -r '.tool_input.command // empty' 2>/dev/null)
 # HB-012: Normalize to single line so multi-line commands match correctly
 CMD=$(echo "$CMD" | tr '\n' ' ')
 
-# Fast path: skip if no .claude, claude-toolkit, or relative protected-path reference
+# Fast path: skip if no .claude, agent-toolkit, or relative protected-path reference
 # Covers CWD-bypass: agent with cwd=~/.claude/ can issue `cp /tmp/evil agents/X`
 # with no .claude literal — catch relative forms too.
-echo "$CMD" | grep -qE '\.claude|claude-toolkit|(^| )agents/|(^| )hooks/|(^| )CLAUDE\.md|(^| )settings\.json' || exit 0
+echo "$CMD" | grep -qE '\.claude|agent-toolkit|(^| )agents/|(^| )hooks/|(^| )CLAUDE\.md|(^| )settings\.json' || exit 0
 
 deny() {
   printf '{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"%s"}}' "$1"
@@ -32,12 +32,12 @@ MSG="Write to control-plane files is blocked. Protected paths (settings.json, ho
 # ------------------------------------------------------------------
 # PROTECTED path fragments (v2 -- HB-009, HB-010, R-01, RT-MCP-014, CLAUD-002)
 # Covers: settings.json, hooks/, CLAUDE.md, agents/, statusline-command.sh,
-#         claude-toolkit/ real-path equivalents, orchestrator/logs/,
+#         agent-toolkit/ real-path equivalents, orchestrator/logs/,
 #         orchestrator/sessions/<timestamp>/logs/ (timestamp-validated to prevent
 #         path-traversal SIDs), orchestrator/session.id (prevents session hijacking),
 #         hookify*.local.md rule files
 # ------------------------------------------------------------------
-PROTECTED='(\.claude/(settings\.json|hooks/|CLAUDE\.md|agents/|statusline-command\.sh)|claude-toolkit/|\.orchestrator/(logs/|sessions/[0-9]{8}T[0-9]{6}/logs/|session\.id)|hookify[^/]*\.local\.md)'
+PROTECTED='(\.claude/(settings\.json|hooks/|CLAUDE\.md|agents/|statusline-command\.sh)|agent-toolkit/|\.orchestrator/(logs/|sessions/[0-9]{8}T[0-9]{6}/logs/|session\.id)|hookify[^/]*\.local\.md)'
 
 # ------------------------------------------------------------------
 # WRITE_OPS (v2 -- comprehensive write-intent operator detection)

@@ -158,7 +158,7 @@ Agent `.md` definition files remain valid under both models. If agent teams prov
 
 ## References
 
-- Agent definitions: `~/.claude/agents/` (symlinked from `claude-toolkit/agents/`)
+- Agent definitions: `~/.claude/agents/` (symlinked from `agent-toolkit/agents/`)
 - Hook scripts: `~/.claude/hooks/`
 - Orchestrator runtime: `.orchestrator/` (per-project, gitignored)
 - Audit findings: summarized in `~/.claude/projects/-Users-bmj--claude/memory/reference_frankenstein_audit.md` (original audit doc retired; findings tracked in memory)
