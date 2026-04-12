@@ -25,6 +25,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Protected-path skip list for `~/.claude/settings.json`, `~/.claude/CLAUDE.md`, and `~/.claude/hooks/` contents
 - Per-component commit strategy: one commit per component, routed through release-engineer per the frankenstein Ship phase rule
 
-[Unreleased]: https://github.com/bmjcoding/claude-toolkit/compare/v1.0.1...HEAD
-[1.0.1]: https://github.com/bmjcoding/claude-toolkit/compare/v1.0.0...v1.0.1
-[1.0.0]: https://github.com/bmjcoding/claude-toolkit/releases/tag/v1.0.0
+[Unreleased]: https://github.com/bmjcoding/claude-toolkit/compare/sync-toolkit-v1.0.1...HEAD
+[1.0.1]: https://github.com/bmjcoding/claude-toolkit/compare/sync-toolkit-v1.0.0...sync-toolkit-v1.0.1
+[1.0.0]: https://github.com/bmjcoding/claude-toolkit/tree/sync-toolkit-v1.0.0
