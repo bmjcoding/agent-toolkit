@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-04-12
+
+### Added
+
+- Finding discipline section: `findings[]` must contain only actionable items; verified-correct OWASP/STRIDE "not applicable" rows belong in `notes`, not `findings[]`. Non-actionable confirmations are prohibited in `findings[]`. (R5 from retro 2026-04-12T150000)
+
 ## [1.2.0] - 2026-04-12
 
 ### Added
@@ -20,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/claude-toolkit/compare/security-engineer-v1.2.0...HEAD
-[1.2.0]: https://github.com/bmjcoding/claude-toolkit/compare/security-engineer-v1.1.0...security-engineer-v1.2.0
+[Unreleased]: https://github.com/bmjcoding/claude-toolkit/compare/security-engineer-v1.3.0...HEAD
+[1.3.0]: https://github.com/bmjcoding/claude-toolkit/compare/security-engineer-v1.2.0...security-engineer-v1.3.0
+[1.2.0]: https://github.com/bmjcoding/claude-toolkit/compare/security-engineer-v1.0.0...security-engineer-v1.2.0
 [1.0.0]: https://github.com/bmjcoding/claude-toolkit/tree/security-engineer-v1.0.0
