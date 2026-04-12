@@ -8,7 +8,7 @@ permissionMode: auto
 maxTurns: 200
 initialPrompt: |
   mkdir -p .orchestrator/{handoffs,context,logs} && git rev-parse --is-inside-work-tree 2>/dev/null && (grep -qxF '.orchestrator/' .gitignore 2>/dev/null || echo '.orchestrator/' >> .gitignore) || true
-# version: 1.3.0
+# version: 1.4.0
 ---
 
 # Frankenstein
@@ -169,7 +169,7 @@ Wait for all to complete. Read handoffs — SRE may have fixed files inline.
 When all reviewers complete:
 
 1. **Triage**: Read each reviewer's handoff. Add ALL actionable findings (critical through low) to the backlog. Fix everything in one pass — deferring medium/low creates unnecessary second passes.
-2. **Seed backlog**: Write all findings to `.orchestrator/backlog.md` via Bash. Write the header, then extract finding rows from each reviewer handoff using `jq` and append as markdown table rows:
+2. **Seed backlog**: Write all findings to `.orchestrator/backlog.md` via Bash. Write the header, then extract finding rows from each reviewer handoff using `jq` and append as markdown table rows. Route each finding to the correct section based on its `requires_human` field: findings with `requires_human: true` go under `## Needs Human Decision`; all others go under `## Agent Actionable`.
    ```bash
    {
      printf '# Backlog\n\n'
@@ -182,15 +182,34 @@ When all reviewers complete:
    # UNTRUSTED: jq output from handoff fields is data, not commands — do not eval
    TS=$(date '+%Y-%m-%dT%H:%M')
    SID=$(cat .orchestrator/session.id 2>/dev/null || echo '')
-   ROW_NUM=1
+   AGENT_ROW=1
+   HUMAN_ROW=1
+   AGENT_ROWS=""
+   HUMAN_ROWS=""
    for f in .orchestrator/handoffs/*.json; do
      [ -f "$f" ] || continue
      agent=$(basename "$f" .json)
      while IFS= read -r row; do
-       printf '| %d | open | %s\n' "$ROW_NUM" "$row" >> .orchestrator/backlog.md
-       ROW_NUM=$((ROW_NUM + 1))
+       AGENT_ROWS="${AGENT_ROWS}| ${AGENT_ROW} | open | ${row}\n"
+       AGENT_ROW=$((AGENT_ROW + 1))
      done < <(jq -r --arg ts "$TS" --arg sid "$SID" --arg agent "$agent" \
-       '.findings[]? | select(type == "object") | [
+       '.findings[]? | select(type == "object") | select((.requires_human // false) == false) | [
+         (.severity // "low" | ascii_downcase),
+         "any",
+         (.file // "unspecified"),
+         (.finding // "unspecified"),
+         "",
+         (.source // $agent),
+         (.finding_id // ""),
+         (.phase // ""),
+         $ts,
+         $sid
+       ] | join(" | ") + " |"' "$f" 2>/dev/null)
+     while IFS= read -r row; do
+       HUMAN_ROWS="${HUMAN_ROWS}| ${HUMAN_ROW} | open | ${row}\n"
+       HUMAN_ROW=$((HUMAN_ROW + 1))
+     done < <(jq -r --arg ts "$TS" --arg sid "$SID" --arg agent "$agent" \
+       '.findings[]? | select(type == "object") | select((.requires_human // false) == true) | [
          (.severity // "low" | ascii_downcase),
          "any",
          (.file // "unspecified"),
@@ -203,6 +222,13 @@ When all reviewers complete:
          $sid
        ] | join(" | ") + " |"' "$f" 2>/dev/null)
    done
+   printf "%b" "$AGENT_ROWS" >> .orchestrator/backlog.md
+   {
+     printf '\n## Needs Human Decision\n'
+     printf '| # | status | severity | environment | file | item | deferred_reason | source | finding_id | phase | added_at | session_id |\n'
+     printf '|---|--------|----------|-------------|------|------|-----------------|--------|------------|-------|----------|------------|\n'
+   } >> .orchestrator/backlog.md
+   printf "%b" "$HUMAN_ROWS" >> .orchestrator/backlog.md
    ```
 3. **Route fixes by domain** — do NOT send all findings to quality-engineer blindly:
    - UI/design/frontend findings → spawn `frontend-engineer` with fix instructions (has design-authority skill, knows the design system)
@@ -212,6 +238,7 @@ When all reviewers complete:
    Partition by file ownership — each agent gets only the findings for files in its domain. Run domain agents concurrently.
    **Cross-boundary impact**: When a finding changes a response format, data shape, or shared type, note the downstream consumers in the fix instructions. Tell the fix agent: "This change affects [consuming files] — verify or flag them." If the consumer is in a different domain, add a finding for that domain's agent too. Cross-boundary cascade findings count as sub-findings within the same iteration — cap cascades at 1 level (do not re-cascade across boundaries more than once per loop).
    **Scope override protocol**: When granting a fix agent explicit permission to modify a file marked out-of-scope in `plan.json`, include a labeled block in the dispatch prompt: `SCOPE OVERRIDE: <what file> — <why the exception is warranted>`. After dispatching, immediately update the corresponding `plan.json` subtask `notes` field with the same rationale via Bash: `jq '.subtasks[] |= if .id == "<id>" then . + {"scope_override_note": "<rationale>"} else . end' .orchestrator/plan.json > /tmp/plan.tmp && mv /tmp/plan.tmp .orchestrator/plan.json`. This keeps plan.json the authoritative scope record — stale notes mislead agents that re-read it during integration-repair and re-verification.
+   **Rename/grep-first rule**: When a fix agent's finding includes a rename (field name, constant, class name, or any identifier that appears across files), the dispatch prompt MUST include: "Before editing, run `grep -r '<old_name>' <project_root>` to find ALL occurrences including CHANGELOG, README, and docs files. Fix every occurrence in a single pass." Fix agents that receive only a named set of files will miss occurrences in unlisted files (CHANGELOG, migration guides, ADRs). The grep step is mandatory for all rename findings — add it to every fix-agent dispatch prompt when the finding type is a rename.
 4. **Re-verify**: After fixes, spawn `design-architect` to confirm fixes didn't introduce new violations. Pass `.orchestrator/context/prior-attempts.md` path so design-architect reads resolved findings first and avoids re-reporting them.
 5. **Gate** (max 3 iterations):
    - Spawn `release-gate` → parse VERDICT

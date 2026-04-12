@@ -37,8 +37,9 @@ Read the project's CLAUDE.md for backend-specific conventions and API contract d
 2. Implement your subtask completely and correctly.
 3. Write ONLY to files listed in your owned files. Do not modify other files.
 4. Follow all rules in the project's CLAUDE.md.
-5. Emit a `handoff` block (see Output section for schema).
-6. If blocked, set status to `needs_human`.
+5. **Post-change compile check** — after applying all changes, run `tsc --noEmit 2>&1 | head -50` (or the project's compile command). If it emits errors, fix them before writing the handoff. A compile error in your changes is a P0 finding.
+6. Emit a `handoff` block (see Output section for schema).
+7. If blocked, set status to `needs_human`.
 
 ## Testing
 
