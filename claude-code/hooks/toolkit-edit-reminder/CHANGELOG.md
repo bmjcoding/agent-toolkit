@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-04-12
+
+### Changed
+
+- BREAKING: moved to the agent-toolkit multi-tool layout. Files relocated:
+  - `hooks/toolkit-edit-reminder/` → `claude-code/hooks/toolkit-edit-reminder/`
+- Shell script updated: scope filter regex updated for the new `claude-code/hooks/` and `shared/skills/` path prefixes.
+- CHANGELOG comparison URLs updated for repo rename `bmjcoding/claude-toolkit` → `bmjcoding/agent-toolkit`.
+
 ## [1.0.0] - 2026-04-11
 
 ### Added
@@ -15,5 +24,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Scope filter targets agents, skills, hooks, commands, and rules directories in agent-toolkit and ~/.claude
 - No-op when editing CHANGELOG.md itself to avoid recursive reminders
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/toolkit-edit-reminder-v1.0.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/toolkit-edit-reminder-v2.0.0...HEAD
+[2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/toolkit-edit-reminder-v1.0.0...claude-code/toolkit-edit-reminder-v2.0.0
 [1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/toolkit-edit-reminder-v1.0.0
