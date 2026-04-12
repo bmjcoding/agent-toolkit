@@ -7,19 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.1.0] - 2026-04-11
-
-### Added
-
-- Changelog skill integration — generates CHANGELOG.md entries before commit
-- `--no-changelog` flag to skip changelog generation
-
 ## [1.0.0] - 2026-04-11
 
 ### Added
 
-- Initial release
+- Initial changelog skill defining Keep a Changelog 1.1.0 + SemVer standard for all toolkit components
 
-[Unreleased]: https://github.com/bmjcoding/claude-toolkit/compare/v1.1.0...HEAD
-[1.1.0]: https://github.com/bmjcoding/claude-toolkit/compare/v1.0.0...v1.1.0
+[Unreleased]: https://github.com/bmjcoding/claude-toolkit/compare/v1.0.0...HEAD
 [1.0.0]: https://github.com/bmjcoding/claude-toolkit/releases/tag/v1.0.0

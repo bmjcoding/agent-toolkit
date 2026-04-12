@@ -76,8 +76,10 @@ Maintained by `/improve` on version bumps:
 | Type | Location |
 |---|---|
 | Skills | `skills/{name}/CHANGELOG.md` (per-skill) |
-| Agents | `agents/CHANGELOG.md` (all agents, organized by name) |
-| Commands | `commands/CHANGELOG.md` (all commands, organized by name) |
+| Agents | `agents/{name}/CHANGELOG.md` (per-component) |
+| Commands | `commands/{name}/CHANGELOG.md` (per-component) |
+| Hooks | `hooks/{name}/CHANGELOG.md` (per-component) |
+| Rules | `rules/{name}/CHANGELOG.md` (per-component) |
 
 ## Flow
 
