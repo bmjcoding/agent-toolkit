@@ -1,212 +1,322 @@
 #!/usr/bin/env bash
-# github-copilot/scripts/install.sh
+# =============================================================================
+# install.sh — GitHub Copilot project-scoped symlink installer
 #
-# Install GitHub Copilot skills and agents into VS Code discovery paths.
+# PURPOSE:
+#   Symlinks GitHub Copilot discovery paths inside a target project's .github/
+#   directory into the agent-toolkit repository. This is PROJECT-SCOPED, not
+#   user-global — each project that wants Copilot support needs this run once.
 #
-# TARGET SURFACE: VS Code GitHub Copilot extension only.
+# SYMLINK MAP (inside <project>/.github/):
+#   .github/skills       -> <REPO>/skills                        (universal)
+#   .github/instructions -> <REPO>/github-copilot/instructions
+#   .github/prompts      -> <REPO>/github-copilot/prompts
+#   .github/agents       -> <REPO>/github-copilot/agents
 #
-# Copilot skill discovery paths (VS Code):
-#   .github/skills/<name>/SKILL.md   (repo-level, highest priority)
-#   .agents/skills/<name>/SKILL.md   (repo-level)
-#   .claude/skills/<name>/SKILL.md   (repo-level, cross-tool compat)
+# SCOPE NOTE:
+#   Unlike claude-code/scripts/install.sh (which installs to ~/.claude/ — user-
+#   global), this script installs to a specific project's .github/ directory.
+#   Run it once per project that should use GitHub Copilot with these skills.
 #
-# Copilot agent discovery path (VS Code):
-#   .github/agents/<name>.agent.md
+# USAGE:
+#   ./install.sh --target <dir>    # <dir> = project root containing .github/
+#   ./install.sh --target <dir> --dry-run
+#   ./install.sh --target <dir> --check
+#   ./install.sh --help
 #
-# Copilot instructions discovery path (VS Code):
-#   .github/instructions/<file>.instructions.md
+# OPTIONS:
+#   --target <dir>   Path to the project root whose .github/ should receive
+#                    the symlinks. Required (unless --help). If omitted and
+#                    the current directory is a git repo that is NOT the
+#                    agent-toolkit repo itself, it will be auto-detected.
+#   --dry-run        Print planned symlink commands without executing them.
+#   --check          Verify existing symlinks match expected; exit 0=OK, 1=diff.
+#   --help           Show this message and exit.
 #
-# Copilot prompts discovery path (VS Code):
-#   .github/prompts/<file>.prompt.md
+# ENV OVERRIDES:
+#   AGENT_TOOLKIT_DIR   Override auto-detected agent-toolkit repo root.
 #
-# This script symlinks from the above discovery paths into github-copilot/.
-# Agents already in claude-code/ that are shared across surfaces are NOT
-# symlinked by this script — use claude-code/scripts/install.sh for those.
-#
-# NOTE: Some target directories (instructions/, prompts/) may not exist yet;
-# they will be populated in later pipeline phases. Entries whose source does
-# not exist are skipped gracefully — re-run after those directories are added.
-#
-# Usage:
-#   ./github-copilot/scripts/install.sh [--dry-run] [--check] [--help]
-#
-# Options:
-#   --dry-run   Print what would be done without making any changes.
-#   --check     Verify all expected symlinks exist and point to correct targets.
-#               Exit 0 if OK, 1 if any symlink is missing or broken.
-#   --help      Show this message and exit.
-#
-# Environment:
-#   AGENT_TOOLKIT_DIR   Override repo root detection (default: git rev-parse --show-toplevel)
+# =============================================================================
 
 set -euo pipefail
 
 # ---------------------------------------------------------------------------
 # Argument parsing
 # ---------------------------------------------------------------------------
-DRY_RUN=false
-CHECK_ONLY=false
 
-for arg in "$@"; do
-  case "$arg" in
-    --dry-run) DRY_RUN=true ;;
-    --check)   CHECK_ONLY=true ;;
-    --help)
-      sed -n '/^# Usage:/,/^[^#]/{ /^[^#]/d; s/^# \{0,1\}//p }' "$0"
+DRY_RUN=false
+CHECK_MODE=false
+TARGET_DIR=""
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --dry-run)
+      DRY_RUN=true
+      shift
+      ;;
+    --check)
+      CHECK_MODE=true
+      shift
+      ;;
+    --target)
+      if [[ $# -lt 2 || -z "$2" ]]; then
+        echo "ERROR: --target requires a directory argument" >&2
+        exit 1
+      fi
+      TARGET_DIR="$2"
+      shift 2
+      ;;
+    --help|-h)
+      sed -n '/^# ===/,/^# ===/p' "$0"
       exit 0
       ;;
     *)
-      echo "Unknown option: $arg" >&2
-      echo "Run with --help for usage." >&2
+      echo "ERROR: unknown argument: $1" >&2
+      echo "Usage: $0 --target <project-dir> [--dry-run|--check]" >&2
       exit 1
       ;;
   esac
 done
 
-# Mutex: --dry-run and --check are mutually exclusive (da-10)
-if [[ "$DRY_RUN" == "true" && "$CHECK_ONLY" == "true" ]]; then
+# Mutually exclusive flags
+if [[ "$DRY_RUN" == "true" && "$CHECK_MODE" == "true" ]]; then
   echo "ERROR: --dry-run and --check are mutually exclusive" >&2
   exit 1
 fi
 
 # ---------------------------------------------------------------------------
-# Repo root resolution
+# Resolve REPO_DIR (agent-toolkit repo root)
 # ---------------------------------------------------------------------------
-REPO_ROOT="${AGENT_TOOLKIT_DIR:-}"
-if [[ -z "$REPO_ROOT" ]]; then
-  REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null)" || {
-    echo "ERROR: Not inside a git repository and AGENT_TOOLKIT_DIR is not set." >&2
-    exit 1
-  }
-fi
 
-# Reject paths with .. segments (security guard)
-case "$REPO_ROOT" in
+_default_repo_dir="$(cd "$(dirname "$0")/../.." && pwd)"
+REPO_DIR="${AGENT_TOOLKIT_DIR:-$_default_repo_dir}"
+
+# Reject path-traversal in env-var override
+case "$REPO_DIR" in
   *..*)
-    echo "ERROR: AGENT_TOOLKIT_DIR contains '..' segments — rejected." >&2
+    echo "ERROR: REPO_DIR contains '..' segments — refusing for safety" >&2
     exit 1
     ;;
 esac
 
-COPILOT_DIR="$REPO_ROOT/github-copilot"
-GITHUB_DIR="$REPO_ROOT/.github"
-SKILLS_DIR="$REPO_ROOT/skills"   # universal skills, repo root
+# Validate it looks like the right repo
+if [[ ! -d "${REPO_DIR}/github-copilot" ]]; then
+  echo "ERROR: REPO_DIR '${REPO_DIR}' does not contain github-copilot/ subdirectory." >&2
+  echo "       Set AGENT_TOOLKIT_DIR to the correct agent-toolkit repo root." >&2
+  exit 1
+fi
 
 # ---------------------------------------------------------------------------
-# Symlink map: LINK_PATH SOURCE_PATH (pairs)
-#
-# Layout:
-#   .github/skills   -> <repo>/skills        (universal skills dir, repo-root)
-#   .github/agents   -> <repo>/github-copilot/agents
-#   .github/prompts  -> <repo>/github-copilot/prompts   (populated in G2c)
-#   .github/instructions -> <repo>/github-copilot/instructions  (populated in G3a)
-#
-# Directory-level symlinks are used where possible (one ln per surface area)
-# rather than per-file symlinks, so new skills/agents are automatically visible.
-#
-# Entries whose source directory does not exist yet are SKIPPED gracefully.
+# Resolve TARGET_DIR (the project whose .github/ will receive symlinks)
 # ---------------------------------------------------------------------------
+
+if [[ -z "$TARGET_DIR" ]]; then
+  # Auto-detect: must be in a git repo that is NOT the agent-toolkit repo
+  _cwd_git_root="$(git rev-parse --show-toplevel 2>/dev/null)" || {
+    echo "ERROR: --target is required when not inside a git repository." >&2
+    echo "       Usage: $0 --target <project-root>" >&2
+    exit 1
+  }
+
+  if [[ "$_cwd_git_root" == "$REPO_DIR" ]]; then
+    echo "ERROR: --target is required. Current directory is the agent-toolkit repo itself." >&2
+    echo "       Specify the project you want to install Copilot support into:" >&2
+    echo "       $0 --target /path/to/your-project" >&2
+    exit 1
+  fi
+
+  TARGET_DIR="$_cwd_git_root"
+  echo "Auto-detected target project: ${TARGET_DIR}"
+fi
+
+# Resolve to absolute path
+TARGET_DIR="$(cd "$TARGET_DIR" && pwd)"
+
+# Reject path-traversal
+case "$TARGET_DIR" in
+  *..*)
+    echo "ERROR: TARGET_DIR contains '..' segments — refusing for safety" >&2
+    exit 1
+    ;;
+esac
+
+if [[ ! -d "$TARGET_DIR" ]]; then
+  echo "ERROR: target directory does not exist: ${TARGET_DIR}" >&2
+  exit 1
+fi
+
+GITHUB_DIR="${TARGET_DIR}/.github"
+
+# ---------------------------------------------------------------------------
+# Symlink definitions
+# Format: "link_name_relative_to_GITHUB_DIR|source_path_absolute"
+# ---------------------------------------------------------------------------
+
 declare -a SYMLINKS=(
-  # Universal skills directory (repo-root /skills is canonical source)
-  "$GITHUB_DIR/skills"                  "$SKILLS_DIR"
-  # Agents
-  "$GITHUB_DIR/agents"                  "$COPILOT_DIR/agents"
-  # Prompts — directory will be populated in G2c; skipped until then
-  "$GITHUB_DIR/prompts"                 "$COPILOT_DIR/prompts"
-  # Instructions — directory will be populated in G3a; skipped until then
-  "$GITHUB_DIR/instructions"            "$COPILOT_DIR/instructions"
+  "skills|${REPO_DIR}/skills"
+  "instructions|${REPO_DIR}/github-copilot/instructions"
+  "prompts|${REPO_DIR}/github-copilot/prompts"
+  "agents|${REPO_DIR}/github-copilot/agents"
 )
 
 # ---------------------------------------------------------------------------
-# Helper: log_action
+# Print header
 # ---------------------------------------------------------------------------
-log_action() {
-  local action="$1" link="$2" target="$3"
-  if [[ "$DRY_RUN" == "true" ]]; then
-    echo "[dry-run] $action: $link -> $target"
-  else
-    echo "$action: $link -> $target"
-  fi
-}
+
+echo ""
+echo "github-copilot install.sh (project-scoped)"
+echo "==========================================="
+echo "REPO_DIR:   ${REPO_DIR}"
+echo "TARGET:     ${TARGET_DIR}"
+echo "GITHUB_DIR: ${GITHUB_DIR}"
+echo ""
+echo "NOTE: This script installs into a specific project's .github/ directory."
+echo "      It is NOT user-global. Run once per project that needs Copilot support."
+echo ""
 
 # ---------------------------------------------------------------------------
-# Check mode
+# --check mode
 # ---------------------------------------------------------------------------
-if [[ "$CHECK_ONLY" == "true" ]]; then
-  ERRORS=0
-  for (( i=0; i<${#SYMLINKS[@]}; i+=2 )); do
-    link="${SYMLINKS[$i]}"
-    target="${SYMLINKS[$((i+1))]}"
 
-    # Skip entries whose source does not exist yet
-    if [[ ! -d "$target" ]]; then
-      echo "SKIP (source not yet present): $link -> $target"
+if [[ "$CHECK_MODE" == "true" ]]; then
+  echo "Mode: CHECK (read-only)"
+  echo ""
+
+  all_match=true
+  for entry in "${SYMLINKS[@]}"; do
+    name="${entry%%|*}"
+    abs_target="${entry##*|}"
+    link_path="${GITHUB_DIR}/${name}"
+
+    # Skip entries whose source does not yet exist
+    if [[ ! -d "${abs_target}" ]]; then
+      printf '  [SKIP]     %-14s  (source not yet present: %s)\n' "${name}" "${abs_target}"
       continue
     fi
 
-    if [[ ! -L "$link" ]]; then
-      echo "MISSING symlink: $link" >&2
-      (( ERRORS++ )) || true
-    elif [[ "$(readlink "$link")" != "$target" ]]; then
-      echo "WRONG target: $link -> $(readlink "$link") (expected $target)" >&2
-      (( ERRORS++ )) || true
-    elif [[ ! -e "$link" ]]; then
-      echo "BROKEN symlink: $link (target does not exist)" >&2
-      (( ERRORS++ )) || true
+    if [[ ! -L "${link_path}" ]]; then
+      printf '  [MISS]     %-14s  (not a symlink at %s)\n' "${name}" "${link_path}"
+      all_match=false
+      continue
+    fi
+
+    current_target="$(readlink "${link_path}")"
+    if [[ "${current_target}" == "${abs_target}" ]]; then
+      printf '  [MATCH]    %-14s  -> %s\n' "${name}" "${current_target}"
     else
-      echo "OK: $link -> $target"
+      printf '  [DIFF]     %-14s\n' "${name}"
+      printf '               current:  %s\n' "${current_target}"
+      printf '               expected: %s\n' "${abs_target}"
+      all_match=false
     fi
   done
-  if (( ERRORS > 0 )); then
-    echo "$ERRORS error(s) found." >&2
+
+  echo ""
+  if [[ "$all_match" == "true" ]]; then
+    echo "All present symlinks match expected targets. OK."
+    exit 0
+  else
+    echo "One or more symlinks differ from expected targets." >&2
     exit 1
   fi
-  echo "All present symlinks OK."
+fi
+
+# ---------------------------------------------------------------------------
+# --dry-run mode
+# ---------------------------------------------------------------------------
+
+if [[ "$DRY_RUN" == "true" ]]; then
+  echo "Mode: DRY RUN (no changes will be made)"
+  echo ""
+
+  for entry in "${SYMLINKS[@]}"; do
+    name="${entry%%|*}"
+    abs_target="${entry##*|}"
+    link_path="${GITHUB_DIR}/${name}"
+
+    if [[ ! -d "${abs_target}" ]]; then
+      printf '  would skip: %s/%s  (source not yet present)\n' "${GITHUB_DIR}" "${name}"
+      continue
+    fi
+
+    if [[ -L "${link_path}" ]]; then
+      current="$(readlink "${link_path}")"
+      if [[ "${current}" == "${abs_target}" ]]; then
+        printf '  unchanged:  %s  (already correct)\n' "${link_path}"
+      else
+        printf '  would update: %s\n' "${link_path}"
+        printf '    before: %s\n' "${current}"
+        printf '    after:  %s\n' "${abs_target}"
+        printf '    cmd: ln -sfn "%s" "%s"\n' "${abs_target}" "${link_path}"
+      fi
+    else
+      printf '  would create: %s\n' "${link_path}"
+      printf '    target: %s\n' "${abs_target}"
+      printf '    cmd: ln -s "%s" "%s"\n' "${abs_target}" "${link_path}"
+    fi
+    echo ""
+  done
+
+  echo "Dry run complete. No changes made."
   exit 0
 fi
 
 # ---------------------------------------------------------------------------
-# Install mode
+# APPLY mode
 # ---------------------------------------------------------------------------
-for (( i=0; i<${#SYMLINKS[@]}; i+=2 )); do
-  link="${SYMLINKS[$i]}"
-  target="${SYMLINKS[$((i+1))]}"
-  link_dir="$(dirname "$link")"
 
-  # Skip entries whose source does not exist yet (graceful — will populate later)
-  if [[ ! -d "$target" ]]; then
-    echo "SKIP (source not yet present): $target"
-    echo "  Re-run this script after $(basename "$target")/ is added."
+echo "Mode: APPLY"
+echo ""
+
+# Ensure .github/ exists in target project
+if [[ ! -d "${GITHUB_DIR}" ]]; then
+  mkdir -p "${GITHUB_DIR}"
+  echo "  created: ${GITHUB_DIR}"
+fi
+
+for entry in "${SYMLINKS[@]}"; do
+  name="${entry%%|*}"
+  abs_target="${entry##*|}"
+  link_path="${GITHUB_DIR}/${name}"
+
+  # Skip entries whose source does not yet exist (graceful — populated later)
+  if [[ ! -d "${abs_target}" ]]; then
+    printf '  %-14s  SKIP (source not yet present — re-run after directory is added)\n' "${name}"
     continue
   fi
 
-  if [[ "$DRY_RUN" == "true" ]]; then
-    log_action "symlink" "$link" "$target"
-    continue
-  fi
-
-  # Create parent directory if needed
-  if [[ ! -d "$link_dir" ]]; then
-    mkdir -p "$link_dir"
-    echo "created: $link_dir"
-  fi
-
-  # Create or update symlink
-  if [[ -L "$link" ]]; then
-    existing="$(readlink "$link")"
-    if [[ "$existing" == "$target" ]]; then
-      echo "unchanged: $link"
-      continue
-    fi
-    echo "updating: $link (was $existing)"
-    rm "$link"
-  elif [[ -e "$link" ]]; then
-    echo "ERROR: $link exists and is not a symlink — refusing to overwrite." >&2
+  # Guard: abort if a real file/dir occupies the link path
+  if [[ -e "${link_path}" && ! -L "${link_path}" ]]; then
+    echo "ERROR: ${link_path} is a real directory/file, not a symlink." >&2
+    echo "       Remove it manually before re-running." >&2
     exit 1
   fi
 
-  ln -s "$target" "$link"
-  log_action "symlink" "$link" "$target"
+  # Capture before state
+  if [[ -L "${link_path}" ]]; then
+    before="$(readlink "${link_path}")"
+  else
+    before="(none)"
+  fi
+
+  ln -sfn "${abs_target}" "${link_path}"
+  after="$(readlink "${link_path}")"
+
+  printf '  %-14s\n' "${name}"
+  printf '    before: %s\n' "${before}"
+  printf '    after:  %s\n' "${after}"
+  if [[ "${before}" == "${after}" ]]; then
+    printf '    status: unchanged (already correct)\n'
+  else
+    printf '    status: updated\n'
+  fi
+  echo ""
 done
 
 echo "Done."
+echo ""
+echo "Next steps:"
+echo "  1. Commit or .gitignore the .github/ symlinks as appropriate for your project."
+echo "  2. Run '$0 --target ${TARGET_DIR} --check' to verify symlinks remain current."
+echo "  3. Re-run this script after new github-copilot/ directories are added to the toolkit."
+echo ""
