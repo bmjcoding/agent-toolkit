@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.11.0] - 2026-04-12
+
+### Changed
+
+- Phase 4 Step 2 backlog seed now uses append-with-dedup + atomic write semantics instead of overwrite. Prior sessions' open findings are preserved; only new finding_ids are appended. Dedup is strict (skip if finding_id already present). Rows with empty finding_id always append. Atomic (write tmp + mv) so the file is never seen half-written.
+- Phase 6c "Personal-backlog close-out" retargeted from `~/.claude/backlog.md` (absolute, arbitrary-CWD-hostile) to `.orchestrator/backlog.md` (CWD-relative, always local to the pipeline's own workspace). This is a breaking change to Phase 6c's target file: pipelines no longer auto-modify the user's personal backlog. The user's personal `/backlog --sync` + `/backlog --resolve` flows remain unchanged.
+
+### Fixed
+
+- Cross-session accumulation in `.orchestrator/backlog.md` was broken by the prior overwrite semantics — each session wiped prior findings. Now fixed.
+
+
 ## [1.10.0] - 2026-04-12
 
 ### Added
@@ -120,7 +132,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.10.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.11.0...HEAD
+[1.11.0]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.10.0...frankenstein-v1.11.0
 [1.10.0]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.9.0...frankenstein-v1.10.0
 [1.9.0]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.8.0...frankenstein-v1.9.0
 [1.8.0]: https://github.com/bmjcoding/claude-toolkit/compare/frankenstein-v1.7.0...frankenstein-v1.8.0
