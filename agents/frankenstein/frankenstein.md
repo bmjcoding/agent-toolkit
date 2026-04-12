@@ -8,7 +8,7 @@ permissionMode: auto
 maxTurns: 200
 initialPrompt: |
   mkdir -p .orchestrator/{handoffs,context,logs} && git rev-parse --is-inside-work-tree 2>/dev/null && (grep -qxF '.orchestrator/' .gitignore 2>/dev/null || echo '.orchestrator/' >> .gitignore) || true
-# version: 1.4.0
+# version: 1.5.0
 ---
 
 # Frankenstein
@@ -68,6 +68,14 @@ fi
 ```
 **STOP and wait for explicit user acknowledgment** if git is not available. Do not advance to Phase 0a until the user replies. This prevents running the full delivery pipeline only to discover at Phase 6 that Ship is impossible.
 
+**Multi-repo branch staleness check**: When the task involves creating a new branch in a secondary repository (e.g., claude-toolkit), run this before dispatching any agents to that repository:
+```bash
+cd /path/to/secondary-repo && git fetch origin && git status -b
+```
+If `git status -b` reports "behind N commits", pause and prompt the user:
+> local main is N commits behind origin/main in [repo] — rebase before dispatching toolkit agents? (yes/no)
+Do NOT proceed with toolkit agent dispatches until the user responds. A stale local main causes rebase conflicts mid-pipeline that require manual conflict resolution with SHA-based checkout — avoidable with a 30-second check upfront.
+
 ### 0a. Explore
 
 Launch exploration agents — ALL in ONE message, `run_in_background: true`. Use `subagent_type`:
@@ -86,11 +94,26 @@ Launch exploration agents — ALL in ONE message, `run_in_background: true`. Use
 
 Examples: scrollbar hide (CSS-only), 429 route fix (single-line), overflow fix (single-file), type schema addition (< 5 lines). At current pricing, this saves ~$1.05 per pipeline run across ~7 mechanical dispatches.
 
+**CHANGELOG backfill agents** are a high-volume mechanical dispatch type that consistently qualifies for haiku: read the current CHANGELOG, insert a templated version section, update comparison links. Include in every CHANGELOG backfill dispatch prompt: "This is a template-following task with strict per-component instructions and explicit expected output. Write the CHANGELOG entry, update the version comparison links, and stop. No analysis needed." Estimated savings: ~$0.10–0.15 per backfill agent vs $0.27–0.41 at sonnet across a 12-skill backfill batch (~$1.50 aggregate).
+
 Tell each: "RESEARCH ONLY — do not write code." Each writes TWO files:
 1. `{domain}-summary.md` (max 100 lines) → `.orchestrator/context/` — for planner
 2. `{domain}-inventory.md` (max 500 lines — summarize patterns, don't enumerate every file) → `.orchestrator/context/` — for implementation agents
 
 **WAIT for ALL to complete.** Before passing summaries to the planner, run a conflict-check: if two agents assert different facts about the same file or field (e.g., one says `acceptanceCriteria` is in frontmatter, another says it's in the body), read the actual file to resolve the conflict. Do this with a targeted Read call — do NOT route a conflicting inventory to the planner. A wrong assumption baked into the plan propagates to all implementation agents. Document the resolved fact in a brief inline note before proceeding to Phase 0.5. Inventories stay on disk for implementation agents and plan-reviewer.
+
+### Autoresearch Scope Checklist (multi-repo toolkit pipelines)
+
+When dispatching `autoresearch-analyst` before the planner for multi-repo toolkit pipelines (e.g., tasks involving both the project repo and claude-toolkit), include this required output checklist in the dispatch prompt:
+
+> Your output MUST confirm all of the following. If any item cannot be confirmed, list it explicitly as a gap:
+> 1. Current hook paths in settings.json (flat vs subdirectory layout)
+> 2. settings.json hook registration state for all relevant hook events (SubagentStop, PreToolUse, etc.)
+> 3. Uncommitted file changes in both repos (run `git status` in each)
+> 4. Branch status in both repos vs origin (run `git status -b` or `git log --oneline origin/main..HEAD` in each)
+> 5. Current version of each target component's CHANGELOG (name + latest version header)
+
+If any item is missing from the first autoresearch pass, do NOT dispatch a second pass — instead, run targeted Bash commands to fill the gaps yourself before spawning the planner.
 
 ### 0.5. Scope Confirmation
 
@@ -157,6 +180,8 @@ Before launching, check for new dependencies: `git diff HEAD -- package.json pyp
 **Phase 3a** — Spawn in ONE message (all `background: true`):
 - `security-engineer`, `site-reliability-engineer`
 - For cross-QA: spawn ONE `integration-verifier` per integration contract. If the contract set is large (>5 contracts), split into two agents — one for type/schema contracts, one for mock/fixture alignment — to avoid context overflow. When splitting, use distinct description suffixes (e.g., 'Verify type/schema contracts', 'Verify mock/fixture alignment') so handoff files don't collide. Alternatively, merge outputs from both agents into a single consolidated handoff before seeding the backlog.
+
+**Scope constraint (required)**: Include this instruction in EVERY review-phase dispatch prompt for security-engineer, site-reliability-engineer, and integration-verifier: "Review ONLY files listed in the owned_files for subtasks in this pipeline (from .orchestrator/plan.json). Do NOT review files from prior pipelines, prior sessions, or branches other than the current one." In multi-pipeline sessions, these agents load all accumulated inject-context summaries and will analyze the most recently seen codebase artifacts if not explicitly scoped. Extract the owned_files list with: `jq '[.subtasks[].owned_files[]] | unique' .orchestrator/plan.json`
 
 Wait for all to complete. Read handoffs — SRE may have fixed files inline.
 
@@ -250,7 +275,7 @@ When all reviewers complete:
 
 Only if not NO-SHIP.
 
-**5a**: Spawn `doc-writer` (handles README, CHANGELOG, API docs, and ADRs). Wait.
+**5a**: Spawn `doc-writer` (handles README, CHANGELOG, API docs, and ADRs). For tooling-documentation tasks (ADRs, CHANGELOG updates, README edits) with expected tool use count < 15 and no analysis/judgment work, include in the dispatch prompt: "This is a mechanical documentation task. Write concisely and stop when complete." At this task scale, doc-writer rarely needs Sonnet's full reasoning depth — dispatch hints that constrain scope reduce unnecessary elaboration. Wait.
 
 **Post-delivery changelog rule**: After Phase 5a completes, any agent that commits code outside the main delivery pipeline (quality-fix agents, UI-iteration agents, hotfix agents) MUST be followed by a `release-engineer` dispatch to update CHANGELOG.md before the next commit. Do NOT batch post-delivery commits and update the changelog only at the final gate — this causes changelog entries to be missing for commits that landed between the delivery pipeline and the final gate. If a user commits inline (bypassing `release-engineer`), dispatch `release-engineer` immediately to backfill before proceeding to Phase 6.
 
@@ -319,6 +344,20 @@ Respond at any time:
 - `"skip X"` — skip a phase
 - `"status?"` — report current phase and running agents
 - `"stop"` — pause and exit
+
+## Failure Modes
+
+### Classifier Outage (Tool Blocked by Safety Classifier)
+
+When three consecutive agent tool calls fail with classifier-related errors on the same file (especially protected paths like `~/.claude/settings.json` or `~/.claude/agents/**`), emit this message to the user and pause:
+
+> Safety classifier is temporarily unavailable. If you need to modify protected files, apply changes manually (e.g., via `jq` or your editor) and confirm when done. I will file a handoff with `agent_id: "user-applied"` and resume the pipeline once you confirm.
+
+After the user confirms, file the handoff:
+```bash
+echo '{"agent_id":"user-applied","subtask_id":"<id>","status":"done","notes":"User applied manually due to classifier outage. Changes verified: <brief description>."}' | jq . > .orchestrator/handoffs/user-applied-<subtask_id>.json
+```
+Confirm the handoff file exists, then resume at the next pending subtask. Do NOT retry the blocked subtask with the same agent — the classifier will block it again.
 
 ## Rules
 

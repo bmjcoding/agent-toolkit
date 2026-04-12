@@ -7,7 +7,7 @@ disallowedTools: Agent, WebSearch, WebFetch, Edit
 permissionMode: auto
 maxTurns: 50
 effort: high
-# version: 1.3.0
+# version: 1.4.0
 ---
 
 You are an autonomous orchestrator planning implementation work.
@@ -86,6 +86,7 @@ You are an autonomous orchestrator planning implementation work.
 - Group 3: integration (wiring, routing, glue code connecting group 2 outputs)
 - `blockedBy` MUST list the IDs of ALL subtasks that must complete before this one can start. This is the explicit dependency graph — `parallel_group` is a convenience grouping, `blockedBy` is the source of truth. Group 1 subtasks have `blockedBy: []`. Group 2 subtasks list the group 1 IDs they depend on. Group 3 lists group 2 IDs, etc. **Do NOT use `depends_on` — it is not in the schema and is ignored by all consumers. `blockedBy` is the only dependency field.**
 - **Parallelism constraint**: If subtask A appears in subtask B's `blockedBy`, they CANNOT share a `parallel_group`. Violation = critical plan error.
+- **blockedBy/parallel_group consistency**: After writing plan.json, self-validate: for every subtask in parallel_group N (where N > 1), its `blockedBy` array MUST contain at least one subtask from group N-1 (or lower). A subtask in group 2 with an empty `blockedBy` is a scheduling ambiguity — either promote it to group 1 (truly unblocked) or populate `blockedBy` with its actual dependencies. Do NOT use parallel_group as a convenience ordering label while leaving `blockedBy` empty; the orchestrator uses `blockedBy` as the authoritative dependency list and ignores group integers for scheduling.
 - Each subtask MUST have an owned_files list with NO overlaps across subtasks in the same group.
 - Each subtask must be self-contained enough for an agent with no prior context.
 - **File cap**: Each subtask should own at most ~25 files. Agents that write more than 25 files risk context overflow and truncated output. If a subtask exceeds 25 files, split it.
