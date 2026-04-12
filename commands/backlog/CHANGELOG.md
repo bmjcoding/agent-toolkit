@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.0] - 2026-04-12
+
+### Added
+
+- `--cleanup` flag — full housekeeping pass combining `--clear-resolved` with header timestamp refresh and summary report.
+- `--dry-run` modifier — compatible with `--clear-resolved`, `--cleanup`, `--retriage`, `--sync`. Previews planned changes without writing.
+
+### Changed
+
+- `--clear-resolved` now also prunes stale `## Known context` subsections when ALL referenced item numbers are in the cleared set. Subsections with any remaining active items are preserved.
+
 ## [2.1.0] - 2026-04-12
 
 ### Added
@@ -56,7 +67,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/claude-toolkit/compare/backlog-v2.1.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/claude-toolkit/compare/backlog-v2.2.0...HEAD
+[2.2.0]: https://github.com/bmjcoding/claude-toolkit/compare/backlog-v2.1.0...backlog-v2.2.0
 [2.1.0]: https://github.com/bmjcoding/claude-toolkit/compare/backlog-v2.0.0...backlog-v2.1.0
 [2.0.0]: https://github.com/bmjcoding/claude-toolkit/compare/backlog-v1.0.1...backlog-v2.0.0
 [1.0.1]: https://github.com/bmjcoding/claude-toolkit/compare/backlog-v1.0.0...backlog-v1.0.1
