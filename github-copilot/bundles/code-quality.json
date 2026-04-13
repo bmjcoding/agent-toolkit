@@ -1,0 +1,15 @@
+{
+  "bundleId": "code-quality",
+  "name": "Code Quality",
+  "description": "Code quality and review pipeline covering linting, auditing, testing, and definition quality checks.",
+  "items": [
+    { "category": "skill",  "itemId": "prod-readiness", "required": true },
+    { "category": "skill",  "itemId": "review-skill",   "required": true },
+    { "category": "skill",  "itemId": "design-lint",    "required": true },
+    { "category": "prompt", "itemId": "lint",           "required": true },
+    { "category": "prompt", "itemId": "audit",          "required": true },
+    { "category": "prompt", "itemId": "test",           "required": true }
+  ],
+  "tags": ["quality", "review", "linting", "testing"],
+  "status": "stable"
+}

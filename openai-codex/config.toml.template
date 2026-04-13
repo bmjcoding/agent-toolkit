@@ -1,0 +1,104 @@
+# Codex CLI project configuration template
+# Version: Codex CLI v0.120.0
+#
+# Usage:
+#   Copy this file to .codex/config.toml in a trusted project repo.
+#   Global config lives at ~/.codex/config.toml.
+#   Project config is only loaded from trusted repos (codex trust <dir>).
+
+# ---------------------------------------------------------------------------
+# Core settings
+# ---------------------------------------------------------------------------
+
+# Default model for all sessions (override per-agent in ~/.codex/agents/<n>.toml)
+model = "codex-mini-latest"
+
+# Sandbox mode controls filesystem and network access.
+# Values: "workspace-write" | "read-only" | "danger-full-access"
+sandbox_mode = "workspace-write"
+
+# Approval policy for tool calls.
+# Values: "on-request" | "untrusted" | "never"
+# "on-request"  — prompts for approval on tool calls that modify state (recommended)
+# "untrusted"   — approves read-only; prompts for writes/deletes
+# "never"       — approves all tool calls without prompting (use with caution)
+approval_policy = "on-request"
+
+# ---------------------------------------------------------------------------
+# Skills configuration
+#
+# NOTE: skills.config[].path points to the SKILL.md file inside the skill
+# directory, not the directory itself.
+#
+# Codex discovers skills from (in order):
+#   1. paths listed in [[skills.config]] entries below
+#   2. .agents/skills/ at the repo root
+#   3. $HOME/.agents/skills/
+#   4. /etc/codex/skills/
+#   5. bundled skills
+#
+# ---------------------------------------------------------------------------
+
+[[skills.config]]
+path = "${AGENT_TOOLKIT_DIR}/openai-codex/skills/backend/SKILL.md"
+enabled = true
+
+[[skills.config]]
+path = "${AGENT_TOOLKIT_DIR}/openai-codex/skills/changelog/SKILL.md"
+enabled = true
+
+[[skills.config]]
+path = "${AGENT_TOOLKIT_DIR}/openai-codex/skills/design-authority/SKILL.md"
+enabled = true
+
+[[skills.config]]
+path = "${AGENT_TOOLKIT_DIR}/openai-codex/skills/design-lint/SKILL.md"
+enabled = true
+
+[[skills.config]]
+path = "${AGENT_TOOLKIT_DIR}/openai-codex/skills/frontend/SKILL.md"
+enabled = true
+
+[[skills.config]]
+path = "${AGENT_TOOLKIT_DIR}/openai-codex/skills/git-ship/SKILL.md"
+enabled = true
+
+[[skills.config]]
+path = "${AGENT_TOOLKIT_DIR}/openai-codex/skills/improve/SKILL.md"
+enabled = true
+
+[[skills.config]]
+path = "${AGENT_TOOLKIT_DIR}/openai-codex/skills/infra/SKILL.md"
+enabled = true
+
+[[skills.config]]
+path = "${AGENT_TOOLKIT_DIR}/openai-codex/skills/observability-patterns/SKILL.md"
+enabled = true
+
+[[skills.config]]
+path = "${AGENT_TOOLKIT_DIR}/openai-codex/skills/owasp-reference/SKILL.md"
+enabled = true
+
+[[skills.config]]
+path = "${AGENT_TOOLKIT_DIR}/openai-codex/skills/prod-readiness/SKILL.md"
+enabled = true
+
+[[skills.config]]
+path = "${AGENT_TOOLKIT_DIR}/openai-codex/skills/retro/SKILL.md"
+enabled = true
+
+[[skills.config]]
+path = "${AGENT_TOOLKIT_DIR}/openai-codex/skills/review-skill/SKILL.md"
+enabled = true
+
+# ---------------------------------------------------------------------------
+# MCP server configuration (optional)
+# ---------------------------------------------------------------------------
+# Declare MCP servers as [mcp_servers.<id>] tables.
+# Each server runs as a subprocess exposing tools to Codex sessions.
+#
+# Example:
+# [mcp_servers.filesystem]
+# command = "npx"
+# args = ["-y", "@modelcontextprotocol/server-filesystem", "/tmp"]
+# env = {}

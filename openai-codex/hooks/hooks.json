@@ -1,0 +1,102 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${AGENT_TOOLKIT_DIR:-$HOME/.codex}/openai-codex/hooks/branch-guard.sh",
+            "statusMessage": "Checking branch guard..."
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${AGENT_TOOLKIT_DIR:-$HOME/.codex}/openai-codex/hooks/pre-push-secrets.sh",
+            "statusMessage": "Scanning for secrets before push..."
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${AGENT_TOOLKIT_DIR:-$HOME/.codex}/openai-codex/hooks/protect-config.sh",
+            "statusMessage": "Checking config protection..."
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${AGENT_TOOLKIT_DIR:-$HOME/.codex}/openai-codex/hooks/changelog-check.sh",
+            "statusMessage": "Validating changelog entry..."
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${AGENT_TOOLKIT_DIR:-$HOME/.codex}/openai-codex/hooks/toolkit-edit-reminder.sh",
+            "statusMessage": "Checking toolkit edit reminder..."
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash|Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${AGENT_TOOLKIT_DIR:-$HOME/.codex}/openai-codex/hooks/integrity-warn.sh",
+            "statusMessage": "Running integrity check..."
+          }
+        ]
+      },
+      {
+        "matcher": "Bash|Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${AGENT_TOOLKIT_DIR:-$HOME/.codex}/openai-codex/hooks/toolkit-drift-check.sh",
+            "statusMessage": "Checking toolkit drift..."
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${AGENT_TOOLKIT_DIR:-$HOME/.codex}/openai-codex/hooks/inject-context.sh",
+            "statusMessage": "Injecting session context..."
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${AGENT_TOOLKIT_DIR:-$HOME/.codex}/openai-codex/hooks/extract-handoff.sh",
+            "statusMessage": "Extracting handoff JSON..."
+          }
+        ]
+      }
+    ]
+  }
+}

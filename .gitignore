@@ -2,3 +2,6 @@
 .security/
 .orchestrator/
 .changelog-platform.yml
+
+# macOS
+.DS_Store
