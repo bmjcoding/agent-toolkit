@@ -2,7 +2,7 @@
 
 This guide covers upgrading a local install from the old flat `claude-toolkit` layout to the new per-tool `agent-toolkit` layout. The restructure is a breaking change because the symlink targets move. You must run the steps below to restore a working Claude Code install.
 
-For the rationale behind the restructure, see [ADR 0005](adr/0005-multi-tool-restructure.md).
+For the rationale behind the restructure, see [ADR 0005](../../docs/adr/0005-multi-tool-restructure.md).
 
 ---
 
@@ -254,12 +254,12 @@ All 48 components received a `v2.0.0` major version bump to mark this breaking l
 - `skill/<slug>-v<version>` (e.g., `skill/changelog-v2.0.0`)
 - `rule/<slug>-v<version>` (e.g., `rule/docker-v2.0.0`)
 
-The prior `shared/<slug>-v<version>` namespace is retired. See [ADR 0004](adr/0004-per-component-changelog-tag-format.md) for the tag format rationale and [ADR 0005](adr/0005-multi-tool-restructure.md) for the full restructure decision record.
+The prior `shared/<slug>-v<version>` namespace is retired. See [ADR 0004](../../docs/adr/0004-per-component-changelog-tag-format.md) for the tag format rationale and [ADR 0005](../../docs/adr/0005-multi-tool-restructure.md) for the full restructure decision record.
 
 ---
 
 ## References
 
-- [ADR 0005 — Multi-Tool Restructure](adr/0005-multi-tool-restructure.md)
-- [ADR 0004 — Per-Component Changelog Tag Format](adr/0004-per-component-changelog-tag-format.md)
+- [ADR 0005 — Multi-Tool Restructure](../../docs/adr/0005-multi-tool-restructure.md)
+- [ADR 0004 — Per-Component Changelog Tag Format](../../docs/adr/0004-per-component-changelog-tag-format.md)
 - Install script: `claude-code/scripts/install.sh`

@@ -8,6 +8,39 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.0.0] - 2026-04-12
+
+### Changed — Breaking
+
+- **Root `skills/` and `rules/` directories deleted.** All three tool directories are
+  now fully self-contained: `claude-code/skills/` (13 skills), `claude-code/rules/`
+  (4 rules), `github-copilot/skills/` (13 skills), `github-copilot/rules/` (4 rules),
+  `openai-codex/skills/` (13 skills), `openai-codex/rules/` (4 rules).
+- **Symlink targets updated** in `claude-code/scripts/install.sh`: `~/.claude/skills`
+  now points to `claude-code/skills/`; `~/.claude/rules` now points to
+  `claude-code/rules/`.
+- **Tag namespace updated**: per-tool skill and rule tags now use the tool's flat
+  namespace (e.g., `claude-code/changelog-v3.0.0`, `openai-codex/changelog-v3.0.0`)
+  instead of the universal `skill/<slug>-v<ver>` and `rule/<slug>-v<ver>` prefixes.
+
+### Added
+
+- **`/docs` root directory** created with repo-wide ADR files:
+  `docs/adr/0004-per-component-changelog-tag-format.md` and
+  `docs/adr/0005-multi-tool-restructure.md`. Non-Claude UX doc moved to `docs/ux/`.
+- **`dependencies.json` per tool** — each tool directory now contains a
+  `dependencies.json` (schema v1.0) declaring its external tool dependencies.
+- **10 parity gaps resolved across GitHub Copilot and OpenAI Codex CLI:**
+  - Copilot: fixed `mode:` → `agent:` field in 6 prompt files.
+  - Copilot: added 12 skill wrapper instruction files under `github-copilot/skills/`.
+  - Copilot: added 9 hook equivalent instruction files under `github-copilot/hooks/`.
+  - Codex: rewrote `hooks.json` to the nested `{"hooks": [...]}` format required by
+    Codex CLI v0.120.0+.
+  - Codex: fixed 3 `config.toml.template` schema errors (`[[skills.config]]` table
+    format, `instructions_template` key, `timeout` type).
+  - Codex: corrected `install.sh` hooks path from `~/.codex/hooks.json` to
+    `~/.openai-codex/hooks.json`.
+
 ### Changed
 
 - `refactor(layout): move skills + rules to repo root; drop shared/ dir (285f27f)` —
@@ -15,7 +48,7 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
   The `shared/` directory is removed. Symlink targets updated: `~/.claude/skills →
   <repo>/skills`, `~/.claude/rules → <repo>/rules`.
 
-### Added
+### Added (pre-v3.0 unreleased work now captured in this release)
 
 - `feat(github-copilot): full port — 15 agents, 4 instructions, 6 prompts` — Complete
   GitHub Copilot surface port across multiple commits. Agents cover all 15 toolkit roles
@@ -88,5 +121,6 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 3. Re-run the install script: `./claude-code/scripts/install.sh`.
 4. Verify: `./claude-code/scripts/install.sh --check`.
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/v2.0.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/v3.0.0...HEAD
+[3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/v2.0.0...v3.0.0
 [2.0.0]: https://github.com/bmjcoding/agent-toolkit/releases/tag/v2.0.0
