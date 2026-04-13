@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.0.0] - 2026-04-13
+
+### Removed
+
+- BREAKING: manifest.json deleted. Dependency declarations are now read from YAML frontmatter in the component's .md definition file. No behavioral change to the component itself.
+
 ## [4.0.0] - 2026-04-12
 
 ### Changed
@@ -88,7 +94,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/backlog-v4.0.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/backlog-v5.0.0...HEAD
+[5.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/backlog-v4.0.0...claude-code/backlog-v5.0.0
 [4.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/backlog-v3.0.0...claude-code/backlog-v4.0.0
 [3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/backlog-v2.3.0...claude-code/backlog-v3.0.0
 [2.3.0]: https://github.com/bmjcoding/agent-toolkit/compare/backlog-v2.2.0...backlog-v2.3.0

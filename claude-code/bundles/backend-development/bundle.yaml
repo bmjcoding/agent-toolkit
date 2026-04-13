@@ -1,0 +1,16 @@
+# components[].role values: core (required for bundle to function) | optional (nice-to-have) | deprecated (will be removed)
+id: backend-development
+name: Backend Development
+description: Provides the backend skill and backend-engineer agent for API implementation, data modeling, and service-layer development.
+status: stable
+tags:
+  - backend
+  - api
+  - engineering
+components:
+  - type: skill
+    id: backend
+    role: core
+  - type: agent
+    id: backend-engineer
+    role: core

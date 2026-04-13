@@ -1,0 +1,29 @@
+# components[].role values: core (required for bundle to function) | optional (nice-to-have) | deprecated (will be removed)
+id: code-quality
+name: Code Quality
+description: Bundles quality skills and lint/audit/test commands for comprehensive code review, standards compliance, and production readiness checks.
+status: stable
+tags:
+  - quality
+  - linting
+  - testing
+  - auditing
+components:
+  - type: skill
+    id: prod-readiness
+    role: core
+  - type: skill
+    id: review-skill
+    role: core
+  - type: skill
+    id: design-lint
+    role: core
+  - type: command
+    id: lint
+    role: core
+  - type: command
+    id: audit
+    role: core
+  - type: command
+    id: test
+    role: core

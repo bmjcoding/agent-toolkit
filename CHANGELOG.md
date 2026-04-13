@@ -8,6 +8,24 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [4.0.0] - 2026-04-13
+
+### Changed — Breaking
+
+- **`manifest.json` files deleted across all 55 claude-code components** (15 agents, 6 commands, 9 hooks, 8 bundles, 4 rules, 13 skills) plus `claude-code/dependencies.json`. Dependency metadata now lives in YAML frontmatter: agents declare peer agents via `tools: Agent(name, ...)` in their `.md` frontmatter; skills and commands declare skill dependencies via a `skills:` list in frontmatter. Hooks carry no dependency metadata (leaf nodes by design).
+- **Bundles migrated from `manifest.json` to `bundle.yaml`** — each bundle directory now contains `bundle.yaml` (YAML, not JSON) with `id`, `name`, `description`, `status`, `tags[]`, and `components[]` fields. The old flat JSON `manifest.json` files are deleted.
+- **`scripts/generate-index.js` rewritten** to parse YAML frontmatter from `.md` files and `bundle.yaml` files instead of reading `manifest.json`. The generator remains the canonical entry point for rebuilding `index.json`; re-run after any component addition or frontmatter change.
+- **`claude-code/README.md` updated** — bundle format description updated from JSON manifest to YAML; frontmatter-driven dependency model documented in the Component Format Reference section.
+
+### Removed
+
+- 55 `manifest.json` files under `claude-code/` (one per component across agents, commands, hooks, bundles, rules, skills).
+- `claude-code/dependencies.json` — tool-level external dependency declarations superseded by frontmatter-embedded metadata.
+
+### Migration
+
+No action required for users who install via symlinks (`./claude-code/scripts/install.sh`). The symlink targets are unchanged. If you previously called `generate-index.js` in CI, re-run it after pulling to regenerate `index.json` from frontmatter.
+
 ## [3.2.0] - 2026-04-13
 
 ### Added
@@ -148,7 +166,8 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 3. Re-run the install script: `./claude-code/scripts/install.sh`.
 4. Verify: `./claude-code/scripts/install.sh --check`.
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/v3.2.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/v4.0.0...HEAD
+[4.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/v3.2.0...v4.0.0
 [3.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/v3.1.0...v3.2.0
 [3.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/v3.0.0...v3.1.0
 [3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/v2.0.0...v3.0.0

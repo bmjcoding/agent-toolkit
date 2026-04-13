@@ -1,0 +1,23 @@
+# components[].role values: core (required for bundle to function) | optional (nice-to-have) | deprecated (will be removed)
+id: security-hardening
+name: Security Hardening
+description: Provides the OWASP reference skill, security-engineer agent, and secrets/config protection hooks for end-to-end security hardening.
+status: stable
+tags:
+  - security
+  - owasp
+  - hardening
+  - secrets
+components:
+  - type: skill
+    id: owasp-reference
+    role: core
+  - type: agent
+    id: security-engineer
+    role: core
+  - type: hook
+    id: pre-push-secrets
+    role: core
+  - type: hook
+    id: protect-config
+    role: core
