@@ -8,7 +8,7 @@ permissionMode: auto
 maxTurns: 200
 initialPrompt: |
   mkdir -p .orchestrator/{handoffs,context,logs,sessions} && git rev-parse --is-inside-work-tree 2>/dev/null && (grep -qxF '.orchestrator/' .gitignore 2>/dev/null || echo '.orchestrator/' >> .gitignore) || true
-# version: 1.13.0
+# version: 1.14.0
 ---
 
 # Frankenstein
@@ -159,6 +159,8 @@ Examples: scrollbar hide (CSS-only), 429 route fix (single-line), overflow fix (
 
 Estimated savings vs Sonnet across a full pipeline: ~$1.42 per run (12 agents × ~18K tokens × $6/Mtok delta).
 
+**Dedicated external research agent pattern**: When a task requires a specific external version string, API detail, or canonical value that cannot be found in the local codebase, dispatch a dedicated research agent (not the implementing agent) with: (a) the exact URL to fetch, (b) the specific string to extract, (c) a fallback value if the page is unreachable. Keep fetch and implement separate — research agents that also implement produce inconsistent results when the fetch fails or returns unexpected content. Tag these agents with `model: haiku` — pure fetch + extract with no implementation reasoning.
+
 Tell each: "RESEARCH ONLY — do not write code." Each writes TWO files:
 1. `{domain}-summary.md` (max 100 lines) → `.orchestrator/context/` — for planner
 2. `{domain}-inventory.md` (max 500 lines — summarize patterns, don't enumerate every file) → `.orchestrator/context/` — for implementation agents
@@ -187,6 +189,32 @@ Before planning, present exploration findings to the user: key features discover
 Spawn `planner` with the task AND exploration summaries. The planner also reads inventories on disk when reconciling conflicting contract shapes. When it completes:
 - Read `.orchestrator/sessions/$SID/plan.json`. Validate it has subtasks with ids, descriptions, owned_files, parallel_groups, and blockedBy arrays.
 - Validate JSON integrity: `jq . .orchestrator/sessions/$SID/plan.json > /dev/null 2>&1`. If this fails, the file is corrupted or truncated — re-run planner (counts as a revision against the 2-revision limit).
+- **Coverage-checker** (run before plan-reviewer): Verify every item in the exploration inventory appears in exactly one subtask's `owned_files`. This prevents the planner from silently skipping files that were in the inventory but never assigned to any agent.
+  ```bash
+  # Extract all owned files from plan.json (deduplicated union)
+  jq -r '[.subtasks[].owned_files[]] | unique | .[]' .orchestrator/sessions/$SID/plan.json | sort > /tmp/plan_owned.txt
+
+  # Extract inventory items from exploration context (adjust glob as needed)
+  find .orchestrator/sessions/$SID/context -name "*-inventory.md" | xargs grep -hE '^\s*[-*]\s+\`?[a-z].*\.(ts|tsx|py|js|jsx|md|json|sh|toml|yaml|yml)\`?' 2>/dev/null \
+    | grep -oE '[a-z][a-zA-Z0-9/_.-]+\.(ts|tsx|py|js|jsx|md|json|sh|toml|yaml|yml)' \
+    | sort -u > /tmp/inventory_items.txt
+
+  # Diff: items in inventory but not in any owned_files list
+  UNMAPPED=$(comm -23 /tmp/inventory_items.txt /tmp/plan_owned.txt | head -20)
+  if [ -n "$UNMAPPED" ]; then
+    echo "COVERAGE GAP: The following inventory items have no owning subtask:"
+    echo "$UNMAPPED"
+    echo "Resolve before dispatching plan-reviewer — send planner a targeted revision listing the unmapped files."
+  else
+    echo "Coverage check PASSED: all inventory items have an owning subtask."
+  fi
+  ```
+  If COVERAGE GAP is reported: send the planner a targeted revision listing the unmapped files. Do NOT dispatch plan-reviewer until the gap is closed. This counts as a revision against the 2-revision limit.
+- **Pre-extract context for plan-reviewer**: Do NOT pass raw `plan.json` as the only context. Before dispatching plan-reviewer, write a compact summary to `.orchestrator/sessions/$SID/context/plan-notes.md`:
+  ```bash
+  jq -r '"# Plan Summary\n\nTask: " + .task + "\n\nContext: " + .context_summary + "\n\n## Subtasks\n" + ([.subtasks[] | "- [" + .id + "] " + .agent + " — " + (.owned_files | length | tostring) + " files — group " + (.parallel_group | tostring) + ": " + .description[:120]] | join("\n"))' .orchestrator/sessions/$SID/plan.json > .orchestrator/sessions/$SID/context/plan-notes.md 2>/dev/null || true
+  ```
+  Include `plan-notes.md` in the plan-reviewer dispatch prompt: "Read plan-notes.md first for the subtask table overview, then read plan.json for full detail." This reduces context load by ~15K tokens per review agent and lowers truncation risk on large plans.
 - Spawn `plan-reviewer`. Read its handoff:
   - `"revise"` with critical/high issues → re-run planner with feedback (max 2 revisions). After 2 revisions, if still `revise`, present the blocking issues to the user and ask whether to proceed or abort.
   - `"approve"` → proceed to user gate

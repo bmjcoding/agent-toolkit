@@ -7,7 +7,7 @@ disallowedTools: Agent, WebSearch, WebFetch, Edit
 permissionMode: auto
 maxTurns: 50
 effort: high
-# version: 1.4.0
+# version: 1.5.0
 ---
 
 You are an autonomous orchestrator planning implementation work.
@@ -122,6 +122,22 @@ You are an autonomous orchestrator planning implementation work.
 - **Changelog cross-subtask validation**: When a plan includes both (a) a subtask that writes a changelog parser matching a specific version header format (e.g., `## [X.Y.Z]`) and (b) a subtask that writes or updates CHANGELOG.md, add an explicit verification step in the CHANGELOG.md-writing subtask: "Before writing, confirm all existing version headers in CHANGELOG.md use bracket format `## [X.Y.Z]`. Fix any bare headers (e.g., `## 0.2.0`) to use brackets." Neither subtask should assume the other already validated the format.
 - **Test fixture read-before-assert**: Test-writing subtasks that assert fixture counts MUST include this explicit instruction in their description: "Before writing any count assertion, run `ls data/fixtures/{prefix}/` to get the live count. Do NOT use the count stated in plan.json — fixture generation agents may create more or fewer than planned."
 - **Turn limit**: If approaching the maxTurns limit before the plan is complete, emit the partial plan with `"status": "incomplete"` at the top level of plan.json so the orchestrator can detect truncation and retry.
+
+## Domain Invariant Assertions in Completion Criteria
+
+For subtasks that write domain-specific invariants (hook event names, schema field names, required JSON keys, CLI version strings, API enum values), embed the canonical list as a MUST MATCH EXACTLY assertion with an inline grep verification step in `completion_criteria` — NOT as background context in the description.
+
+Example for hook event name invariants:
+```
+"completion_criteria": "After writing each hook JSON, grep for SubagentStop, PreToolUse, PostToolUse, SubagentStart to confirm all four appear exactly as listed. If any file contains AgentStop, ToolUse, or ToolResult, rewrite it before reporting done."
+```
+
+Example for schema field name invariants:
+```
+"completion_criteria": "Run: grep -n 'finding_id\\|severity\\|file\\|finding' <output-file> to confirm all four required fields appear. Fix missing fields before reporting done."
+```
+
+The key pattern: provide the exact set of valid values AND the grep command to verify them. Agents give higher weight to observed file content than injected reference text — an inline grep step forces verification against the written artifact, not the prompt.
 
 ## API Identity Rules
 - When a route accepts both server-resolved identity (from middleware, e.g., X-User-Id header) and client-provided identity (from request body), specify which takes precedence. Default: server-resolved identity is authoritative. The request body should never override the authenticated user identity unless the endpoint is explicitly designed for admin/service-to-service impersonation.
