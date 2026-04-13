@@ -1,0 +1,17 @@
+{
+  "id": "extract-handoff",
+  "name": "Extract Handoff",
+  "type": "hook",
+  "tool": "github-copilot",
+  "version": "3.0.0",
+  "ref": "main",
+  "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/extract-handoff.json",
+  "install_path": ".github/hooks/",
+  "install_command": "mkdir -p .github/hooks && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/extract-handoff.json -o .github/hooks/extract-handoff.json && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/extract-handoff.sh -o .github/hooks/extract-handoff.sh",
+  "files": ["extract-handoff.json", "extract-handoff.sh"],
+  "status": "available",
+  "tooltip_text": "",
+  "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
+  "experimental": false,
+  "notes": "SubagentStop hook — extracts and persists handoff data when a subagent session ends."
+}
