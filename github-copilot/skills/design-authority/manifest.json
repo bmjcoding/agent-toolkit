@@ -1,0 +1,20 @@
+{
+  "id": "design-authority",
+  "name": "Design Authority",
+  "type": "skill",
+  "tool": "github-copilot",
+  "version": "3.0.0",
+  "ref": "main",
+  "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/skills/design-authority/SKILL.md",
+  "install_path": "~/.claude/skills/design-authority/",
+  "install_command": "mkdir -p ~/.claude/skills/design-authority && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/skills/design-authority/SKILL.md -o ~/.claude/skills/design-authority/SKILL.md",
+  "files": [
+    "SKILL.md",
+    "CHANGELOG.md"
+  ],
+  "status": "available",
+  "tooltip_text": "Design system guidance for generating and modifying frontend components. Provides token references, canonical patterns, and anti-convergence rules.",
+  "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
+  "experimental": false,
+  "notes": "Installs to ~/.claude/ path for compatibility with future Claude Code migration (official VSCode docs confirm parity)."
+}

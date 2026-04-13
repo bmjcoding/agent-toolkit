@@ -1,0 +1,20 @@
+{
+  "id": "frontend",
+  "name": "Frontend",
+  "type": "skill",
+  "tool": "github-copilot",
+  "version": "3.0.0",
+  "ref": "main",
+  "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/skills/frontend/SKILL.md",
+  "install_path": "~/.claude/skills/frontend/",
+  "install_command": "mkdir -p ~/.claude/skills/frontend && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/skills/frontend/SKILL.md -o ~/.claude/skills/frontend/SKILL.md",
+  "files": [
+    "SKILL.md",
+    "CHANGELOG.md"
+  ],
+  "status": "available",
+  "tooltip_text": "Lightweight frontend workflow — implement with design system enforcement, review, and lint.",
+  "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
+  "experimental": false,
+  "notes": "Installs to ~/.claude/ path for compatibility with future Claude Code migration (official VSCode docs confirm parity)."
+}

@@ -1,0 +1,17 @@
+{
+  "id": "changelog-check",
+  "name": "Changelog Check",
+  "type": "hook",
+  "tool": "github-copilot",
+  "version": "3.0.0",
+  "ref": "main",
+  "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/changelog-check.json",
+  "install_path": ".github/hooks/",
+  "install_command": "mkdir -p .github/hooks && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/changelog-check.json -o .github/hooks/changelog-check.json && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/changelog-check.sh -o .github/hooks/changelog-check.sh",
+  "files": ["changelog-check.json", "changelog-check.sh"],
+  "status": "available",
+  "tooltip_text": "",
+  "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
+  "experimental": false,
+  "notes": "PreToolUse hook — warns when a CHANGELOG.md has not been updated before committing."
+}

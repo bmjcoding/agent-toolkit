@@ -1,0 +1,17 @@
+{
+  "id": "test",
+  "name": "Test",
+  "type": "command",
+  "tool": "github-copilot",
+  "version": "3.0.0",
+  "ref": "main",
+  "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/prompts/test.prompt.md",
+  "install_path": ".github/prompts/",
+  "install_command": "mkdir -p .github/prompts && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/prompts/test.prompt.md -o .github/prompts/test.prompt.md",
+  "files": ["test.prompt.md"],
+  "status": "available",
+  "tooltip_text": "Write tests to cover gaps and achieve >=80% coverage on changed files.",
+  "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
+  "experimental": false,
+  "notes": "Copilot prompt files are workspace-scoped. Invoke with /test in Copilot Chat."
+}

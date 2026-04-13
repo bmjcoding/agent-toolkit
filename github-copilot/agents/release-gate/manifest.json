@@ -1,0 +1,19 @@
+{
+  "id": "release-gate",
+  "name": "Release Gate",
+  "type": "agent",
+  "tool": "github-copilot",
+  "version": "3.0.0",
+  "ref": "main",
+  "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/release-gate.agent.md",
+  "install_path": "~/.claude/agents/",
+  "install_command": "curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/release-gate.agent.md -o ~/.claude/agents/release-gate.agent.md",
+  "files": [
+    "release-gate.agent.md"
+  ],
+  "status": "available",
+  "tooltip_text": "",
+  "docs_url": "https://code.visualstudio.com/docs/copilot/agents/overview",
+  "experimental": false,
+  "notes": "Installs to ~/.claude/ path — parity confirmed by VSCode custom-instructions docs."
+}
