@@ -9,12 +9,43 @@
   "install_path": "~/.claude/plugins/code-quality/",
   "install_command": "/plugin install code-quality@bmjcoding/agent-toolkit",
   "files": [
-    "manifest.json",
-    "../code-quality.json"
+    "manifest.json"
   ],
   "status": "available",
   "tooltip_text": "",
   "docs_url": "https://docs.anthropic.com/en/docs/claude-code/plugins",
   "experimental": false,
-  "notes": "Claude Code 'plugin' primitive."
+  "notes": "Claude Code 'plugin' primitive.",
+  "components": [
+    {
+      "type": "skill",
+      "id": "prod-readiness",
+      "role": "core"
+    },
+    {
+      "type": "skill",
+      "id": "review-skill",
+      "role": "core"
+    },
+    {
+      "type": "skill",
+      "id": "design-lint",
+      "role": "core"
+    },
+    {
+      "type": "command",
+      "id": "lint",
+      "role": "core"
+    },
+    {
+      "type": "command",
+      "id": "audit",
+      "role": "core"
+    },
+    {
+      "type": "command",
+      "id": "test",
+      "role": "core"
+    }
+  ]
 }

@@ -8,10 +8,20 @@
   "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/planner/planner.md",
   "install_path": "~/.claude/agents/",
   "install_command": "mkdir -p ~/.claude/agents && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/planner/planner.md -o ~/.claude/agents/planner.md",
-  "files": ["planner.md"],
+  "files": [
+    "planner.md"
+  ],
   "status": "available",
   "tooltip_text": "Autonomous planning agent that reads codebases and decomposes tasks into parallel-group implementation plans with file ownership and integration contracts.",
   "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
   "experimental": false,
-  "notes": ""
+  "notes": "",
+  "dependencies": [
+    {
+      "type": "hook",
+      "id": "inject-context",
+      "reason": "reads session context via pre-tool hook",
+      "optional": false
+    }
+  ]
 }

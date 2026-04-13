@@ -8,10 +8,34 @@
   "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/frontend-engineer.toml",
   "install_path": "",
   "install_command": "",
-  "files": ["frontend-engineer.toml"],
+  "files": [
+    "frontend-engineer.toml"
+  ],
   "status": "unverified",
   "tooltip_text": "Codex CLI agent install path is not documented. See the Codex docs for the current recommended setup.",
   "docs_url": "https://developers.openai.com/codex/guides/agents-md",
   "experimental": false,
-  "notes": "UNVERIFIED — Codex does not document a standalone agent install path; subagents appear to be plugin-bundled in current docs."
+  "notes": "UNVERIFIED \u2014 Codex does not document a standalone agent install path; subagents appear to be plugin-bundled in current docs.",
+  "dependencies": [
+    {
+      "type": "skill",
+      "id": "frontend",
+      "optional": false
+    },
+    {
+      "type": "skill",
+      "id": "design-authority",
+      "optional": false
+    },
+    {
+      "type": "skill",
+      "id": "design-lint",
+      "optional": false
+    },
+    {
+      "type": "hook",
+      "id": "inject-context",
+      "optional": false
+    }
+  ]
 }

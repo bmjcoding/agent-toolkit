@@ -8,10 +8,34 @@
   "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/quality-engineer/quality-engineer.md",
   "install_path": "~/.claude/agents/",
   "install_command": "mkdir -p ~/.claude/agents && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/quality-engineer/quality-engineer.md -o ~/.claude/agents/quality-engineer.md",
-  "files": ["quality-engineer.md"],
+  "files": [
+    "quality-engineer.md"
+  ],
   "status": "available",
   "tooltip_text": "Autonomous quality agent that remediates findings from specialist reviews, repairs broken integration contracts, and validates post-finalize changes. Replaces fixer, integration-repairer, and post-validator.",
   "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
   "experimental": false,
-  "notes": ""
+  "notes": "",
+  "dependencies": [
+    {
+      "type": "skill",
+      "id": "prod-readiness",
+      "optional": false
+    },
+    {
+      "type": "command",
+      "id": "test",
+      "optional": false
+    },
+    {
+      "type": "command",
+      "id": "lint",
+      "optional": false
+    },
+    {
+      "type": "command",
+      "id": "audit",
+      "optional": false
+    }
+  ]
 }

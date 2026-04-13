@@ -8,10 +8,24 @@
   "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/release-gate.toml",
   "install_path": "",
   "install_command": "",
-  "files": ["release-gate.toml"],
+  "files": [
+    "release-gate.toml"
+  ],
   "status": "unverified",
   "tooltip_text": "Codex CLI agent install path is not documented. See the Codex docs for the current recommended setup.",
   "docs_url": "https://developers.openai.com/codex/guides/agents-md",
   "experimental": false,
-  "notes": "UNVERIFIED — Codex does not document a standalone agent install path; subagents appear to be plugin-bundled in current docs."
+  "notes": "UNVERIFIED \u2014 Codex does not document a standalone agent install path; subagents appear to be plugin-bundled in current docs.",
+  "dependencies": [
+    {
+      "type": "skill",
+      "id": "prod-readiness",
+      "optional": false
+    },
+    {
+      "type": "command",
+      "id": "test",
+      "optional": false
+    }
+  ]
 }

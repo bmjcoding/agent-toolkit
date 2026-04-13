@@ -9,12 +9,38 @@
   "install_path": "~/.claude/plugins/git-workflow/",
   "install_command": "/plugin install git-workflow@bmjcoding/agent-toolkit",
   "files": [
-    "manifest.json",
-    "../git-workflow.json"
+    "manifest.json"
   ],
   "status": "available",
   "tooltip_text": "",
   "docs_url": "https://docs.anthropic.com/en/docs/claude-code/plugins",
   "experimental": false,
-  "notes": "Claude Code 'plugin' primitive."
+  "notes": "Claude Code 'plugin' primitive.",
+  "components": [
+    {
+      "type": "skill",
+      "id": "git-ship",
+      "role": "core"
+    },
+    {
+      "type": "skill",
+      "id": "changelog",
+      "role": "core"
+    },
+    {
+      "type": "command",
+      "id": "git-verify",
+      "role": "core"
+    },
+    {
+      "type": "hook",
+      "id": "branch-guard",
+      "role": "core"
+    },
+    {
+      "type": "hook",
+      "id": "pre-push-secrets",
+      "role": "core"
+    }
+  ]
 }

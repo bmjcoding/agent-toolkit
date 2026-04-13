@@ -9,12 +9,38 @@
   "install_path": "",
   "install_command": "",
   "files": [
-    "manifest.json",
-    "../git-workflow.json"
+    "manifest.json"
   ],
   "status": "unverified",
   "tooltip_text": "GitHub Copilot does not document a bundle/plugin primitive. See docs for manual install of individual components.",
   "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
   "experimental": false,
-  "notes": "UNVERIFIED — no documented Copilot bundle format."
+  "notes": "UNVERIFIED \u2014 no documented Copilot bundle format.",
+  "components": [
+    {
+      "type": "skill",
+      "id": "git-ship",
+      "role": "core"
+    },
+    {
+      "type": "skill",
+      "id": "changelog",
+      "role": "core"
+    },
+    {
+      "type": "command",
+      "id": "git-verify",
+      "role": "core"
+    },
+    {
+      "type": "hook",
+      "id": "branch-guard",
+      "role": "core"
+    },
+    {
+      "type": "hook",
+      "id": "pre-push-secrets",
+      "role": "core"
+    }
+  ]
 }
