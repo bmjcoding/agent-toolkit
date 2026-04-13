@@ -8,15 +8,15 @@ This directory contains all **Claude Code-specific content** — components that
 claude-code/
   agents/     # 15 subagent definitions (.md with YAML frontmatter: name, description, tools, disallowedTools, permissionMode, maxTurns, ...)
   commands/   # 6 slash command definitions (.md loaded as /commandname in Claude Code sessions)
-  hooks/      # 10 shell scripts wired to Claude Code hook events (PreToolUse, PostToolUse, SubagentStart, SubagentStop)
+  hooks/      # 9 shell scripts wired to Claude Code hook events (PreToolUse, PostToolUse, SubagentStart, SubagentStop)
   bundles/    # JSON bundle manifests grouping related components for bulk install
   docs/       # Architecture decision records, migration guides, UX design docs
   scripts/
     install.sh  # Symlink manager for ~/.claude/
 ```
 
-Universal skills (13) and rules (4) live at the **repository root** under `skills/` and
-`rules/`, not in this directory. Install symlinks for those target the repo root directly.
+Skills (13) and rules (4) for Claude Code live in **this directory** under `claude-code/skills/` and
+`claude-code/rules/`, making this tool directory fully self-contained.
 
 ## Install (Symlinks)
 
@@ -27,8 +27,8 @@ Claude Code loads these components via symlinks from `~/.claude/`:
 ~/.claude/commands -> /path/to/agent-toolkit/claude-code/commands
 ~/.claude/docs     -> /path/to/agent-toolkit/claude-code/docs
 ~/.claude/hooks    -> /path/to/agent-toolkit/claude-code/hooks
-~/.claude/rules    -> /path/to/agent-toolkit/rules
-~/.claude/skills   -> /path/to/agent-toolkit/skills
+~/.claude/rules    -> /path/to/agent-toolkit/claude-code/rules
+~/.claude/skills   -> /path/to/agent-toolkit/claude-code/skills
 ```
 
 Run the install script to create or retarget all six symlinks atomically:
