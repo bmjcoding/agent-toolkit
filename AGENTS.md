@@ -12,11 +12,36 @@ Directory layout:
 
 ```
 agent-toolkit/
-  skills/          # Universal skills (13) — single source of truth for all tools
-  rules/           # Universal rules (4) — docker, logging, node, python
-  claude-code/     # Claude Code-specific agents, commands, hooks, bundles
-  github-copilot/  # GitHub Copilot-specific agents, instructions, prompts
-  openai-codex/    # OpenAI Codex CLI-specific agents, hooks, and config
+  docs/            # Repo-wide documentation
+    adr/           # Architecture Decision Records (repo-wide scope)
+    ux/            # UX design specs (multi-tool scope)
+  claude-code/     # Claude Code — fully self-contained
+    agents/        # 15 agent definitions
+    commands/      # 6 slash commands
+    hooks/         # 9 shell hooks
+    bundles/       # 8 curated install bundles
+    skills/        # 13 skill definitions (Claude Code copy)
+    rules/         # 4 rule sets (Claude Code copy)
+    docs/          # Claude Code-specific ADRs and operational docs
+    scripts/
+  github-copilot/  # GitHub Copilot (VS Code) — fully self-contained
+    agents/        # 15 .agent.md definitions
+    instructions/  # 4 path-scoped instruction files
+    prompts/       # 6 reusable prompt files
+    hooks/         # 9 hook JSON files
+    bundles/       # 8 curated install bundles
+    skills/        # 13 skill wrappers
+    rules/         # 4 rule sets (Copilot copy)
+    mcp/           # MCP server config template (maps to .vscode/mcp.json at install time)
+    scripts/
+  openai-codex/    # OpenAI Codex CLI — fully self-contained
+    agents/        # 15 .toml agent definitions
+    hooks/         # 9 .sh scripts + hooks.json
+    bundles/       # 8 curated install bundles
+    skills/        # 13 skill definitions
+    rules/         # 4 rule sets (Codex copy)
+    scripts/
+  AGENTS.md        # Repo-wide instructions (read natively by all 3 tools)
 ```
 
 ---
@@ -85,11 +110,9 @@ Global git config enforces `gpgsign=true` — all commits must be GPG-signed. Pl
 All components follow **SemVer 2.0.0** with **Keep a Changelog 1.1.0** format.
 
 - Tag format: `<namespace>/<slug>-v<major>.<minor>.<patch>`
-  - `claude-code/<slug>-v<ver>` — Claude Code agents, commands, hooks
-  - `skill/<slug>-v<ver>` — universal skills under `skills/`
-  - `rule/<slug>-v<ver>` — universal rules under `rules/`
-  - `github-copilot/<slug>-v<ver>` — Copilot-specific agents, instructions, prompts
-  - `openai-codex/<slug>-v<ver>` — Codex-specific agents, hooks, config
+  - `claude-code/<slug>-v<ver>` — Claude Code agents, commands, hooks, skills, rules
+  - `github-copilot/<slug>-v<ver>` — Copilot agents, instructions, prompts, hooks, skills, rules
+  - `openai-codex/<slug>-v<ver>` — Codex agents, hooks, skills, rules, config
 - Bump rules:
   - **PATCH**: wording fixes, ≤5 line changes, no new sections
   - **MINOR**: new sections or capabilities
@@ -100,11 +123,13 @@ All components follow **SemVer 2.0.0** with **Keep a Changelog 1.1.0** format.
 
 ## Toolkit Path Configuration
 
-The environment variable `TOOLKIT_PATH` overrides the default local path for toolkit scripts and hooks. Set it in your shell profile if your checkout is not at the default location:
+The environment variable `AGENT_TOOLKIT_DIR` overrides the default local path for toolkit scripts and hooks. Set it in your shell profile if your checkout is not at the default location:
 
 ```sh
-export TOOLKIT_PATH=/path/to/your/agent-toolkit
+export AGENT_TOOLKIT_DIR=/path/to/your/agent-toolkit
 ```
+
+Note: `TOOLKIT_PATH` is also accepted by the `toolkit-drift-check` hook as an alias for `AGENT_TOOLKIT_DIR`; prefer `AGENT_TOOLKIT_DIR` for consistency with install scripts and hook manifests.
 
 ---
 

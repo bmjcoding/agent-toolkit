@@ -25,30 +25,43 @@ The GitHub repository is renamed from `claude-toolkit` to `agent-toolkit`. This 
 
 ### 2. Top-level per-tool directory structure
 
+Updated 2026-04-12 for v3.0.0 restructure.
+
 ```
 agent-toolkit/
-├── skills/               # Universal skills (13) — single source of truth
-├── rules/                # Universal rules (4) — docker, logging, node, python
-├── claude-code/          # All Claude Code-specific content
-│   ├── agents/           # 15 agents
-│   ├── commands/         # 6 slash commands
-│   ├── docs/
-│   ├── hooks/            # 10 hooks
-│   └── scripts/
-├── github-copilot/       # GitHub Copilot VS Code IDE
-│   ├── agents/           # 15 .agent.md definitions
-│   ├── instructions/     # 4 path-specific instruction files
-│   ├── prompts/          # 6 .prompt.md files
-│   ├── skills/           # changelog wrapper
-│   └── scripts/
-└── openai-codex/         # OpenAI Codex CLI
-    ├── agents/           # 15 .toml agent definitions
-    ├── hooks/            # 9 .sh scripts + hooks.json
-    ├── config.toml.template  # 13 [[skills.config]] entries
-    └── scripts/
+  docs/            # Repo-wide documentation
+    adr/           # Architecture Decision Records (repo-wide scope)
+    ux/            # UX design specs (multi-tool scope)
+  claude-code/     # Claude Code — fully self-contained
+    agents/        # 15 agent definitions
+    commands/      # 6 slash commands
+    hooks/         # 9 shell hooks
+    bundles/       # 8 curated install bundles
+    skills/        # 13 skill definitions (Claude Code copy)
+    rules/         # 4 rule sets (Claude Code copy)
+    docs/          # Claude Code-specific ADRs and operational docs
+    scripts/
+  github-copilot/  # GitHub Copilot (VS Code) — fully self-contained
+    agents/        # 15 .agent.md definitions
+    instructions/  # 4 path-scoped instruction files
+    prompts/       # 6 reusable prompt files
+    hooks/         # 9 hook JSON files
+    bundles/       # 8 curated install bundles
+    skills/        # 13 skill wrappers
+    rules/         # 4 rule sets (Copilot copy)
+    mcp/           # MCP server config template
+    scripts/
+  openai-codex/    # OpenAI Codex CLI — fully self-contained
+    agents/        # 15 .toml agent definitions
+    hooks/         # 9 .sh scripts + hooks.json
+    bundles/       # 8 curated install bundles
+    skills/        # 13 skill definitions
+    rules/         # 4 rule sets (Codex copy)
+    scripts/
+  AGENTS.md        # Repo-wide instructions (read natively by all 3 tools)
 ```
 
-Each tool directory is self-contained. Cross-tool content that works identically across all three tools (skills, generic rules) lives at the repository root under `skills/` and `rules/`.
+Each tool directory is fully self-contained. There are no shared `skills/` or `rules/` directories at the repository root; each tool carries its own copy of skills and rules within its subtree.
 
 ### 3. AGENTS.md at repo root
 
@@ -64,9 +77,9 @@ Claude Code does not natively read `AGENTS.md`. To avoid duplicating the shared 
 
 This is Claude Code's documented @-import syntax. It instructs Claude Code to read `AGENTS.md` first, then apply any Claude Code-specific additions that follow in `CLAUDE.md`. This is the bridge pattern — not a symlink (see Alternatives Considered).
 
-### 5. Skills and rules at repo root as single source of truth
+### 5. Skills and rules embedded within each tool directory
 
-Skills and rules live at the repository root (`/skills/`, `/rules/`). Claude Code users access them via updated symlinks: `~/.claude/skills → agent-toolkit/skills` and `~/.claude/rules → agent-toolkit/rules`. GitHub Copilot users install them via `.github/skills` symlink at install time. Codex CLI users reference them via `[[skills.config]]` entries in `config.toml` or `.agents/skills/` symlink.
+Each tool directory (`claude-code/`, `github-copilot/`, `openai-codex/`) carries its own copy of the 13 skills and 4 rules. There is no shared root-level source of truth; every tool subtree is fully self-contained. Claude Code symlinks point to `claude-code/skills/` and `claude-code/rules/`. GitHub Copilot and Codex install scripts wire their own copies. See Addendum below for the historical record of how this decision evolved from the initial v2.0.0 design.
 
 ### 6. Version bumps
 
@@ -132,7 +145,7 @@ Symlink one file to the other so they stay in sync. Rejected because neither too
 ## References
 
 - ADR 0001: `claude-code/docs/adr/0001-frankenstein-agent-teams-migration.md` — agent roster and hook inventory
-- ADR 0004: `claude-code/docs/adr/0004-per-component-changelog-tag-format.md` — tag format and changelog URL generation
+- ADR 0004: `docs/adr/0004-per-component-changelog-tag-format.md` — tag format and changelog URL generation
 - Migration guide: `claude-code/docs/migration-v2.md`
 - Install script: `claude-code/scripts/install.sh`
 - Drift check hook: `claude-code/hooks/toolkit-drift-check/toolkit-drift-check.sh`
