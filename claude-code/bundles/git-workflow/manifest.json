@@ -1,0 +1,20 @@
+{
+  "id": "git-workflow",
+  "name": "Git Workflow",
+  "type": "bundle",
+  "tool": "claude-code",
+  "version": "1.0.0",
+  "ref": "main",
+  "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/bundles/git-workflow/.claude-plugin/plugin.json",
+  "install_path": "~/.claude/plugins/git-workflow/",
+  "install_command": "/plugin install git-workflow@bmjcoding/agent-toolkit",
+  "files": [
+    "manifest.json",
+    "../git-workflow.json"
+  ],
+  "status": "available",
+  "tooltip_text": "",
+  "docs_url": "https://docs.anthropic.com/en/docs/claude-code/plugins",
+  "experimental": false,
+  "notes": "Claude Code 'plugin' primitive."
+}

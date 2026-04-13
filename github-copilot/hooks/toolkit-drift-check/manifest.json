@@ -1,0 +1,17 @@
+{
+  "id": "toolkit-drift-check",
+  "name": "Toolkit Drift Check",
+  "type": "hook",
+  "tool": "github-copilot",
+  "version": "3.0.0",
+  "ref": "main",
+  "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/toolkit-drift-check.json",
+  "install_path": ".github/hooks/",
+  "install_command": "mkdir -p .github/hooks && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/toolkit-drift-check.json -o .github/hooks/toolkit-drift-check.json && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/toolkit-drift-check.sh -o .github/hooks/toolkit-drift-check.sh",
+  "files": ["toolkit-drift-check.json", "toolkit-drift-check.sh"],
+  "status": "available",
+  "tooltip_text": "",
+  "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
+  "experimental": false,
+  "notes": "SubagentStop hook — detects drift between installed toolkit symlinks and the upstream agent-toolkit repo after each subagent run."
+}

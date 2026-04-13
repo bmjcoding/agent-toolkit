@@ -1,0 +1,17 @@
+{
+  "id": "security-engineer",
+  "name": "Security Engineer",
+  "type": "agent",
+  "tool": "claude-code",
+  "version": "3.0.0",
+  "ref": "main",
+  "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/security-engineer/security-engineer.md",
+  "install_path": "~/.claude/agents/",
+  "install_command": "mkdir -p ~/.claude/agents && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/security-engineer/security-engineer.md -o ~/.claude/agents/security-engineer.md",
+  "files": ["security-engineer.md"],
+  "status": "available",
+  "tooltip_text": "Cybersecurity engineer performing STRIDE threat modeling, OWASP Top 10 review, auth analysis, and dependency security evaluation. Use during Phase 3a specialist reviews.",
+  "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
+  "experimental": false,
+  "notes": ""
+}

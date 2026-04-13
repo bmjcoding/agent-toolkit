@@ -1,0 +1,22 @@
+{
+  "id": "prod-readiness",
+  "name": "Prod Readiness",
+  "type": "skill",
+  "tool": "openai-codex",
+  "version": "2.0.0",
+  "ref": "main",
+  "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/skills/prod-readiness/SKILL.md",
+  "install_path": "~/.codex/skills/prod-readiness/",
+  "install_command": "mkdir -p ~/.codex/skills/prod-readiness/evals ~/.codex/skills/prod-readiness/references && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/skills/prod-readiness/SKILL.md -o ~/.codex/skills/prod-readiness/SKILL.md",
+  "files": [
+    "SKILL.md",
+    "CHANGELOG.md",
+    "evals/evals.json",
+    "references/phases.md"
+  ],
+  "status": "available",
+  "tooltip_text": "Full production readiness check — build, lint, audit, test, git verify, and ship verdict.",
+  "docs_url": "https://developers.openai.com/codex",
+  "experimental": false,
+  "notes": ""
+}

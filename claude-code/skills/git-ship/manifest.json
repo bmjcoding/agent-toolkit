@@ -1,0 +1,17 @@
+{
+  "id": "git-ship",
+  "name": "Git Ship",
+  "type": "skill",
+  "tool": "claude-code",
+  "version": "3.0.0",
+  "ref": "main",
+  "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/skills/git-ship/SKILL.md",
+  "install_path": "~/.claude/skills/git-ship/",
+  "install_command": "mkdir -p ~/.claude/skills/git-ship && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/skills/git-ship/SKILL.md -o ~/.claude/skills/git-ship/SKILL.md",
+  "files": ["SKILL.md", "CHANGELOG.md"],
+  "status": "available",
+  "tooltip_text": "",
+  "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
+  "experimental": false,
+  "notes": ""
+}

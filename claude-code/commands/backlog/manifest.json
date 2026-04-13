@@ -1,0 +1,17 @@
+{
+  "id": "backlog",
+  "name": "Backlog",
+  "type": "command",
+  "tool": "claude-code",
+  "version": "4.0.0",
+  "ref": "main",
+  "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/commands/backlog/backlog.md",
+  "install_path": "~/.claude/commands/",
+  "install_command": "curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/commands/backlog/backlog.md -o ~/.claude/commands/backlog.md",
+  "files": ["backlog.md", "CHANGELOG.md"],
+  "status": "available",
+  "tooltip_text": "View, resolve, retriage, or clear items in the pipeline backlog.",
+  "docs_url": "https://docs.anthropic.com/en/docs/claude-code/slash-commands",
+  "experimental": false,
+  "notes": ""
+}

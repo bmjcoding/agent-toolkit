@@ -1,0 +1,17 @@
+{
+  "id": "git-verify",
+  "name": "Git Verify",
+  "type": "command",
+  "tool": "github-copilot",
+  "version": "3.0.0",
+  "ref": "main",
+  "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/prompts/git-verify.prompt.md",
+  "install_path": ".github/prompts/",
+  "install_command": "mkdir -p .github/prompts && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/prompts/git-verify.prompt.md -o .github/prompts/git-verify.prompt.md",
+  "files": ["git-verify.prompt.md"],
+  "status": "available",
+  "tooltip_text": "Verify git hygiene and commit safety — secrets, sensitive files, large files, commit quality.",
+  "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
+  "experimental": false,
+  "notes": "Copilot prompt files are workspace-scoped. Invoke with /git-verify in Copilot Chat."
+}
