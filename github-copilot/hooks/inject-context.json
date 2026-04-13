@@ -1,0 +1,10 @@
+{
+  "hooks": {
+    "SubagentStart": [
+      {
+        "type": "command",
+        "command": "bash \"$AGENT_TOOLKIT_DIR/github-copilot/hooks/inject-context.sh\""
+      }
+    ]
+  }
+}

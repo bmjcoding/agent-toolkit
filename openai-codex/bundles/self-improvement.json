@@ -1,0 +1,14 @@
+{
+  "bundleId": "self-improvement",
+  "name": "Self-Improvement",
+  "description": "Autonomous retro, improve, and validate loop for continuously evolving toolkit definitions.",
+  "items": [
+    { "category": "skill", "itemId": "retro",                "required": true },
+    { "category": "skill", "itemId": "improve",              "required": true },
+    { "category": "skill", "itemId": "review-skill",         "required": true },
+    { "category": "skill", "itemId": "changelog",            "required": true },
+    { "category": "agent", "itemId": "autoresearch-analyst", "required": true }
+  ],
+  "tags": ["retro", "improvement", "autonomous"],
+  "status": "stable"
+}
