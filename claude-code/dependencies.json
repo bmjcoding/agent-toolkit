@@ -1,0 +1,50 @@
+{
+  "$schema_version": "1.0",
+  "tool": "claude-code",
+  "display_name": "Claude Code",
+  "min_cli_version": "2.1.50",
+  "_note": "min_cli_version is the version after which the Task tool was renamed to Agent in subagent definitions. The exact version is unconfirmed in the CHANGELOG (last 'Task tool' reference is 2.1.45; first 'Agent tool' reference is 2.1.69; no explicit rename entry exists). 2.1.50 is the user-reported lower bound.",
+  "external_binaries": [
+    {
+      "name": "gitleaks",
+      "purpose": "secrets scanning in pre-push-secrets hook",
+      "required": true,
+      "install_hint": "brew install gitleaks"
+    },
+    {
+      "name": "gpg",
+      "purpose": "GPG commit signing",
+      "required": true,
+      "install_hint": "brew install gnupg"
+    },
+    {
+      "name": "jq",
+      "purpose": "JSON processing in hooks",
+      "required": true,
+      "install_hint": "brew install jq"
+    }
+  ],
+  "component_counts": {
+    "agents": 15,
+    "commands": 6,
+    "hooks": 9,
+    "bundles": 8,
+    "skills": 13,
+    "rules": 4,
+    "prompts": 0,
+    "instructions": 0
+  },
+  "component_dependencies": [
+    {"from": "agents/frankenstein", "to": "agents/planner", "note": "orchestrator dispatches to all 14 sub-agents"},
+    {"from": "agents/autoresearch-analyst", "to": "skills/retro", "note": "loads retro skill"},
+    {"from": "agents/autoresearch-analyst", "to": "skills/improve", "note": "loads improve skill"},
+    {"from": "agents/autoresearch-analyst", "to": "skills/review-skill", "note": "loads review-skill"},
+    {"from": "agents/design-architect", "to": "skills/design-authority", "note": "loads design-authority skill"},
+    {"from": "agents/design-architect", "to": "skills/design-lint", "note": "loads design-lint skill"},
+    {"from": "agents/frontend-engineer", "to": "skills/design-authority", "note": "loads design-authority skill"},
+    {"from": "agents/release-gate", "to": "skills/prod-readiness", "note": "runs prod-readiness checks"},
+    {"from": "agents/security-engineer", "to": "skills/owasp-reference", "note": "loads owasp-reference skill"},
+    {"from": "agents/site-reliability-engineer", "to": "skills/observability-patterns", "note": "loads observability-patterns skill"},
+    {"from": "agents/release-engineer", "to": "skills/changelog", "note": "loads changelog skill"}
+  ]
+}

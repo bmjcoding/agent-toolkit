@@ -9,7 +9,7 @@ TOOL=$(echo "$INPUT" | jq -r '.tool_name // empty' 2>/dev/null)
 FILE=$(echo "$INPUT" | jq -r '.tool_input.file_path // .tool_input.path // empty' 2>/dev/null)
 [[ -z "$FILE" ]] && exit 0
 
-echo "$FILE" | grep -qE '(agent-toolkit|claude-toolkit|/\.claude)/(agents|skills|hooks|commands|rules|claude-code)/[^/]+/[^/]+|^claude-code/(agents|hooks|commands)/[^/]+/[^/]+|^(skills|rules)/[^/]+/[^/]+' || exit 0
+echo "$FILE" | grep -qE '(agent-toolkit|claude-toolkit|/\.claude)/(agents|skills|hooks|commands|rules|claude-code)/[^/]+/[^/]+|^claude-code/(agents|hooks|commands|skills|rules)/[^/]+/[^/]+' || exit 0
 
 [[ "$(basename "$FILE")" == "CHANGELOG.md" ]] && exit 0
 

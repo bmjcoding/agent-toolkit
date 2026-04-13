@@ -20,7 +20,7 @@ CMD=$(echo "$CMD" | tr '\n' ' ')
 # Fast path: skip if no .claude, agent-toolkit, claude-toolkit, or relative protected-path reference
 # Covers CWD-bypass: agent with cwd=~/.claude/ can issue `cp /tmp/evil agents/X`
 # with no .claude literal — catch relative forms too.
-echo "$CMD" | grep -qE '\.claude|agent-toolkit|claude-toolkit|claude-code/hooks/|claude-code/agents/|claude-code/commands/|(^|/)(skills|rules)/|(^| )agents/|(^| )hooks/|(^| )CLAUDE\.md|(^| )settings\.json' || exit 0
+echo "$CMD" | grep -qE '\.claude|agent-toolkit|claude-toolkit|claude-code/hooks/|claude-code/agents/|claude-code/commands/|claude-code/(skills|rules)/|(^| )agents/|(^| )hooks/|(^| )CLAUDE\.md|(^| )settings\.json' || exit 0
 
 deny() {
   printf '{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"%s"}}' "$1"
@@ -38,7 +38,7 @@ MSG="Write to control-plane files is blocked. Protected paths (settings.json, ho
 #         path-traversal SIDs), orchestrator/session.id (prevents session hijacking),
 #         hookify*.local.md rule files
 # ------------------------------------------------------------------
-PROTECTED='(\.claude/(settings\.json|hooks/|CLAUDE\.md|agents/|statusline-command\.sh)|agent-toolkit/|claude-toolkit/|claude-code/(agents|commands|hooks)/|(^|/)(skills|rules)/|\.orchestrator/(logs/|sessions/[0-9]{8}T[0-9]{6}/logs/|session\.id)|hookify[^/]*\.local\.md)'
+PROTECTED='(\.claude/(settings\.json|hooks/|CLAUDE\.md|agents/|statusline-command\.sh)|agent-toolkit/|claude-toolkit/|claude-code/(agents|commands|hooks|skills|rules)/|(^|/)claude-code/(skills|rules)/|\.orchestrator/(logs/|sessions/[0-9]{8}T[0-9]{6}/logs/|session\.id)|hookify[^/]*\.local\.md)'
 
 # ------------------------------------------------------------------
 # WRITE_OPS (v2 -- comprehensive write-intent operator detection)

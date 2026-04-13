@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.0.0] - 2026-04-12
+
+### Changed
+
+- BREAKING: v3.0 layout — hooks remain under `claude-code/hooks/extract-handoff/`; skill/rule path patterns in some scripts updated to new `claude-code/skills/` and `claude-code/rules/` locations.
+
 ## [2.0.0] - 2026-04-12
 
 ### Changed
@@ -36,7 +42,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/extract-handoff-v2.0.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/extract-handoff-v3.0.0...HEAD
+[3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/extract-handoff-v2.0.0...claude-code/extract-handoff-v3.0.0
 [2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/extract-handoff-v1.1.0...claude-code/extract-handoff-v2.0.0
 [1.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/extract-handoff-v1.0.0...extract-handoff-v1.1.0
 [1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/extract-handoff-v1.0.0

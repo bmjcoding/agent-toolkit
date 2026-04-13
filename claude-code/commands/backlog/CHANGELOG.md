@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.0.0] - 2026-04-12
+
+### Changed
+
+- BREAKING: restructured for v3.0 per-tool layout. Claude Code remains under `claude-code/` with all components fully self-contained. Rules and skills relocated to `claude-code/rules/` and `claude-code/skills/` (away from root).
+
 ## [3.0.0] - 2026-04-12
 
 ### Changed
@@ -82,7 +88,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/backlog-v3.0.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/backlog-v4.0.0...HEAD
+[4.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/backlog-v3.0.0...claude-code/backlog-v4.0.0
 [3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/backlog-v2.3.0...claude-code/backlog-v3.0.0
 [2.3.0]: https://github.com/bmjcoding/agent-toolkit/compare/backlog-v2.2.0...backlog-v2.3.0
 [2.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/backlog-v2.1.0...backlog-v2.2.0

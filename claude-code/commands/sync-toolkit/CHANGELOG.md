@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.0.0] - 2026-04-12
+
+### Changed
+
+- BREAKING: restructured for v3.0 per-tool layout. Claude Code remains under `claude-code/` with all components fully self-contained. Rules and skills relocated to `claude-code/rules/` and `claude-code/skills/` (away from root).
+
 ## [2.0.0] - 2026-04-12
 
 ### Changed
@@ -33,7 +39,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Protected-path skip list for `~/.claude/settings.json`, `~/.claude/CLAUDE.md`, and `~/.claude/hooks/` contents
 - Per-component commit strategy: one commit per component, routed through release-engineer per the frankenstein Ship phase rule
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/sync-toolkit-v2.0.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/sync-toolkit-v3.0.0...HEAD
+[3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/sync-toolkit-v2.0.0...claude-code/sync-toolkit-v3.0.0
 [2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/sync-toolkit-v1.0.1...claude-code/sync-toolkit-v2.0.0
 [1.0.1]: https://github.com/bmjcoding/agent-toolkit/compare/sync-toolkit-v1.0.0...sync-toolkit-v1.0.1
 [1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/sync-toolkit-v1.0.0

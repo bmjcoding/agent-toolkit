@@ -25,7 +25,7 @@ fi
 # Locate the agent-toolkit root.
 # Honour $TOOLKIT_PATH override; fall back to the canonical install location.
 # ---------------------------------------------------------------------------
-TOOLKIT="${TOOLKIT_PATH:-/Users/bmj/Developer/git/agent-toolkit}"
+TOOLKIT="${TOOLKIT_PATH:-${AGENT_TOOLKIT_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")/../../.." && pwd)}}"
 
 if [[ ! -d "$TOOLKIT" ]]; then
   exit 0
@@ -42,11 +42,11 @@ _INPUT_CONSUMED="$INPUT"
 
 # ---------------------------------------------------------------------------
 # Detect modified component files in the toolkit working tree.
-# Component paths match: (agents|skills|hooks|commands|rules)/<name>/<file>
+# Component paths match: claude-code/(agents|skills|hooks|commands|rules)/<name>/<file>
 # ---------------------------------------------------------------------------
 # Pattern matching component paths: (TYPE)/(name)/(file) — used for both
 # filtering modified paths and as documentation of what counts as a component.
-COMPONENT_PATTERN='^(claude-code/(agents|hooks|commands)|skills|rules)/[^/]+/[^/]+'
+COMPONENT_PATTERN='^claude-code/(agents|hooks|commands|skills|rules)/[^/]+/[^/]+'
 
 # Capture git status output; gracefully handle non-git directories.
 GIT_STATUS="$(git -C "$TOOLKIT" status --porcelain 2>/dev/null)" || exit 0

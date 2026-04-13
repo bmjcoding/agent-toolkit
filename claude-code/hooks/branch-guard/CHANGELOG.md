@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.0.0] - 2026-04-12
+
+### Changed
+
+- BREAKING: v3.0 layout — hooks remain under `claude-code/hooks/branch-guard/`; skill/rule path patterns in some scripts updated to new `claude-code/skills/` and `claude-code/rules/` locations.
+
 ## [2.0.0] - 2026-04-12
 
 ### Changed
@@ -21,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/branch-guard-v2.0.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/branch-guard-v3.0.0...HEAD
+[3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/branch-guard-v2.0.0...claude-code/branch-guard-v3.0.0
 [2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/branch-guard-v1.0.0...claude-code/branch-guard-v2.0.0
 [1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/branch-guard-v1.0.0
