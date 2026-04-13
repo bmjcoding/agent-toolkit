@@ -1,0 +1,17 @@
+{
+  "id": "design-authority",
+  "name": "Design Authority",
+  "type": "skill",
+  "tool": "claude-code",
+  "version": "3.0.0",
+  "ref": "main",
+  "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/skills/design-authority/SKILL.md",
+  "install_path": "~/.claude/skills/design-authority/",
+  "install_command": "mkdir -p ~/.claude/skills/design-authority && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/skills/design-authority/SKILL.md -o ~/.claude/skills/design-authority/SKILL.md",
+  "files": ["SKILL.md", "CHANGELOG.md"],
+  "status": "available",
+  "tooltip_text": "",
+  "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
+  "experimental": false,
+  "notes": ""
+}

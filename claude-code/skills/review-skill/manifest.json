@@ -1,0 +1,17 @@
+{
+  "id": "review-skill",
+  "name": "Review Skill",
+  "type": "skill",
+  "tool": "claude-code",
+  "version": "3.0.0",
+  "ref": "main",
+  "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/skills/review-skill/SKILL.md",
+  "install_path": "~/.claude/skills/review-skill/",
+  "install_command": "mkdir -p ~/.claude/skills/review-skill && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/skills/review-skill/SKILL.md -o ~/.claude/skills/review-skill/SKILL.md",
+  "files": ["SKILL.md", "CHANGELOG.md"],
+  "status": "available",
+  "tooltip_text": "",
+  "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
+  "experimental": false,
+  "notes": ""
+}

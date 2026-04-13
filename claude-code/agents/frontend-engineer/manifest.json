@@ -1,0 +1,17 @@
+{
+  "id": "frontend-engineer",
+  "name": "Frontend Engineer",
+  "type": "agent",
+  "tool": "claude-code",
+  "version": "3.0.0",
+  "ref": "main",
+  "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/frontend-engineer/frontend-engineer.md",
+  "install_path": "~/.claude/agents/",
+  "install_command": "mkdir -p ~/.claude/agents && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/frontend-engineer/frontend-engineer.md -o ~/.claude/agents/frontend-engineer.md",
+  "files": ["frontend-engineer.md"],
+  "status": "available",
+  "tooltip_text": "Frontend engineer that builds React/Tailwind UI with design system awareness. Always loads the design-authority skill before writing UI code. Use for subtasks with .tsx, .css, or component/page files.",
+  "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
+  "experimental": false,
+  "notes": ""
+}

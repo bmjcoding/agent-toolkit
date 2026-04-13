@@ -1,0 +1,17 @@
+{
+  "id": "logging",
+  "name": "Logging",
+  "type": "rule",
+  "tool": "claude-code",
+  "version": "3.0.0",
+  "ref": "main",
+  "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/rules/logging/logging.md",
+  "install_path": "~/.claude/rules/",
+  "install_command": "mkdir -p ~/.claude/rules && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/rules/logging/logging.md -o ~/.claude/rules/logging.md",
+  "files": ["logging.md", "CHANGELOG.md"],
+  "status": "available",
+  "tooltip_text": "",
+  "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
+  "experimental": false,
+  "notes": ""
+}
