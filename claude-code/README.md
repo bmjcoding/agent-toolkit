@@ -9,7 +9,7 @@ claude-code/
   agents/     # 15 subagent definitions (.md with YAML frontmatter: name, description, tools, disallowedTools, permissionMode, maxTurns, ...)
   commands/   # 6 slash command definitions (.md loaded as /commandname in Claude Code sessions)
   hooks/      # 9 shell scripts wired to Claude Code hook events (PreToolUse, PostToolUse, SubagentStart, SubagentStop)
-  bundles/    # JSON bundle manifests grouping related components for bulk install
+  bundles/    # YAML bundle files grouping related components for bulk install
   docs/       # Architecture decision records, migration guides, UX design docs
   scripts/
     install.sh  # Symlink manager for ~/.claude/
@@ -51,7 +51,7 @@ Hooks must also be registered in `~/.claude/settings.json` under the `hooks` key
 - **Agent** (`<name>.md`): YAML frontmatter with `name`, `description`, `tools`, `disallowedTools`, `permissionMode`, `maxTurns`, `effort`; body is Markdown instructions.
 - **Command** (`<name>.md`): YAML frontmatter with `name`, `description`, `argument-hint`, `disable-model-invocation`; body is the command implementation prompt.
 - **Hook** (`<name>.sh`): Plain Bash, registered by event type in `settings.json`; exit 2 blocks, exit 1 warns, exit 0 continues.
-- **Bundle** (`<name>.json`): Flat JSON manifest with `bundleId`, `name`, `description`, `items[]`, `tags[]`, `status`.
+- **Bundle** (`bundle.yaml`): YAML file with `id`, `name`, `description`, `status`, `tags[]`, `components[]` (each entry has `type`, `id`, `role`). Dependency metadata for agents and skills is declared in the component's own `.md` frontmatter (`tools:` for agents, `skills:` for skills/commands), not in the bundle file. Valid `role` values: `core` (required for the bundle to function), `optional` (nice-to-have, installable separately), `deprecated` (scheduled for removal). All current entries use `core`. The `path` field in `index.json` bundle entries is the canonical resolution key — always resolve bundle files via `index.json` rather than reconstructing paths from slug alone, since filename conventions differ across primitive types.
 
 ## Tag Format
 
