@@ -40,7 +40,7 @@ fi
 # Locate the agent-toolkit root.
 # Honour $TOOLKIT_PATH override; fall back to the canonical install location.
 # ---------------------------------------------------------------------------
-TOOLKIT="${TOOLKIT_PATH:-/Users/bmj/Developer/git/agent-toolkit}"
+TOOLKIT="${TOOLKIT_PATH:-${AGENT_TOOLKIT_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")/../.." && pwd)}}"
 
 if [[ ! -d "$TOOLKIT" ]]; then
   exit 0

@@ -1,6 +1,6 @@
 # openai-codex/
 
-This directory contains **OpenAI Codex CLI-specific content** — agents, hooks, and configuration formatted for the Codex CLI (Rust client, v0.120.0+).
+This directory contains **OpenAI Codex CLI-specific content** — agents, hooks, skills, rules, bundles, and configuration formatted for the Codex CLI (Rust client, v0.120.0+). This directory is fully self-contained; it does not depend on root-level `skills/` or `rules/` directories.
 
 ## Subdirectory Layout
 
@@ -17,14 +17,15 @@ openai-codex/
     protect-config.sh
     toolkit-drift-check.sh
     toolkit-edit-reminder.sh
-    hooks.json           # Hook manifest wiring all 9 scripts to Codex events
+    hooks.json           # Hook manifest — install to ~/.codex/hooks.json
+  skills/              # 13 universal skills (each in <slug>/SKILL.md)
+  rules/               # 4 universal rules (docker, logging, node, python)
+  bundles/             # 8 bundle manifests grouping components by workflow
   config.toml.template # Project config template with 13 [[skills.config]] entries
+  dependencies.json    # Per-tool dependency manifest (schema v1.0)
   scripts/
-    install.sh         # Wire openai-codex/ content into .codex/ and .agents/
+    install.sh         # Wire openai-codex/ content into ~/.codex/
 ```
-
-Universal skills (13) live at the **repository root** under `skills/`. Codex reads
-them via `.agents/skills/` symlink or `[[skills.config]]` entries in `config.toml`.
 
 ## Install
 
@@ -35,10 +36,21 @@ bash openai-codex/scripts/install.sh
 
 # Or manually
 cp openai-codex/agents/*.toml ~/.codex/agents/
-cp openai-codex/hooks/hooks.json .codex/hooks.json
+cp openai-codex/hooks/hooks.json ~/.codex/hooks.json
 cp openai-codex/config.toml.template .codex/config.toml
-ln -s /path/to/agent-toolkit/skills .agents/skills
 ```
+
+### Hooks path
+
+Per the official Codex CLI specification, `hooks.json` must be installed as a file **next to** `config.toml`:
+
+```
+~/.codex/
+  config.toml      # user-global config
+  hooks.json       # hook manifest — sibling to config.toml (NOT in a hooks/ subdir)
+```
+
+The install script symlinks `openai-codex/hooks/hooks.json` → `~/.codex/hooks.json`. Hook shell scripts remain in `openai-codex/hooks/` and are referenced by their full path inside `hooks.json`.
 
 ## AGENTS.md Integration
 
@@ -64,37 +76,68 @@ See `openai-codex/agents/planner.toml` for a canonical example with inline docum
 
 ## Hooks
 
-Codex CLI hooks are configured via `hooks.json` and are **experimental** — they require `features.codex_hooks = true` in `config.toml`. Currently Bash-only; `PreToolUse` and `PostToolUse` events supported. Disabled on Windows.
+Codex CLI hooks are configured via `hooks.json` and are **experimental** — they require `features.codex_hooks = true` in `config.toml`. Currently Bash-only. Disabled on Windows.
 
-The 9 hooks in `openai-codex/hooks/`:
+The hook manifest uses the official nested format:
 
-| Script | Event | Purpose |
+```json
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "<regex>",
+        "hooks": [
+          { "type": "command", "command": "<full path to script>", "statusMessage": "..." }
+        ]
+      }
+    ]
+  }
+}
+```
+
+The 9 hooks in `openai-codex/hooks/` are mapped to Codex events as follows:
+
+| Script | Codex Event | Purpose |
 |---|---|---|
 | `branch-guard.sh` | PreToolUse | Prevent destructive operations on protected branches |
 | `changelog-check.sh` | PreToolUse | Enforce changelog entry before commit |
-| `extract-handoff.sh` | PostToolUse | Extract agent handoff JSON from output |
-| `inject-context.sh` | PreToolUse | Inject session context into agent runs |
-| `integrity-warn.sh` | PostToolUse | Warn when output integrity checks fail |
-| `pre-push-secrets.sh` | PreToolUse | Scan for secrets before push |
 | `protect-config.sh` | PreToolUse | Block writes to protected config files |
+| `toolkit-edit-reminder.sh` | PreToolUse | Remind to update changelog after toolkit edits |
+| `pre-push-secrets.sh` | PreToolUse | Scan for secrets before push |
+| `integrity-warn.sh` | PostToolUse | Warn when output integrity checks fail |
 | `toolkit-drift-check.sh` | PostToolUse | Detect uncommitted drift in toolkit components |
-| `toolkit-edit-reminder.sh` | PostToolUse | Remind to update changelog after toolkit edits |
+| `inject-context.sh` | UserPromptSubmit | Inject session context into agent runs |
+| `extract-handoff.sh` | Stop | Extract agent handoff JSON from output |
 
 ## Skills
 
-The `config.toml.template` includes 13 `[[skills.config]]` entries — one per universal
-skill — pointing to `skills/<slug>/SKILL.md` at the repo root. Copy the template to
-`.codex/config.toml` and adjust the base path to match your checkout location.
+Skills live at `openai-codex/skills/<slug>/SKILL.md`. The `config.toml.template` includes 13 `[[skills.config]]` entries pointing to each `SKILL.md` file.
 
-Codex can also discover skills via `.agents/skills/` symlink:
+Valid `[[skills.config]]` fields are `path`, `name`, and `enabled` only (`description` is not allowed — the schema has `additionalProperties: false`).
+
+Codex can also discover skills via `.agents/skills/` in the repo root:
 
 ```sh
-ln -s /path/to/agent-toolkit/skills .agents/skills
+ln -s /path/to/agent-toolkit/openai-codex/skills .agents/skills
 ```
 
-## Config Location
+## Config Settings
+
+Key `config.toml` values used in this toolkit:
+
+| Field | Value | Notes |
+|---|---|---|
+| `approval_policy` | `"on-request"` | Valid values: `"on-request"`, `"untrusted"`, `"never"` |
+| `sandbox_mode` | `"workspace-write"` | Valid values: `"workspace-write"`, `"read-only"`, `"danger-full-access"` |
+| `[features] codex_hooks` | `true` | Required to activate hooks |
 
 Project config: `.codex/config.toml` (loaded only from trusted repos). Global config: `~/.codex/config.toml`. MCP servers are declared as `[mcp_servers.<id>]` tables in config.toml.
+
+## Bundles
+
+Bundle manifests in `openai-codex/bundles/` group components by workflow. Codex bundles include only `agent`, `skill`, and `hook` items — no `command` or `rule` categories (Codex has no custom slash commands; rules are embedded in AGENTS.md).
+
+See `openai-codex/bundles/README.md` for the full bundle list and format documentation.
 
 ## Tag Format
 
