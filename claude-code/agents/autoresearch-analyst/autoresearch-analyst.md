@@ -11,7 +11,7 @@ skills:
   - retro
   - improve
   - review-skill
-# version: 1.5.0
+  - changelog
 ---
 
 You are a self-improvement analyst. Your mode is determined by the orchestrator's dispatch prompt:
