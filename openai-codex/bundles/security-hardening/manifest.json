@@ -9,12 +9,33 @@
   "install_path": "",
   "install_command": "",
   "files": [
-    "manifest.json",
-    "../security-hardening.json"
+    "manifest.json"
   ],
   "status": "unverified",
   "tooltip_text": "OpenAI Codex CLI plugin system is not yet finalized in official documentation. See docs for available primitives.",
   "docs_url": "https://developers.openai.com/codex",
   "experimental": false,
-  "notes": "UNVERIFIED — Codex plugin/bundle format not documented at researched URLs."
+  "notes": "UNVERIFIED \u2014 Codex plugin/bundle format not documented at researched URLs.",
+  "components": [
+    {
+      "type": "skill",
+      "id": "owasp-reference",
+      "role": "core"
+    },
+    {
+      "type": "agent",
+      "id": "security-engineer",
+      "role": "core"
+    },
+    {
+      "type": "hook",
+      "id": "pre-push-secrets",
+      "role": "core"
+    },
+    {
+      "type": "hook",
+      "id": "protect-config",
+      "role": "core"
+    }
+  ]
 }

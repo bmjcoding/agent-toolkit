@@ -16,7 +16,29 @@
     "tooltip_text": "Self-improvement agent that runs retrospectives, applies improvements, reviews definitions, and runs full improve-validate cycles. Spawned by orchestrators or dispatched for batch operations.",
     "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
     "experimental": false,
-    "notes": ""
+    "notes": "",
+    "dependencies": [
+      {
+        "type": "skill",
+        "id": "retro",
+        "optional": false
+      },
+      {
+        "type": "skill",
+        "id": "improve",
+        "optional": false
+      },
+      {
+        "type": "skill",
+        "id": "review-skill",
+        "optional": false
+      },
+      {
+        "type": "skill",
+        "id": "changelog",
+        "optional": false
+      }
+    ]
   },
   {
     "id": "backend-engineer",
@@ -35,7 +57,19 @@
     "tooltip_text": "Backend engineer that builds API routes, services, and data layer code with contract awareness. Use for subtasks with API endpoints, services, middleware, or server-side files.",
     "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
     "experimental": false,
-    "notes": ""
+    "notes": "",
+    "dependencies": [
+      {
+        "type": "skill",
+        "id": "backend",
+        "optional": false
+      },
+      {
+        "type": "hook",
+        "id": "inject-context",
+        "optional": false
+      }
+    ]
   },
   {
     "id": "design-architect",
@@ -54,7 +88,24 @@
     "tooltip_text": "Senior architect and design authority reviewing implementation for structural integrity, API/code design quality, and visual/UI coherence. Runs deterministic structural checks first, then semantic review. Use during Phase 3.",
     "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
     "experimental": false,
-    "notes": ""
+    "notes": "",
+    "dependencies": [
+      {
+        "type": "skill",
+        "id": "design-authority",
+        "optional": false
+      },
+      {
+        "type": "skill",
+        "id": "design-lint",
+        "optional": false
+      },
+      {
+        "type": "hook",
+        "id": "inject-context",
+        "optional": false
+      }
+    ]
   },
   {
     "id": "doc-writer",
@@ -73,7 +124,14 @@
     "tooltip_text": "Technical writer that updates README, CHANGELOG, API docs, JSDoc/docstrings, config docs, and Architecture Decision Records after feature implementation.",
     "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
     "experimental": false,
-    "notes": ""
+    "notes": "",
+    "dependencies": [
+      {
+        "type": "hook",
+        "id": "inject-context",
+        "optional": false
+      }
+    ]
   },
   {
     "id": "frankenstein",
@@ -92,7 +150,178 @@
     "tooltip_text": "Master orchestrator that decomposes tasks, spawns parallel subagents, and coordinates multi-phase pipelines.",
     "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
     "experimental": false,
-    "notes": ""
+    "notes": "",
+    "dependencies": [
+      {
+        "type": "skill",
+        "id": "retro",
+        "optional": false
+      },
+      {
+        "type": "skill",
+        "id": "improve",
+        "optional": false
+      },
+      {
+        "type": "skill",
+        "id": "review-skill",
+        "optional": false
+      },
+      {
+        "type": "skill",
+        "id": "prod-readiness",
+        "optional": false
+      },
+      {
+        "type": "skill",
+        "id": "changelog",
+        "optional": false
+      },
+      {
+        "type": "skill",
+        "id": "git-ship",
+        "optional": false
+      },
+      {
+        "type": "command",
+        "id": "lint",
+        "optional": false
+      },
+      {
+        "type": "command",
+        "id": "audit",
+        "optional": false
+      },
+      {
+        "type": "command",
+        "id": "test",
+        "optional": false
+      },
+      {
+        "type": "command",
+        "id": "git-verify",
+        "optional": false
+      },
+      {
+        "type": "command",
+        "id": "backlog",
+        "optional": false
+      },
+      {
+        "type": "hook",
+        "id": "extract-handoff",
+        "optional": false
+      },
+      {
+        "type": "hook",
+        "id": "inject-context",
+        "optional": false
+      },
+      {
+        "type": "hook",
+        "id": "integrity-warn",
+        "optional": false
+      },
+      {
+        "type": "hook",
+        "id": "protect-config",
+        "optional": false
+      },
+      {
+        "type": "hook",
+        "id": "branch-guard",
+        "optional": false
+      },
+      {
+        "type": "hook",
+        "id": "pre-push-secrets",
+        "optional": false
+      },
+      {
+        "type": "agent",
+        "id": "planner",
+        "reason": "Spawned in Phase 1 to decompose the task into a parallel-group plan",
+        "optional": false
+      },
+      {
+        "type": "agent",
+        "id": "plan-reviewer",
+        "reason": "Spawned in Phase 1 to validate the plan before implementation begins",
+        "optional": false
+      },
+      {
+        "type": "agent",
+        "id": "frontend-engineer",
+        "reason": "Spawned in Phase 0a for UI exploration and Phase 2 for frontend subtask implementation",
+        "optional": true
+      },
+      {
+        "type": "agent",
+        "id": "backend-engineer",
+        "reason": "Spawned in Phase 0a for API exploration and Phase 2 for backend subtask implementation",
+        "optional": true
+      },
+      {
+        "type": "agent",
+        "id": "staff-engineer",
+        "reason": "Spawned in Phase 0a for infra/types exploration and Phase 2 for cross-cutting subtask implementation",
+        "optional": true
+      },
+      {
+        "type": "agent",
+        "id": "integration-verifier",
+        "reason": "Spawned between every parallel group and during Phase 3a to verify integration contracts",
+        "optional": false
+      },
+      {
+        "type": "agent",
+        "id": "quality-engineer",
+        "reason": "Spawned in Phase 2 on failure, Phase 4 quality loop, and Phase 5b post-validation",
+        "optional": false
+      },
+      {
+        "type": "agent",
+        "id": "security-engineer",
+        "reason": "Spawned in Phase 3a to review the changeset for security vulnerabilities",
+        "optional": false
+      },
+      {
+        "type": "agent",
+        "id": "site-reliability-engineer",
+        "reason": "Spawned in Phase 3a to review observability, health checks, and operational readiness",
+        "optional": false
+      },
+      {
+        "type": "agent",
+        "id": "design-architect",
+        "reason": "Spawned in Phase 3b and Phase 4 to audit architecture violations and verify quality-loop fixes",
+        "optional": false
+      },
+      {
+        "type": "agent",
+        "id": "release-gate",
+        "reason": "Spawned in Phase 4 quality loop to render a CLEAR/CAUTION/NO-SHIP verdict before shipping",
+        "optional": false
+      },
+      {
+        "type": "agent",
+        "id": "doc-writer",
+        "reason": "Spawned in Phase 5a to produce README, CHANGELOG, API docs, and ADRs",
+        "optional": false
+      },
+      {
+        "type": "agent",
+        "id": "release-engineer",
+        "reason": "Spawned in Phase 6a (commit) and Phase 6b (push + PR) to ship the changeset",
+        "optional": false
+      },
+      {
+        "type": "agent",
+        "id": "autoresearch-analyst",
+        "reason": "Spawned in Phase 7a for retro analysis and optionally in Phase 0a for codebase research",
+        "optional": false
+      }
+    ]
   },
   {
     "id": "frontend-engineer",
@@ -111,7 +340,29 @@
     "tooltip_text": "Frontend engineer that builds React/Tailwind UI with design system awareness. Always loads the design-authority skill before writing UI code. Use for subtasks with .tsx, .css, or component/page files.",
     "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
     "experimental": false,
-    "notes": ""
+    "notes": "",
+    "dependencies": [
+      {
+        "type": "skill",
+        "id": "frontend",
+        "optional": false
+      },
+      {
+        "type": "skill",
+        "id": "design-authority",
+        "optional": false
+      },
+      {
+        "type": "skill",
+        "id": "design-lint",
+        "optional": false
+      },
+      {
+        "type": "hook",
+        "id": "inject-context",
+        "optional": false
+      }
+    ]
   },
   {
     "id": "integration-verifier",
@@ -130,7 +381,14 @@
     "tooltip_text": "Verifies integration contracts between groups — file existence, type compilation, interface correctness — then reviews boundaries from the provider's perspective. Use between implementation groups and during Phase 3a.",
     "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
     "experimental": false,
-    "notes": ""
+    "notes": "",
+    "dependencies": [
+      {
+        "type": "hook",
+        "id": "inject-context",
+        "optional": false
+      }
+    ]
   },
   {
     "id": "plan-reviewer",
@@ -149,7 +407,14 @@
     "tooltip_text": "Plan quality reviewer that validates subtask granularity, dependency gaps, file ownership, feasibility, and integration contracts before implementation begins.",
     "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
     "experimental": false,
-    "notes": ""
+    "notes": "",
+    "dependencies": [
+      {
+        "type": "hook",
+        "id": "inject-context",
+        "optional": false
+      }
+    ]
   },
   {
     "id": "planner",
@@ -168,7 +433,15 @@
     "tooltip_text": "Autonomous planning agent that reads codebases and decomposes tasks into parallel-group implementation plans with file ownership and integration contracts.",
     "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
     "experimental": false,
-    "notes": ""
+    "notes": "",
+    "dependencies": [
+      {
+        "type": "hook",
+        "id": "inject-context",
+        "reason": "reads session context via pre-tool hook",
+        "optional": false
+      }
+    ]
   },
   {
     "id": "quality-engineer",
@@ -187,7 +460,29 @@
     "tooltip_text": "Autonomous quality agent that remediates findings from specialist reviews, repairs broken integration contracts, and validates post-finalize changes. Replaces fixer, integration-repairer, and post-validator.",
     "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
     "experimental": false,
-    "notes": ""
+    "notes": "",
+    "dependencies": [
+      {
+        "type": "skill",
+        "id": "prod-readiness",
+        "optional": false
+      },
+      {
+        "type": "command",
+        "id": "test",
+        "optional": false
+      },
+      {
+        "type": "command",
+        "id": "lint",
+        "optional": false
+      },
+      {
+        "type": "command",
+        "id": "audit",
+        "optional": false
+      }
+    ]
   },
   {
     "id": "release-engineer",
@@ -206,7 +501,34 @@
     "tooltip_text": "Structures commits, writes PR descriptions, pushes code, creates pull requests, and optionally bumps versions and creates releases. Use during Phase 5-6.",
     "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
     "experimental": false,
-    "notes": ""
+    "notes": "",
+    "dependencies": [
+      {
+        "type": "skill",
+        "id": "git-ship",
+        "optional": false
+      },
+      {
+        "type": "skill",
+        "id": "changelog",
+        "optional": false
+      },
+      {
+        "type": "command",
+        "id": "git-verify",
+        "optional": false
+      },
+      {
+        "type": "hook",
+        "id": "branch-guard",
+        "optional": false
+      },
+      {
+        "type": "hook",
+        "id": "pre-push-secrets",
+        "optional": false
+      }
+    ]
   },
   {
     "id": "release-gate",
@@ -225,7 +547,19 @@
     "tooltip_text": "Release readiness gate that runs /prod-readiness with context from specialist reviews and prior attempts, emitting a SHIP/NO-SHIP verdict. Use during Phase 4 quality loop.",
     "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
     "experimental": false,
-    "notes": ""
+    "notes": "",
+    "dependencies": [
+      {
+        "type": "skill",
+        "id": "prod-readiness",
+        "optional": false
+      },
+      {
+        "type": "command",
+        "id": "test",
+        "optional": false
+      }
+    ]
   },
   {
     "id": "security-engineer",
@@ -244,7 +578,24 @@
     "tooltip_text": "Cybersecurity engineer performing STRIDE threat modeling, OWASP Top 10 review, auth analysis, and dependency security evaluation. Use during Phase 3a specialist reviews.",
     "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
     "experimental": false,
-    "notes": ""
+    "notes": "",
+    "dependencies": [
+      {
+        "type": "skill",
+        "id": "owasp-reference",
+        "optional": false
+      },
+      {
+        "type": "hook",
+        "id": "pre-push-secrets",
+        "optional": false
+      },
+      {
+        "type": "hook",
+        "id": "protect-config",
+        "optional": false
+      }
+    ]
   },
   {
     "id": "site-reliability-engineer",
@@ -263,7 +614,19 @@
     "tooltip_text": "SRE reviewing and remediating operational readiness — health checks, observability, timeouts, graceful degradation. Can fix self-contained issues inline. Use during Phase 3a specialist reviews.",
     "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
     "experimental": false,
-    "notes": ""
+    "notes": "",
+    "dependencies": [
+      {
+        "type": "skill",
+        "id": "infra",
+        "optional": false
+      },
+      {
+        "type": "skill",
+        "id": "observability-patterns",
+        "optional": false
+      }
+    ]
   },
   {
     "id": "staff-engineer",
@@ -282,7 +645,14 @@
     "tooltip_text": "General-purpose engineer for subtasks that are not clearly frontend or backend — infrastructure, configuration, shared types, scripts, tooling, CI/CD setup. Use when neither frontend-engineer nor backend-engineer fits.",
     "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
     "experimental": false,
-    "notes": ""
+    "notes": "",
+    "dependencies": [
+      {
+        "type": "hook",
+        "id": "inject-context",
+        "optional": false
+      }
+    ]
   },
   {
     "id": "backend-development",
@@ -295,14 +665,25 @@
     "install_path": "~/.claude/plugins/backend-development/",
     "install_command": "/plugin install backend-development@bmjcoding/agent-toolkit",
     "files": [
-      "manifest.json",
-      "../backend-development.json"
+      "manifest.json"
     ],
     "status": "available",
     "tooltip_text": "",
     "docs_url": "https://docs.anthropic.com/en/docs/claude-code/plugins",
     "experimental": false,
-    "notes": "Claude Code 'plugin' primitive."
+    "notes": "Claude Code 'plugin' primitive.",
+    "components": [
+      {
+        "type": "skill",
+        "id": "backend",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "backend-engineer",
+        "role": "core"
+      }
+    ]
   },
   {
     "id": "code-quality",
@@ -315,14 +696,45 @@
     "install_path": "~/.claude/plugins/code-quality/",
     "install_command": "/plugin install code-quality@bmjcoding/agent-toolkit",
     "files": [
-      "manifest.json",
-      "../code-quality.json"
+      "manifest.json"
     ],
     "status": "available",
     "tooltip_text": "",
     "docs_url": "https://docs.anthropic.com/en/docs/claude-code/plugins",
     "experimental": false,
-    "notes": "Claude Code 'plugin' primitive."
+    "notes": "Claude Code 'plugin' primitive.",
+    "components": [
+      {
+        "type": "skill",
+        "id": "prod-readiness",
+        "role": "core"
+      },
+      {
+        "type": "skill",
+        "id": "review-skill",
+        "role": "core"
+      },
+      {
+        "type": "skill",
+        "id": "design-lint",
+        "role": "core"
+      },
+      {
+        "type": "command",
+        "id": "lint",
+        "role": "core"
+      },
+      {
+        "type": "command",
+        "id": "audit",
+        "role": "core"
+      },
+      {
+        "type": "command",
+        "id": "test",
+        "role": "core"
+      }
+    ]
   },
   {
     "id": "frankenstein-orchestration",
@@ -335,14 +747,175 @@
     "install_path": "~/.claude/plugins/frankenstein-orchestration/",
     "install_command": "/plugin install frankenstein-orchestration@bmjcoding/agent-toolkit",
     "files": [
-      "manifest.json",
-      "../frankenstein-orchestration.json"
+      "manifest.json"
     ],
     "status": "available",
     "tooltip_text": "",
     "docs_url": "https://docs.anthropic.com/en/docs/claude-code/plugins",
     "experimental": false,
-    "notes": "Claude Code 'plugin' primitive."
+    "notes": "Claude Code 'plugin' primitive.",
+    "components": [
+      {
+        "type": "agent",
+        "id": "frankenstein",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "planner",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "plan-reviewer",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "frontend-engineer",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "backend-engineer",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "staff-engineer",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "integration-verifier",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "design-architect",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "security-engineer",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "site-reliability-engineer",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "quality-engineer",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "release-gate",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "release-engineer",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "doc-writer",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "autoresearch-analyst",
+        "role": "core"
+      },
+      {
+        "type": "skill",
+        "id": "retro",
+        "role": "core"
+      },
+      {
+        "type": "skill",
+        "id": "improve",
+        "role": "core"
+      },
+      {
+        "type": "skill",
+        "id": "review-skill",
+        "role": "core"
+      },
+      {
+        "type": "skill",
+        "id": "prod-readiness",
+        "role": "core"
+      },
+      {
+        "type": "skill",
+        "id": "changelog",
+        "role": "core"
+      },
+      {
+        "type": "skill",
+        "id": "git-ship",
+        "role": "core"
+      },
+      {
+        "type": "command",
+        "id": "lint",
+        "role": "core"
+      },
+      {
+        "type": "command",
+        "id": "audit",
+        "role": "core"
+      },
+      {
+        "type": "command",
+        "id": "test",
+        "role": "core"
+      },
+      {
+        "type": "command",
+        "id": "git-verify",
+        "role": "core"
+      },
+      {
+        "type": "command",
+        "id": "backlog",
+        "role": "core"
+      },
+      {
+        "type": "hook",
+        "id": "extract-handoff",
+        "role": "core"
+      },
+      {
+        "type": "hook",
+        "id": "inject-context",
+        "role": "core"
+      },
+      {
+        "type": "hook",
+        "id": "integrity-warn",
+        "role": "core"
+      },
+      {
+        "type": "hook",
+        "id": "protect-config",
+        "role": "core"
+      },
+      {
+        "type": "hook",
+        "id": "branch-guard",
+        "role": "core"
+      },
+      {
+        "type": "hook",
+        "id": "pre-push-secrets",
+        "role": "core"
+      }
+    ]
   },
   {
     "id": "frontend-development",
@@ -355,14 +928,35 @@
     "install_path": "~/.claude/plugins/frontend-development/",
     "install_command": "/plugin install frontend-development@bmjcoding/agent-toolkit",
     "files": [
-      "manifest.json",
-      "../frontend-development.json"
+      "manifest.json"
     ],
     "status": "available",
     "tooltip_text": "",
     "docs_url": "https://docs.anthropic.com/en/docs/claude-code/plugins",
     "experimental": false,
-    "notes": "Claude Code 'plugin' primitive."
+    "notes": "Claude Code 'plugin' primitive.",
+    "components": [
+      {
+        "type": "skill",
+        "id": "frontend",
+        "role": "core"
+      },
+      {
+        "type": "skill",
+        "id": "design-authority",
+        "role": "core"
+      },
+      {
+        "type": "skill",
+        "id": "design-lint",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "frontend-engineer",
+        "role": "core"
+      }
+    ]
   },
   {
     "id": "git-workflow",
@@ -375,14 +969,40 @@
     "install_path": "~/.claude/plugins/git-workflow/",
     "install_command": "/plugin install git-workflow@bmjcoding/agent-toolkit",
     "files": [
-      "manifest.json",
-      "../git-workflow.json"
+      "manifest.json"
     ],
     "status": "available",
     "tooltip_text": "",
     "docs_url": "https://docs.anthropic.com/en/docs/claude-code/plugins",
     "experimental": false,
-    "notes": "Claude Code 'plugin' primitive."
+    "notes": "Claude Code 'plugin' primitive.",
+    "components": [
+      {
+        "type": "skill",
+        "id": "git-ship",
+        "role": "core"
+      },
+      {
+        "type": "skill",
+        "id": "changelog",
+        "role": "core"
+      },
+      {
+        "type": "command",
+        "id": "git-verify",
+        "role": "core"
+      },
+      {
+        "type": "hook",
+        "id": "branch-guard",
+        "role": "core"
+      },
+      {
+        "type": "hook",
+        "id": "pre-push-secrets",
+        "role": "core"
+      }
+    ]
   },
   {
     "id": "infrastructure",
@@ -395,14 +1015,30 @@
     "install_path": "~/.claude/plugins/infrastructure/",
     "install_command": "/plugin install infrastructure@bmjcoding/agent-toolkit",
     "files": [
-      "manifest.json",
-      "../infrastructure.json"
+      "manifest.json"
     ],
     "status": "available",
     "tooltip_text": "",
     "docs_url": "https://docs.anthropic.com/en/docs/claude-code/plugins",
     "experimental": false,
-    "notes": "Claude Code 'plugin' primitive."
+    "notes": "Claude Code 'plugin' primitive.",
+    "components": [
+      {
+        "type": "skill",
+        "id": "infra",
+        "role": "core"
+      },
+      {
+        "type": "skill",
+        "id": "observability-patterns",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "site-reliability-engineer",
+        "role": "core"
+      }
+    ]
   },
   {
     "id": "security-hardening",
@@ -415,14 +1051,35 @@
     "install_path": "~/.claude/plugins/security-hardening/",
     "install_command": "/plugin install security-hardening@bmjcoding/agent-toolkit",
     "files": [
-      "manifest.json",
-      "../security-hardening.json"
+      "manifest.json"
     ],
     "status": "available",
     "tooltip_text": "",
     "docs_url": "https://docs.anthropic.com/en/docs/claude-code/plugins",
     "experimental": false,
-    "notes": "Claude Code 'plugin' primitive."
+    "notes": "Claude Code 'plugin' primitive.",
+    "components": [
+      {
+        "type": "skill",
+        "id": "owasp-reference",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "security-engineer",
+        "role": "core"
+      },
+      {
+        "type": "hook",
+        "id": "pre-push-secrets",
+        "role": "core"
+      },
+      {
+        "type": "hook",
+        "id": "protect-config",
+        "role": "core"
+      }
+    ]
   },
   {
     "id": "self-improvement",
@@ -435,14 +1092,40 @@
     "install_path": "~/.claude/plugins/self-improvement/",
     "install_command": "/plugin install self-improvement@bmjcoding/agent-toolkit",
     "files": [
-      "manifest.json",
-      "../self-improvement.json"
+      "manifest.json"
     ],
     "status": "available",
     "tooltip_text": "",
     "docs_url": "https://docs.anthropic.com/en/docs/claude-code/plugins",
     "experimental": false,
-    "notes": "Claude Code 'plugin' primitive."
+    "notes": "Claude Code 'plugin' primitive.",
+    "components": [
+      {
+        "type": "skill",
+        "id": "retro",
+        "role": "core"
+      },
+      {
+        "type": "skill",
+        "id": "improve",
+        "role": "core"
+      },
+      {
+        "type": "skill",
+        "id": "review-skill",
+        "role": "core"
+      },
+      {
+        "type": "skill",
+        "id": "changelog",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "autoresearch-analyst",
+        "role": "core"
+      }
+    ]
   },
   {
     "id": "audit",
@@ -1101,7 +1784,29 @@
     "tooltip_text": "",
     "docs_url": "https://code.visualstudio.com/docs/copilot/agents/overview",
     "experimental": false,
-    "notes": "Installs to ~/.claude/ path — parity confirmed by VSCode custom-instructions docs."
+    "notes": "Installs to ~/.claude/ path — parity confirmed by VSCode custom-instructions docs.",
+    "dependencies": [
+      {
+        "type": "skill",
+        "id": "retro",
+        "optional": false
+      },
+      {
+        "type": "skill",
+        "id": "improve",
+        "optional": false
+      },
+      {
+        "type": "skill",
+        "id": "review-skill",
+        "optional": false
+      },
+      {
+        "type": "skill",
+        "id": "changelog",
+        "optional": false
+      }
+    ]
   },
   {
     "id": "backend-engineer",
@@ -1120,7 +1825,19 @@
     "tooltip_text": "",
     "docs_url": "https://code.visualstudio.com/docs/copilot/agents/overview",
     "experimental": false,
-    "notes": "Installs to ~/.claude/ path — parity confirmed by VSCode custom-instructions docs."
+    "notes": "Installs to ~/.claude/ path — parity confirmed by VSCode custom-instructions docs.",
+    "dependencies": [
+      {
+        "type": "skill",
+        "id": "backend",
+        "optional": false
+      },
+      {
+        "type": "hook",
+        "id": "inject-context",
+        "optional": false
+      }
+    ]
   },
   {
     "id": "design-architect",
@@ -1139,7 +1856,24 @@
     "tooltip_text": "",
     "docs_url": "https://code.visualstudio.com/docs/copilot/agents/overview",
     "experimental": false,
-    "notes": "Installs to ~/.claude/ path — parity confirmed by VSCode custom-instructions docs."
+    "notes": "Installs to ~/.claude/ path — parity confirmed by VSCode custom-instructions docs.",
+    "dependencies": [
+      {
+        "type": "skill",
+        "id": "design-authority",
+        "optional": false
+      },
+      {
+        "type": "skill",
+        "id": "design-lint",
+        "optional": false
+      },
+      {
+        "type": "hook",
+        "id": "inject-context",
+        "optional": false
+      }
+    ]
   },
   {
     "id": "doc-writer",
@@ -1158,7 +1892,14 @@
     "tooltip_text": "",
     "docs_url": "https://code.visualstudio.com/docs/copilot/agents/overview",
     "experimental": false,
-    "notes": "Installs to ~/.claude/ path — parity confirmed by VSCode custom-instructions docs."
+    "notes": "Installs to ~/.claude/ path — parity confirmed by VSCode custom-instructions docs.",
+    "dependencies": [
+      {
+        "type": "hook",
+        "id": "inject-context",
+        "optional": false
+      }
+    ]
   },
   {
     "id": "frankenstein",
@@ -1177,7 +1918,178 @@
     "tooltip_text": "",
     "docs_url": "https://code.visualstudio.com/docs/copilot/agents/overview",
     "experimental": false,
-    "notes": "Installs to ~/.claude/ path — parity confirmed by VSCode custom-instructions docs."
+    "notes": "Installs to ~/.claude/ path — parity confirmed by VSCode custom-instructions docs.",
+    "dependencies": [
+      {
+        "type": "skill",
+        "id": "retro",
+        "optional": false
+      },
+      {
+        "type": "skill",
+        "id": "improve",
+        "optional": false
+      },
+      {
+        "type": "skill",
+        "id": "review-skill",
+        "optional": false
+      },
+      {
+        "type": "skill",
+        "id": "prod-readiness",
+        "optional": false
+      },
+      {
+        "type": "skill",
+        "id": "changelog",
+        "optional": false
+      },
+      {
+        "type": "skill",
+        "id": "git-ship",
+        "optional": false
+      },
+      {
+        "type": "command",
+        "id": "lint",
+        "optional": false
+      },
+      {
+        "type": "command",
+        "id": "audit",
+        "optional": false
+      },
+      {
+        "type": "command",
+        "id": "test",
+        "optional": false
+      },
+      {
+        "type": "command",
+        "id": "git-verify",
+        "optional": false
+      },
+      {
+        "type": "command",
+        "id": "backlog",
+        "optional": false
+      },
+      {
+        "type": "hook",
+        "id": "extract-handoff",
+        "optional": false
+      },
+      {
+        "type": "hook",
+        "id": "inject-context",
+        "optional": false
+      },
+      {
+        "type": "hook",
+        "id": "integrity-warn",
+        "optional": false
+      },
+      {
+        "type": "hook",
+        "id": "protect-config",
+        "optional": false
+      },
+      {
+        "type": "hook",
+        "id": "branch-guard",
+        "optional": false
+      },
+      {
+        "type": "hook",
+        "id": "pre-push-secrets",
+        "optional": false
+      },
+      {
+        "type": "agent",
+        "id": "planner",
+        "reason": "Spawned in Phase 1 to decompose the task into a parallel-group plan",
+        "optional": false
+      },
+      {
+        "type": "agent",
+        "id": "plan-reviewer",
+        "reason": "Spawned in Phase 1 to validate the plan before implementation begins",
+        "optional": false
+      },
+      {
+        "type": "agent",
+        "id": "frontend-engineer",
+        "reason": "Spawned in Phase 0a for UI exploration and Phase 2 for frontend subtask implementation",
+        "optional": true
+      },
+      {
+        "type": "agent",
+        "id": "backend-engineer",
+        "reason": "Spawned in Phase 0a for API exploration and Phase 2 for backend subtask implementation",
+        "optional": true
+      },
+      {
+        "type": "agent",
+        "id": "staff-engineer",
+        "reason": "Spawned in Phase 0a for infra/types exploration and Phase 2 for cross-cutting subtask implementation",
+        "optional": true
+      },
+      {
+        "type": "agent",
+        "id": "integration-verifier",
+        "reason": "Spawned between every parallel group and during Phase 3a to verify integration contracts",
+        "optional": false
+      },
+      {
+        "type": "agent",
+        "id": "quality-engineer",
+        "reason": "Spawned in Phase 2 on failure, Phase 4 quality loop, and Phase 5b post-validation",
+        "optional": false
+      },
+      {
+        "type": "agent",
+        "id": "security-engineer",
+        "reason": "Spawned in Phase 3a to review the changeset for security vulnerabilities",
+        "optional": false
+      },
+      {
+        "type": "agent",
+        "id": "site-reliability-engineer",
+        "reason": "Spawned in Phase 3a to review observability, health checks, and operational readiness",
+        "optional": false
+      },
+      {
+        "type": "agent",
+        "id": "design-architect",
+        "reason": "Spawned in Phase 3b and Phase 4 to audit architecture violations and verify quality-loop fixes",
+        "optional": false
+      },
+      {
+        "type": "agent",
+        "id": "release-gate",
+        "reason": "Spawned in Phase 4 quality loop to render a CLEAR/CAUTION/NO-SHIP verdict before shipping",
+        "optional": false
+      },
+      {
+        "type": "agent",
+        "id": "doc-writer",
+        "reason": "Spawned in Phase 5a to produce README, CHANGELOG, API docs, and ADRs",
+        "optional": false
+      },
+      {
+        "type": "agent",
+        "id": "release-engineer",
+        "reason": "Spawned in Phase 6a (commit) and Phase 6b (push + PR) to ship the changeset",
+        "optional": false
+      },
+      {
+        "type": "agent",
+        "id": "autoresearch-analyst",
+        "reason": "Spawned in Phase 7a for retro analysis and optionally in Phase 0a for codebase research",
+        "optional": false
+      }
+    ]
   },
   {
     "id": "frontend-engineer",
@@ -1196,7 +2108,29 @@
     "tooltip_text": "",
     "docs_url": "https://code.visualstudio.com/docs/copilot/agents/overview",
     "experimental": false,
-    "notes": "Installs to ~/.claude/ path — parity confirmed by VSCode custom-instructions docs."
+    "notes": "Installs to ~/.claude/ path — parity confirmed by VSCode custom-instructions docs.",
+    "dependencies": [
+      {
+        "type": "skill",
+        "id": "frontend",
+        "optional": false
+      },
+      {
+        "type": "skill",
+        "id": "design-authority",
+        "optional": false
+      },
+      {
+        "type": "skill",
+        "id": "design-lint",
+        "optional": false
+      },
+      {
+        "type": "hook",
+        "id": "inject-context",
+        "optional": false
+      }
+    ]
   },
   {
     "id": "integration-verifier",
@@ -1215,7 +2149,14 @@
     "tooltip_text": "",
     "docs_url": "https://code.visualstudio.com/docs/copilot/agents/overview",
     "experimental": false,
-    "notes": "Installs to ~/.claude/ path — parity confirmed by VSCode custom-instructions docs."
+    "notes": "Installs to ~/.claude/ path — parity confirmed by VSCode custom-instructions docs.",
+    "dependencies": [
+      {
+        "type": "hook",
+        "id": "inject-context",
+        "optional": false
+      }
+    ]
   },
   {
     "id": "plan-reviewer",
@@ -1234,7 +2175,14 @@
     "tooltip_text": "",
     "docs_url": "https://code.visualstudio.com/docs/copilot/agents/overview",
     "experimental": false,
-    "notes": "Installs to ~/.claude/ path — parity confirmed by VSCode custom-instructions docs."
+    "notes": "Installs to ~/.claude/ path — parity confirmed by VSCode custom-instructions docs.",
+    "dependencies": [
+      {
+        "type": "hook",
+        "id": "inject-context",
+        "optional": false
+      }
+    ]
   },
   {
     "id": "planner",
@@ -1253,7 +2201,20 @@
     "tooltip_text": "",
     "docs_url": "https://code.visualstudio.com/docs/copilot/agents/overview",
     "experimental": false,
-    "notes": "Installs to ~/.claude/ path — parity confirmed by VSCode custom-instructions docs."
+    "notes": "Installs to ~/.claude/ path — parity confirmed by VSCode custom-instructions docs.",
+    "dependencies": [
+      {
+        "type": "hook",
+        "id": "inject-context",
+        "optional": false
+      },
+      {
+        "type": "agent",
+        "id": "plan-reviewer",
+        "reason": "Plan-reviewer is dispatched by frankenstein immediately after planner completes to validate the generated plan",
+        "optional": true
+      }
+    ]
   },
   {
     "id": "quality-engineer",
@@ -1272,7 +2233,29 @@
     "tooltip_text": "",
     "docs_url": "https://code.visualstudio.com/docs/copilot/agents/overview",
     "experimental": false,
-    "notes": "Installs to ~/.claude/ path — parity confirmed by VSCode custom-instructions docs."
+    "notes": "Installs to ~/.claude/ path — parity confirmed by VSCode custom-instructions docs.",
+    "dependencies": [
+      {
+        "type": "skill",
+        "id": "prod-readiness",
+        "optional": false
+      },
+      {
+        "type": "command",
+        "id": "test",
+        "optional": false
+      },
+      {
+        "type": "command",
+        "id": "lint",
+        "optional": false
+      },
+      {
+        "type": "command",
+        "id": "audit",
+        "optional": false
+      }
+    ]
   },
   {
     "id": "release-engineer",
@@ -1291,7 +2274,34 @@
     "tooltip_text": "",
     "docs_url": "https://code.visualstudio.com/docs/copilot/agents/overview",
     "experimental": false,
-    "notes": "Installs to ~/.claude/ path — parity confirmed by VSCode custom-instructions docs."
+    "notes": "Installs to ~/.claude/ path — parity confirmed by VSCode custom-instructions docs.",
+    "dependencies": [
+      {
+        "type": "skill",
+        "id": "git-ship",
+        "optional": false
+      },
+      {
+        "type": "skill",
+        "id": "changelog",
+        "optional": false
+      },
+      {
+        "type": "command",
+        "id": "git-verify",
+        "optional": false
+      },
+      {
+        "type": "hook",
+        "id": "branch-guard",
+        "optional": false
+      },
+      {
+        "type": "hook",
+        "id": "pre-push-secrets",
+        "optional": false
+      }
+    ]
   },
   {
     "id": "release-gate",
@@ -1310,7 +2320,19 @@
     "tooltip_text": "",
     "docs_url": "https://code.visualstudio.com/docs/copilot/agents/overview",
     "experimental": false,
-    "notes": "Installs to ~/.claude/ path — parity confirmed by VSCode custom-instructions docs."
+    "notes": "Installs to ~/.claude/ path — parity confirmed by VSCode custom-instructions docs.",
+    "dependencies": [
+      {
+        "type": "skill",
+        "id": "prod-readiness",
+        "optional": false
+      },
+      {
+        "type": "command",
+        "id": "test",
+        "optional": false
+      }
+    ]
   },
   {
     "id": "security-engineer",
@@ -1329,7 +2351,24 @@
     "tooltip_text": "",
     "docs_url": "https://code.visualstudio.com/docs/copilot/agents/overview",
     "experimental": false,
-    "notes": "Installs to ~/.claude/ path — parity confirmed by VSCode custom-instructions docs."
+    "notes": "Installs to ~/.claude/ path — parity confirmed by VSCode custom-instructions docs.",
+    "dependencies": [
+      {
+        "type": "skill",
+        "id": "owasp-reference",
+        "optional": false
+      },
+      {
+        "type": "hook",
+        "id": "pre-push-secrets",
+        "optional": false
+      },
+      {
+        "type": "hook",
+        "id": "protect-config",
+        "optional": false
+      }
+    ]
   },
   {
     "id": "site-reliability-engineer",
@@ -1348,7 +2387,19 @@
     "tooltip_text": "",
     "docs_url": "https://code.visualstudio.com/docs/copilot/agents/overview",
     "experimental": false,
-    "notes": "Installs to ~/.claude/ path — parity confirmed by VSCode custom-instructions docs."
+    "notes": "Installs to ~/.claude/ path — parity confirmed by VSCode custom-instructions docs.",
+    "dependencies": [
+      {
+        "type": "skill",
+        "id": "infra",
+        "optional": false
+      },
+      {
+        "type": "skill",
+        "id": "observability-patterns",
+        "optional": false
+      }
+    ]
   },
   {
     "id": "staff-engineer",
@@ -1367,7 +2418,14 @@
     "tooltip_text": "",
     "docs_url": "https://code.visualstudio.com/docs/copilot/agents/overview",
     "experimental": false,
-    "notes": "Installs to ~/.claude/ path — parity confirmed by VSCode custom-instructions docs."
+    "notes": "Installs to ~/.claude/ path — parity confirmed by VSCode custom-instructions docs.",
+    "dependencies": [
+      {
+        "type": "hook",
+        "id": "inject-context",
+        "optional": false
+      }
+    ]
   },
   {
     "id": "backend-development",
@@ -1380,14 +2438,25 @@
     "install_path": "",
     "install_command": "",
     "files": [
-      "manifest.json",
-      "../backend-development.json"
+      "manifest.json"
     ],
     "status": "unverified",
     "tooltip_text": "GitHub Copilot does not document a bundle/plugin primitive. See docs for manual install of individual components.",
     "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
     "experimental": false,
-    "notes": "UNVERIFIED — no documented Copilot bundle format."
+    "notes": "UNVERIFIED — no documented Copilot bundle format.",
+    "components": [
+      {
+        "type": "skill",
+        "id": "backend",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "backend-engineer",
+        "role": "core"
+      }
+    ]
   },
   {
     "id": "code-quality",
@@ -1400,14 +2469,45 @@
     "install_path": "",
     "install_command": "",
     "files": [
-      "manifest.json",
-      "../code-quality.json"
+      "manifest.json"
     ],
     "status": "unverified",
     "tooltip_text": "GitHub Copilot does not document a bundle/plugin primitive. See docs for manual install of individual components.",
     "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
     "experimental": false,
-    "notes": "UNVERIFIED — no documented Copilot bundle format."
+    "notes": "UNVERIFIED — no documented Copilot bundle format.",
+    "components": [
+      {
+        "type": "skill",
+        "id": "prod-readiness",
+        "role": "core"
+      },
+      {
+        "type": "skill",
+        "id": "review-skill",
+        "role": "core"
+      },
+      {
+        "type": "skill",
+        "id": "design-lint",
+        "role": "core"
+      },
+      {
+        "type": "command",
+        "id": "lint",
+        "role": "core"
+      },
+      {
+        "type": "command",
+        "id": "audit",
+        "role": "core"
+      },
+      {
+        "type": "command",
+        "id": "test",
+        "role": "core"
+      }
+    ]
   },
   {
     "id": "frankenstein-orchestration",
@@ -1420,14 +2520,175 @@
     "install_path": "",
     "install_command": "",
     "files": [
-      "manifest.json",
-      "../frankenstein-orchestration.json"
+      "manifest.json"
     ],
     "status": "unverified",
     "tooltip_text": "GitHub Copilot does not document a bundle/plugin primitive. See docs for manual install of individual components.",
     "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
     "experimental": false,
-    "notes": "UNVERIFIED — no documented Copilot bundle format."
+    "notes": "UNVERIFIED — no documented Copilot bundle format.",
+    "components": [
+      {
+        "type": "agent",
+        "id": "frankenstein",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "planner",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "plan-reviewer",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "frontend-engineer",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "backend-engineer",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "staff-engineer",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "integration-verifier",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "design-architect",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "security-engineer",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "site-reliability-engineer",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "quality-engineer",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "release-gate",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "release-engineer",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "doc-writer",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "autoresearch-analyst",
+        "role": "core"
+      },
+      {
+        "type": "skill",
+        "id": "retro",
+        "role": "core"
+      },
+      {
+        "type": "skill",
+        "id": "improve",
+        "role": "core"
+      },
+      {
+        "type": "skill",
+        "id": "review-skill",
+        "role": "core"
+      },
+      {
+        "type": "skill",
+        "id": "prod-readiness",
+        "role": "core"
+      },
+      {
+        "type": "skill",
+        "id": "changelog",
+        "role": "core"
+      },
+      {
+        "type": "skill",
+        "id": "git-ship",
+        "role": "core"
+      },
+      {
+        "type": "command",
+        "id": "lint",
+        "role": "core"
+      },
+      {
+        "type": "command",
+        "id": "audit",
+        "role": "core"
+      },
+      {
+        "type": "command",
+        "id": "test",
+        "role": "core"
+      },
+      {
+        "type": "command",
+        "id": "git-verify",
+        "role": "core"
+      },
+      {
+        "type": "command",
+        "id": "backlog",
+        "role": "core"
+      },
+      {
+        "type": "hook",
+        "id": "extract-handoff",
+        "role": "core"
+      },
+      {
+        "type": "hook",
+        "id": "inject-context",
+        "role": "core"
+      },
+      {
+        "type": "hook",
+        "id": "integrity-warn",
+        "role": "core"
+      },
+      {
+        "type": "hook",
+        "id": "protect-config",
+        "role": "core"
+      },
+      {
+        "type": "hook",
+        "id": "branch-guard",
+        "role": "core"
+      },
+      {
+        "type": "hook",
+        "id": "pre-push-secrets",
+        "role": "core"
+      }
+    ]
   },
   {
     "id": "frontend-development",
@@ -1440,14 +2701,35 @@
     "install_path": "",
     "install_command": "",
     "files": [
-      "manifest.json",
-      "../frontend-development.json"
+      "manifest.json"
     ],
     "status": "unverified",
     "tooltip_text": "GitHub Copilot does not document a bundle/plugin primitive. See docs for manual install of individual components.",
     "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
     "experimental": false,
-    "notes": "UNVERIFIED — no documented Copilot bundle format."
+    "notes": "UNVERIFIED — no documented Copilot bundle format.",
+    "components": [
+      {
+        "type": "skill",
+        "id": "frontend",
+        "role": "core"
+      },
+      {
+        "type": "skill",
+        "id": "design-authority",
+        "role": "core"
+      },
+      {
+        "type": "skill",
+        "id": "design-lint",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "frontend-engineer",
+        "role": "core"
+      }
+    ]
   },
   {
     "id": "git-workflow",
@@ -1460,14 +2742,40 @@
     "install_path": "",
     "install_command": "",
     "files": [
-      "manifest.json",
-      "../git-workflow.json"
+      "manifest.json"
     ],
     "status": "unverified",
     "tooltip_text": "GitHub Copilot does not document a bundle/plugin primitive. See docs for manual install of individual components.",
     "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
     "experimental": false,
-    "notes": "UNVERIFIED — no documented Copilot bundle format."
+    "notes": "UNVERIFIED — no documented Copilot bundle format.",
+    "components": [
+      {
+        "type": "skill",
+        "id": "git-ship",
+        "role": "core"
+      },
+      {
+        "type": "skill",
+        "id": "changelog",
+        "role": "core"
+      },
+      {
+        "type": "command",
+        "id": "git-verify",
+        "role": "core"
+      },
+      {
+        "type": "hook",
+        "id": "branch-guard",
+        "role": "core"
+      },
+      {
+        "type": "hook",
+        "id": "pre-push-secrets",
+        "role": "core"
+      }
+    ]
   },
   {
     "id": "infrastructure",
@@ -1480,14 +2788,30 @@
     "install_path": "",
     "install_command": "",
     "files": [
-      "manifest.json",
-      "../infrastructure.json"
+      "manifest.json"
     ],
     "status": "unverified",
     "tooltip_text": "GitHub Copilot does not document a bundle/plugin primitive. See docs for manual install of individual components.",
     "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
     "experimental": false,
-    "notes": "UNVERIFIED — no documented Copilot bundle format."
+    "notes": "UNVERIFIED — no documented Copilot bundle format.",
+    "components": [
+      {
+        "type": "skill",
+        "id": "infra",
+        "role": "core"
+      },
+      {
+        "type": "skill",
+        "id": "observability-patterns",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "site-reliability-engineer",
+        "role": "core"
+      }
+    ]
   },
   {
     "id": "security-hardening",
@@ -1500,14 +2824,35 @@
     "install_path": "",
     "install_command": "",
     "files": [
-      "manifest.json",
-      "../security-hardening.json"
+      "manifest.json"
     ],
     "status": "unverified",
     "tooltip_text": "GitHub Copilot does not document a bundle/plugin primitive. See docs for manual install of individual components.",
     "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
     "experimental": false,
-    "notes": "UNVERIFIED — no documented Copilot bundle format."
+    "notes": "UNVERIFIED — no documented Copilot bundle format.",
+    "components": [
+      {
+        "type": "skill",
+        "id": "owasp-reference",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "security-engineer",
+        "role": "core"
+      },
+      {
+        "type": "hook",
+        "id": "pre-push-secrets",
+        "role": "core"
+      },
+      {
+        "type": "hook",
+        "id": "protect-config",
+        "role": "core"
+      }
+    ]
   },
   {
     "id": "self-improvement",
@@ -1520,14 +2865,40 @@
     "install_path": "",
     "install_command": "",
     "files": [
-      "manifest.json",
-      "../self-improvement.json"
+      "manifest.json"
     ],
     "status": "unverified",
     "tooltip_text": "GitHub Copilot does not document a bundle/plugin primitive. See docs for manual install of individual components.",
     "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
     "experimental": false,
-    "notes": "UNVERIFIED — no documented Copilot bundle format."
+    "notes": "UNVERIFIED — no documented Copilot bundle format.",
+    "components": [
+      {
+        "type": "skill",
+        "id": "retro",
+        "role": "core"
+      },
+      {
+        "type": "skill",
+        "id": "improve",
+        "role": "core"
+      },
+      {
+        "type": "skill",
+        "id": "review-skill",
+        "role": "core"
+      },
+      {
+        "type": "skill",
+        "id": "changelog",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "autoresearch-analyst",
+        "role": "core"
+      }
+    ]
   },
   {
     "id": "audit",
@@ -2180,7 +3551,29 @@
     "tooltip_text": "Codex CLI agent install path is not documented. See the Codex docs for the current recommended setup.",
     "docs_url": "https://developers.openai.com/codex/guides/agents-md",
     "experimental": false,
-    "notes": "UNVERIFIED — Codex does not document a standalone agent install path; subagents appear to be plugin-bundled in current docs."
+    "notes": "UNVERIFIED — Codex does not document a standalone agent install path; subagents appear to be plugin-bundled in current docs.",
+    "dependencies": [
+      {
+        "type": "skill",
+        "id": "retro",
+        "optional": false
+      },
+      {
+        "type": "skill",
+        "id": "improve",
+        "optional": false
+      },
+      {
+        "type": "skill",
+        "id": "review-skill",
+        "optional": false
+      },
+      {
+        "type": "skill",
+        "id": "changelog",
+        "optional": false
+      }
+    ]
   },
   {
     "id": "backend-engineer",
@@ -2199,7 +3592,19 @@
     "tooltip_text": "Codex CLI agent install path is not documented. See the Codex docs for the current recommended setup.",
     "docs_url": "https://developers.openai.com/codex/guides/agents-md",
     "experimental": false,
-    "notes": "UNVERIFIED — Codex does not document a standalone agent install path; subagents appear to be plugin-bundled in current docs."
+    "notes": "UNVERIFIED — Codex does not document a standalone agent install path; subagents appear to be plugin-bundled in current docs.",
+    "dependencies": [
+      {
+        "type": "skill",
+        "id": "backend",
+        "optional": false
+      },
+      {
+        "type": "hook",
+        "id": "inject-context",
+        "optional": false
+      }
+    ]
   },
   {
     "id": "design-architect",
@@ -2218,7 +3623,24 @@
     "tooltip_text": "Codex CLI agent install path is not documented. See the Codex docs for the current recommended setup.",
     "docs_url": "https://developers.openai.com/codex/guides/agents-md",
     "experimental": false,
-    "notes": "UNVERIFIED — Codex does not document a standalone agent install path; subagents appear to be plugin-bundled in current docs."
+    "notes": "UNVERIFIED — Codex does not document a standalone agent install path; subagents appear to be plugin-bundled in current docs.",
+    "dependencies": [
+      {
+        "type": "skill",
+        "id": "design-authority",
+        "optional": false
+      },
+      {
+        "type": "skill",
+        "id": "design-lint",
+        "optional": false
+      },
+      {
+        "type": "hook",
+        "id": "inject-context",
+        "optional": false
+      }
+    ]
   },
   {
     "id": "doc-writer",
@@ -2237,7 +3659,14 @@
     "tooltip_text": "Codex CLI agent install path is not documented. See the Codex docs for the current recommended setup.",
     "docs_url": "https://developers.openai.com/codex/guides/agents-md",
     "experimental": false,
-    "notes": "UNVERIFIED — Codex does not document a standalone agent install path; subagents appear to be plugin-bundled in current docs."
+    "notes": "UNVERIFIED — Codex does not document a standalone agent install path; subagents appear to be plugin-bundled in current docs.",
+    "dependencies": [
+      {
+        "type": "hook",
+        "id": "inject-context",
+        "optional": false
+      }
+    ]
   },
   {
     "id": "frankenstein",
@@ -2256,7 +3685,178 @@
     "tooltip_text": "Codex CLI agent install path is not documented. See the Codex docs for the current recommended setup.",
     "docs_url": "https://developers.openai.com/codex/guides/agents-md",
     "experimental": false,
-    "notes": "UNVERIFIED — Codex does not document a standalone agent install path; subagents appear to be plugin-bundled in current docs."
+    "notes": "UNVERIFIED — Codex does not document a standalone agent install path; subagents appear to be plugin-bundled in current docs.",
+    "dependencies": [
+      {
+        "type": "skill",
+        "id": "retro",
+        "optional": false
+      },
+      {
+        "type": "skill",
+        "id": "improve",
+        "optional": false
+      },
+      {
+        "type": "skill",
+        "id": "review-skill",
+        "optional": false
+      },
+      {
+        "type": "skill",
+        "id": "prod-readiness",
+        "optional": false
+      },
+      {
+        "type": "skill",
+        "id": "changelog",
+        "optional": false
+      },
+      {
+        "type": "skill",
+        "id": "git-ship",
+        "optional": false
+      },
+      {
+        "type": "command",
+        "id": "lint",
+        "optional": false
+      },
+      {
+        "type": "command",
+        "id": "audit",
+        "optional": false
+      },
+      {
+        "type": "command",
+        "id": "test",
+        "optional": false
+      },
+      {
+        "type": "command",
+        "id": "git-verify",
+        "optional": false
+      },
+      {
+        "type": "command",
+        "id": "backlog",
+        "optional": false
+      },
+      {
+        "type": "hook",
+        "id": "extract-handoff",
+        "optional": false
+      },
+      {
+        "type": "hook",
+        "id": "inject-context",
+        "optional": false
+      },
+      {
+        "type": "hook",
+        "id": "integrity-warn",
+        "optional": false
+      },
+      {
+        "type": "hook",
+        "id": "protect-config",
+        "optional": false
+      },
+      {
+        "type": "hook",
+        "id": "branch-guard",
+        "optional": false
+      },
+      {
+        "type": "hook",
+        "id": "pre-push-secrets",
+        "optional": false
+      },
+      {
+        "type": "agent",
+        "id": "planner",
+        "reason": "Spawned in Phase 1 to decompose the task into a parallel-group plan",
+        "optional": false
+      },
+      {
+        "type": "agent",
+        "id": "plan-reviewer",
+        "reason": "Spawned in Phase 1 to validate the plan before implementation begins",
+        "optional": false
+      },
+      {
+        "type": "agent",
+        "id": "frontend-engineer",
+        "reason": "Spawned in Phase 0a for UI exploration and Phase 2 for frontend subtask implementation",
+        "optional": true
+      },
+      {
+        "type": "agent",
+        "id": "backend-engineer",
+        "reason": "Spawned in Phase 0a for API exploration and Phase 2 for backend subtask implementation",
+        "optional": true
+      },
+      {
+        "type": "agent",
+        "id": "staff-engineer",
+        "reason": "Spawned in Phase 0a for infra/types exploration and Phase 2 for cross-cutting subtask implementation",
+        "optional": true
+      },
+      {
+        "type": "agent",
+        "id": "integration-verifier",
+        "reason": "Spawned between every parallel group and during Phase 3a to verify integration contracts",
+        "optional": false
+      },
+      {
+        "type": "agent",
+        "id": "quality-engineer",
+        "reason": "Spawned in Phase 2 on failure, Phase 4 quality loop, and Phase 5b post-validation",
+        "optional": false
+      },
+      {
+        "type": "agent",
+        "id": "security-engineer",
+        "reason": "Spawned in Phase 3a to review the changeset for security vulnerabilities",
+        "optional": false
+      },
+      {
+        "type": "agent",
+        "id": "site-reliability-engineer",
+        "reason": "Spawned in Phase 3a to review observability, health checks, and operational readiness",
+        "optional": false
+      },
+      {
+        "type": "agent",
+        "id": "design-architect",
+        "reason": "Spawned in Phase 3b and Phase 4 to audit architecture violations and verify quality-loop fixes",
+        "optional": false
+      },
+      {
+        "type": "agent",
+        "id": "release-gate",
+        "reason": "Spawned in Phase 4 quality loop to render a CLEAR/CAUTION/NO-SHIP verdict before shipping",
+        "optional": false
+      },
+      {
+        "type": "agent",
+        "id": "doc-writer",
+        "reason": "Spawned in Phase 5a to produce README, CHANGELOG, API docs, and ADRs",
+        "optional": false
+      },
+      {
+        "type": "agent",
+        "id": "release-engineer",
+        "reason": "Spawned in Phase 6a (commit) and Phase 6b (push + PR) to ship the changeset",
+        "optional": false
+      },
+      {
+        "type": "agent",
+        "id": "autoresearch-analyst",
+        "reason": "Spawned in Phase 7a for retro analysis and optionally in Phase 0a for codebase research",
+        "optional": false
+      }
+    ]
   },
   {
     "id": "frontend-engineer",
@@ -2275,7 +3875,29 @@
     "tooltip_text": "Codex CLI agent install path is not documented. See the Codex docs for the current recommended setup.",
     "docs_url": "https://developers.openai.com/codex/guides/agents-md",
     "experimental": false,
-    "notes": "UNVERIFIED — Codex does not document a standalone agent install path; subagents appear to be plugin-bundled in current docs."
+    "notes": "UNVERIFIED — Codex does not document a standalone agent install path; subagents appear to be plugin-bundled in current docs.",
+    "dependencies": [
+      {
+        "type": "skill",
+        "id": "frontend",
+        "optional": false
+      },
+      {
+        "type": "skill",
+        "id": "design-authority",
+        "optional": false
+      },
+      {
+        "type": "skill",
+        "id": "design-lint",
+        "optional": false
+      },
+      {
+        "type": "hook",
+        "id": "inject-context",
+        "optional": false
+      }
+    ]
   },
   {
     "id": "integration-verifier",
@@ -2294,7 +3916,14 @@
     "tooltip_text": "Codex CLI agent install path is not documented. See the Codex docs for the current recommended setup.",
     "docs_url": "https://developers.openai.com/codex/guides/agents-md",
     "experimental": false,
-    "notes": "UNVERIFIED — Codex does not document a standalone agent install path; subagents appear to be plugin-bundled in current docs."
+    "notes": "UNVERIFIED — Codex does not document a standalone agent install path; subagents appear to be plugin-bundled in current docs.",
+    "dependencies": [
+      {
+        "type": "hook",
+        "id": "inject-context",
+        "optional": false
+      }
+    ]
   },
   {
     "id": "plan-reviewer",
@@ -2313,7 +3942,14 @@
     "tooltip_text": "Codex CLI agent install path is not documented. See the Codex docs for the current recommended setup.",
     "docs_url": "https://developers.openai.com/codex/guides/agents-md",
     "experimental": false,
-    "notes": "UNVERIFIED — Codex does not document a standalone agent install path; subagents appear to be plugin-bundled in current docs."
+    "notes": "UNVERIFIED — Codex does not document a standalone agent install path; subagents appear to be plugin-bundled in current docs.",
+    "dependencies": [
+      {
+        "type": "hook",
+        "id": "inject-context",
+        "optional": false
+      }
+    ]
   },
   {
     "id": "planner",
@@ -2332,7 +3968,20 @@
     "tooltip_text": "Codex CLI agent install path is not documented. See the Codex docs for the current recommended setup.",
     "docs_url": "https://developers.openai.com/codex/guides/agents-md",
     "experimental": false,
-    "notes": "UNVERIFIED — Codex does not document a standalone agent install path; subagents appear to be plugin-bundled in current docs."
+    "notes": "UNVERIFIED — Codex does not document a standalone agent install path; subagents appear to be plugin-bundled in current docs.",
+    "dependencies": [
+      {
+        "type": "hook",
+        "id": "inject-context",
+        "optional": false
+      },
+      {
+        "type": "agent",
+        "id": "plan-reviewer",
+        "reason": "Plan-reviewer is dispatched by frankenstein immediately after planner completes to validate the generated plan",
+        "optional": true
+      }
+    ]
   },
   {
     "id": "quality-engineer",
@@ -2351,7 +4000,29 @@
     "tooltip_text": "Codex CLI agent install path is not documented. See the Codex docs for the current recommended setup.",
     "docs_url": "https://developers.openai.com/codex/guides/agents-md",
     "experimental": false,
-    "notes": "UNVERIFIED — Codex does not document a standalone agent install path; subagents appear to be plugin-bundled in current docs."
+    "notes": "UNVERIFIED — Codex does not document a standalone agent install path; subagents appear to be plugin-bundled in current docs.",
+    "dependencies": [
+      {
+        "type": "skill",
+        "id": "prod-readiness",
+        "optional": false
+      },
+      {
+        "type": "command",
+        "id": "test",
+        "optional": false
+      },
+      {
+        "type": "command",
+        "id": "lint",
+        "optional": false
+      },
+      {
+        "type": "command",
+        "id": "audit",
+        "optional": false
+      }
+    ]
   },
   {
     "id": "release-engineer",
@@ -2370,7 +4041,34 @@
     "tooltip_text": "Codex CLI agent install path is not documented. See the Codex docs for the current recommended setup.",
     "docs_url": "https://developers.openai.com/codex/guides/agents-md",
     "experimental": false,
-    "notes": "UNVERIFIED — Codex does not document a standalone agent install path; subagents appear to be plugin-bundled in current docs."
+    "notes": "UNVERIFIED — Codex does not document a standalone agent install path; subagents appear to be plugin-bundled in current docs.",
+    "dependencies": [
+      {
+        "type": "skill",
+        "id": "git-ship",
+        "optional": false
+      },
+      {
+        "type": "skill",
+        "id": "changelog",
+        "optional": false
+      },
+      {
+        "type": "command",
+        "id": "git-verify",
+        "optional": false
+      },
+      {
+        "type": "hook",
+        "id": "branch-guard",
+        "optional": false
+      },
+      {
+        "type": "hook",
+        "id": "pre-push-secrets",
+        "optional": false
+      }
+    ]
   },
   {
     "id": "release-gate",
@@ -2389,7 +4087,19 @@
     "tooltip_text": "Codex CLI agent install path is not documented. See the Codex docs for the current recommended setup.",
     "docs_url": "https://developers.openai.com/codex/guides/agents-md",
     "experimental": false,
-    "notes": "UNVERIFIED — Codex does not document a standalone agent install path; subagents appear to be plugin-bundled in current docs."
+    "notes": "UNVERIFIED — Codex does not document a standalone agent install path; subagents appear to be plugin-bundled in current docs.",
+    "dependencies": [
+      {
+        "type": "skill",
+        "id": "prod-readiness",
+        "optional": false
+      },
+      {
+        "type": "command",
+        "id": "test",
+        "optional": false
+      }
+    ]
   },
   {
     "id": "security-engineer",
@@ -2408,7 +4118,24 @@
     "tooltip_text": "Codex CLI agent install path is not documented. See the Codex docs for the current recommended setup.",
     "docs_url": "https://developers.openai.com/codex/guides/agents-md",
     "experimental": false,
-    "notes": "UNVERIFIED — Codex does not document a standalone agent install path; subagents appear to be plugin-bundled in current docs."
+    "notes": "UNVERIFIED — Codex does not document a standalone agent install path; subagents appear to be plugin-bundled in current docs.",
+    "dependencies": [
+      {
+        "type": "skill",
+        "id": "owasp-reference",
+        "optional": false
+      },
+      {
+        "type": "hook",
+        "id": "pre-push-secrets",
+        "optional": false
+      },
+      {
+        "type": "hook",
+        "id": "protect-config",
+        "optional": false
+      }
+    ]
   },
   {
     "id": "site-reliability-engineer",
@@ -2427,7 +4154,19 @@
     "tooltip_text": "Codex CLI agent install path is not documented. See the Codex docs for the current recommended setup.",
     "docs_url": "https://developers.openai.com/codex/guides/agents-md",
     "experimental": false,
-    "notes": "UNVERIFIED — Codex does not document a standalone agent install path; subagents appear to be plugin-bundled in current docs."
+    "notes": "UNVERIFIED — Codex does not document a standalone agent install path; subagents appear to be plugin-bundled in current docs.",
+    "dependencies": [
+      {
+        "type": "skill",
+        "id": "infra",
+        "optional": false
+      },
+      {
+        "type": "skill",
+        "id": "observability-patterns",
+        "optional": false
+      }
+    ]
   },
   {
     "id": "staff-engineer",
@@ -2446,7 +4185,14 @@
     "tooltip_text": "Codex CLI agent install path is not documented. See the Codex docs for the current recommended setup.",
     "docs_url": "https://developers.openai.com/codex/guides/agents-md",
     "experimental": false,
-    "notes": "UNVERIFIED — Codex does not document a standalone agent install path; subagents appear to be plugin-bundled in current docs."
+    "notes": "UNVERIFIED — Codex does not document a standalone agent install path; subagents appear to be plugin-bundled in current docs.",
+    "dependencies": [
+      {
+        "type": "hook",
+        "id": "inject-context",
+        "optional": false
+      }
+    ]
   },
   {
     "id": "backend-development",
@@ -2459,14 +4205,25 @@
     "install_path": "",
     "install_command": "",
     "files": [
-      "manifest.json",
-      "../backend-development.json"
+      "manifest.json"
     ],
     "status": "unverified",
     "tooltip_text": "OpenAI Codex CLI plugin system is not yet finalized in official documentation. See docs for available primitives.",
     "docs_url": "https://developers.openai.com/codex",
     "experimental": false,
-    "notes": "UNVERIFIED — Codex plugin/bundle format not documented at researched URLs."
+    "notes": "UNVERIFIED — Codex plugin/bundle format not documented at researched URLs.",
+    "components": [
+      {
+        "type": "skill",
+        "id": "backend",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "backend-engineer",
+        "role": "core"
+      }
+    ]
   },
   {
     "id": "code-quality",
@@ -2479,14 +4236,30 @@
     "install_path": "",
     "install_command": "",
     "files": [
-      "manifest.json",
-      "../code-quality.json"
+      "manifest.json"
     ],
     "status": "unverified",
     "tooltip_text": "OpenAI Codex CLI plugin system is not yet finalized in official documentation. See docs for available primitives.",
     "docs_url": "https://developers.openai.com/codex",
     "experimental": false,
-    "notes": "UNVERIFIED — Codex plugin/bundle format not documented at researched URLs."
+    "notes": "UNVERIFIED — Codex plugin/bundle format not documented at researched URLs. openai-codex omits 3 command-type components present in claude-code and github-copilot variants (lint, audit, test) — codex CLI does not support the command primitive.",
+    "components": [
+      {
+        "type": "skill",
+        "id": "prod-readiness",
+        "role": "core"
+      },
+      {
+        "type": "skill",
+        "id": "review-skill",
+        "role": "core"
+      },
+      {
+        "type": "skill",
+        "id": "design-lint",
+        "role": "core"
+      }
+    ]
   },
   {
     "id": "frankenstein-orchestration",
@@ -2499,14 +4272,150 @@
     "install_path": "",
     "install_command": "",
     "files": [
-      "manifest.json",
-      "../frankenstein-orchestration.json"
+      "manifest.json"
     ],
     "status": "unverified",
     "tooltip_text": "OpenAI Codex CLI plugin system is not yet finalized in official documentation. See docs for available primitives.",
     "docs_url": "https://developers.openai.com/codex",
     "experimental": false,
-    "notes": "UNVERIFIED — Codex plugin/bundle format not documented at researched URLs."
+    "notes": "UNVERIFIED — Codex plugin/bundle format not documented at researched URLs. openai-codex omits 5 command-type components present in claude-code and github-copilot variants (lint, audit, test, git-verify, backlog) — codex CLI does not support the command primitive.",
+    "components": [
+      {
+        "type": "agent",
+        "id": "frankenstein",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "planner",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "plan-reviewer",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "frontend-engineer",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "backend-engineer",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "staff-engineer",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "integration-verifier",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "design-architect",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "security-engineer",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "site-reliability-engineer",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "quality-engineer",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "release-gate",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "release-engineer",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "doc-writer",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "autoresearch-analyst",
+        "role": "core"
+      },
+      {
+        "type": "skill",
+        "id": "retro",
+        "role": "core"
+      },
+      {
+        "type": "skill",
+        "id": "improve",
+        "role": "core"
+      },
+      {
+        "type": "skill",
+        "id": "review-skill",
+        "role": "core"
+      },
+      {
+        "type": "skill",
+        "id": "prod-readiness",
+        "role": "core"
+      },
+      {
+        "type": "skill",
+        "id": "changelog",
+        "role": "core"
+      },
+      {
+        "type": "skill",
+        "id": "git-ship",
+        "role": "core"
+      },
+      {
+        "type": "hook",
+        "id": "extract-handoff",
+        "role": "core"
+      },
+      {
+        "type": "hook",
+        "id": "inject-context",
+        "role": "core"
+      },
+      {
+        "type": "hook",
+        "id": "integrity-warn",
+        "role": "core"
+      },
+      {
+        "type": "hook",
+        "id": "protect-config",
+        "role": "core"
+      },
+      {
+        "type": "hook",
+        "id": "branch-guard",
+        "role": "core"
+      },
+      {
+        "type": "hook",
+        "id": "pre-push-secrets",
+        "role": "core"
+      }
+    ]
   },
   {
     "id": "frontend-development",
@@ -2519,14 +4428,35 @@
     "install_path": "",
     "install_command": "",
     "files": [
-      "manifest.json",
-      "../frontend-development.json"
+      "manifest.json"
     ],
     "status": "unverified",
     "tooltip_text": "OpenAI Codex CLI plugin system is not yet finalized in official documentation. See docs for available primitives.",
     "docs_url": "https://developers.openai.com/codex",
     "experimental": false,
-    "notes": "UNVERIFIED — Codex plugin/bundle format not documented at researched URLs."
+    "notes": "UNVERIFIED — Codex plugin/bundle format not documented at researched URLs.",
+    "components": [
+      {
+        "type": "skill",
+        "id": "frontend",
+        "role": "core"
+      },
+      {
+        "type": "skill",
+        "id": "design-authority",
+        "role": "core"
+      },
+      {
+        "type": "skill",
+        "id": "design-lint",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "frontend-engineer",
+        "role": "core"
+      }
+    ]
   },
   {
     "id": "git-workflow",
@@ -2539,14 +4469,35 @@
     "install_path": "",
     "install_command": "",
     "files": [
-      "manifest.json",
-      "../git-workflow.json"
+      "manifest.json"
     ],
     "status": "unverified",
     "tooltip_text": "OpenAI Codex CLI plugin system is not yet finalized in official documentation. See docs for available primitives.",
     "docs_url": "https://developers.openai.com/codex",
     "experimental": false,
-    "notes": "UNVERIFIED — Codex plugin/bundle format not documented at researched URLs."
+    "notes": "UNVERIFIED — Codex plugin/bundle format not documented at researched URLs. openai-codex omits 1 command-type component present in claude-code and github-copilot variants (git-verify) — codex CLI does not support the command primitive.",
+    "components": [
+      {
+        "type": "skill",
+        "id": "git-ship",
+        "role": "core"
+      },
+      {
+        "type": "skill",
+        "id": "changelog",
+        "role": "core"
+      },
+      {
+        "type": "hook",
+        "id": "branch-guard",
+        "role": "core"
+      },
+      {
+        "type": "hook",
+        "id": "pre-push-secrets",
+        "role": "core"
+      }
+    ]
   },
   {
     "id": "infrastructure",
@@ -2559,14 +4510,30 @@
     "install_path": "",
     "install_command": "",
     "files": [
-      "manifest.json",
-      "../infrastructure.json"
+      "manifest.json"
     ],
     "status": "unverified",
     "tooltip_text": "OpenAI Codex CLI plugin system is not yet finalized in official documentation. See docs for available primitives.",
     "docs_url": "https://developers.openai.com/codex",
     "experimental": false,
-    "notes": "UNVERIFIED — Codex plugin/bundle format not documented at researched URLs."
+    "notes": "UNVERIFIED — Codex plugin/bundle format not documented at researched URLs.",
+    "components": [
+      {
+        "type": "skill",
+        "id": "infra",
+        "role": "core"
+      },
+      {
+        "type": "skill",
+        "id": "observability-patterns",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "site-reliability-engineer",
+        "role": "core"
+      }
+    ]
   },
   {
     "id": "security-hardening",
@@ -2579,14 +4546,35 @@
     "install_path": "",
     "install_command": "",
     "files": [
-      "manifest.json",
-      "../security-hardening.json"
+      "manifest.json"
     ],
     "status": "unverified",
     "tooltip_text": "OpenAI Codex CLI plugin system is not yet finalized in official documentation. See docs for available primitives.",
     "docs_url": "https://developers.openai.com/codex",
     "experimental": false,
-    "notes": "UNVERIFIED — Codex plugin/bundle format not documented at researched URLs."
+    "notes": "UNVERIFIED — Codex plugin/bundle format not documented at researched URLs.",
+    "components": [
+      {
+        "type": "skill",
+        "id": "owasp-reference",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "security-engineer",
+        "role": "core"
+      },
+      {
+        "type": "hook",
+        "id": "pre-push-secrets",
+        "role": "core"
+      },
+      {
+        "type": "hook",
+        "id": "protect-config",
+        "role": "core"
+      }
+    ]
   },
   {
     "id": "self-improvement",
@@ -2599,14 +4587,142 @@
     "install_path": "",
     "install_command": "",
     "files": [
-      "manifest.json",
-      "../self-improvement.json"
+      "manifest.json"
     ],
     "status": "unverified",
     "tooltip_text": "OpenAI Codex CLI plugin system is not yet finalized in official documentation. See docs for available primitives.",
     "docs_url": "https://developers.openai.com/codex",
     "experimental": false,
-    "notes": "UNVERIFIED — Codex plugin/bundle format not documented at researched URLs."
+    "notes": "UNVERIFIED — Codex plugin/bundle format not documented at researched URLs.",
+    "components": [
+      {
+        "type": "skill",
+        "id": "retro",
+        "role": "core"
+      },
+      {
+        "type": "skill",
+        "id": "improve",
+        "role": "core"
+      },
+      {
+        "type": "skill",
+        "id": "review-skill",
+        "role": "core"
+      },
+      {
+        "type": "skill",
+        "id": "changelog",
+        "role": "core"
+      },
+      {
+        "type": "agent",
+        "id": "autoresearch-analyst",
+        "role": "core"
+      }
+    ]
+  },
+  {
+    "id": "audit",
+    "name": "Audit",
+    "type": "command",
+    "tool": "openai-codex",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "",
+    "install_path": "",
+    "install_command": "",
+    "files": [],
+    "status": "unavailable",
+    "tooltip_text": "Codex CLI does not support user-defined slash commands. Use a skill or agent instead.",
+    "docs_url": "https://developers.openai.com/codex",
+    "experimental": false,
+    "notes": "Codex has no user-defined slash-command mechanism. Built-in slash commands are fixed. See docs_url for the full built-in command list."
+  },
+  {
+    "id": "backlog",
+    "name": "Backlog",
+    "type": "command",
+    "tool": "openai-codex",
+    "version": "4.0.0",
+    "ref": "main",
+    "download_url": "",
+    "install_path": "",
+    "install_command": "",
+    "files": [],
+    "status": "unavailable",
+    "tooltip_text": "Codex CLI does not support user-defined slash commands. Use a skill or agent instead.",
+    "docs_url": "https://developers.openai.com/codex",
+    "experimental": false,
+    "notes": "Codex has no user-defined slash-command mechanism. Built-in slash commands are fixed. See docs_url for the full built-in command list."
+  },
+  {
+    "id": "git-verify",
+    "name": "Git Verify",
+    "type": "command",
+    "tool": "openai-codex",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "",
+    "install_path": "",
+    "install_command": "",
+    "files": [],
+    "status": "unavailable",
+    "tooltip_text": "Codex CLI does not support user-defined slash commands. Use a skill or agent instead.",
+    "docs_url": "https://developers.openai.com/codex",
+    "experimental": false,
+    "notes": "Codex has no user-defined slash-command mechanism. Built-in slash commands are fixed. See docs_url for the full built-in command list."
+  },
+  {
+    "id": "lint",
+    "name": "Lint",
+    "type": "command",
+    "tool": "openai-codex",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "",
+    "install_path": "",
+    "install_command": "",
+    "files": [],
+    "status": "unavailable",
+    "tooltip_text": "Codex CLI does not support user-defined slash commands. Use a skill or agent instead.",
+    "docs_url": "https://developers.openai.com/codex",
+    "experimental": false,
+    "notes": "Codex has no user-defined slash-command mechanism. Built-in slash commands are fixed. See docs_url for the full built-in command list."
+  },
+  {
+    "id": "sync-toolkit",
+    "name": "Sync Toolkit",
+    "type": "command",
+    "tool": "openai-codex",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "",
+    "install_path": "",
+    "install_command": "",
+    "files": [],
+    "status": "unavailable",
+    "tooltip_text": "Codex CLI does not support user-defined slash commands. Use a skill or agent instead.",
+    "docs_url": "https://developers.openai.com/codex",
+    "experimental": false,
+    "notes": "Codex has no user-defined slash-command mechanism. Built-in slash commands are fixed. See docs_url for the full built-in command list."
+  },
+  {
+    "id": "test",
+    "name": "Test",
+    "type": "command",
+    "tool": "openai-codex",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "",
+    "install_path": "",
+    "install_command": "",
+    "files": [],
+    "status": "unavailable",
+    "tooltip_text": "Codex CLI does not support user-defined slash commands. Use a skill or agent instead.",
+    "docs_url": "https://developers.openai.com/codex",
+    "experimental": false,
+    "notes": "Codex has no user-defined slash-command mechanism. Built-in slash commands are fixed. See docs_url for the full built-in command list."
   },
   {
     "id": "branch-guard",

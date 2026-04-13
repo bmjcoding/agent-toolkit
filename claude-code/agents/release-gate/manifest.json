@@ -8,10 +8,24 @@
   "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/release-gate/release-gate.md",
   "install_path": "~/.claude/agents/",
   "install_command": "mkdir -p ~/.claude/agents && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/release-gate/release-gate.md -o ~/.claude/agents/release-gate.md",
-  "files": ["release-gate.md"],
+  "files": [
+    "release-gate.md"
+  ],
   "status": "available",
   "tooltip_text": "Release readiness gate that runs /prod-readiness with context from specialist reviews and prior attempts, emitting a SHIP/NO-SHIP verdict. Use during Phase 4 quality loop.",
   "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
   "experimental": false,
-  "notes": ""
+  "notes": "",
+  "dependencies": [
+    {
+      "type": "skill",
+      "id": "prod-readiness",
+      "optional": false
+    },
+    {
+      "type": "command",
+      "id": "test",
+      "optional": false
+    }
+  ]
 }

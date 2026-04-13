@@ -9,12 +9,33 @@
   "install_path": "",
   "install_command": "",
   "files": [
-    "manifest.json",
-    "../security-hardening.json"
+    "manifest.json"
   ],
   "status": "unverified",
   "tooltip_text": "GitHub Copilot does not document a bundle/plugin primitive. See docs for manual install of individual components.",
   "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
   "experimental": false,
-  "notes": "UNVERIFIED — no documented Copilot bundle format."
+  "notes": "UNVERIFIED \u2014 no documented Copilot bundle format.",
+  "components": [
+    {
+      "type": "skill",
+      "id": "owasp-reference",
+      "role": "core"
+    },
+    {
+      "type": "agent",
+      "id": "security-engineer",
+      "role": "core"
+    },
+    {
+      "type": "hook",
+      "id": "pre-push-secrets",
+      "role": "core"
+    },
+    {
+      "type": "hook",
+      "id": "protect-config",
+      "role": "core"
+    }
+  ]
 }

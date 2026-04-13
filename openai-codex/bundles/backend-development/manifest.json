@@ -9,12 +9,23 @@
   "install_path": "",
   "install_command": "",
   "files": [
-    "manifest.json",
-    "../backend-development.json"
+    "manifest.json"
   ],
   "status": "unverified",
   "tooltip_text": "OpenAI Codex CLI plugin system is not yet finalized in official documentation. See docs for available primitives.",
   "docs_url": "https://developers.openai.com/codex",
   "experimental": false,
-  "notes": "UNVERIFIED — Codex plugin/bundle format not documented at researched URLs."
+  "notes": "UNVERIFIED \u2014 Codex plugin/bundle format not documented at researched URLs.",
+  "components": [
+    {
+      "type": "skill",
+      "id": "backend",
+      "role": "core"
+    },
+    {
+      "type": "agent",
+      "id": "backend-engineer",
+      "role": "core"
+    }
+  ]
 }
