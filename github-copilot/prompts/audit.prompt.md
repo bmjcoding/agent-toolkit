@@ -1,6 +1,6 @@
 ---
 description: "Comprehensive code audit covering correctness, security, accessibility, type safety, and operational resilience."
-mode: agent
+agent: agent
 tools: [read_file, search_files, run_in_terminal, list_dir]
 argument-hint: "[paths...] [--dry-run]"
 ---

@@ -1,6 +1,6 @@
 ---
 description: "Run linting and standards compliance checks, auto-fix everything possible."
-mode: agent
+agent: agent
 tools: [read_file, search_files, run_in_terminal, list_dir]
 argument-hint: "[paths...] [--dry-run]"
 ---

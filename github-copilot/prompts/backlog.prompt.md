@@ -1,6 +1,6 @@
 ---
 description: "View, resolve, retriage, or clear items in the pipeline backlog."
-mode: agent
+agent: agent
 tools: [read_file, search_files, run_in_terminal, list_dir]
 argument-hint: "[--resolve N] [--resolve N --wont-fix \"reason\"] [--defer N --env ENV \"reason\"] [--defer N --session \"reason\"] [--retriage] [--clear-resolved] [--agent] [--human] [--env ENV] [--open] [--sync] [--cleanup] [--dry-run]"
 ---

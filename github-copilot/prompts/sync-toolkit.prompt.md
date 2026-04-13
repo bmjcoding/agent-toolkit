@@ -1,6 +1,6 @@
 ---
 description: "Detect changed toolkit components, generate CHANGELOG entries, bump versions, copy to ~/.claude, commit per-component, and open a PR."
-mode: agent
+agent: agent
 tools: [read_file, search_files, run_in_terminal, list_dir]
 argument-hint: "[--dry-run] [--no-pr] [--component TYPE/NAME]"
 ---

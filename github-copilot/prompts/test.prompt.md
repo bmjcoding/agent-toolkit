@@ -1,6 +1,6 @@
 ---
 description: "Write tests to cover gaps and achieve >=80% coverage on changed files."
-mode: agent
+agent: agent
 tools: [read_file, search_files, run_in_terminal, list_dir]
 argument-hint: "[paths...] [--dry-run]"
 ---
