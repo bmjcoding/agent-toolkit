@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.6.0] - 2026-04-13
+
+### Added
+
+- QA-fix scope constraint rule: dispatch prompts for quality-fix agents must include an explicit scope boundary preventing modifications outside listed files
+- Enum-extension cross-boundary propagation rule: after adding an enum variant, grep for exhaustive maps across all workspaces and run tsc --noEmit on all workspaces
+- CHANGELOG pre-insert duplicate check rule: verify target version header does not already exist before inserting it
+- Frontmatter field spec completeness rule: enumerate all component types that use a shared frontmatter field in the subtask description
+
 ## [4.0.0] - 2026-04-13
 
 ### Removed

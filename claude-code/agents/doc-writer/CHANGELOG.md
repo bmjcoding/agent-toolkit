@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.1] - 2026-04-13
+
+### Changed
+
+- ADR numbering instruction now requires filesystem check via the Gotchas section rather than deriving from session context; prevents numbering collisions across concurrent pipeline runs
+
 ## [4.0.0] - 2026-04-13
 
 ### Removed
