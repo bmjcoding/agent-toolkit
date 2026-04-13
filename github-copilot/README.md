@@ -10,8 +10,6 @@ github-copilot/
   bundles/      # 8 bundle manifests grouping agents + skills for common workflows
   hooks/        # 9 hook JSON manifests + shell scripts (VS Code .github/hooks/)
   instructions/ # 4 path-specific instruction files (docker, logging, node, python)
-  mcp/
-    mcp.json    # Stub/template for .vscode/mcp.json MCP server config
   prompts/      # 6 reusable prompt files (.prompt.md — VS Code, VS, JetBrains only)
   rules/        # 4 rule directories (docker, logging, node, python)
   scripts/
@@ -164,19 +162,6 @@ belong together; the `install.sh` script wires the underlying directories.
 | `infrastructure` | Infrastructure-as-code and deployment workflow |
 | `security-hardening` | Security review and OWASP workflow |
 | `self-improvement` | Retrospective and iterative improvement workflow |
-
-## MCP Configuration
-
-`github-copilot/mcp/mcp.json` is a stub template for `.vscode/mcp.json` (workspace-scoped
-MCP server configuration). Copy or adapt the relevant server block into your project's
-`.vscode/mcp.json` to activate MCP tools in VS Code Copilot.
-
-Copilot MCP constraints:
-- Only `tools` transport is supported (no resources, no prompts).
-- No OAuth remote MCP — `stdio` or `http+sse` only.
-- For cloud agents: secrets must be prefixed `COPILOT_MCP_` in the `copilot` environment.
-- MCP servers can also be declared per-agent in `.github/agents/<name>.agent.md` frontmatter
-  under the `mcp-servers` key.
 
 ## Copilot-Specific Constraints
 

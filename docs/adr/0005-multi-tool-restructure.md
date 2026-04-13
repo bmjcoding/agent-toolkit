@@ -49,7 +49,6 @@ agent-toolkit/
     bundles/       # 8 curated install bundles
     skills/        # 13 skill wrappers
     rules/         # 4 rule sets (Copilot copy)
-    mcp/           # MCP server config template
     scripts/
   openai-codex/    # OpenAI Codex CLI — fully self-contained
     agents/        # 15 .toml agent definitions

@@ -33,7 +33,6 @@ agent-toolkit/
     bundles/            # 8 curated install bundles
     skills/             # 13 skill wrappers
     rules/              # 4 rule sets
-    mcp/                # MCP server config template (maps to .vscode/mcp.json at install time)
     scripts/
   openai-codex/         # OpenAI Codex CLI — fully self-contained
     agents/             # 15 <name>.toml agent definitions
@@ -67,10 +66,31 @@ All components are versioned independently with SemVer.
 
 ### Claude Code
 
-Run the install script to create symlinks from `~/.claude/` into this repo:
+Claude Code reads configuration, hooks, and components from `~/.claude/`. Wire this toolkit
+in by creating symlinks from `~/.claude/` into the `claude-code/` subtree:
+
+| Symlink | Target | What Claude Code loads from it |
+|---|---|---|
+| `~/.claude/agents` | `claude-code/agents` | 15 agent definitions (YAML frontmatter + Markdown) |
+| `~/.claude/commands` | `claude-code/commands` | 6 slash commands (`/lint`, `/audit`, `/test`, etc.) |
+| `~/.claude/hooks` | `claude-code/hooks` | 9 shell hooks (PreToolUse / PostToolUse) |
+| `~/.claude/rules` | `claude-code/rules` | 4 rule sets (docker, logging, node, python) |
+| `~/.claude/skills` | `claude-code/skills` | 13 skill definitions |
+
+**Setup — one-time from the toolkit root:**
+
+```bash
+TOOLKIT=$(pwd)  # or: export AGENT_TOOLKIT_DIR=$HOME/Developer/git/agent-toolkit
+ln -sfn "$TOOLKIT/claude-code/agents"   ~/.claude/agents
+ln -sfn "$TOOLKIT/claude-code/commands" ~/.claude/commands
+ln -sfn "$TOOLKIT/claude-code/hooks"    ~/.claude/hooks
+ln -sfn "$TOOLKIT/claude-code/rules"    ~/.claude/rules
+ln -sfn "$TOOLKIT/claude-code/skills"   ~/.claude/skills
+```
+
+Or use the bundled installer (also handles `docs` and supports `--dry-run` / `--check`):
 
 ```sh
-# Default (apply symlinks)
 ./claude-code/scripts/install.sh
 
 # Dry-run (preview changes, no writes)
@@ -80,18 +100,11 @@ Run the install script to create symlinks from `~/.claude/` into this repo:
 ./claude-code/scripts/install.sh --check
 ```
 
-Symlink map:
-
-```
-~/.claude/agents   -> <repo>/claude-code/agents
-~/.claude/commands -> <repo>/claude-code/commands
-~/.claude/docs     -> <repo>/claude-code/docs
-~/.claude/hooks    -> <repo>/claude-code/hooks
-~/.claude/rules    -> <repo>/claude-code/rules
-~/.claude/skills   -> <repo>/claude-code/skills
-```
-
 Override repo root: `AGENT_TOOLKIT_DIR=/path/to/repo ./claude-code/scripts/install.sh`
+
+After setup, Claude Code auto-discovers all agents, commands, rules, and skills on next
+session start. Hooks must additionally be registered in `~/.claude/settings.json`
+(see `claude-code/hooks/README.md`).
 
 > **Breaking change (v3.0.0)**: if you have existing `~/.claude/` symlinks pointing to
 > the repo-root `rules/` or `skills/` directories, re-run `install.sh` to retarget them.
