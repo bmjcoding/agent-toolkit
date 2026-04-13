@@ -12,15 +12,15 @@
 #   ~/.claude/commands ->  <REPO>/claude-code/commands
 #   ~/.claude/docs     ->  <REPO>/claude-code/docs
 #   ~/.claude/hooks    ->  <REPO>/claude-code/hooks
-#   ~/.claude/rules    ->  <REPO>/rules             (universal — not claude-code/rules)
-#   ~/.claude/skills   ->  <REPO>/skills            (universal — not shared/skills)
+#   ~/.claude/rules    ->  <REPO>/claude-code/rules
+#   ~/.claude/skills   ->  <REPO>/claude-code/skills
 #
 # IDEMPOTENT: uses `ln -sfn` so re-running is always safe.
 #
 # REFERENCES:
 #   - AGENTS.md: top-level agent roster and surface overview
-#   - docs/adr/0004-per-component-changelog-tag-format.md: restructure ADR
-#     that established the claude-code/, rules/, and skills/ layout
+#   - docs/adr/0005-multi-tool-restructure.md: restructure ADR
+#     that established the per-tool claude-code/rules/ and claude-code/skills/ layout
 #
 # USAGE:
 #   ./install.sh              # apply symlinks
@@ -114,8 +114,8 @@ declare -a SYMLINKS=(
   "commands|claude-code/commands"
   "docs|claude-code/docs"
   "hooks|claude-code/hooks"
-  "rules|rules"
-  "skills|skills"
+  "rules|claude-code/rules"
+  "skills|claude-code/skills"
 )
 
 # ---------------------------------------------------------------------------
