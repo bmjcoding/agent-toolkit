@@ -1,0 +1,107 @@
+# components[].role values: core (required for bundle to function) | optional (nice-to-have) | deprecated (will be removed)
+id: frankenstein-orchestration
+name: Frankenstein Orchestration
+description: The full multi-agent orchestration suite — all 15 agents, 6 skills, 5 commands, and 6 hooks required to run the Frankenstein pipeline end-to-end.
+status: stable
+tags:
+  - orchestration
+  - multi-agent
+  - pipeline
+  - frankenstein
+components:
+  - type: agent
+    id: frankenstein
+    role: core
+  - type: agent
+    id: planner
+    role: core
+  - type: agent
+    id: plan-reviewer
+    role: core
+  - type: agent
+    id: frontend-engineer
+    role: core
+  - type: agent
+    id: backend-engineer
+    role: core
+  - type: agent
+    id: staff-engineer
+    role: core
+  - type: agent
+    id: integration-verifier
+    role: core
+  - type: agent
+    id: design-architect
+    role: core
+  - type: agent
+    id: security-engineer
+    role: core
+  - type: agent
+    id: site-reliability-engineer
+    role: core
+  - type: agent
+    id: quality-engineer
+    role: core
+  - type: agent
+    id: release-gate
+    role: core
+  - type: agent
+    id: release-engineer
+    role: core
+  - type: agent
+    id: doc-writer
+    role: core
+  - type: agent
+    id: autoresearch-analyst
+    role: core
+  - type: skill
+    id: retro
+    role: core
+  - type: skill
+    id: improve
+    role: core
+  - type: skill
+    id: review-skill
+    role: core
+  - type: skill
+    id: prod-readiness
+    role: core
+  - type: skill
+    id: changelog
+    role: core
+  - type: skill
+    id: git-ship
+    role: core
+  - type: command
+    id: lint
+    role: core
+  - type: command
+    id: audit
+    role: core
+  - type: command
+    id: test
+    role: core
+  - type: command
+    id: git-verify
+    role: core
+  - type: command
+    id: backlog
+    role: core
+  - type: hook
+    id: extract-handoff
+    role: core
+  - type: hook
+    id: inject-context
+    role: core
+  - type: hook
+    id: integrity-warn
+    role: core
+  - type: hook
+    id: protect-config
+    role: core
+  - type: hook
+    id: branch-guard
+    role: core
+  - type: hook
+    id: pre-push-secrets
+    role: core

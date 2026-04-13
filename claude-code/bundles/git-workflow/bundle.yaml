@@ -1,0 +1,26 @@
+# components[].role values: core (required for bundle to function) | optional (nice-to-have) | deprecated (will be removed)
+id: git-workflow
+name: Git Workflow
+description: Combines git-ship and changelog skills with the git-verify command and branch/secrets hooks for a complete git-disciplined workflow.
+status: stable
+tags:
+  - git
+  - workflow
+  - changelog
+  - security
+components:
+  - type: skill
+    id: git-ship
+    role: core
+  - type: skill
+    id: changelog
+    role: core
+  - type: command
+    id: git-verify
+    role: core
+  - type: hook
+    id: branch-guard
+    role: core
+  - type: hook
+    id: pre-push-secrets
+    role: core

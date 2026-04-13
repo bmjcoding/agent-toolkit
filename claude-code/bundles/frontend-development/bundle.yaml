@@ -1,0 +1,23 @@
+# components[].role values: core (required for bundle to function) | optional (nice-to-have) | deprecated (will be removed)
+id: frontend-development
+name: Frontend Development
+description: Provides frontend, design-authority, and design-lint skills alongside the frontend-engineer agent for UI implementation and design system compliance.
+status: stable
+tags:
+  - frontend
+  - ui
+  - design
+  - engineering
+components:
+  - type: skill
+    id: frontend
+    role: core
+  - type: skill
+    id: design-authority
+    role: core
+  - type: skill
+    id: design-lint
+    role: core
+  - type: agent
+    id: frontend-engineer
+    role: core
