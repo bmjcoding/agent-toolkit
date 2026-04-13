@@ -5,8 +5,6 @@ description: >
   Use when the user wants to ship code, open a PR, merge, or clean up branches.
 disable-model-invocation: true
 argument-hint: "[pr | merge | cleanup | --draft | --auto-merge | --force]"
-metadata:
-  version: 1.1.0
 ---
 
 # Git Ship

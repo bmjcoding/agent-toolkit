@@ -5,10 +5,7 @@ description: >
   or anytime you want to improve a skill/agent. Supports --validate for
   autonomous improve-then-review validation cycles.
 disable-model-invocation: true
-model: sonnet
 argument-hint: "[retro-output or recommendation] [--validate] [--skip-validation]"
-metadata:
-  version: 1.2.0
 ---
 
 # Improve
