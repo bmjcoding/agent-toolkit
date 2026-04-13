@@ -1,0 +1,17 @@
+{
+  "id": "pre-push-secrets",
+  "name": "Pre-Push Secrets",
+  "type": "hook",
+  "tool": "claude-code",
+  "version": "3.0.0",
+  "ref": "main",
+  "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/hooks/pre-push-secrets/pre-push-secrets.sh",
+  "install_path": "~/.claude/hooks/",
+  "install_command": "curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/hooks/pre-push-secrets/pre-push-secrets.sh -o ~/.claude/hooks/pre-push-secrets.sh && chmod +x ~/.claude/hooks/pre-push-secrets.sh",
+  "files": ["pre-push-secrets.sh", "CHANGELOG.md"],
+  "status": "available",
+  "tooltip_text": "PreToolUse hook that scans staged changes for secrets before git push. Uses gitleaks if available, falls back to grep patterns for common credential formats.",
+  "docs_url": "https://docs.anthropic.com/en/docs/claude-code/hooks",
+  "experimental": false,
+  "notes": "Register in ~/.claude/settings.json hook events after install."
+}

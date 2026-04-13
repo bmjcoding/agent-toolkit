@@ -1,0 +1,17 @@
+{
+  "id": "protect-config",
+  "name": "Protect Config",
+  "type": "hook",
+  "tool": "claude-code",
+  "version": "3.0.0",
+  "ref": "main",
+  "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/hooks/protect-config/protect-config.sh",
+  "install_path": "~/.claude/hooks/",
+  "install_command": "curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/hooks/protect-config/protect-config.sh -o ~/.claude/hooks/protect-config.sh && chmod +x ~/.claude/hooks/protect-config.sh",
+  "files": ["protect-config.sh", "CHANGELOG.md"],
+  "status": "available",
+  "tooltip_text": "PreToolUse hook that blocks Bash writes to ~/.claude control-plane files (CLAUDE.md, settings.json, and similar). Prevents persistent instruction poisoning via hook injection.",
+  "docs_url": "https://docs.anthropic.com/en/docs/claude-code/hooks",
+  "experimental": false,
+  "notes": "Register in ~/.claude/settings.json hook events after install."
+}
