@@ -8,10 +8,13 @@
 #   user-global — each project that wants Copilot support needs this run once.
 #
 # SYMLINK MAP (inside <project>/.github/):
-#   .github/skills       -> <REPO>/skills                        (universal)
+#   .github/agents       -> <REPO>/github-copilot/agents
+#   .github/bundles      -> <REPO>/github-copilot/bundles
+#   .github/hooks        -> <REPO>/github-copilot/hooks
 #   .github/instructions -> <REPO>/github-copilot/instructions
 #   .github/prompts      -> <REPO>/github-copilot/prompts
-#   .github/agents       -> <REPO>/github-copilot/agents
+#   .github/rules        -> <REPO>/github-copilot/rules
+#   .github/skills       -> <REPO>/github-copilot/skills   (13 skills, Copilot wrappers)
 #
 # SCOPE NOTE:
 #   Unlike claude-code/scripts/install.sh (which installs to ~/.claude/ — user-
@@ -153,10 +156,13 @@ GITHUB_DIR="${TARGET_DIR}/.github"
 # ---------------------------------------------------------------------------
 
 declare -a SYMLINKS=(
-  "skills|${REPO_DIR}/skills"
+  "agents|${REPO_DIR}/github-copilot/agents"
+  "bundles|${REPO_DIR}/github-copilot/bundles"
+  "hooks|${REPO_DIR}/github-copilot/hooks"
   "instructions|${REPO_DIR}/github-copilot/instructions"
   "prompts|${REPO_DIR}/github-copilot/prompts"
-  "agents|${REPO_DIR}/github-copilot/agents"
+  "rules|${REPO_DIR}/github-copilot/rules"
+  "skills|${REPO_DIR}/github-copilot/skills"
 )
 
 # ---------------------------------------------------------------------------

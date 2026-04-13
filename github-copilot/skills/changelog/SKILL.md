@@ -4,32 +4,7 @@ description: >
   Canonical CHANGELOG.md standard: Keep a Changelog 1.1.0 + SemVer, required header,
   version sections, categories, per-component tags, comparison links, bump table. Use
   when creating or editing any CHANGELOG.md in the toolkit.
-argument-hint: "[path to CHANGELOG.md to edit or create]"
-target: vscode
 ---
-
-<!-- TARGET SURFACE: VS Code GitHub Copilot extension only.
-     Not intended for GitHub.com cloud agent or CLI tools. -->
-
-<!-- POINTER STRATEGY: This file is a lightweight wrapper around the canonical skill
-     at shared/skills/changelog/SKILL.md. It re-exports the frontmatter in Copilot
-     format and includes all body content inline so VS Code can load it without
-     a symlink. The canonical source remains shared/skills/changelog/SKILL.md.
-
-     DECISION: pointer-style wrapper chosen over full copy because:
-     1. The canonical source is authoritative — edits to shared/ propagate without
-        manual sync.
-     2. The only Copilot-specific adaptation is frontmatter (dropping
-        disable-model-invocation, converting metadata.version to a comment).
-     3. A full copy creates drift risk: two files describing the same standard
-        that must be kept in sync manually.
-
-     LIMITATION: VS Code skill discovery reads from .github/skills/, .agents/skills/,
-     or .claude/skills/. Files in github-copilot/skills/ are NOT auto-discovered by
-     Copilot — you must symlink or copy this file to one of those paths. The
-     github-copilot/scripts/install.sh script handles this. -->
-
-<!-- version: 3.0.0 — mirrors shared/skills/changelog @ v3.0.0 -->
 
 # Changelog Standard
 
@@ -126,12 +101,12 @@ Rules:
 - If no VCS tag has been pushed yet for this component, omit link definitions and
   document with: `<!-- No tags pushed yet for this component — compare links omitted until first tag -->`
 
-**Platform-specific URL templates** (GitLab, Bitbucket Cloud, Bitbucket Datacenter) ->
-see `shared/skills/changelog/references/platform-urls.md`.
+**Platform-specific URL templates** (GitLab, Bitbucket Cloud, Bitbucket Datacenter) →
+see `references/platform-urls.md`.
 
-Run `shared/skills/changelog/scripts/detect-platform.sh` to auto-detect the platform
-from `git remote`. Override by creating `.changelog-platform.yml` at the repo root:
-`platform: gitlab` (or `github`, `bitbucket-cloud`, `bitbucket-datacenter`).
+Run `scripts/detect-platform.sh` to auto-detect the platform from `git remote`. Override
+by creating `.changelog-platform.yml` at the repo root: `platform: gitlab` (or `github`,
+`bitbucket-cloud`, `bitbucket-datacenter`).
 
 ## [Unreleased] Workflow
 
@@ -160,11 +135,15 @@ atomic.
 and its version bumped. Other components' `[Unreleased]` sections are unaffected by an
 unrelated component's release.
 
+**Who triggers:** a human developer, the `/sync-toolkit` command, or the
+release-engineer agent when dispatched by the orchestrator. Automated CI does not cut
+releases without explicit invocation.
+
 ## SemVer Bump Table
 
 | Signal | Bump |
 |---|---|
-| Wording fix, gotcha added, <= 5 lines changed, no new sections | PATCH |
+| Wording fix, gotcha added, ≤5 lines changed, no new sections | PATCH |
 | New section, new reference file, new capability, new rule | MINOR |
 | Structural rewrite, output format change, handoff schema change, breaking behavior | MAJOR |
 
@@ -192,8 +171,8 @@ versioned independently using the per-component tag format.
 
 ## Gotchas
 
-Common authoring mistakes. See `shared/skills/changelog/references/anti-patterns.md`
-for the full table and the commit-log-versus-changelog rules.
+Common authoring mistakes. See `references/anti-patterns.md` for the full table and the
+commit-log-versus-changelog rules.
 
 - `## X.Y.Z` without brackets breaks tooling that parses the `## [x.y.z]` format.
 - Non-ISO dates (`04/05/26`) are ambiguous and forbidden.
@@ -209,18 +188,18 @@ for the full table and the commit-log-versus-changelog rules.
 
 | Topic | File |
 |-------|------|
-| Platform URL formats (GitHub, GitLab, Bitbucket Cloud, Bitbucket Datacenter) | `shared/skills/changelog/references/platform-urls.md` |
-| Anti-patterns table, commit-log-vs-changelog rules, yanked releases | `shared/skills/changelog/references/anti-patterns.md` |
-| Migrating from monolithic tags; version renumbering procedure | `shared/skills/changelog/references/migration.md` |
-| Drift-prevention hooks; commit classification for automated entries | `shared/skills/changelog/references/enforcement.md` |
+| Platform URL formats (GitHub, GitLab, Bitbucket Cloud, Bitbucket Datacenter) | `references/platform-urls.md` |
+| Anti-patterns table, commit-log-vs-changelog rules, yanked releases | `references/anti-patterns.md` |
+| Migrating from monolithic tags; version renumbering procedure | `references/migration.md` |
+| Drift-prevention hooks; commit classification for automated entries | `references/enforcement.md` |
 
 ## Scripts
 
 | Script | Purpose |
 |--------|---------|
-| `detect-platform.sh` | Detect repo platform (github / gitlab / bitbucket-cloud / bitbucket-datacenter) from `git remote` and `.changelog-platform.yml`. |
-| `backfill-changelog-tags.sh` | Backfill per-component git tags from a CHANGELOG.md during migration from monolithic tag format. |
+| `scripts/detect-platform.sh` | Detect repo platform (github / gitlab / bitbucket-cloud / bitbucket-datacenter) from `git remote` and `.changelog-platform.yml`. |
+| `scripts/backfill-changelog-tags.sh` | Backfill per-component git tags from a CHANGELOG.md during migration from monolithic tag format. |
 
-Both scripts are in `shared/skills/changelog/scripts/` and support `--help`.
+Both scripts support `--help`.
 
 $ARGUMENTS

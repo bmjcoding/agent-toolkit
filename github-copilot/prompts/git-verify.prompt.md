@@ -1,6 +1,6 @@
 ---
 description: "Verify git hygiene and commit safety — secrets, sensitive files, large files, commit quality."
-mode: agent
+agent: agent
 tools: [read_file, search_files, run_in_terminal, list_dir]
 argument-hint: "[paths...] [--dry-run]"
 ---
