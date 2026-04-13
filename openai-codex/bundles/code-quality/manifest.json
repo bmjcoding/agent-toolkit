@@ -9,12 +9,28 @@
   "install_path": "",
   "install_command": "",
   "files": [
-    "manifest.json",
-    "../code-quality.json"
+    "manifest.json"
   ],
   "status": "unverified",
   "tooltip_text": "OpenAI Codex CLI plugin system is not yet finalized in official documentation. See docs for available primitives.",
   "docs_url": "https://developers.openai.com/codex",
   "experimental": false,
-  "notes": "UNVERIFIED — Codex plugin/bundle format not documented at researched URLs."
+  "notes": "UNVERIFIED \u2014 Codex plugin/bundle format not documented at researched URLs. openai-codex omits 3 command-type components present in claude-code and github-copilot variants (lint, audit, test) — codex CLI does not support the command primitive.",
+  "components": [
+    {
+      "type": "skill",
+      "id": "prod-readiness",
+      "role": "core"
+    },
+    {
+      "type": "skill",
+      "id": "review-skill",
+      "role": "core"
+    },
+    {
+      "type": "skill",
+      "id": "design-lint",
+      "role": "core"
+    }
+  ]
 }

@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.1.0] - 2026-04-13
+
+### Added
+
+- `dependencies[]` field on all 15 agent manifests. Each entry declares a required or optional primitive dependency (skill, command, hook, or agent) with an optional `reason` string explaining when that dependency is invoked.
+- `components[]` field on all 8 bundle manifests. Each entry declares a constituent primitive with `type`, `id`, and `role` (`core` | `optional` | `dep`). Bundle manifests are now the single source of truth for composition.
+- `commands-unsupported/` directory with 6 command-stub manifests (`status: unavailable`, `install_command: ""`). Codex CLI has no user-defined slash-command mechanism; these stubs document the gap and are indexed as unavailable entries in the ALT Central download matrix.
+
+### Removed
+
+- 8 sibling bundle composition files (`bundles/<name>.json`). Composition data has migrated to each bundle's `manifest.json` `components[]` field.
+
 ## [3.0.0] - 2026-04-12
 
 ### Added

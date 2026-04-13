@@ -9,12 +9,28 @@
   "install_path": "~/.claude/plugins/infrastructure/",
   "install_command": "/plugin install infrastructure@bmjcoding/agent-toolkit",
   "files": [
-    "manifest.json",
-    "../infrastructure.json"
+    "manifest.json"
   ],
   "status": "available",
   "tooltip_text": "",
   "docs_url": "https://docs.anthropic.com/en/docs/claude-code/plugins",
   "experimental": false,
-  "notes": "Claude Code 'plugin' primitive."
+  "notes": "Claude Code 'plugin' primitive.",
+  "components": [
+    {
+      "type": "skill",
+      "id": "infra",
+      "role": "core"
+    },
+    {
+      "type": "skill",
+      "id": "observability-patterns",
+      "role": "core"
+    },
+    {
+      "type": "agent",
+      "id": "site-reliability-engineer",
+      "role": "core"
+    }
+  ]
 }
