@@ -1,0 +1,28 @@
+{
+  "id": "design-lint",
+  "name": "Design Lint",
+  "type": "skill",
+  "tool": "openai-codex",
+  "version": "3.0.0",
+  "ref": "main",
+  "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/skills/design-lint/SKILL.md",
+  "install_path": "~/.codex/skills/design-lint/",
+  "install_command": "mkdir -p ~/.codex/skills/design-lint/checks && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/skills/design-lint/SKILL.md -o ~/.codex/skills/design-lint/SKILL.md",
+  "files": [
+    "SKILL.md",
+    "CHANGELOG.md",
+    "checks/border-radius.sh",
+    "checks/dark-mode-pairs.sh",
+    "checks/focus-visible.sh",
+    "checks/hex-colors.sh",
+    "checks/oklch-gamut-accent.sh",
+    "checks/oklch-gamut-surface.sh",
+    "checks/shadow-weight.sh",
+    "checks/z-index.sh"
+  ],
+  "status": "available",
+  "tooltip_text": "Deterministic design system linting checks for Tailwind CSS/React components.",
+  "docs_url": "https://developers.openai.com/codex",
+  "experimental": false,
+  "notes": ""
+}

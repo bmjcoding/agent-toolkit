@@ -1,0 +1,23 @@
+{
+  "id": "owasp-reference",
+  "name": "OWASP Reference",
+  "type": "skill",
+  "tool": "openai-codex",
+  "version": "2.0.0",
+  "ref": "main",
+  "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/skills/owasp-reference/SKILL.md",
+  "install_path": "~/.codex/skills/owasp-reference/",
+  "install_command": "mkdir -p ~/.codex/skills/owasp-reference/references && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/skills/owasp-reference/SKILL.md -o ~/.codex/skills/owasp-reference/SKILL.md",
+  "files": [
+    "SKILL.md",
+    "CHANGELOG.md",
+    "references/auth-patterns.md",
+    "references/owasp-top10.md",
+    "references/stride-threats.md"
+  ],
+  "status": "available",
+  "tooltip_text": "OWASP Top 10, STRIDE threat modeling, and common vulnerability patterns for security review.",
+  "docs_url": "https://developers.openai.com/codex",
+  "experimental": false,
+  "notes": ""
+}

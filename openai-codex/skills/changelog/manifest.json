@@ -1,0 +1,26 @@
+{
+  "id": "changelog",
+  "name": "Changelog",
+  "type": "skill",
+  "tool": "openai-codex",
+  "version": "3.0.0",
+  "ref": "main",
+  "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/skills/changelog/SKILL.md",
+  "install_path": "~/.codex/skills/changelog/",
+  "install_command": "mkdir -p ~/.codex/skills/changelog/references ~/.codex/skills/changelog/scripts && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/skills/changelog/SKILL.md -o ~/.codex/skills/changelog/SKILL.md",
+  "files": [
+    "SKILL.md",
+    "CHANGELOG.md",
+    "references/anti-patterns.md",
+    "references/enforcement.md",
+    "references/migration.md",
+    "references/platform-urls.md",
+    "scripts/backfill-changelog-tags.sh",
+    "scripts/detect-platform.sh"
+  ],
+  "status": "available",
+  "tooltip_text": "Canonical CHANGELOG.md standard: Keep a Changelog 1.1.0 + SemVer, per-component tags, bump table.",
+  "docs_url": "https://developers.openai.com/codex",
+  "experimental": false,
+  "notes": ""
+}

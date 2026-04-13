@@ -1,0 +1,20 @@
+{
+  "id": "frontend",
+  "name": "Frontend",
+  "type": "skill",
+  "tool": "openai-codex",
+  "version": "3.0.0",
+  "ref": "main",
+  "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/skills/frontend/SKILL.md",
+  "install_path": "~/.codex/skills/frontend/",
+  "install_command": "mkdir -p ~/.codex/skills/frontend && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/skills/frontend/SKILL.md -o ~/.codex/skills/frontend/SKILL.md",
+  "files": [
+    "SKILL.md",
+    "CHANGELOG.md"
+  ],
+  "status": "available",
+  "tooltip_text": "Lightweight frontend workflow — implement with design system enforcement, review, and lint.",
+  "docs_url": "https://developers.openai.com/codex",
+  "experimental": false,
+  "notes": ""
+}

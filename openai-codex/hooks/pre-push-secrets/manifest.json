@@ -1,0 +1,19 @@
+{
+  "id": "pre-push-secrets",
+  "name": "Pre-Push Secrets Scan",
+  "type": "hook",
+  "tool": "openai-codex",
+  "version": "3.0.0",
+  "ref": "main",
+  "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/pre-push-secrets.sh",
+  "install_path": "~/.codex/hooks/",
+  "install_command": "# Enable experimental hooks in ~/.codex/config.toml:\n# [features]\n# codex_hooks = true\n\n# Then install:\nmkdir -p ~/.codex/hooks && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/pre-push-secrets.sh -o ~/.codex/hooks/pre-push-secrets.sh && chmod +x ~/.codex/hooks/pre-push-secrets.sh",
+  "files": [
+    "pre-push-secrets.sh"
+  ],
+  "status": "available",
+  "tooltip_text": "Codex CLI hooks are experimental and require [features] codex_hooks = true in ~/.codex/config.toml.",
+  "docs_url": "https://developers.openai.com/codex",
+  "experimental": true,
+  "notes": "EXPERIMENTAL FEATURE — requires codex_hooks flag in config.toml. Secrets scan (gitleaks or grep fallback) before git push during PreToolUse Bash events. Ported from claude-code/hooks/pre-push-secrets."
+}
