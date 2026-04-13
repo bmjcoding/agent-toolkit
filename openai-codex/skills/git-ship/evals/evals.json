@@ -1,0 +1,54 @@
+{
+  "skill_name": "git-ship",
+  "evals": [
+    {
+      "id": 1,
+      "name": "full-ship-github",
+      "prompt": "Run /git-ship with unstaged changes on a feature branch against a GitHub remote. The branch has 2 uncommitted files and is 3 commits ahead of the default branch.",
+      "expected_output": "Commits changes, rebases on default, pushes with --force-with-lease, creates PR with issue refs, outputs summary table.",
+      "assertions": [
+        "Stages changed files by name (not git add -A)",
+        "Generates commit message matching repo style with Co-Authored-By trailer",
+        "Rebases on default branch before pushing",
+        "Uses --force-with-lease --force-if-includes for push",
+        "Creates PR with issue refs parsed from branch/commits",
+        "Outputs summary table with Commit SHA, PR URL, Auto-merge status, Branches pruned"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "pr-only",
+      "prompt": "Run /git-ship pr on a branch that already has 2 commits ahead of default, clean working tree, no open PR.",
+      "expected_output": "Does not commit. Rebases, pushes, creates PR. Reports URL.",
+      "assertions": [
+        "Does NOT create a new commit",
+        "Aborts if on default branch",
+        "Checks for existing open PR — stops if one exists",
+        "Rebases and pushes",
+        "Creates PR and reports URL"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "empty-diff-guard",
+      "prompt": "Run /git-ship on a branch that has no uncommitted changes and is 0 commits ahead of the default branch.",
+      "expected_output": "Reports 'Nothing to ship' and stops cleanly. No push or PR.",
+      "assertions": [
+        "Reports 'Nothing to ship' and stops",
+        "Does NOT attempt push or PR creation",
+        "Does NOT error — exits cleanly"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "on-default-branch-guard",
+      "prompt": "Run /git-ship while on main (the default branch) with uncommitted changes.",
+      "expected_output": "Aborts with clear error before making any commits or pushes.",
+      "assertions": [
+        "Detects that current branch equals default branch",
+        "Aborts with a clear error message before making any commits or pushes",
+        "Does NOT create a PR on the default branch"
+      ]
+    }
+  ]
+}

@@ -9,8 +9,8 @@
 # INSTALL TARGETS:
 #   Agents:   openai-codex/agents/*.toml   -> ~/.codex/agents/  (user-global)
 #             OR .codex/agents/             (project-local with --project)
-#   Hooks:    openai-codex/hooks/*.sh
-#             openai-codex/hooks/hooks.json -> ~/.codex/hooks/
+#   Hooks:    openai-codex/hooks/hooks.json -> ~/.codex/hooks.json  (sibling to config.toml)
+#             Hook scripts remain in openai-codex/hooks/ (referenced by path in hooks.json)
 #   Config:   Appends [[skills.config]] blocks from config.toml.template
 #             to ~/.codex/config.toml  (with prompt — NEVER overwrites existing)
 #   Feature:  Adds features.codex_hooks=true to ~/.codex/config.toml (with prompt)
@@ -103,11 +103,11 @@ CONFIG_TEMPLATE="${REPO_DIR}/openai-codex/config.toml.template"
 
 if [[ "$SCOPE" == "project" ]]; then
   AGENTS_DEST="${PWD}/.codex/agents"
-  HOOKS_DEST="${HOME}/.codex/hooks"   # hooks always go to user-global
+  HOOKS_JSON_DEST="${HOME}/.codex/hooks.json"   # hooks.json always goes to user-global, sibling to config.toml
   CODEX_CONFIG="${HOME}/.codex/config.toml"
 else
   AGENTS_DEST="${HOME}/.codex/agents"
-  HOOKS_DEST="${HOME}/.codex/hooks"
+  HOOKS_JSON_DEST="${HOME}/.codex/hooks.json"
   CODEX_CONFIG="${HOME}/.codex/config.toml"
 fi
 
@@ -140,7 +140,7 @@ echo "agent-toolkit: openai-codex install.sh"
 echo "======================================="
 echo "REPO_DIR:    ${REPO_DIR}"
 echo "Scope:       ${SCOPE} (agents -> ${AGENTS_DEST})"
-echo "Hooks:       ${HOOKS_DEST}"
+echo "Hooks JSON:  ${HOOKS_JSON_DEST}"
 echo "Config:      ${CODEX_CONFIG}"
 echo ""
 
@@ -186,32 +186,23 @@ if [[ "$CHECK_MODE" == "true" ]]; then
 
   # --- Hooks (only if not skipped) ---
   if [[ "$SKIP_HOOKS" == "false" ]]; then
-    echo "Hooks (${HOOKS_DEST}):"
-    if [[ ! -d "${HOOKS_DEST}" ]]; then
-      miss "hooks directory not found: ${HOOKS_DEST}"
-      all_ok=false
+    echo "Hooks JSON (${HOOKS_JSON_DEST}):"
+    hooks_json_src="${HOOKS_SRC}/hooks.json"
+    if [[ -L "${HOOKS_JSON_DEST}" ]]; then
+      current_target="$(readlink "${HOOKS_JSON_DEST}")"
+      if [[ "${current_target}" == "${hooks_json_src}" ]]; then
+        ok "hooks.json -> ${current_target}"
+      else
+        printf '  [DIFF]       hooks.json\n' >&2
+        printf '                 current:  %s\n' "${current_target}" >&2
+        printf '                 expected: %s\n' "${hooks_json_src}" >&2
+        all_ok=false
+      fi
+    elif [[ -f "${HOOKS_JSON_DEST}" ]]; then
+      skip "hooks.json (copy — not a symlink; run install to convert)"
     else
-      for hook_src in "${HOOKS_SRC}"/*.sh "${HOOKS_SRC}/hooks.json"; do
-        [[ -f "$hook_src" ]] || continue
-        fname="$(basename "$hook_src")"
-        dest_path="${HOOKS_DEST}/${fname}"
-        if [[ -L "${dest_path}" ]]; then
-          current_target="$(readlink "${dest_path}")"
-          if [[ "${current_target}" == "${hook_src}" ]]; then
-            ok "${fname} -> ${current_target}"
-          else
-            printf '  [DIFF]       %s\n' "${fname}" >&2
-            printf '                 current:  %s\n' "${current_target}" >&2
-            printf '                 expected: %s\n' "${hook_src}" >&2
-            all_ok=false
-          fi
-        elif [[ -f "${dest_path}" ]]; then
-          skip "${fname} (copy — not a symlink)"
-        else
-          miss "${fname}"
-          all_ok=false
-        fi
-      done
+      miss "hooks.json not found: ${HOOKS_JSON_DEST}"
+      all_ok=false
     fi
     echo ""
   fi
@@ -345,52 +336,47 @@ if [[ "$SKIP_HOOKS" == "true" ]]; then
 else
   echo "  NOTE: Codex hooks are experimental. They require Codex CLI v0.120.0+."
   echo "        You will be prompted before enabling features.codex_hooks in config."
+  echo "        Hook scripts stay in openai-codex/hooks/; hooks.json is symlinked"
+  echo "        to ~/.codex/hooks.json (sibling to config.toml) per the official spec."
   echo ""
 
-  if [[ "$DRY_RUN" == "false" && ! -d "${HOOKS_DEST}" ]]; then
-    mkdir -p "${HOOKS_DEST}"
-    echo "  created: ${HOOKS_DEST}"
-  fi
+  hooks_json_src="${HOOKS_SRC}/hooks.json"
+  dest_path="${HOOKS_JSON_DEST}"
 
-  for hook_src in "${HOOKS_SRC}"/*.sh "${HOOKS_SRC}/hooks.json"; do
-    [[ -f "$hook_src" ]] || continue
-    fname="$(basename "$hook_src")"
-    dest_path="${HOOKS_DEST}/${fname}"
-
-    if [[ "$DRY_RUN" == "true" ]]; then
-      if [[ -L "${dest_path}" ]]; then
-        current="$(readlink "${dest_path}")"
-        if [[ "$current" == "$hook_src" ]]; then
-          printf '  unchanged:   %s (already symlinked)\n' "${fname}"
-        else
-          printf '  would update: %s\n' "${fname}"
-          printf '    before: %s\n' "${current}"
-          printf '    after:  %s\n' "${hook_src}"
-        fi
+  if [[ "$DRY_RUN" == "true" ]]; then
+    if [[ -L "${dest_path}" ]]; then
+      current="$(readlink "${dest_path}")"
+      if [[ "$current" == "$hooks_json_src" ]]; then
+        printf '  unchanged:   hooks.json (already symlinked)\n'
       else
-        printf '  would create symlink: %s -> %s\n' "${dest_path}" "${hook_src}"
+        printf '  would update: hooks.json\n'
+        printf '    before: %s\n' "${current}"
+        printf '    after:  %s\n' "${hooks_json_src}"
       fi
-      continue
+    else
+      printf '  would create symlink: %s -> %s\n' "${dest_path}" "${hooks_json_src}"
     fi
+  else
+    # Ensure ~/.codex/ directory exists
+    mkdir -p "$(dirname "${dest_path}")"
 
     # Guard: abort if a real file occupies the link path (hooks are sensitive — skip, don't overwrite)
     if [[ -e "${dest_path}" && ! -L "${dest_path}" ]]; then
       echo "  SKIP (real file exists — not overwriting): ${dest_path}" >&2
-      continue
-    fi
-
-    before="(none)"
-    [[ -L "${dest_path}" ]] && before="$(readlink "${dest_path}")"
-
-    ln -sfn "${hook_src}" "${dest_path}"
-    after="$(readlink "${dest_path}")"
-
-    if [[ "$before" == "$after" ]]; then
-      printf '  unchanged:   %s\n' "${fname}"
     else
-      printf '  installed:   %s -> %s\n' "${fname}" "${after}"
+      before="(none)"
+      [[ -L "${dest_path}" ]] && before="$(readlink "${dest_path}")"
+
+      ln -sfn "${hooks_json_src}" "${dest_path}"
+      after="$(readlink "${dest_path}")"
+
+      if [[ "$before" == "$after" ]]; then
+        printf '  unchanged:   hooks.json\n'
+      else
+        printf '  installed:   hooks.json -> %s\n' "${after}"
+      fi
     fi
-  done
+  fi
 
   echo ""
 fi
@@ -440,8 +426,12 @@ else
         echo "  created: ${CODEX_CONFIG}"
       fi
 
+      # Escape sed metacharacters in REPO_DIR before interpolation.
+      # Characters |, \, and & have special meaning in sed replacement strings.
+      REPO_DIR_ESCAPED=$(printf '%s' "$REPO_DIR" | sed 's|[\\&|]|\\&|g')
+
       # Replace ${AGENT_TOOLKIT_DIR} placeholder with actual REPO_DIR
-      _skills_to_append="$(sed "s|\${AGENT_TOOLKIT_DIR}|${REPO_DIR}|g" "${CONFIG_TEMPLATE}" \
+      _skills_to_append="$(sed "s|\${AGENT_TOOLKIT_DIR}|${REPO_DIR_ESCAPED}|g" "${CONFIG_TEMPLATE}" \
         | awk '/^\[\[skills\.config\]\]/{found=1} found && /^# -+$/{found=0} found{print}')"
 
       printf '\n# ---- agent-toolkit skills (added by install.sh) ----\n' >> "${CODEX_CONFIG}"

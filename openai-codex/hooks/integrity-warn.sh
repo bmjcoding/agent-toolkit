@@ -18,7 +18,7 @@
 #   ~/.codex/hooks/integrity-warn.sh
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
-INTEGRITY_SCRIPT="${SCRIPT_DIR}/../integrity-check.sh"
+INTEGRITY_SCRIPT="${SCRIPT_DIR}/../scripts/integrity-check.sh"
 
 if [ ! -x "$INTEGRITY_SCRIPT" ]; then
   # Toolkit not found — fail silently, never block
