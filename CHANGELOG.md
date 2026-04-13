@@ -8,6 +8,25 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.2.0] - 2026-04-13
+
+### Added
+
+- `components[]` field on all 24 bundle manifests (8 per tool, across claude-code, github-copilot, openai-codex). Each entry carries `type`, `id`, and `role` (`core` | `optional` | `dep`). Bundle manifests are now the single source of truth for composition.
+- `dependencies[]` field on all 45 agent manifests (15 per tool). Each entry carries `type`, `id`, `optional`, and an optional `reason` string. The `frankenstein` agent declares 17 primitive dependencies (skills, commands, hooks) and 14 agent-type dependencies; `planner` declares 1 optional agent dependency (`plan-reviewer`).
+- `commands-unsupported/` primitive directory for openai-codex, containing 6 command-stub manifests (`status: unavailable`) documenting that Codex CLI has no user-defined slash-command mechanism. These stubs are indexed by `generate-index.js` and surfaced as unavailable options in the ALT Central download matrix.
+- Cross-reference validation in `scripts/generate-index.js`: exits with code 1 and names every broken reference when any `components[].id` or `dependencies[].id` does not resolve to a real same-tool manifest entry. Ships with an inline `--test` harness (3 test cases).
+- Notes in 3 bundle manifests documenting where openai-codex command primitives diverge from claude-code equivalents (no user-defined slash commands).
+- Total manifest count increased from 156 to 165.
+
+### Removed
+
+- 24 sibling composition files (`bundles/<name>.json`) across all three tools. Composition data has migrated to each bundle's `manifest.json` `components[]` field. The sibling files had become a second source of truth and were deleted to prevent drift.
+
+### Changed
+
+- `scripts/generate-index.js` extended with `validateCrossRefs()` — the generator now validates all cross-references before writing `index.json`. The generator remains the canonical entry point for rebuilding the catalog; re-run after any manifest addition or modification.
+
 ## [3.1.0] - 2026-04-12
 
 ### Added
@@ -129,7 +148,8 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 3. Re-run the install script: `./claude-code/scripts/install.sh`.
 4. Verify: `./claude-code/scripts/install.sh --check`.
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/v3.1.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/v3.2.0...HEAD
+[3.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/v3.1.0...v3.2.0
 [3.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/v3.0.0...v3.1.0
 [3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/v2.0.0...v3.0.0
 [2.0.0]: https://github.com/bmjcoding/agent-toolkit/releases/tag/v2.0.0
