@@ -1,0 +1,17 @@
+{
+  "id": "branch-guard",
+  "name": "Branch Guard",
+  "type": "hook",
+  "tool": "claude-code",
+  "version": "3.0.0",
+  "ref": "main",
+  "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/hooks/branch-guard/branch-guard.sh",
+  "install_path": "~/.claude/hooks/",
+  "install_command": "curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/hooks/branch-guard/branch-guard.sh -o ~/.claude/hooks/branch-guard.sh && chmod +x ~/.claude/hooks/branch-guard.sh",
+  "files": ["branch-guard.sh", "CHANGELOG.md"],
+  "status": "available",
+  "tooltip_text": "PreToolUse hook that blocks direct git push to main or master. Denies the tool call and instructs the agent to create a feature branch first.",
+  "docs_url": "https://docs.anthropic.com/en/docs/claude-code/hooks",
+  "experimental": false,
+  "notes": "Register in ~/.claude/settings.json hook events after install."
+}

@@ -1,0 +1,17 @@
+{
+  "id": "release-engineer",
+  "name": "Release Engineer",
+  "type": "agent",
+  "tool": "claude-code",
+  "version": "3.0.0",
+  "ref": "main",
+  "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/release-engineer/release-engineer.md",
+  "install_path": "~/.claude/agents/",
+  "install_command": "mkdir -p ~/.claude/agents && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/release-engineer/release-engineer.md -o ~/.claude/agents/release-engineer.md",
+  "files": ["release-engineer.md"],
+  "status": "available",
+  "tooltip_text": "Structures commits, writes PR descriptions, pushes code, creates pull requests, and optionally bumps versions and creates releases. Use during Phase 5-6.",
+  "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
+  "experimental": false,
+  "notes": ""
+}

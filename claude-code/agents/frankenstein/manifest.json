@@ -1,0 +1,17 @@
+{
+  "id": "frankenstein",
+  "name": "Frankenstein",
+  "type": "agent",
+  "tool": "claude-code",
+  "version": "3.0.0",
+  "ref": "main",
+  "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/frankenstein/frankenstein.md",
+  "install_path": "~/.claude/agents/",
+  "install_command": "mkdir -p ~/.claude/agents && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/frankenstein/frankenstein.md -o ~/.claude/agents/frankenstein.md",
+  "files": ["frankenstein.md"],
+  "status": "available",
+  "tooltip_text": "Master orchestrator that decomposes tasks, spawns parallel subagents, and coordinates multi-phase pipelines.",
+  "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
+  "experimental": false,
+  "notes": ""
+}

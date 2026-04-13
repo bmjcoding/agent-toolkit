@@ -1,0 +1,20 @@
+{
+  "id": "frankenstein-orchestration",
+  "name": "Frankenstein Orchestration",
+  "type": "bundle",
+  "tool": "openai-codex",
+  "version": "3.0.0",
+  "ref": "main",
+  "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/bundles/frankenstein-orchestration.json",
+  "install_path": "",
+  "install_command": "",
+  "files": [
+    "manifest.json",
+    "../frankenstein-orchestration.json"
+  ],
+  "status": "unverified",
+  "tooltip_text": "OpenAI Codex CLI plugin system is not yet finalized in official documentation. See docs for available primitives.",
+  "docs_url": "https://developers.openai.com/codex",
+  "experimental": false,
+  "notes": "UNVERIFIED — Codex plugin/bundle format not documented at researched URLs."
+}

@@ -1,0 +1,3184 @@
+[
+  {
+    "id": "autoresearch-analyst",
+    "name": "Autoresearch Analyst",
+    "type": "agent",
+    "tool": "claude-code",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/autoresearch-analyst/autoresearch-analyst.md",
+    "install_path": "~/.claude/agents/",
+    "install_command": "mkdir -p ~/.claude/agents && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/autoresearch-analyst/autoresearch-analyst.md -o ~/.claude/agents/autoresearch-analyst.md",
+    "files": [
+      "autoresearch-analyst.md"
+    ],
+    "status": "available",
+    "tooltip_text": "Self-improvement agent that runs retrospectives, applies improvements, reviews definitions, and runs full improve-validate cycles. Spawned by orchestrators or dispatched for batch operations.",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
+    "experimental": false,
+    "notes": ""
+  },
+  {
+    "id": "backend-engineer",
+    "name": "Backend Engineer",
+    "type": "agent",
+    "tool": "claude-code",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/backend-engineer/backend-engineer.md",
+    "install_path": "~/.claude/agents/",
+    "install_command": "mkdir -p ~/.claude/agents && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/backend-engineer/backend-engineer.md -o ~/.claude/agents/backend-engineer.md",
+    "files": [
+      "backend-engineer.md"
+    ],
+    "status": "available",
+    "tooltip_text": "Backend engineer that builds API routes, services, and data layer code with contract awareness. Use for subtasks with API endpoints, services, middleware, or server-side files.",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
+    "experimental": false,
+    "notes": ""
+  },
+  {
+    "id": "design-architect",
+    "name": "Design Architect",
+    "type": "agent",
+    "tool": "claude-code",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/design-architect/design-architect.md",
+    "install_path": "~/.claude/agents/",
+    "install_command": "mkdir -p ~/.claude/agents && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/design-architect/design-architect.md -o ~/.claude/agents/design-architect.md",
+    "files": [
+      "design-architect.md"
+    ],
+    "status": "available",
+    "tooltip_text": "Senior architect and design authority reviewing implementation for structural integrity, API/code design quality, and visual/UI coherence. Runs deterministic structural checks first, then semantic review. Use during Phase 3.",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
+    "experimental": false,
+    "notes": ""
+  },
+  {
+    "id": "doc-writer",
+    "name": "Doc Writer",
+    "type": "agent",
+    "tool": "claude-code",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/doc-writer/doc-writer.md",
+    "install_path": "~/.claude/agents/",
+    "install_command": "mkdir -p ~/.claude/agents && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/doc-writer/doc-writer.md -o ~/.claude/agents/doc-writer.md",
+    "files": [
+      "doc-writer.md"
+    ],
+    "status": "available",
+    "tooltip_text": "Technical writer that updates README, CHANGELOG, API docs, JSDoc/docstrings, config docs, and Architecture Decision Records after feature implementation.",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
+    "experimental": false,
+    "notes": ""
+  },
+  {
+    "id": "frankenstein",
+    "name": "Frankenstein",
+    "type": "agent",
+    "tool": "claude-code",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/frankenstein/frankenstein.md",
+    "install_path": "~/.claude/agents/",
+    "install_command": "mkdir -p ~/.claude/agents && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/frankenstein/frankenstein.md -o ~/.claude/agents/frankenstein.md",
+    "files": [
+      "frankenstein.md"
+    ],
+    "status": "available",
+    "tooltip_text": "Master orchestrator that decomposes tasks, spawns parallel subagents, and coordinates multi-phase pipelines.",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
+    "experimental": false,
+    "notes": ""
+  },
+  {
+    "id": "frontend-engineer",
+    "name": "Frontend Engineer",
+    "type": "agent",
+    "tool": "claude-code",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/frontend-engineer/frontend-engineer.md",
+    "install_path": "~/.claude/agents/",
+    "install_command": "mkdir -p ~/.claude/agents && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/frontend-engineer/frontend-engineer.md -o ~/.claude/agents/frontend-engineer.md",
+    "files": [
+      "frontend-engineer.md"
+    ],
+    "status": "available",
+    "tooltip_text": "Frontend engineer that builds React/Tailwind UI with design system awareness. Always loads the design-authority skill before writing UI code. Use for subtasks with .tsx, .css, or component/page files.",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
+    "experimental": false,
+    "notes": ""
+  },
+  {
+    "id": "integration-verifier",
+    "name": "Integration Verifier",
+    "type": "agent",
+    "tool": "claude-code",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/integration-verifier/integration-verifier.md",
+    "install_path": "~/.claude/agents/",
+    "install_command": "mkdir -p ~/.claude/agents && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/integration-verifier/integration-verifier.md -o ~/.claude/agents/integration-verifier.md",
+    "files": [
+      "integration-verifier.md"
+    ],
+    "status": "available",
+    "tooltip_text": "Verifies integration contracts between groups — file existence, type compilation, interface correctness — then reviews boundaries from the provider's perspective. Use between implementation groups and during Phase 3a.",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
+    "experimental": false,
+    "notes": ""
+  },
+  {
+    "id": "plan-reviewer",
+    "name": "Plan Reviewer",
+    "type": "agent",
+    "tool": "claude-code",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/plan-reviewer/plan-reviewer.md",
+    "install_path": "~/.claude/agents/",
+    "install_command": "mkdir -p ~/.claude/agents && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/plan-reviewer/plan-reviewer.md -o ~/.claude/agents/plan-reviewer.md",
+    "files": [
+      "plan-reviewer.md"
+    ],
+    "status": "available",
+    "tooltip_text": "Plan quality reviewer that validates subtask granularity, dependency gaps, file ownership, feasibility, and integration contracts before implementation begins.",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
+    "experimental": false,
+    "notes": ""
+  },
+  {
+    "id": "planner",
+    "name": "Planner",
+    "type": "agent",
+    "tool": "claude-code",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/planner/planner.md",
+    "install_path": "~/.claude/agents/",
+    "install_command": "mkdir -p ~/.claude/agents && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/planner/planner.md -o ~/.claude/agents/planner.md",
+    "files": [
+      "planner.md"
+    ],
+    "status": "available",
+    "tooltip_text": "Autonomous planning agent that reads codebases and decomposes tasks into parallel-group implementation plans with file ownership and integration contracts.",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
+    "experimental": false,
+    "notes": ""
+  },
+  {
+    "id": "quality-engineer",
+    "name": "Quality Engineer",
+    "type": "agent",
+    "tool": "claude-code",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/quality-engineer/quality-engineer.md",
+    "install_path": "~/.claude/agents/",
+    "install_command": "mkdir -p ~/.claude/agents && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/quality-engineer/quality-engineer.md -o ~/.claude/agents/quality-engineer.md",
+    "files": [
+      "quality-engineer.md"
+    ],
+    "status": "available",
+    "tooltip_text": "Autonomous quality agent that remediates findings from specialist reviews, repairs broken integration contracts, and validates post-finalize changes. Replaces fixer, integration-repairer, and post-validator.",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
+    "experimental": false,
+    "notes": ""
+  },
+  {
+    "id": "release-engineer",
+    "name": "Release Engineer",
+    "type": "agent",
+    "tool": "claude-code",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/release-engineer/release-engineer.md",
+    "install_path": "~/.claude/agents/",
+    "install_command": "mkdir -p ~/.claude/agents && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/release-engineer/release-engineer.md -o ~/.claude/agents/release-engineer.md",
+    "files": [
+      "release-engineer.md"
+    ],
+    "status": "available",
+    "tooltip_text": "Structures commits, writes PR descriptions, pushes code, creates pull requests, and optionally bumps versions and creates releases. Use during Phase 5-6.",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
+    "experimental": false,
+    "notes": ""
+  },
+  {
+    "id": "release-gate",
+    "name": "Release Gate",
+    "type": "agent",
+    "tool": "claude-code",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/release-gate/release-gate.md",
+    "install_path": "~/.claude/agents/",
+    "install_command": "mkdir -p ~/.claude/agents && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/release-gate/release-gate.md -o ~/.claude/agents/release-gate.md",
+    "files": [
+      "release-gate.md"
+    ],
+    "status": "available",
+    "tooltip_text": "Release readiness gate that runs /prod-readiness with context from specialist reviews and prior attempts, emitting a SHIP/NO-SHIP verdict. Use during Phase 4 quality loop.",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
+    "experimental": false,
+    "notes": ""
+  },
+  {
+    "id": "security-engineer",
+    "name": "Security Engineer",
+    "type": "agent",
+    "tool": "claude-code",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/security-engineer/security-engineer.md",
+    "install_path": "~/.claude/agents/",
+    "install_command": "mkdir -p ~/.claude/agents && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/security-engineer/security-engineer.md -o ~/.claude/agents/security-engineer.md",
+    "files": [
+      "security-engineer.md"
+    ],
+    "status": "available",
+    "tooltip_text": "Cybersecurity engineer performing STRIDE threat modeling, OWASP Top 10 review, auth analysis, and dependency security evaluation. Use during Phase 3a specialist reviews.",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
+    "experimental": false,
+    "notes": ""
+  },
+  {
+    "id": "site-reliability-engineer",
+    "name": "Site Reliability Engineer",
+    "type": "agent",
+    "tool": "claude-code",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/site-reliability-engineer/site-reliability-engineer.md",
+    "install_path": "~/.claude/agents/",
+    "install_command": "mkdir -p ~/.claude/agents && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/site-reliability-engineer/site-reliability-engineer.md -o ~/.claude/agents/site-reliability-engineer.md",
+    "files": [
+      "site-reliability-engineer.md"
+    ],
+    "status": "available",
+    "tooltip_text": "SRE reviewing and remediating operational readiness — health checks, observability, timeouts, graceful degradation. Can fix self-contained issues inline. Use during Phase 3a specialist reviews.",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
+    "experimental": false,
+    "notes": ""
+  },
+  {
+    "id": "staff-engineer",
+    "name": "Staff Engineer",
+    "type": "agent",
+    "tool": "claude-code",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/staff-engineer/staff-engineer.md",
+    "install_path": "~/.claude/agents/",
+    "install_command": "mkdir -p ~/.claude/agents && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/staff-engineer/staff-engineer.md -o ~/.claude/agents/staff-engineer.md",
+    "files": [
+      "staff-engineer.md"
+    ],
+    "status": "available",
+    "tooltip_text": "General-purpose engineer for subtasks that are not clearly frontend or backend — infrastructure, configuration, shared types, scripts, tooling, CI/CD setup. Use when neither frontend-engineer nor backend-engineer fits.",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
+    "experimental": false,
+    "notes": ""
+  },
+  {
+    "id": "backend-development",
+    "name": "Backend Development",
+    "type": "bundle",
+    "tool": "claude-code",
+    "version": "1.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/bundles/backend-development/.claude-plugin/plugin.json",
+    "install_path": "~/.claude/plugins/backend-development/",
+    "install_command": "/plugin install backend-development@bmjcoding/agent-toolkit",
+    "files": [
+      "manifest.json",
+      "../backend-development.json"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code/plugins",
+    "experimental": false,
+    "notes": "Claude Code 'plugin' primitive."
+  },
+  {
+    "id": "code-quality",
+    "name": "Code Quality",
+    "type": "bundle",
+    "tool": "claude-code",
+    "version": "1.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/bundles/code-quality/.claude-plugin/plugin.json",
+    "install_path": "~/.claude/plugins/code-quality/",
+    "install_command": "/plugin install code-quality@bmjcoding/agent-toolkit",
+    "files": [
+      "manifest.json",
+      "../code-quality.json"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code/plugins",
+    "experimental": false,
+    "notes": "Claude Code 'plugin' primitive."
+  },
+  {
+    "id": "frankenstein-orchestration",
+    "name": "Frankenstein Orchestration",
+    "type": "bundle",
+    "tool": "claude-code",
+    "version": "1.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/bundles/frankenstein-orchestration/.claude-plugin/plugin.json",
+    "install_path": "~/.claude/plugins/frankenstein-orchestration/",
+    "install_command": "/plugin install frankenstein-orchestration@bmjcoding/agent-toolkit",
+    "files": [
+      "manifest.json",
+      "../frankenstein-orchestration.json"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code/plugins",
+    "experimental": false,
+    "notes": "Claude Code 'plugin' primitive."
+  },
+  {
+    "id": "frontend-development",
+    "name": "Frontend Development",
+    "type": "bundle",
+    "tool": "claude-code",
+    "version": "1.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/bundles/frontend-development/.claude-plugin/plugin.json",
+    "install_path": "~/.claude/plugins/frontend-development/",
+    "install_command": "/plugin install frontend-development@bmjcoding/agent-toolkit",
+    "files": [
+      "manifest.json",
+      "../frontend-development.json"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code/plugins",
+    "experimental": false,
+    "notes": "Claude Code 'plugin' primitive."
+  },
+  {
+    "id": "git-workflow",
+    "name": "Git Workflow",
+    "type": "bundle",
+    "tool": "claude-code",
+    "version": "1.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/bundles/git-workflow/.claude-plugin/plugin.json",
+    "install_path": "~/.claude/plugins/git-workflow/",
+    "install_command": "/plugin install git-workflow@bmjcoding/agent-toolkit",
+    "files": [
+      "manifest.json",
+      "../git-workflow.json"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code/plugins",
+    "experimental": false,
+    "notes": "Claude Code 'plugin' primitive."
+  },
+  {
+    "id": "infrastructure",
+    "name": "Infrastructure",
+    "type": "bundle",
+    "tool": "claude-code",
+    "version": "1.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/bundles/infrastructure/.claude-plugin/plugin.json",
+    "install_path": "~/.claude/plugins/infrastructure/",
+    "install_command": "/plugin install infrastructure@bmjcoding/agent-toolkit",
+    "files": [
+      "manifest.json",
+      "../infrastructure.json"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code/plugins",
+    "experimental": false,
+    "notes": "Claude Code 'plugin' primitive."
+  },
+  {
+    "id": "security-hardening",
+    "name": "Security Hardening",
+    "type": "bundle",
+    "tool": "claude-code",
+    "version": "1.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/bundles/security-hardening/.claude-plugin/plugin.json",
+    "install_path": "~/.claude/plugins/security-hardening/",
+    "install_command": "/plugin install security-hardening@bmjcoding/agent-toolkit",
+    "files": [
+      "manifest.json",
+      "../security-hardening.json"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code/plugins",
+    "experimental": false,
+    "notes": "Claude Code 'plugin' primitive."
+  },
+  {
+    "id": "self-improvement",
+    "name": "Self-Improvement",
+    "type": "bundle",
+    "tool": "claude-code",
+    "version": "1.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/bundles/self-improvement/.claude-plugin/plugin.json",
+    "install_path": "~/.claude/plugins/self-improvement/",
+    "install_command": "/plugin install self-improvement@bmjcoding/agent-toolkit",
+    "files": [
+      "manifest.json",
+      "../self-improvement.json"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code/plugins",
+    "experimental": false,
+    "notes": "Claude Code 'plugin' primitive."
+  },
+  {
+    "id": "audit",
+    "name": "Audit",
+    "type": "command",
+    "tool": "claude-code",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/commands/audit/audit.md",
+    "install_path": "~/.claude/commands/",
+    "install_command": "curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/commands/audit/audit.md -o ~/.claude/commands/audit.md",
+    "files": [
+      "audit.md",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "Comprehensive code audit covering correctness, security, accessibility, type safety, and operational resilience.",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code/slash-commands",
+    "experimental": false,
+    "notes": ""
+  },
+  {
+    "id": "backlog",
+    "name": "Backlog",
+    "type": "command",
+    "tool": "claude-code",
+    "version": "4.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/commands/backlog/backlog.md",
+    "install_path": "~/.claude/commands/",
+    "install_command": "curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/commands/backlog/backlog.md -o ~/.claude/commands/backlog.md",
+    "files": [
+      "backlog.md",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "View, resolve, retriage, or clear items in the pipeline backlog.",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code/slash-commands",
+    "experimental": false,
+    "notes": ""
+  },
+  {
+    "id": "git-verify",
+    "name": "Git Verify",
+    "type": "command",
+    "tool": "claude-code",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/commands/git-verify/git-verify.md",
+    "install_path": "~/.claude/commands/",
+    "install_command": "curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/commands/git-verify/git-verify.md -o ~/.claude/commands/git-verify.md",
+    "files": [
+      "git-verify.md",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "Verify git hygiene and commit safety — secrets, sensitive files, large files, commit quality.",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code/slash-commands",
+    "experimental": false,
+    "notes": ""
+  },
+  {
+    "id": "lint",
+    "name": "Lint",
+    "type": "command",
+    "tool": "claude-code",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/commands/lint/lint.md",
+    "install_path": "~/.claude/commands/",
+    "install_command": "curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/commands/lint/lint.md -o ~/.claude/commands/lint.md",
+    "files": [
+      "lint.md",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "Run linting and standards compliance checks, auto-fix everything possible.",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code/slash-commands",
+    "experimental": false,
+    "notes": ""
+  },
+  {
+    "id": "sync-toolkit",
+    "name": "Sync Toolkit",
+    "type": "command",
+    "tool": "claude-code",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/commands/sync-toolkit/sync-toolkit.md",
+    "install_path": "~/.claude/commands/",
+    "install_command": "curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/commands/sync-toolkit/sync-toolkit.md -o ~/.claude/commands/sync-toolkit.md",
+    "files": [
+      "sync-toolkit.md",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "Detect changed toolkit components, generate CHANGELOG entries, bump versions, copy to ~/.claude, commit per-component, and open a PR.",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code/slash-commands",
+    "experimental": false,
+    "notes": ""
+  },
+  {
+    "id": "test",
+    "name": "Test",
+    "type": "command",
+    "tool": "claude-code",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/commands/test/test.md",
+    "install_path": "~/.claude/commands/",
+    "install_command": "curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/commands/test/test.md -o ~/.claude/commands/test.md",
+    "files": [
+      "test.md",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "Write tests to cover gaps and achieve >=80% coverage on changed files.",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code/slash-commands",
+    "experimental": false,
+    "notes": ""
+  },
+  {
+    "id": "branch-guard",
+    "name": "Branch Guard",
+    "type": "hook",
+    "tool": "claude-code",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/hooks/branch-guard/branch-guard.sh",
+    "install_path": "~/.claude/hooks/",
+    "install_command": "curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/hooks/branch-guard/branch-guard.sh -o ~/.claude/hooks/branch-guard.sh && chmod +x ~/.claude/hooks/branch-guard.sh",
+    "files": [
+      "branch-guard.sh",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "PreToolUse hook that blocks direct git push to main or master. Denies the tool call and instructs the agent to create a feature branch first.",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code/hooks",
+    "experimental": false,
+    "notes": "Register in ~/.claude/settings.json hook events after install."
+  },
+  {
+    "id": "changelog-check",
+    "name": "Changelog Check",
+    "type": "hook",
+    "tool": "claude-code",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/hooks/changelog-check/changelog-check.sh",
+    "install_path": "~/.claude/hooks/",
+    "install_command": "curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/hooks/changelog-check/changelog-check.sh -o ~/.claude/hooks/changelog-check.sh && chmod +x ~/.claude/hooks/changelog-check.sh",
+    "files": [
+      "changelog-check.sh",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "PreToolUse hook that blocks git push if CHANGELOG.md was not modified in any commit being pushed. Enforces the changelog-first workflow.",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code/hooks",
+    "experimental": false,
+    "notes": "Register in ~/.claude/settings.json hook events after install."
+  },
+  {
+    "id": "extract-handoff",
+    "name": "Extract Handoff",
+    "type": "hook",
+    "tool": "claude-code",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/hooks/extract-handoff/extract-handoff.sh",
+    "install_path": "~/.claude/hooks/",
+    "install_command": "curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/hooks/extract-handoff/extract-handoff.sh -o ~/.claude/hooks/extract-handoff.sh && chmod +x ~/.claude/hooks/extract-handoff.sh",
+    "files": [
+      "extract-handoff.sh",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "SubagentStop hook that extracts handoff JSON from an agent's final message and writes it to .orchestrator/handoffs/<agent_id>.json for orchestrator consumption.",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code/hooks",
+    "experimental": false,
+    "notes": "Register in ~/.claude/settings.json hook events after install."
+  },
+  {
+    "id": "inject-context",
+    "name": "Inject Context",
+    "type": "hook",
+    "tool": "claude-code",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/hooks/inject-context/inject-context.sh",
+    "install_path": "~/.claude/hooks/",
+    "install_command": "curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/hooks/inject-context/inject-context.sh -o ~/.claude/hooks/inject-context.sh && chmod +x ~/.claude/hooks/inject-context.sh",
+    "files": [
+      "inject-context.sh",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "SubagentStart hook that injects orchestrator context files into subagents at startup, ensuring each agent has access to session state and prior handoffs.",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code/hooks",
+    "experimental": false,
+    "notes": "Register in ~/.claude/settings.json hook events after install."
+  },
+  {
+    "id": "integrity-warn",
+    "name": "Integrity Warn",
+    "type": "hook",
+    "tool": "claude-code",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/hooks/integrity-warn/integrity-warn.sh",
+    "install_path": "~/.claude/hooks/",
+    "install_command": "curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/hooks/integrity-warn/integrity-warn.sh -o ~/.claude/hooks/integrity-warn.sh && chmod +x ~/.claude/hooks/integrity-warn.sh",
+    "files": [
+      "integrity-warn.sh",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "PostToolUse hook that runs integrity-check.sh silently and prints a warning to stderr if toolkit symlink or file mismatches are detected. Advisory only — does not block.",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code/hooks",
+    "experimental": false,
+    "notes": "Register in ~/.claude/settings.json hook events after install."
+  },
+  {
+    "id": "pre-push-secrets",
+    "name": "Pre-Push Secrets",
+    "type": "hook",
+    "tool": "claude-code",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/hooks/pre-push-secrets/pre-push-secrets.sh",
+    "install_path": "~/.claude/hooks/",
+    "install_command": "curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/hooks/pre-push-secrets/pre-push-secrets.sh -o ~/.claude/hooks/pre-push-secrets.sh && chmod +x ~/.claude/hooks/pre-push-secrets.sh",
+    "files": [
+      "pre-push-secrets.sh",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "PreToolUse hook that scans staged changes for secrets before git push. Uses gitleaks if available, falls back to grep patterns for common credential formats.",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code/hooks",
+    "experimental": false,
+    "notes": "Register in ~/.claude/settings.json hook events after install."
+  },
+  {
+    "id": "protect-config",
+    "name": "Protect Config",
+    "type": "hook",
+    "tool": "claude-code",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/hooks/protect-config/protect-config.sh",
+    "install_path": "~/.claude/hooks/",
+    "install_command": "curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/hooks/protect-config/protect-config.sh -o ~/.claude/hooks/protect-config.sh && chmod +x ~/.claude/hooks/protect-config.sh",
+    "files": [
+      "protect-config.sh",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "PreToolUse hook that blocks Bash writes to ~/.claude control-plane files (CLAUDE.md, settings.json, and similar). Prevents persistent instruction poisoning via hook injection.",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code/hooks",
+    "experimental": false,
+    "notes": "Register in ~/.claude/settings.json hook events after install."
+  },
+  {
+    "id": "toolkit-drift-check",
+    "name": "Toolkit Drift Check",
+    "type": "hook",
+    "tool": "claude-code",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/hooks/toolkit-drift-check/toolkit-drift-check.sh",
+    "install_path": "~/.claude/hooks/",
+    "install_command": "curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/hooks/toolkit-drift-check/toolkit-drift-check.sh -o ~/.claude/hooks/toolkit-drift-check.sh && chmod +x ~/.claude/hooks/toolkit-drift-check.sh",
+    "files": [
+      "toolkit-drift-check.sh",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "PostToolUse hook that warns when agent-toolkit component files were edited without a paired CHANGELOG.md update. Catches changelog drift before commit.",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code/hooks",
+    "experimental": false,
+    "notes": "Register in ~/.claude/settings.json hook events after install."
+  },
+  {
+    "id": "toolkit-edit-reminder",
+    "name": "Toolkit Edit Reminder",
+    "type": "hook",
+    "tool": "claude-code",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/hooks/toolkit-edit-reminder/toolkit-edit-reminder.sh",
+    "install_path": "~/.claude/hooks/",
+    "install_command": "curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/hooks/toolkit-edit-reminder/toolkit-edit-reminder.sh -o ~/.claude/hooks/toolkit-edit-reminder.sh && chmod +x ~/.claude/hooks/toolkit-edit-reminder.sh",
+    "files": [
+      "toolkit-edit-reminder.sh",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "PreToolUse hook that reminds agents editing toolkit component files to update CHANGELOG.md per Keep a Changelog 1.1.0 before proceeding.",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code/hooks",
+    "experimental": false,
+    "notes": "Register in ~/.claude/settings.json hook events after install."
+  },
+  {
+    "id": "docker",
+    "name": "Docker",
+    "type": "rule",
+    "tool": "claude-code",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/rules/docker/docker.md",
+    "install_path": "~/.claude/rules/",
+    "install_command": "mkdir -p ~/.claude/rules && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/rules/docker/docker.md -o ~/.claude/rules/docker.md",
+    "files": [
+      "docker.md",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
+    "experimental": false,
+    "notes": ""
+  },
+  {
+    "id": "logging",
+    "name": "Logging",
+    "type": "rule",
+    "tool": "claude-code",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/rules/logging/logging.md",
+    "install_path": "~/.claude/rules/",
+    "install_command": "mkdir -p ~/.claude/rules && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/rules/logging/logging.md -o ~/.claude/rules/logging.md",
+    "files": [
+      "logging.md",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
+    "experimental": false,
+    "notes": ""
+  },
+  {
+    "id": "node",
+    "name": "Node",
+    "type": "rule",
+    "tool": "claude-code",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/rules/node/node.md",
+    "install_path": "~/.claude/rules/",
+    "install_command": "mkdir -p ~/.claude/rules && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/rules/node/node.md -o ~/.claude/rules/node.md",
+    "files": [
+      "node.md",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
+    "experimental": false,
+    "notes": ""
+  },
+  {
+    "id": "python",
+    "name": "Python",
+    "type": "rule",
+    "tool": "claude-code",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/rules/python/python.md",
+    "install_path": "~/.claude/rules/",
+    "install_command": "mkdir -p ~/.claude/rules && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/rules/python/python.md -o ~/.claude/rules/python.md",
+    "files": [
+      "python.md",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
+    "experimental": false,
+    "notes": ""
+  },
+  {
+    "id": "backend",
+    "name": "Backend",
+    "type": "skill",
+    "tool": "claude-code",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/skills/backend/SKILL.md",
+    "install_path": "~/.claude/skills/backend/",
+    "install_command": "mkdir -p ~/.claude/skills/backend && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/skills/backend/SKILL.md -o ~/.claude/skills/backend/SKILL.md",
+    "files": [
+      "SKILL.md",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
+    "experimental": false,
+    "notes": ""
+  },
+  {
+    "id": "changelog",
+    "name": "Changelog",
+    "type": "skill",
+    "tool": "claude-code",
+    "version": "5.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/skills/changelog/SKILL.md",
+    "install_path": "~/.claude/skills/changelog/",
+    "install_command": "mkdir -p ~/.claude/skills/changelog && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/skills/changelog/SKILL.md -o ~/.claude/skills/changelog/SKILL.md",
+    "files": [
+      "SKILL.md",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
+    "experimental": false,
+    "notes": ""
+  },
+  {
+    "id": "design-authority",
+    "name": "Design Authority",
+    "type": "skill",
+    "tool": "claude-code",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/skills/design-authority/SKILL.md",
+    "install_path": "~/.claude/skills/design-authority/",
+    "install_command": "mkdir -p ~/.claude/skills/design-authority && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/skills/design-authority/SKILL.md -o ~/.claude/skills/design-authority/SKILL.md",
+    "files": [
+      "SKILL.md",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
+    "experimental": false,
+    "notes": ""
+  },
+  {
+    "id": "design-lint",
+    "name": "Design Lint",
+    "type": "skill",
+    "tool": "claude-code",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/skills/design-lint/SKILL.md",
+    "install_path": "~/.claude/skills/design-lint/",
+    "install_command": "mkdir -p ~/.claude/skills/design-lint && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/skills/design-lint/SKILL.md -o ~/.claude/skills/design-lint/SKILL.md",
+    "files": [
+      "SKILL.md",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
+    "experimental": false,
+    "notes": ""
+  },
+  {
+    "id": "frontend",
+    "name": "Frontend",
+    "type": "skill",
+    "tool": "claude-code",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/skills/frontend/SKILL.md",
+    "install_path": "~/.claude/skills/frontend/",
+    "install_command": "mkdir -p ~/.claude/skills/frontend && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/skills/frontend/SKILL.md -o ~/.claude/skills/frontend/SKILL.md",
+    "files": [
+      "SKILL.md",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
+    "experimental": false,
+    "notes": ""
+  },
+  {
+    "id": "git-ship",
+    "name": "Git Ship",
+    "type": "skill",
+    "tool": "claude-code",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/skills/git-ship/SKILL.md",
+    "install_path": "~/.claude/skills/git-ship/",
+    "install_command": "mkdir -p ~/.claude/skills/git-ship && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/skills/git-ship/SKILL.md -o ~/.claude/skills/git-ship/SKILL.md",
+    "files": [
+      "SKILL.md",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
+    "experimental": false,
+    "notes": ""
+  },
+  {
+    "id": "improve",
+    "name": "Improve",
+    "type": "skill",
+    "tool": "claude-code",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/skills/improve/SKILL.md",
+    "install_path": "~/.claude/skills/improve/",
+    "install_command": "mkdir -p ~/.claude/skills/improve && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/skills/improve/SKILL.md -o ~/.claude/skills/improve/SKILL.md",
+    "files": [
+      "SKILL.md",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
+    "experimental": false,
+    "notes": ""
+  },
+  {
+    "id": "infra",
+    "name": "Infra",
+    "type": "skill",
+    "tool": "claude-code",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/skills/infra/SKILL.md",
+    "install_path": "~/.claude/skills/infra/",
+    "install_command": "mkdir -p ~/.claude/skills/infra && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/skills/infra/SKILL.md -o ~/.claude/skills/infra/SKILL.md",
+    "files": [
+      "SKILL.md",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
+    "experimental": false,
+    "notes": ""
+  },
+  {
+    "id": "observability-patterns",
+    "name": "Observability Patterns",
+    "type": "skill",
+    "tool": "claude-code",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/skills/observability-patterns/SKILL.md",
+    "install_path": "~/.claude/skills/observability-patterns/",
+    "install_command": "mkdir -p ~/.claude/skills/observability-patterns && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/skills/observability-patterns/SKILL.md -o ~/.claude/skills/observability-patterns/SKILL.md",
+    "files": [
+      "SKILL.md",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
+    "experimental": false,
+    "notes": ""
+  },
+  {
+    "id": "owasp-reference",
+    "name": "OWASP Reference",
+    "type": "skill",
+    "tool": "claude-code",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/skills/owasp-reference/SKILL.md",
+    "install_path": "~/.claude/skills/owasp-reference/",
+    "install_command": "mkdir -p ~/.claude/skills/owasp-reference && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/skills/owasp-reference/SKILL.md -o ~/.claude/skills/owasp-reference/SKILL.md",
+    "files": [
+      "SKILL.md",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
+    "experimental": false,
+    "notes": ""
+  },
+  {
+    "id": "prod-readiness",
+    "name": "Prod Readiness",
+    "type": "skill",
+    "tool": "claude-code",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/skills/prod-readiness/SKILL.md",
+    "install_path": "~/.claude/skills/prod-readiness/",
+    "install_command": "mkdir -p ~/.claude/skills/prod-readiness && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/skills/prod-readiness/SKILL.md -o ~/.claude/skills/prod-readiness/SKILL.md",
+    "files": [
+      "SKILL.md",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
+    "experimental": false,
+    "notes": ""
+  },
+  {
+    "id": "retro",
+    "name": "Retro",
+    "type": "skill",
+    "tool": "claude-code",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/skills/retro/SKILL.md",
+    "install_path": "~/.claude/skills/retro/",
+    "install_command": "mkdir -p ~/.claude/skills/retro && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/skills/retro/SKILL.md -o ~/.claude/skills/retro/SKILL.md",
+    "files": [
+      "SKILL.md",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
+    "experimental": false,
+    "notes": ""
+  },
+  {
+    "id": "review-skill",
+    "name": "Review Skill",
+    "type": "skill",
+    "tool": "claude-code",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/skills/review-skill/SKILL.md",
+    "install_path": "~/.claude/skills/review-skill/",
+    "install_command": "mkdir -p ~/.claude/skills/review-skill && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/skills/review-skill/SKILL.md -o ~/.claude/skills/review-skill/SKILL.md",
+    "files": [
+      "SKILL.md",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://docs.anthropic.com/en/docs/claude-code",
+    "experimental": false,
+    "notes": ""
+  },
+  {
+    "id": "autoresearch-analyst",
+    "name": "Autoresearch Analyst",
+    "type": "agent",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/autoresearch-analyst.agent.md",
+    "install_path": "~/.claude/agents/",
+    "install_command": "curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/autoresearch-analyst.agent.md -o ~/.claude/agents/autoresearch-analyst.agent.md",
+    "files": [
+      "autoresearch-analyst.agent.md"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/agents/overview",
+    "experimental": false,
+    "notes": "Installs to ~/.claude/ path — parity confirmed by VSCode custom-instructions docs."
+  },
+  {
+    "id": "backend-engineer",
+    "name": "Backend Engineer",
+    "type": "agent",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/backend-engineer.agent.md",
+    "install_path": "~/.claude/agents/",
+    "install_command": "curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/backend-engineer.agent.md -o ~/.claude/agents/backend-engineer.agent.md",
+    "files": [
+      "backend-engineer.agent.md"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/agents/overview",
+    "experimental": false,
+    "notes": "Installs to ~/.claude/ path — parity confirmed by VSCode custom-instructions docs."
+  },
+  {
+    "id": "design-architect",
+    "name": "Design Architect",
+    "type": "agent",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/design-architect.agent.md",
+    "install_path": "~/.claude/agents/",
+    "install_command": "curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/design-architect.agent.md -o ~/.claude/agents/design-architect.agent.md",
+    "files": [
+      "design-architect.agent.md"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/agents/overview",
+    "experimental": false,
+    "notes": "Installs to ~/.claude/ path — parity confirmed by VSCode custom-instructions docs."
+  },
+  {
+    "id": "doc-writer",
+    "name": "Doc Writer",
+    "type": "agent",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/doc-writer.agent.md",
+    "install_path": "~/.claude/agents/",
+    "install_command": "curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/doc-writer.agent.md -o ~/.claude/agents/doc-writer.agent.md",
+    "files": [
+      "doc-writer.agent.md"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/agents/overview",
+    "experimental": false,
+    "notes": "Installs to ~/.claude/ path — parity confirmed by VSCode custom-instructions docs."
+  },
+  {
+    "id": "frankenstein",
+    "name": "Frankenstein",
+    "type": "agent",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/frankenstein.agent.md",
+    "install_path": "~/.claude/agents/",
+    "install_command": "curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/frankenstein.agent.md -o ~/.claude/agents/frankenstein.agent.md",
+    "files": [
+      "frankenstein.agent.md"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/agents/overview",
+    "experimental": false,
+    "notes": "Installs to ~/.claude/ path — parity confirmed by VSCode custom-instructions docs."
+  },
+  {
+    "id": "frontend-engineer",
+    "name": "Frontend Engineer",
+    "type": "agent",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/frontend-engineer.agent.md",
+    "install_path": "~/.claude/agents/",
+    "install_command": "curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/frontend-engineer.agent.md -o ~/.claude/agents/frontend-engineer.agent.md",
+    "files": [
+      "frontend-engineer.agent.md"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/agents/overview",
+    "experimental": false,
+    "notes": "Installs to ~/.claude/ path — parity confirmed by VSCode custom-instructions docs."
+  },
+  {
+    "id": "integration-verifier",
+    "name": "Integration Verifier",
+    "type": "agent",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/integration-verifier.agent.md",
+    "install_path": "~/.claude/agents/",
+    "install_command": "curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/integration-verifier.agent.md -o ~/.claude/agents/integration-verifier.agent.md",
+    "files": [
+      "integration-verifier.agent.md"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/agents/overview",
+    "experimental": false,
+    "notes": "Installs to ~/.claude/ path — parity confirmed by VSCode custom-instructions docs."
+  },
+  {
+    "id": "plan-reviewer",
+    "name": "Plan Reviewer",
+    "type": "agent",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/plan-reviewer.agent.md",
+    "install_path": "~/.claude/agents/",
+    "install_command": "curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/plan-reviewer.agent.md -o ~/.claude/agents/plan-reviewer.agent.md",
+    "files": [
+      "plan-reviewer.agent.md"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/agents/overview",
+    "experimental": false,
+    "notes": "Installs to ~/.claude/ path — parity confirmed by VSCode custom-instructions docs."
+  },
+  {
+    "id": "planner",
+    "name": "Planner",
+    "type": "agent",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/planner.agent.md",
+    "install_path": "~/.claude/agents/",
+    "install_command": "curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/planner.agent.md -o ~/.claude/agents/planner.agent.md",
+    "files": [
+      "planner.agent.md"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/agents/overview",
+    "experimental": false,
+    "notes": "Installs to ~/.claude/ path — parity confirmed by VSCode custom-instructions docs."
+  },
+  {
+    "id": "quality-engineer",
+    "name": "Quality Engineer",
+    "type": "agent",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/quality-engineer.agent.md",
+    "install_path": "~/.claude/agents/",
+    "install_command": "curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/quality-engineer.agent.md -o ~/.claude/agents/quality-engineer.agent.md",
+    "files": [
+      "quality-engineer.agent.md"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/agents/overview",
+    "experimental": false,
+    "notes": "Installs to ~/.claude/ path — parity confirmed by VSCode custom-instructions docs."
+  },
+  {
+    "id": "release-engineer",
+    "name": "Release Engineer",
+    "type": "agent",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/release-engineer.agent.md",
+    "install_path": "~/.claude/agents/",
+    "install_command": "curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/release-engineer.agent.md -o ~/.claude/agents/release-engineer.agent.md",
+    "files": [
+      "release-engineer.agent.md"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/agents/overview",
+    "experimental": false,
+    "notes": "Installs to ~/.claude/ path — parity confirmed by VSCode custom-instructions docs."
+  },
+  {
+    "id": "release-gate",
+    "name": "Release Gate",
+    "type": "agent",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/release-gate.agent.md",
+    "install_path": "~/.claude/agents/",
+    "install_command": "curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/release-gate.agent.md -o ~/.claude/agents/release-gate.agent.md",
+    "files": [
+      "release-gate.agent.md"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/agents/overview",
+    "experimental": false,
+    "notes": "Installs to ~/.claude/ path — parity confirmed by VSCode custom-instructions docs."
+  },
+  {
+    "id": "security-engineer",
+    "name": "Security Engineer",
+    "type": "agent",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/security-engineer.agent.md",
+    "install_path": "~/.claude/agents/",
+    "install_command": "curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/security-engineer.agent.md -o ~/.claude/agents/security-engineer.agent.md",
+    "files": [
+      "security-engineer.agent.md"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/agents/overview",
+    "experimental": false,
+    "notes": "Installs to ~/.claude/ path — parity confirmed by VSCode custom-instructions docs."
+  },
+  {
+    "id": "site-reliability-engineer",
+    "name": "Site Reliability Engineer",
+    "type": "agent",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/site-reliability-engineer.agent.md",
+    "install_path": "~/.claude/agents/",
+    "install_command": "curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/site-reliability-engineer.agent.md -o ~/.claude/agents/site-reliability-engineer.agent.md",
+    "files": [
+      "site-reliability-engineer.agent.md"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/agents/overview",
+    "experimental": false,
+    "notes": "Installs to ~/.claude/ path — parity confirmed by VSCode custom-instructions docs."
+  },
+  {
+    "id": "staff-engineer",
+    "name": "Staff Engineer",
+    "type": "agent",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/staff-engineer.agent.md",
+    "install_path": "~/.claude/agents/",
+    "install_command": "curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/staff-engineer.agent.md -o ~/.claude/agents/staff-engineer.agent.md",
+    "files": [
+      "staff-engineer.agent.md"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/agents/overview",
+    "experimental": false,
+    "notes": "Installs to ~/.claude/ path — parity confirmed by VSCode custom-instructions docs."
+  },
+  {
+    "id": "backend-development",
+    "name": "Backend Development",
+    "type": "bundle",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/bundles/backend-development.json",
+    "install_path": "",
+    "install_command": "",
+    "files": [
+      "manifest.json",
+      "../backend-development.json"
+    ],
+    "status": "unverified",
+    "tooltip_text": "GitHub Copilot does not document a bundle/plugin primitive. See docs for manual install of individual components.",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
+    "experimental": false,
+    "notes": "UNVERIFIED — no documented Copilot bundle format."
+  },
+  {
+    "id": "code-quality",
+    "name": "Code Quality",
+    "type": "bundle",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/bundles/code-quality.json",
+    "install_path": "",
+    "install_command": "",
+    "files": [
+      "manifest.json",
+      "../code-quality.json"
+    ],
+    "status": "unverified",
+    "tooltip_text": "GitHub Copilot does not document a bundle/plugin primitive. See docs for manual install of individual components.",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
+    "experimental": false,
+    "notes": "UNVERIFIED — no documented Copilot bundle format."
+  },
+  {
+    "id": "frankenstein-orchestration",
+    "name": "Frankenstein Orchestration",
+    "type": "bundle",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/bundles/frankenstein-orchestration.json",
+    "install_path": "",
+    "install_command": "",
+    "files": [
+      "manifest.json",
+      "../frankenstein-orchestration.json"
+    ],
+    "status": "unverified",
+    "tooltip_text": "GitHub Copilot does not document a bundle/plugin primitive. See docs for manual install of individual components.",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
+    "experimental": false,
+    "notes": "UNVERIFIED — no documented Copilot bundle format."
+  },
+  {
+    "id": "frontend-development",
+    "name": "Frontend Development",
+    "type": "bundle",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/bundles/frontend-development.json",
+    "install_path": "",
+    "install_command": "",
+    "files": [
+      "manifest.json",
+      "../frontend-development.json"
+    ],
+    "status": "unverified",
+    "tooltip_text": "GitHub Copilot does not document a bundle/plugin primitive. See docs for manual install of individual components.",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
+    "experimental": false,
+    "notes": "UNVERIFIED — no documented Copilot bundle format."
+  },
+  {
+    "id": "git-workflow",
+    "name": "Git Workflow",
+    "type": "bundle",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/bundles/git-workflow.json",
+    "install_path": "",
+    "install_command": "",
+    "files": [
+      "manifest.json",
+      "../git-workflow.json"
+    ],
+    "status": "unverified",
+    "tooltip_text": "GitHub Copilot does not document a bundle/plugin primitive. See docs for manual install of individual components.",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
+    "experimental": false,
+    "notes": "UNVERIFIED — no documented Copilot bundle format."
+  },
+  {
+    "id": "infrastructure",
+    "name": "Infrastructure",
+    "type": "bundle",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/bundles/infrastructure.json",
+    "install_path": "",
+    "install_command": "",
+    "files": [
+      "manifest.json",
+      "../infrastructure.json"
+    ],
+    "status": "unverified",
+    "tooltip_text": "GitHub Copilot does not document a bundle/plugin primitive. See docs for manual install of individual components.",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
+    "experimental": false,
+    "notes": "UNVERIFIED — no documented Copilot bundle format."
+  },
+  {
+    "id": "security-hardening",
+    "name": "Security Hardening",
+    "type": "bundle",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/bundles/security-hardening.json",
+    "install_path": "",
+    "install_command": "",
+    "files": [
+      "manifest.json",
+      "../security-hardening.json"
+    ],
+    "status": "unverified",
+    "tooltip_text": "GitHub Copilot does not document a bundle/plugin primitive. See docs for manual install of individual components.",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
+    "experimental": false,
+    "notes": "UNVERIFIED — no documented Copilot bundle format."
+  },
+  {
+    "id": "self-improvement",
+    "name": "Self-Improvement",
+    "type": "bundle",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/bundles/self-improvement.json",
+    "install_path": "",
+    "install_command": "",
+    "files": [
+      "manifest.json",
+      "../self-improvement.json"
+    ],
+    "status": "unverified",
+    "tooltip_text": "GitHub Copilot does not document a bundle/plugin primitive. See docs for manual install of individual components.",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
+    "experimental": false,
+    "notes": "UNVERIFIED — no documented Copilot bundle format."
+  },
+  {
+    "id": "audit",
+    "name": "Audit",
+    "type": "command",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/prompts/audit.prompt.md",
+    "install_path": ".github/prompts/",
+    "install_command": "mkdir -p .github/prompts && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/prompts/audit.prompt.md -o .github/prompts/audit.prompt.md",
+    "files": [
+      "audit.prompt.md"
+    ],
+    "status": "available",
+    "tooltip_text": "Comprehensive code audit covering correctness, security, accessibility, type safety, and operational resilience.",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
+    "experimental": false,
+    "notes": "Copilot prompt files are workspace-scoped. Invoke with /audit in Copilot Chat."
+  },
+  {
+    "id": "backlog",
+    "name": "Backlog",
+    "type": "command",
+    "tool": "github-copilot",
+    "version": "4.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/prompts/backlog.prompt.md",
+    "install_path": ".github/prompts/",
+    "install_command": "mkdir -p .github/prompts && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/prompts/backlog.prompt.md -o .github/prompts/backlog.prompt.md",
+    "files": [
+      "backlog.prompt.md"
+    ],
+    "status": "available",
+    "tooltip_text": "View, resolve, retriage, or clear items in the pipeline backlog.",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
+    "experimental": false,
+    "notes": "Copilot prompt files are workspace-scoped. Invoke with /backlog in Copilot Chat."
+  },
+  {
+    "id": "git-verify",
+    "name": "Git Verify",
+    "type": "command",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/prompts/git-verify.prompt.md",
+    "install_path": ".github/prompts/",
+    "install_command": "mkdir -p .github/prompts && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/prompts/git-verify.prompt.md -o .github/prompts/git-verify.prompt.md",
+    "files": [
+      "git-verify.prompt.md"
+    ],
+    "status": "available",
+    "tooltip_text": "Verify git hygiene and commit safety — secrets, sensitive files, large files, commit quality.",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
+    "experimental": false,
+    "notes": "Copilot prompt files are workspace-scoped. Invoke with /git-verify in Copilot Chat."
+  },
+  {
+    "id": "lint",
+    "name": "Lint",
+    "type": "command",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/prompts/lint.prompt.md",
+    "install_path": ".github/prompts/",
+    "install_command": "mkdir -p .github/prompts && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/prompts/lint.prompt.md -o .github/prompts/lint.prompt.md",
+    "files": [
+      "lint.prompt.md"
+    ],
+    "status": "available",
+    "tooltip_text": "Run linting and standards compliance checks, auto-fix everything possible.",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
+    "experimental": false,
+    "notes": "Copilot prompt files are workspace-scoped. Invoke with /lint in Copilot Chat."
+  },
+  {
+    "id": "sync-toolkit",
+    "name": "Sync Toolkit",
+    "type": "command",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/prompts/sync-toolkit.prompt.md",
+    "install_path": ".github/prompts/",
+    "install_command": "mkdir -p .github/prompts && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/prompts/sync-toolkit.prompt.md -o .github/prompts/sync-toolkit.prompt.md",
+    "files": [
+      "sync-toolkit.prompt.md"
+    ],
+    "status": "available",
+    "tooltip_text": "Detect changed toolkit components, generate CHANGELOG entries, bump versions, copy to ~/.claude, commit per-component, and open a PR.",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
+    "experimental": false,
+    "notes": "Copilot prompt files are workspace-scoped. Invoke with /sync-toolkit in Copilot Chat."
+  },
+  {
+    "id": "test",
+    "name": "Test",
+    "type": "command",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/prompts/test.prompt.md",
+    "install_path": ".github/prompts/",
+    "install_command": "mkdir -p .github/prompts && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/prompts/test.prompt.md -o .github/prompts/test.prompt.md",
+    "files": [
+      "test.prompt.md"
+    ],
+    "status": "available",
+    "tooltip_text": "Write tests to cover gaps and achieve >=80% coverage on changed files.",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
+    "experimental": false,
+    "notes": "Copilot prompt files are workspace-scoped. Invoke with /test in Copilot Chat."
+  },
+  {
+    "id": "branch-guard",
+    "name": "Branch Guard",
+    "type": "hook",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/branch-guard.json",
+    "install_path": ".github/hooks/",
+    "install_command": "mkdir -p .github/hooks && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/branch-guard.json -o .github/hooks/branch-guard.json && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/branch-guard.sh -o .github/hooks/branch-guard.sh",
+    "files": [
+      "branch-guard.json",
+      "branch-guard.sh"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
+    "experimental": false,
+    "notes": "PreToolUse hook — blocks direct git push to main/master branches."
+  },
+  {
+    "id": "changelog-check",
+    "name": "Changelog Check",
+    "type": "hook",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/changelog-check.json",
+    "install_path": ".github/hooks/",
+    "install_command": "mkdir -p .github/hooks && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/changelog-check.json -o .github/hooks/changelog-check.json && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/changelog-check.sh -o .github/hooks/changelog-check.sh",
+    "files": [
+      "changelog-check.json",
+      "changelog-check.sh"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
+    "experimental": false,
+    "notes": "PreToolUse hook — warns when a CHANGELOG.md has not been updated before committing."
+  },
+  {
+    "id": "extract-handoff",
+    "name": "Extract Handoff",
+    "type": "hook",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/extract-handoff.json",
+    "install_path": ".github/hooks/",
+    "install_command": "mkdir -p .github/hooks && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/extract-handoff.json -o .github/hooks/extract-handoff.json && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/extract-handoff.sh -o .github/hooks/extract-handoff.sh",
+    "files": [
+      "extract-handoff.json",
+      "extract-handoff.sh"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
+    "experimental": false,
+    "notes": "SubagentStop hook — extracts and persists handoff data when a subagent session ends."
+  },
+  {
+    "id": "inject-context",
+    "name": "Inject Context",
+    "type": "hook",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/inject-context.json",
+    "install_path": ".github/hooks/",
+    "install_command": "mkdir -p .github/hooks && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/inject-context.json -o .github/hooks/inject-context.json && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/inject-context.sh -o .github/hooks/inject-context.sh",
+    "files": [
+      "inject-context.json",
+      "inject-context.sh"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
+    "experimental": false,
+    "notes": "SubagentStart hook — injects project context into subagent sessions at startup."
+  },
+  {
+    "id": "integrity-warn",
+    "name": "Integrity Warn",
+    "type": "hook",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/integrity-warn.json",
+    "install_path": ".github/hooks/",
+    "install_command": "mkdir -p .github/hooks && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/integrity-warn.json -o .github/hooks/integrity-warn.json && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/integrity-warn.sh -o .github/hooks/integrity-warn.sh",
+    "files": [
+      "integrity-warn.json",
+      "integrity-warn.sh"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
+    "experimental": false,
+    "notes": "SubagentStop hook — emits a warning when toolkit file integrity checks fail after a subagent run."
+  },
+  {
+    "id": "pre-push-secrets",
+    "name": "Pre-Push Secrets",
+    "type": "hook",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/pre-push-secrets.json",
+    "install_path": ".github/hooks/",
+    "install_command": "mkdir -p .github/hooks && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/pre-push-secrets.json -o .github/hooks/pre-push-secrets.json && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/pre-push-secrets.sh -o .github/hooks/pre-push-secrets.sh",
+    "files": [
+      "pre-push-secrets.json",
+      "pre-push-secrets.sh"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
+    "experimental": false,
+    "notes": "PreToolUse hook — scans staged changes for secrets (via gitleaks) before git push or commit operations."
+  },
+  {
+    "id": "protect-config",
+    "name": "Protect Config",
+    "type": "hook",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/protect-config.json",
+    "install_path": ".github/hooks/",
+    "install_command": "mkdir -p .github/hooks && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/protect-config.json -o .github/hooks/protect-config.json && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/protect-config.sh -o .github/hooks/protect-config.sh",
+    "files": [
+      "protect-config.json",
+      "protect-config.sh"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
+    "experimental": false,
+    "notes": "PreToolUse hook — blocks unauthorized writes to protected configuration files (CLAUDE.md, settings.json, etc.)."
+  },
+  {
+    "id": "toolkit-drift-check",
+    "name": "Toolkit Drift Check",
+    "type": "hook",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/toolkit-drift-check.json",
+    "install_path": ".github/hooks/",
+    "install_command": "mkdir -p .github/hooks && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/toolkit-drift-check.json -o .github/hooks/toolkit-drift-check.json && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/toolkit-drift-check.sh -o .github/hooks/toolkit-drift-check.sh",
+    "files": [
+      "toolkit-drift-check.json",
+      "toolkit-drift-check.sh"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
+    "experimental": false,
+    "notes": "SubagentStop hook — detects drift between installed toolkit symlinks and the upstream agent-toolkit repo after each subagent run."
+  },
+  {
+    "id": "toolkit-edit-reminder",
+    "name": "Toolkit Edit Reminder",
+    "type": "hook",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/toolkit-edit-reminder.json",
+    "install_path": ".github/hooks/",
+    "install_command": "mkdir -p .github/hooks && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/toolkit-edit-reminder.json -o .github/hooks/toolkit-edit-reminder.json && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/toolkit-edit-reminder.sh -o .github/hooks/toolkit-edit-reminder.sh",
+    "files": [
+      "toolkit-edit-reminder.json",
+      "toolkit-edit-reminder.sh"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
+    "experimental": false,
+    "notes": "PostToolUse hook — reminds contributors to update the relevant CHANGELOG.md when toolkit files are edited."
+  },
+  {
+    "id": "docker",
+    "name": "Docker",
+    "type": "rule",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/rules/docker/docker.instructions.md",
+    "install_path": "~/.claude/rules/",
+    "install_command": "mkdir -p ~/.claude/rules && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/rules/docker/docker.instructions.md -o ~/.claude/rules/docker.md",
+    "files": [
+      "docker.instructions.md",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
+    "experimental": false,
+    "notes": "Installs to ~/.claude/rules/ — Copilot VSCode accepts these paths per official docs."
+  },
+  {
+    "id": "logging",
+    "name": "Logging",
+    "type": "rule",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/rules/logging/logging.instructions.md",
+    "install_path": "~/.claude/rules/",
+    "install_command": "mkdir -p ~/.claude/rules && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/rules/logging/logging.instructions.md -o ~/.claude/rules/logging.md",
+    "files": [
+      "logging.instructions.md",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
+    "experimental": false,
+    "notes": "Installs to ~/.claude/rules/ — Copilot VSCode accepts these paths per official docs."
+  },
+  {
+    "id": "node",
+    "name": "Node",
+    "type": "rule",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/rules/node/node.instructions.md",
+    "install_path": "~/.claude/rules/",
+    "install_command": "mkdir -p ~/.claude/rules && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/rules/node/node.instructions.md -o ~/.claude/rules/node.md",
+    "files": [
+      "node.instructions.md",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
+    "experimental": false,
+    "notes": "Installs to ~/.claude/rules/ — Copilot VSCode accepts these paths per official docs."
+  },
+  {
+    "id": "python",
+    "name": "Python",
+    "type": "rule",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/rules/python/python.instructions.md",
+    "install_path": "~/.claude/rules/",
+    "install_command": "mkdir -p ~/.claude/rules && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/rules/python/python.instructions.md -o ~/.claude/rules/python.md",
+    "files": [
+      "python.instructions.md",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
+    "experimental": false,
+    "notes": "Installs to ~/.claude/rules/ — Copilot VSCode accepts these paths per official docs."
+  },
+  {
+    "id": "backend",
+    "name": "Backend",
+    "type": "skill",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/skills/backend/SKILL.md",
+    "install_path": "~/.claude/skills/backend/",
+    "install_command": "mkdir -p ~/.claude/skills/backend && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/skills/backend/SKILL.md -o ~/.claude/skills/backend/SKILL.md",
+    "files": [
+      "SKILL.md",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "Lightweight backend workflow — implement with convention awareness, security review, and lint.",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
+    "experimental": false,
+    "notes": "Installs to ~/.claude/ path for compatibility with future Claude Code migration (official VSCode docs confirm parity)."
+  },
+  {
+    "id": "changelog",
+    "name": "Changelog",
+    "type": "skill",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/skills/changelog/SKILL.md",
+    "install_path": "~/.claude/skills/changelog/",
+    "install_command": "mkdir -p ~/.claude/skills/changelog && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/skills/changelog/SKILL.md -o ~/.claude/skills/changelog/SKILL.md",
+    "files": [
+      "SKILL.md",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "Canonical CHANGELOG.md standard: Keep a Changelog 1.1.0 + SemVer, required header, version sections, per-component tags, comparison links.",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
+    "experimental": false,
+    "notes": "Installs to ~/.claude/ path for compatibility with future Claude Code migration (official VSCode docs confirm parity)."
+  },
+  {
+    "id": "design-authority",
+    "name": "Design Authority",
+    "type": "skill",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/skills/design-authority/SKILL.md",
+    "install_path": "~/.claude/skills/design-authority/",
+    "install_command": "mkdir -p ~/.claude/skills/design-authority && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/skills/design-authority/SKILL.md -o ~/.claude/skills/design-authority/SKILL.md",
+    "files": [
+      "SKILL.md",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "Design system guidance for generating and modifying frontend components. Provides token references, canonical patterns, and anti-convergence rules.",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
+    "experimental": false,
+    "notes": "Installs to ~/.claude/ path for compatibility with future Claude Code migration (official VSCode docs confirm parity)."
+  },
+  {
+    "id": "design-lint",
+    "name": "Design Lint",
+    "type": "skill",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/skills/design-lint/SKILL.md",
+    "install_path": "~/.claude/skills/design-lint/",
+    "install_command": "mkdir -p ~/.claude/skills/design-lint && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/skills/design-lint/SKILL.md -o ~/.claude/skills/design-lint/SKILL.md",
+    "files": [
+      "SKILL.md",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "Deterministic design system linting checks. Defines grep/regex patterns for structural violations in Tailwind CSS/React components.",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
+    "experimental": false,
+    "notes": "Installs to ~/.claude/ path for compatibility with future Claude Code migration (official VSCode docs confirm parity)."
+  },
+  {
+    "id": "frontend",
+    "name": "Frontend",
+    "type": "skill",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/skills/frontend/SKILL.md",
+    "install_path": "~/.claude/skills/frontend/",
+    "install_command": "mkdir -p ~/.claude/skills/frontend && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/skills/frontend/SKILL.md -o ~/.claude/skills/frontend/SKILL.md",
+    "files": [
+      "SKILL.md",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "Lightweight frontend workflow — implement with design system enforcement, review, and lint.",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
+    "experimental": false,
+    "notes": "Installs to ~/.claude/ path for compatibility with future Claude Code migration (official VSCode docs confirm parity)."
+  },
+  {
+    "id": "git-ship",
+    "name": "Git Ship",
+    "type": "skill",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/skills/git-ship/SKILL.md",
+    "install_path": "~/.claude/skills/git-ship/",
+    "install_command": "mkdir -p ~/.claude/skills/git-ship && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/skills/git-ship/SKILL.md -o ~/.claude/skills/git-ship/SKILL.md",
+    "files": [
+      "SKILL.md",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "Git shipping workflow — commit, push, open PRs, enable auto-merge, and clean up worktrees.",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
+    "experimental": false,
+    "notes": "Installs to ~/.claude/ path for compatibility with future Claude Code migration (official VSCode docs confirm parity)."
+  },
+  {
+    "id": "improve",
+    "name": "Improve",
+    "type": "skill",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/skills/improve/SKILL.md",
+    "install_path": "~/.claude/skills/improve/",
+    "install_command": "mkdir -p ~/.claude/skills/improve && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/skills/improve/SKILL.md -o ~/.claude/skills/improve/SKILL.md",
+    "files": [
+      "SKILL.md",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "Apply retro recommendations with automated verification. Supports autonomous improve-then-review validation cycles.",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
+    "experimental": false,
+    "notes": "Installs to ~/.claude/ path for compatibility with future Claude Code migration (official VSCode docs confirm parity)."
+  },
+  {
+    "id": "infra",
+    "name": "Infra",
+    "type": "skill",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/skills/infra/SKILL.md",
+    "install_path": "~/.claude/skills/infra/",
+    "install_command": "mkdir -p ~/.claude/skills/infra && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/skills/infra/SKILL.md -o ~/.claude/skills/infra/SKILL.md",
+    "files": [
+      "SKILL.md",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "Lightweight infrastructure workflow — implement with SRE review for operational readiness.",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
+    "experimental": false,
+    "notes": "Installs to ~/.claude/ path for compatibility with future Claude Code migration (official VSCode docs confirm parity)."
+  },
+  {
+    "id": "observability-patterns",
+    "name": "Observability Patterns",
+    "type": "skill",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/skills/observability-patterns/SKILL.md",
+    "install_path": "~/.claude/skills/observability-patterns/",
+    "install_command": "mkdir -p ~/.claude/skills/observability-patterns && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/skills/observability-patterns/SKILL.md -o ~/.claude/skills/observability-patterns/SKILL.md",
+    "files": [
+      "SKILL.md",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "Structured logging, health checks, metrics, and runbook patterns for SRE review and remediation.",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
+    "experimental": false,
+    "notes": "Installs to ~/.claude/ path for compatibility with future Claude Code migration (official VSCode docs confirm parity)."
+  },
+  {
+    "id": "owasp-reference",
+    "name": "OWASP Reference",
+    "type": "skill",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/skills/owasp-reference/SKILL.md",
+    "install_path": "~/.claude/skills/owasp-reference/",
+    "install_command": "mkdir -p ~/.claude/skills/owasp-reference && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/skills/owasp-reference/SKILL.md -o ~/.claude/skills/owasp-reference/SKILL.md",
+    "files": [
+      "SKILL.md",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "OWASP Top 10, STRIDE threat modeling, and common vulnerability patterns for security review.",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
+    "experimental": false,
+    "notes": "Installs to ~/.claude/ path for compatibility with future Claude Code migration (official VSCode docs confirm parity)."
+  },
+  {
+    "id": "prod-readiness",
+    "name": "Prod Readiness",
+    "type": "skill",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/skills/prod-readiness/SKILL.md",
+    "install_path": "~/.claude/skills/prod-readiness/",
+    "install_command": "mkdir -p ~/.claude/skills/prod-readiness && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/skills/prod-readiness/SKILL.md -o ~/.claude/skills/prod-readiness/SKILL.md",
+    "files": [
+      "SKILL.md",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "Full production readiness check — build, lint, audit, test, simplify, final validation, git verify, and ship verdict.",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
+    "experimental": false,
+    "notes": "Installs to ~/.claude/ path for compatibility with future Claude Code migration (official VSCode docs confirm parity)."
+  },
+  {
+    "id": "retro",
+    "name": "Retro",
+    "type": "skill",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/skills/retro/SKILL.md",
+    "install_path": "~/.claude/skills/retro/",
+    "install_command": "mkdir -p ~/.claude/skills/retro && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/skills/retro/SKILL.md -o ~/.claude/skills/retro/SKILL.md",
+    "files": [
+      "SKILL.md",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "Run a retrospective on any completed run — single agent, subagent, skill, or orchestration pipeline.",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
+    "experimental": false,
+    "notes": "Installs to ~/.claude/ path for compatibility with future Claude Code migration (official VSCode docs confirm parity)."
+  },
+  {
+    "id": "review-skill",
+    "name": "Review Skill",
+    "type": "skill",
+    "tool": "github-copilot",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/skills/review-skill/SKILL.md",
+    "install_path": "~/.claude/skills/review-skill/",
+    "install_command": "mkdir -p ~/.claude/skills/review-skill && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/skills/review-skill/SKILL.md -o ~/.claude/skills/review-skill/SKILL.md",
+    "files": [
+      "SKILL.md",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "Review a skill or agent definition for quality and correctness. Supports batch review of directories with parallel dispatch.",
+    "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
+    "experimental": false,
+    "notes": "Installs to ~/.claude/ path for compatibility with future Claude Code migration (official VSCode docs confirm parity)."
+  },
+  {
+    "id": "autoresearch-analyst",
+    "name": "Autoresearch Analyst",
+    "type": "agent",
+    "tool": "openai-codex",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/autoresearch-analyst.toml",
+    "install_path": "",
+    "install_command": "",
+    "files": [
+      "autoresearch-analyst.toml"
+    ],
+    "status": "unverified",
+    "tooltip_text": "Codex CLI agent install path is not documented. See the Codex docs for the current recommended setup.",
+    "docs_url": "https://developers.openai.com/codex/guides/agents-md",
+    "experimental": false,
+    "notes": "UNVERIFIED — Codex does not document a standalone agent install path; subagents appear to be plugin-bundled in current docs."
+  },
+  {
+    "id": "backend-engineer",
+    "name": "Backend Engineer",
+    "type": "agent",
+    "tool": "openai-codex",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/backend-engineer.toml",
+    "install_path": "",
+    "install_command": "",
+    "files": [
+      "backend-engineer.toml"
+    ],
+    "status": "unverified",
+    "tooltip_text": "Codex CLI agent install path is not documented. See the Codex docs for the current recommended setup.",
+    "docs_url": "https://developers.openai.com/codex/guides/agents-md",
+    "experimental": false,
+    "notes": "UNVERIFIED — Codex does not document a standalone agent install path; subagents appear to be plugin-bundled in current docs."
+  },
+  {
+    "id": "design-architect",
+    "name": "Design Architect",
+    "type": "agent",
+    "tool": "openai-codex",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/design-architect.toml",
+    "install_path": "",
+    "install_command": "",
+    "files": [
+      "design-architect.toml"
+    ],
+    "status": "unverified",
+    "tooltip_text": "Codex CLI agent install path is not documented. See the Codex docs for the current recommended setup.",
+    "docs_url": "https://developers.openai.com/codex/guides/agents-md",
+    "experimental": false,
+    "notes": "UNVERIFIED — Codex does not document a standalone agent install path; subagents appear to be plugin-bundled in current docs."
+  },
+  {
+    "id": "doc-writer",
+    "name": "Doc Writer",
+    "type": "agent",
+    "tool": "openai-codex",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/doc-writer.toml",
+    "install_path": "",
+    "install_command": "",
+    "files": [
+      "doc-writer.toml"
+    ],
+    "status": "unverified",
+    "tooltip_text": "Codex CLI agent install path is not documented. See the Codex docs for the current recommended setup.",
+    "docs_url": "https://developers.openai.com/codex/guides/agents-md",
+    "experimental": false,
+    "notes": "UNVERIFIED — Codex does not document a standalone agent install path; subagents appear to be plugin-bundled in current docs."
+  },
+  {
+    "id": "frankenstein",
+    "name": "Frankenstein",
+    "type": "agent",
+    "tool": "openai-codex",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/frankenstein.toml",
+    "install_path": "",
+    "install_command": "",
+    "files": [
+      "frankenstein.toml"
+    ],
+    "status": "unverified",
+    "tooltip_text": "Codex CLI agent install path is not documented. See the Codex docs for the current recommended setup.",
+    "docs_url": "https://developers.openai.com/codex/guides/agents-md",
+    "experimental": false,
+    "notes": "UNVERIFIED — Codex does not document a standalone agent install path; subagents appear to be plugin-bundled in current docs."
+  },
+  {
+    "id": "frontend-engineer",
+    "name": "Frontend Engineer",
+    "type": "agent",
+    "tool": "openai-codex",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/frontend-engineer.toml",
+    "install_path": "",
+    "install_command": "",
+    "files": [
+      "frontend-engineer.toml"
+    ],
+    "status": "unverified",
+    "tooltip_text": "Codex CLI agent install path is not documented. See the Codex docs for the current recommended setup.",
+    "docs_url": "https://developers.openai.com/codex/guides/agents-md",
+    "experimental": false,
+    "notes": "UNVERIFIED — Codex does not document a standalone agent install path; subagents appear to be plugin-bundled in current docs."
+  },
+  {
+    "id": "integration-verifier",
+    "name": "Integration Verifier",
+    "type": "agent",
+    "tool": "openai-codex",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/integration-verifier.toml",
+    "install_path": "",
+    "install_command": "",
+    "files": [
+      "integration-verifier.toml"
+    ],
+    "status": "unverified",
+    "tooltip_text": "Codex CLI agent install path is not documented. See the Codex docs for the current recommended setup.",
+    "docs_url": "https://developers.openai.com/codex/guides/agents-md",
+    "experimental": false,
+    "notes": "UNVERIFIED — Codex does not document a standalone agent install path; subagents appear to be plugin-bundled in current docs."
+  },
+  {
+    "id": "plan-reviewer",
+    "name": "Plan Reviewer",
+    "type": "agent",
+    "tool": "openai-codex",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/plan-reviewer.toml",
+    "install_path": "",
+    "install_command": "",
+    "files": [
+      "plan-reviewer.toml"
+    ],
+    "status": "unverified",
+    "tooltip_text": "Codex CLI agent install path is not documented. See the Codex docs for the current recommended setup.",
+    "docs_url": "https://developers.openai.com/codex/guides/agents-md",
+    "experimental": false,
+    "notes": "UNVERIFIED — Codex does not document a standalone agent install path; subagents appear to be plugin-bundled in current docs."
+  },
+  {
+    "id": "planner",
+    "name": "Planner",
+    "type": "agent",
+    "tool": "openai-codex",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/planner.toml",
+    "install_path": "",
+    "install_command": "",
+    "files": [
+      "planner.toml"
+    ],
+    "status": "unverified",
+    "tooltip_text": "Codex CLI agent install path is not documented. See the Codex docs for the current recommended setup.",
+    "docs_url": "https://developers.openai.com/codex/guides/agents-md",
+    "experimental": false,
+    "notes": "UNVERIFIED — Codex does not document a standalone agent install path; subagents appear to be plugin-bundled in current docs."
+  },
+  {
+    "id": "quality-engineer",
+    "name": "Quality Engineer",
+    "type": "agent",
+    "tool": "openai-codex",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/quality-engineer.toml",
+    "install_path": "",
+    "install_command": "",
+    "files": [
+      "quality-engineer.toml"
+    ],
+    "status": "unverified",
+    "tooltip_text": "Codex CLI agent install path is not documented. See the Codex docs for the current recommended setup.",
+    "docs_url": "https://developers.openai.com/codex/guides/agents-md",
+    "experimental": false,
+    "notes": "UNVERIFIED — Codex does not document a standalone agent install path; subagents appear to be plugin-bundled in current docs."
+  },
+  {
+    "id": "release-engineer",
+    "name": "Release Engineer",
+    "type": "agent",
+    "tool": "openai-codex",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/release-engineer.toml",
+    "install_path": "",
+    "install_command": "",
+    "files": [
+      "release-engineer.toml"
+    ],
+    "status": "unverified",
+    "tooltip_text": "Codex CLI agent install path is not documented. See the Codex docs for the current recommended setup.",
+    "docs_url": "https://developers.openai.com/codex/guides/agents-md",
+    "experimental": false,
+    "notes": "UNVERIFIED — Codex does not document a standalone agent install path; subagents appear to be plugin-bundled in current docs."
+  },
+  {
+    "id": "release-gate",
+    "name": "Release Gate",
+    "type": "agent",
+    "tool": "openai-codex",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/release-gate.toml",
+    "install_path": "",
+    "install_command": "",
+    "files": [
+      "release-gate.toml"
+    ],
+    "status": "unverified",
+    "tooltip_text": "Codex CLI agent install path is not documented. See the Codex docs for the current recommended setup.",
+    "docs_url": "https://developers.openai.com/codex/guides/agents-md",
+    "experimental": false,
+    "notes": "UNVERIFIED — Codex does not document a standalone agent install path; subagents appear to be plugin-bundled in current docs."
+  },
+  {
+    "id": "security-engineer",
+    "name": "Security Engineer",
+    "type": "agent",
+    "tool": "openai-codex",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/security-engineer.toml",
+    "install_path": "",
+    "install_command": "",
+    "files": [
+      "security-engineer.toml"
+    ],
+    "status": "unverified",
+    "tooltip_text": "Codex CLI agent install path is not documented. See the Codex docs for the current recommended setup.",
+    "docs_url": "https://developers.openai.com/codex/guides/agents-md",
+    "experimental": false,
+    "notes": "UNVERIFIED — Codex does not document a standalone agent install path; subagents appear to be plugin-bundled in current docs."
+  },
+  {
+    "id": "site-reliability-engineer",
+    "name": "Site Reliability Engineer",
+    "type": "agent",
+    "tool": "openai-codex",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/site-reliability-engineer.toml",
+    "install_path": "",
+    "install_command": "",
+    "files": [
+      "site-reliability-engineer.toml"
+    ],
+    "status": "unverified",
+    "tooltip_text": "Codex CLI agent install path is not documented. See the Codex docs for the current recommended setup.",
+    "docs_url": "https://developers.openai.com/codex/guides/agents-md",
+    "experimental": false,
+    "notes": "UNVERIFIED — Codex does not document a standalone agent install path; subagents appear to be plugin-bundled in current docs."
+  },
+  {
+    "id": "staff-engineer",
+    "name": "Staff Engineer",
+    "type": "agent",
+    "tool": "openai-codex",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/staff-engineer.toml",
+    "install_path": "",
+    "install_command": "",
+    "files": [
+      "staff-engineer.toml"
+    ],
+    "status": "unverified",
+    "tooltip_text": "Codex CLI agent install path is not documented. See the Codex docs for the current recommended setup.",
+    "docs_url": "https://developers.openai.com/codex/guides/agents-md",
+    "experimental": false,
+    "notes": "UNVERIFIED — Codex does not document a standalone agent install path; subagents appear to be plugin-bundled in current docs."
+  },
+  {
+    "id": "backend-development",
+    "name": "Backend Development",
+    "type": "bundle",
+    "tool": "openai-codex",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/bundles/backend-development.json",
+    "install_path": "",
+    "install_command": "",
+    "files": [
+      "manifest.json",
+      "../backend-development.json"
+    ],
+    "status": "unverified",
+    "tooltip_text": "OpenAI Codex CLI plugin system is not yet finalized in official documentation. See docs for available primitives.",
+    "docs_url": "https://developers.openai.com/codex",
+    "experimental": false,
+    "notes": "UNVERIFIED — Codex plugin/bundle format not documented at researched URLs."
+  },
+  {
+    "id": "code-quality",
+    "name": "Code Quality",
+    "type": "bundle",
+    "tool": "openai-codex",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/bundles/code-quality.json",
+    "install_path": "",
+    "install_command": "",
+    "files": [
+      "manifest.json",
+      "../code-quality.json"
+    ],
+    "status": "unverified",
+    "tooltip_text": "OpenAI Codex CLI plugin system is not yet finalized in official documentation. See docs for available primitives.",
+    "docs_url": "https://developers.openai.com/codex",
+    "experimental": false,
+    "notes": "UNVERIFIED — Codex plugin/bundle format not documented at researched URLs."
+  },
+  {
+    "id": "frankenstein-orchestration",
+    "name": "Frankenstein Orchestration",
+    "type": "bundle",
+    "tool": "openai-codex",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/bundles/frankenstein-orchestration.json",
+    "install_path": "",
+    "install_command": "",
+    "files": [
+      "manifest.json",
+      "../frankenstein-orchestration.json"
+    ],
+    "status": "unverified",
+    "tooltip_text": "OpenAI Codex CLI plugin system is not yet finalized in official documentation. See docs for available primitives.",
+    "docs_url": "https://developers.openai.com/codex",
+    "experimental": false,
+    "notes": "UNVERIFIED — Codex plugin/bundle format not documented at researched URLs."
+  },
+  {
+    "id": "frontend-development",
+    "name": "Frontend Development",
+    "type": "bundle",
+    "tool": "openai-codex",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/bundles/frontend-development.json",
+    "install_path": "",
+    "install_command": "",
+    "files": [
+      "manifest.json",
+      "../frontend-development.json"
+    ],
+    "status": "unverified",
+    "tooltip_text": "OpenAI Codex CLI plugin system is not yet finalized in official documentation. See docs for available primitives.",
+    "docs_url": "https://developers.openai.com/codex",
+    "experimental": false,
+    "notes": "UNVERIFIED — Codex plugin/bundle format not documented at researched URLs."
+  },
+  {
+    "id": "git-workflow",
+    "name": "Git Workflow",
+    "type": "bundle",
+    "tool": "openai-codex",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/bundles/git-workflow.json",
+    "install_path": "",
+    "install_command": "",
+    "files": [
+      "manifest.json",
+      "../git-workflow.json"
+    ],
+    "status": "unverified",
+    "tooltip_text": "OpenAI Codex CLI plugin system is not yet finalized in official documentation. See docs for available primitives.",
+    "docs_url": "https://developers.openai.com/codex",
+    "experimental": false,
+    "notes": "UNVERIFIED — Codex plugin/bundle format not documented at researched URLs."
+  },
+  {
+    "id": "infrastructure",
+    "name": "Infrastructure",
+    "type": "bundle",
+    "tool": "openai-codex",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/bundles/infrastructure.json",
+    "install_path": "",
+    "install_command": "",
+    "files": [
+      "manifest.json",
+      "../infrastructure.json"
+    ],
+    "status": "unverified",
+    "tooltip_text": "OpenAI Codex CLI plugin system is not yet finalized in official documentation. See docs for available primitives.",
+    "docs_url": "https://developers.openai.com/codex",
+    "experimental": false,
+    "notes": "UNVERIFIED — Codex plugin/bundle format not documented at researched URLs."
+  },
+  {
+    "id": "security-hardening",
+    "name": "Security Hardening",
+    "type": "bundle",
+    "tool": "openai-codex",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/bundles/security-hardening.json",
+    "install_path": "",
+    "install_command": "",
+    "files": [
+      "manifest.json",
+      "../security-hardening.json"
+    ],
+    "status": "unverified",
+    "tooltip_text": "OpenAI Codex CLI plugin system is not yet finalized in official documentation. See docs for available primitives.",
+    "docs_url": "https://developers.openai.com/codex",
+    "experimental": false,
+    "notes": "UNVERIFIED — Codex plugin/bundle format not documented at researched URLs."
+  },
+  {
+    "id": "self-improvement",
+    "name": "Self-Improvement",
+    "type": "bundle",
+    "tool": "openai-codex",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/bundles/self-improvement.json",
+    "install_path": "",
+    "install_command": "",
+    "files": [
+      "manifest.json",
+      "../self-improvement.json"
+    ],
+    "status": "unverified",
+    "tooltip_text": "OpenAI Codex CLI plugin system is not yet finalized in official documentation. See docs for available primitives.",
+    "docs_url": "https://developers.openai.com/codex",
+    "experimental": false,
+    "notes": "UNVERIFIED — Codex plugin/bundle format not documented at researched URLs."
+  },
+  {
+    "id": "branch-guard",
+    "name": "Branch Guard",
+    "type": "hook",
+    "tool": "openai-codex",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/branch-guard.sh",
+    "install_path": "~/.codex/hooks/",
+    "install_command": "# Enable experimental hooks in ~/.codex/config.toml:\n# [features]\n# codex_hooks = true\n\n# Then install:\nmkdir -p ~/.codex/hooks && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/branch-guard.sh -o ~/.codex/hooks/branch-guard.sh && chmod +x ~/.codex/hooks/branch-guard.sh",
+    "files": [
+      "branch-guard.sh"
+    ],
+    "status": "available",
+    "tooltip_text": "Codex CLI hooks are experimental and require [features] codex_hooks = true in ~/.codex/config.toml.",
+    "docs_url": "https://developers.openai.com/codex",
+    "experimental": true,
+    "notes": "EXPERIMENTAL FEATURE — requires codex_hooks flag in config.toml. Blocks direct pushes to main/master during PreToolUse Bash events. Ported from claude-code/hooks/branch-guard."
+  },
+  {
+    "id": "changelog-check",
+    "name": "Changelog Check",
+    "type": "hook",
+    "tool": "openai-codex",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/changelog-check.sh",
+    "install_path": "~/.codex/hooks/",
+    "install_command": "# Enable experimental hooks in ~/.codex/config.toml:\n# [features]\n# codex_hooks = true\n\n# Then install:\nmkdir -p ~/.codex/hooks && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/changelog-check.sh -o ~/.codex/hooks/changelog-check.sh && chmod +x ~/.codex/hooks/changelog-check.sh",
+    "files": [
+      "changelog-check.sh"
+    ],
+    "status": "available",
+    "tooltip_text": "Codex CLI hooks are experimental and require [features] codex_hooks = true in ~/.codex/config.toml.",
+    "docs_url": "https://developers.openai.com/codex",
+    "experimental": true,
+    "notes": "EXPERIMENTAL FEATURE — requires codex_hooks flag in config.toml. Enforces CHANGELOG.md updates before git push during PreToolUse Edit|Write events. Ported from claude-code/hooks/changelog-check."
+  },
+  {
+    "id": "extract-handoff",
+    "name": "Extract Handoff",
+    "type": "hook",
+    "tool": "openai-codex",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/extract-handoff.sh",
+    "install_path": "~/.codex/hooks/",
+    "install_command": "# Enable experimental hooks in ~/.codex/config.toml:\n# [features]\n# codex_hooks = true\n\n# Then install:\nmkdir -p ~/.codex/hooks && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/extract-handoff.sh -o ~/.codex/hooks/extract-handoff.sh && chmod +x ~/.codex/hooks/extract-handoff.sh",
+    "files": [
+      "extract-handoff.sh"
+    ],
+    "status": "available",
+    "tooltip_text": "Codex CLI hooks are experimental and require [features] codex_hooks = true in ~/.codex/config.toml.",
+    "docs_url": "https://developers.openai.com/codex",
+    "experimental": true,
+    "notes": "EXPERIMENTAL FEATURE — requires codex_hooks flag in config.toml. Extracts and validates handoff JSON from the agent final message during Stop events. Ported from claude-code/hooks/extract-handoff."
+  },
+  {
+    "id": "inject-context",
+    "name": "Inject Context",
+    "type": "hook",
+    "tool": "openai-codex",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/inject-context.sh",
+    "install_path": "~/.codex/hooks/",
+    "install_command": "# Enable experimental hooks in ~/.codex/config.toml:\n# [features]\n# codex_hooks = true\n\n# Then install:\nmkdir -p ~/.codex/hooks && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/inject-context.sh -o ~/.codex/hooks/inject-context.sh && chmod +x ~/.codex/hooks/inject-context.sh",
+    "files": [
+      "inject-context.sh"
+    ],
+    "status": "available",
+    "tooltip_text": "Codex CLI hooks are experimental and require [features] codex_hooks = true in ~/.codex/config.toml.",
+    "docs_url": "https://developers.openai.com/codex",
+    "experimental": true,
+    "notes": "EXPERIMENTAL FEATURE — requires codex_hooks flag in config.toml. Injects orchestrator project-brief and constraints during UserPromptSubmit events. Ported from claude-code/hooks/inject-context."
+  },
+  {
+    "id": "integrity-warn",
+    "name": "Integrity Warn",
+    "type": "hook",
+    "tool": "openai-codex",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/integrity-warn.sh",
+    "install_path": "~/.codex/hooks/",
+    "install_command": "# Enable experimental hooks in ~/.codex/config.toml:\n# [features]\n# codex_hooks = true\n\n# Then install:\nmkdir -p ~/.codex/hooks && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/integrity-warn.sh -o ~/.codex/hooks/integrity-warn.sh && chmod +x ~/.codex/hooks/integrity-warn.sh",
+    "files": [
+      "integrity-warn.sh"
+    ],
+    "status": "available",
+    "tooltip_text": "Codex CLI hooks are experimental and require [features] codex_hooks = true in ~/.codex/config.toml.",
+    "docs_url": "https://developers.openai.com/codex",
+    "experimental": true,
+    "notes": "EXPERIMENTAL FEATURE — requires codex_hooks flag in config.toml. Advisory integrity check after tool use during PostToolUse Bash|Edit|Write events. Requires integrity-check.sh at ~/.codex/integrity-check.sh. Ported from claude-code/hooks/integrity-warn."
+  },
+  {
+    "id": "pre-push-secrets",
+    "name": "Pre-Push Secrets Scan",
+    "type": "hook",
+    "tool": "openai-codex",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/pre-push-secrets.sh",
+    "install_path": "~/.codex/hooks/",
+    "install_command": "# Enable experimental hooks in ~/.codex/config.toml:\n# [features]\n# codex_hooks = true\n\n# Then install:\nmkdir -p ~/.codex/hooks && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/pre-push-secrets.sh -o ~/.codex/hooks/pre-push-secrets.sh && chmod +x ~/.codex/hooks/pre-push-secrets.sh",
+    "files": [
+      "pre-push-secrets.sh"
+    ],
+    "status": "available",
+    "tooltip_text": "Codex CLI hooks are experimental and require [features] codex_hooks = true in ~/.codex/config.toml.",
+    "docs_url": "https://developers.openai.com/codex",
+    "experimental": true,
+    "notes": "EXPERIMENTAL FEATURE — requires codex_hooks flag in config.toml. Secrets scan (gitleaks or grep fallback) before git push during PreToolUse Bash events. Ported from claude-code/hooks/pre-push-secrets."
+  },
+  {
+    "id": "protect-config",
+    "name": "Protect Config",
+    "type": "hook",
+    "tool": "openai-codex",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/protect-config.sh",
+    "install_path": "~/.codex/hooks/",
+    "install_command": "# Enable experimental hooks in ~/.codex/config.toml:\n# [features]\n# codex_hooks = true\n\n# Then install:\nmkdir -p ~/.codex/hooks && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/protect-config.sh -o ~/.codex/hooks/protect-config.sh && chmod +x ~/.codex/hooks/protect-config.sh",
+    "files": [
+      "protect-config.sh"
+    ],
+    "status": "available",
+    "tooltip_text": "Codex CLI hooks are experimental and require [features] codex_hooks = true in ~/.codex/config.toml.",
+    "docs_url": "https://developers.openai.com/codex",
+    "experimental": true,
+    "notes": "EXPERIMENTAL FEATURE — requires codex_hooks flag in config.toml. Blocks writes to control-plane files during PreToolUse Bash events. Guards ~/.claude/ paths by default; extend PROTECTED regex for ~/.codex/ if needed. Ported from claude-code/hooks/protect-config."
+  },
+  {
+    "id": "toolkit-drift-check",
+    "name": "Toolkit Drift Check",
+    "type": "hook",
+    "tool": "openai-codex",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/toolkit-drift-check.sh",
+    "install_path": "~/.codex/hooks/",
+    "install_command": "# Enable experimental hooks in ~/.codex/config.toml:\n# [features]\n# codex_hooks = true\n\n# Then install:\nmkdir -p ~/.codex/hooks && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/toolkit-drift-check.sh -o ~/.codex/hooks/toolkit-drift-check.sh && chmod +x ~/.codex/hooks/toolkit-drift-check.sh",
+    "files": [
+      "toolkit-drift-check.sh"
+    ],
+    "status": "available",
+    "tooltip_text": "Codex CLI hooks are experimental and require [features] codex_hooks = true in ~/.codex/config.toml.",
+    "docs_url": "https://developers.openai.com/codex",
+    "experimental": true,
+    "notes": "EXPERIMENTAL FEATURE — requires codex_hooks flag in config.toml. Warns when toolkit components are edited without a CHANGELOG update during PostToolUse Bash|Edit|Write events. Reads $CLAUDE_SESSION_ID for dedup; substitute the Codex session env var if available. Ported from claude-code/hooks/toolkit-drift-check."
+  },
+  {
+    "id": "toolkit-edit-reminder",
+    "name": "Toolkit Edit Reminder",
+    "type": "hook",
+    "tool": "openai-codex",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/toolkit-edit-reminder.sh",
+    "install_path": "~/.codex/hooks/",
+    "install_command": "# Enable experimental hooks in ~/.codex/config.toml:\n# [features]\n# codex_hooks = true\n\n# Then install:\nmkdir -p ~/.codex/hooks && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/toolkit-edit-reminder.sh -o ~/.codex/hooks/toolkit-edit-reminder.sh && chmod +x ~/.codex/hooks/toolkit-edit-reminder.sh",
+    "files": [
+      "toolkit-edit-reminder.sh"
+    ],
+    "status": "available",
+    "tooltip_text": "Codex CLI hooks are experimental and require [features] codex_hooks = true in ~/.codex/config.toml.",
+    "docs_url": "https://developers.openai.com/codex",
+    "experimental": true,
+    "notes": "EXPERIMENTAL FEATURE — requires codex_hooks flag in config.toml. Reminds agents to update CHANGELOG.md per KaC 1.1.0 during PreToolUse Edit|Write events. Ported from claude-code/hooks/toolkit-edit-reminder."
+  },
+  {
+    "id": "docker",
+    "name": "Docker",
+    "type": "rule",
+    "tool": "openai-codex",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/rules/docker/docker.md",
+    "install_path": "AGENTS.md",
+    "install_command": "curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/rules/docker/docker.md | cat >> AGENTS.md",
+    "files": [
+      "docker.md",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://developers.openai.com/codex",
+    "experimental": false,
+    "notes": "Appends rule content to the project AGENTS.md file. Codex CLI discovers rules via AGENTS.md in the project root or ~/.codex/AGENTS.md for user-global scope."
+  },
+  {
+    "id": "logging",
+    "name": "Logging",
+    "type": "rule",
+    "tool": "openai-codex",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/rules/logging/logging.md",
+    "install_path": "AGENTS.md",
+    "install_command": "curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/rules/logging/logging.md | cat >> AGENTS.md",
+    "files": [
+      "logging.md",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://developers.openai.com/codex",
+    "experimental": false,
+    "notes": "Appends rule content to the project AGENTS.md file. Codex CLI discovers rules via AGENTS.md in the project root or ~/.codex/AGENTS.md for user-global scope."
+  },
+  {
+    "id": "node",
+    "name": "Node",
+    "type": "rule",
+    "tool": "openai-codex",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/rules/node/node.md",
+    "install_path": "AGENTS.md",
+    "install_command": "curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/rules/node/node.md | cat >> AGENTS.md",
+    "files": [
+      "node.md",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://developers.openai.com/codex",
+    "experimental": false,
+    "notes": "Appends rule content to the project AGENTS.md file. Codex CLI discovers rules via AGENTS.md in the project root or ~/.codex/AGENTS.md for user-global scope."
+  },
+  {
+    "id": "python",
+    "name": "Python",
+    "type": "rule",
+    "tool": "openai-codex",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/rules/python/python.md",
+    "install_path": "AGENTS.md",
+    "install_command": "curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/rules/python/python.md | cat >> AGENTS.md",
+    "files": [
+      "python.md",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "",
+    "docs_url": "https://developers.openai.com/codex",
+    "experimental": false,
+    "notes": "Appends rule content to the project AGENTS.md file. Codex CLI discovers rules via AGENTS.md in the project root or ~/.codex/AGENTS.md for user-global scope."
+  },
+  {
+    "id": "backend",
+    "name": "Backend",
+    "type": "skill",
+    "tool": "openai-codex",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/skills/backend/SKILL.md",
+    "install_path": "~/.codex/skills/backend/",
+    "install_command": "mkdir -p ~/.codex/skills/backend && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/skills/backend/SKILL.md -o ~/.codex/skills/backend/SKILL.md",
+    "files": [
+      "SKILL.md",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "Lightweight backend workflow — implement with convention awareness, security review, and lint.",
+    "docs_url": "https://developers.openai.com/codex",
+    "experimental": false,
+    "notes": ""
+  },
+  {
+    "id": "changelog",
+    "name": "Changelog",
+    "type": "skill",
+    "tool": "openai-codex",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/skills/changelog/SKILL.md",
+    "install_path": "~/.codex/skills/changelog/",
+    "install_command": "mkdir -p ~/.codex/skills/changelog/references ~/.codex/skills/changelog/scripts && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/skills/changelog/SKILL.md -o ~/.codex/skills/changelog/SKILL.md",
+    "files": [
+      "SKILL.md",
+      "CHANGELOG.md",
+      "references/anti-patterns.md",
+      "references/enforcement.md",
+      "references/migration.md",
+      "references/platform-urls.md",
+      "scripts/backfill-changelog-tags.sh",
+      "scripts/detect-platform.sh"
+    ],
+    "status": "available",
+    "tooltip_text": "Canonical CHANGELOG.md standard: Keep a Changelog 1.1.0 + SemVer, per-component tags, bump table.",
+    "docs_url": "https://developers.openai.com/codex",
+    "experimental": false,
+    "notes": ""
+  },
+  {
+    "id": "design-authority",
+    "name": "Design Authority",
+    "type": "skill",
+    "tool": "openai-codex",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/skills/design-authority/SKILL.md",
+    "install_path": "~/.codex/skills/design-authority/",
+    "install_command": "mkdir -p ~/.codex/skills/design-authority/references/components ~/.codex/skills/design-authority/templates && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/skills/design-authority/SKILL.md -o ~/.codex/skills/design-authority/SKILL.md",
+    "files": [
+      "SKILL.md",
+      "CHANGELOG.md",
+      "references/charts.md",
+      "references/color-system.md",
+      "references/components/actions.md",
+      "references/components/data-display.md",
+      "references/components/focus.md",
+      "references/components/forms.md",
+      "references/components/INDEX.md",
+      "references/components/mdx-lookup.md",
+      "references/components/navigation.md",
+      "references/components/surfaces.md",
+      "references/density.md",
+      "references/design-tokens.md",
+      "references/effects.md",
+      "references/interactive-states.md",
+      "references/theme-brutalist.md",
+      "references/typography.md",
+      "templates/app-detail-panel.tsx",
+      "templates/data-table.tsx",
+      "templates/filter-bar.tsx",
+      "templates/stat-card-grid.tsx"
+    ],
+    "status": "available",
+    "tooltip_text": "Design system guidance for generating and modifying frontend components. Provides token references, canonical patterns, and anti-convergence rules.",
+    "docs_url": "https://developers.openai.com/codex",
+    "experimental": false,
+    "notes": ""
+  },
+  {
+    "id": "design-lint",
+    "name": "Design Lint",
+    "type": "skill",
+    "tool": "openai-codex",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/skills/design-lint/SKILL.md",
+    "install_path": "~/.codex/skills/design-lint/",
+    "install_command": "mkdir -p ~/.codex/skills/design-lint/checks && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/skills/design-lint/SKILL.md -o ~/.codex/skills/design-lint/SKILL.md",
+    "files": [
+      "SKILL.md",
+      "CHANGELOG.md",
+      "checks/border-radius.sh",
+      "checks/dark-mode-pairs.sh",
+      "checks/focus-visible.sh",
+      "checks/hex-colors.sh",
+      "checks/oklch-gamut-accent.sh",
+      "checks/oklch-gamut-surface.sh",
+      "checks/shadow-weight.sh",
+      "checks/z-index.sh"
+    ],
+    "status": "available",
+    "tooltip_text": "Deterministic design system linting checks for Tailwind CSS/React components.",
+    "docs_url": "https://developers.openai.com/codex",
+    "experimental": false,
+    "notes": ""
+  },
+  {
+    "id": "frontend",
+    "name": "Frontend",
+    "type": "skill",
+    "tool": "openai-codex",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/skills/frontend/SKILL.md",
+    "install_path": "~/.codex/skills/frontend/",
+    "install_command": "mkdir -p ~/.codex/skills/frontend && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/skills/frontend/SKILL.md -o ~/.codex/skills/frontend/SKILL.md",
+    "files": [
+      "SKILL.md",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "Lightweight frontend workflow — implement with design system enforcement, review, and lint.",
+    "docs_url": "https://developers.openai.com/codex",
+    "experimental": false,
+    "notes": ""
+  },
+  {
+    "id": "git-ship",
+    "name": "Git Ship",
+    "type": "skill",
+    "tool": "openai-codex",
+    "version": "2.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/skills/git-ship/SKILL.md",
+    "install_path": "~/.codex/skills/git-ship/",
+    "install_command": "mkdir -p ~/.codex/skills/git-ship/evals ~/.codex/skills/git-ship/references && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/skills/git-ship/SKILL.md -o ~/.codex/skills/git-ship/SKILL.md",
+    "files": [
+      "SKILL.md",
+      "CHANGELOG.md",
+      "evals/evals.json",
+      "references/provider-detection.md"
+    ],
+    "status": "available",
+    "tooltip_text": "Git shipping workflow — commit, push, open PRs, enable auto-merge, and clean up worktrees.",
+    "docs_url": "https://developers.openai.com/codex",
+    "experimental": false,
+    "notes": ""
+  },
+  {
+    "id": "improve",
+    "name": "Improve",
+    "type": "skill",
+    "tool": "openai-codex",
+    "version": "2.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/skills/improve/SKILL.md",
+    "install_path": "~/.codex/skills/improve/",
+    "install_command": "mkdir -p ~/.codex/skills/improve/evals ~/.codex/skills/improve/references && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/skills/improve/SKILL.md -o ~/.codex/skills/improve/SKILL.md",
+    "files": [
+      "SKILL.md",
+      "CHANGELOG.md",
+      "evals/evals.json",
+      "references/eval-matching.md",
+      "references/validation-loop.md",
+      "references/version-bump.md"
+    ],
+    "status": "available",
+    "tooltip_text": "Apply retro recommendations with automated verification. Supports --validate for autonomous improve-then-review cycles.",
+    "docs_url": "https://developers.openai.com/codex",
+    "experimental": false,
+    "notes": ""
+  },
+  {
+    "id": "infra",
+    "name": "Infra",
+    "type": "skill",
+    "tool": "openai-codex",
+    "version": "2.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/skills/infra/SKILL.md",
+    "install_path": "~/.codex/skills/infra/",
+    "install_command": "mkdir -p ~/.codex/skills/infra && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/skills/infra/SKILL.md -o ~/.codex/skills/infra/SKILL.md",
+    "files": [
+      "SKILL.md",
+      "CHANGELOG.md"
+    ],
+    "status": "available",
+    "tooltip_text": "Lightweight infrastructure workflow — implement with SRE review for operational readiness.",
+    "docs_url": "https://developers.openai.com/codex",
+    "experimental": false,
+    "notes": ""
+  },
+  {
+    "id": "observability-patterns",
+    "name": "Observability Patterns",
+    "type": "skill",
+    "tool": "openai-codex",
+    "version": "2.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/skills/observability-patterns/SKILL.md",
+    "install_path": "~/.codex/skills/observability-patterns/",
+    "install_command": "mkdir -p ~/.codex/skills/observability-patterns/references && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/skills/observability-patterns/SKILL.md -o ~/.codex/skills/observability-patterns/SKILL.md",
+    "files": [
+      "SKILL.md",
+      "CHANGELOG.md",
+      "references/health-checks.md",
+      "references/runbook-template.md",
+      "references/structured-logging.md"
+    ],
+    "status": "available",
+    "tooltip_text": "Structured logging, health checks, metrics, and runbook patterns for SRE review and remediation.",
+    "docs_url": "https://developers.openai.com/codex",
+    "experimental": false,
+    "notes": ""
+  },
+  {
+    "id": "owasp-reference",
+    "name": "OWASP Reference",
+    "type": "skill",
+    "tool": "openai-codex",
+    "version": "2.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/skills/owasp-reference/SKILL.md",
+    "install_path": "~/.codex/skills/owasp-reference/",
+    "install_command": "mkdir -p ~/.codex/skills/owasp-reference/references && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/skills/owasp-reference/SKILL.md -o ~/.codex/skills/owasp-reference/SKILL.md",
+    "files": [
+      "SKILL.md",
+      "CHANGELOG.md",
+      "references/auth-patterns.md",
+      "references/owasp-top10.md",
+      "references/stride-threats.md"
+    ],
+    "status": "available",
+    "tooltip_text": "OWASP Top 10, STRIDE threat modeling, and common vulnerability patterns for security review.",
+    "docs_url": "https://developers.openai.com/codex",
+    "experimental": false,
+    "notes": ""
+  },
+  {
+    "id": "prod-readiness",
+    "name": "Prod Readiness",
+    "type": "skill",
+    "tool": "openai-codex",
+    "version": "2.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/skills/prod-readiness/SKILL.md",
+    "install_path": "~/.codex/skills/prod-readiness/",
+    "install_command": "mkdir -p ~/.codex/skills/prod-readiness/evals ~/.codex/skills/prod-readiness/references && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/skills/prod-readiness/SKILL.md -o ~/.codex/skills/prod-readiness/SKILL.md",
+    "files": [
+      "SKILL.md",
+      "CHANGELOG.md",
+      "evals/evals.json",
+      "references/phases.md"
+    ],
+    "status": "available",
+    "tooltip_text": "Full production readiness check — build, lint, audit, test, git verify, and ship verdict.",
+    "docs_url": "https://developers.openai.com/codex",
+    "experimental": false,
+    "notes": ""
+  },
+  {
+    "id": "retro",
+    "name": "Retro",
+    "type": "skill",
+    "tool": "openai-codex",
+    "version": "3.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/skills/retro/SKILL.md",
+    "install_path": "~/.codex/skills/retro/",
+    "install_command": "mkdir -p ~/.codex/skills/retro/evals ~/.codex/skills/retro/references ~/.codex/skills/retro/scripts && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/skills/retro/SKILL.md -o ~/.codex/skills/retro/SKILL.md",
+    "files": [
+      "SKILL.md",
+      "CHANGELOG.md",
+      "evals/evals.json",
+      "references/example-output.md",
+      "references/finalization.md",
+      "references/model-pricing.json",
+      "references/orchestration-deep-dive.md",
+      "references/single-agent-deep-dive.md",
+      "references/system-architecture.md",
+      "references/system-overview.mmd",
+      "references/system-overview.svg",
+      "scripts/parse-metrics.py",
+      "scripts/retro-history.py",
+      "scripts/verify-claims.py"
+    ],
+    "status": "available",
+    "tooltip_text": "Run a retrospective on any completed run — single agent, subagent, skill, or orchestration pipeline.",
+    "docs_url": "https://developers.openai.com/codex",
+    "experimental": false,
+    "notes": ""
+  },
+  {
+    "id": "review-skill",
+    "name": "Review Skill",
+    "type": "skill",
+    "tool": "openai-codex",
+    "version": "2.0.0",
+    "ref": "main",
+    "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/skills/review-skill/SKILL.md",
+    "install_path": "~/.codex/skills/review-skill/",
+    "install_command": "mkdir -p ~/.codex/skills/review-skill/evals ~/.codex/skills/review-skill/scripts && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/skills/review-skill/SKILL.md -o ~/.codex/skills/review-skill/SKILL.md",
+    "files": [
+      "SKILL.md",
+      "CHANGELOG.md",
+      "evals/evals.json",
+      "scripts/lint-definition.py"
+    ],
+    "status": "available",
+    "tooltip_text": "Review a skill or agent definition for quality and correctness. Supports batch review with parallel dispatch.",
+    "docs_url": "https://developers.openai.com/codex",
+    "experimental": false,
+    "notes": ""
+  }
+]

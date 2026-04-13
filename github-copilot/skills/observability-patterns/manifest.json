@@ -1,0 +1,20 @@
+{
+  "id": "observability-patterns",
+  "name": "Observability Patterns",
+  "type": "skill",
+  "tool": "github-copilot",
+  "version": "3.0.0",
+  "ref": "main",
+  "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/skills/observability-patterns/SKILL.md",
+  "install_path": "~/.claude/skills/observability-patterns/",
+  "install_command": "mkdir -p ~/.claude/skills/observability-patterns && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/skills/observability-patterns/SKILL.md -o ~/.claude/skills/observability-patterns/SKILL.md",
+  "files": [
+    "SKILL.md",
+    "CHANGELOG.md"
+  ],
+  "status": "available",
+  "tooltip_text": "Structured logging, health checks, metrics, and runbook patterns for SRE review and remediation.",
+  "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
+  "experimental": false,
+  "notes": "Installs to ~/.claude/ path for compatibility with future Claude Code migration (official VSCode docs confirm parity)."
+}
