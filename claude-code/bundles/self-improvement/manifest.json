@@ -9,12 +9,38 @@
   "install_path": "~/.claude/plugins/self-improvement/",
   "install_command": "/plugin install self-improvement@bmjcoding/agent-toolkit",
   "files": [
-    "manifest.json",
-    "../self-improvement.json"
+    "manifest.json"
   ],
   "status": "available",
   "tooltip_text": "",
   "docs_url": "https://docs.anthropic.com/en/docs/claude-code/plugins",
   "experimental": false,
-  "notes": "Claude Code 'plugin' primitive."
+  "notes": "Claude Code 'plugin' primitive.",
+  "components": [
+    {
+      "type": "skill",
+      "id": "retro",
+      "role": "core"
+    },
+    {
+      "type": "skill",
+      "id": "improve",
+      "role": "core"
+    },
+    {
+      "type": "skill",
+      "id": "review-skill",
+      "role": "core"
+    },
+    {
+      "type": "skill",
+      "id": "changelog",
+      "role": "core"
+    },
+    {
+      "type": "agent",
+      "id": "autoresearch-analyst",
+      "role": "core"
+    }
+  ]
 }

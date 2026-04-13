@@ -9,12 +9,43 @@
   "install_path": "",
   "install_command": "",
   "files": [
-    "manifest.json",
-    "../code-quality.json"
+    "manifest.json"
   ],
   "status": "unverified",
   "tooltip_text": "GitHub Copilot does not document a bundle/plugin primitive. See docs for manual install of individual components.",
   "docs_url": "https://code.visualstudio.com/docs/copilot/customization/overview",
   "experimental": false,
-  "notes": "UNVERIFIED — no documented Copilot bundle format."
+  "notes": "UNVERIFIED \u2014 no documented Copilot bundle format.",
+  "components": [
+    {
+      "type": "skill",
+      "id": "prod-readiness",
+      "role": "core"
+    },
+    {
+      "type": "skill",
+      "id": "review-skill",
+      "role": "core"
+    },
+    {
+      "type": "skill",
+      "id": "design-lint",
+      "role": "core"
+    },
+    {
+      "type": "command",
+      "id": "lint",
+      "role": "core"
+    },
+    {
+      "type": "command",
+      "id": "audit",
+      "role": "core"
+    },
+    {
+      "type": "command",
+      "id": "test",
+      "role": "core"
+    }
+  ]
 }

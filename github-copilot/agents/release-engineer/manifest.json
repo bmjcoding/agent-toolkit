@@ -15,5 +15,32 @@
   "tooltip_text": "",
   "docs_url": "https://code.visualstudio.com/docs/copilot/agents/overview",
   "experimental": false,
-  "notes": "Installs to ~/.claude/ path — parity confirmed by VSCode custom-instructions docs."
+  "notes": "Installs to ~/.claude/ path \u2014 parity confirmed by VSCode custom-instructions docs.",
+  "dependencies": [
+    {
+      "type": "skill",
+      "id": "git-ship",
+      "optional": false
+    },
+    {
+      "type": "skill",
+      "id": "changelog",
+      "optional": false
+    },
+    {
+      "type": "command",
+      "id": "git-verify",
+      "optional": false
+    },
+    {
+      "type": "hook",
+      "id": "branch-guard",
+      "optional": false
+    },
+    {
+      "type": "hook",
+      "id": "pre-push-secrets",
+      "optional": false
+    }
+  ]
 }
