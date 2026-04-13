@@ -1,0 +1,20 @@
+# components[].role values: core (required for bundle to function) | optional (nice-to-have) | deprecated (will be removed)
+id: infrastructure
+name: Infrastructure
+description: Bundles the infra and observability-patterns skills with the site-reliability-engineer agent for infrastructure automation and operational excellence.
+status: stable
+tags:
+  - infrastructure
+  - observability
+  - sre
+  - operations
+components:
+  - type: skill
+    id: infra
+    role: core
+  - type: skill
+    id: observability-patterns
+    role: core
+  - type: agent
+    id: site-reliability-engineer
+    role: core
