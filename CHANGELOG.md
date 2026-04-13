@@ -8,6 +8,14 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.1.0] - 2026-04-12
+
+### Added
+
+- `manifest.json` per primitive across all 156 primitives (13 skills × 3 tools + agents, hooks, commands, rules × 3 tools). Each manifest captures `id`, `name`, `type`, `tool`, `version`, `ref`, `download_url`, `install_path`, `install_command`, `files`, `status`, and `experimental` fields.
+- `scripts/generate-index.js` — Node.js generator (uses only `fs` and `path` builtins) that walks all `<tool>/<primitive-type>/<name>/manifest.json` paths and writes `index.json` as a root-level JSON array. Re-run after adding any manifest.
+- `index.json` at the repository root — machine-readable catalog of all 156 manifests; consumed by ALT Central's backend `fetchInstallOptions` service with a 5-minute cache and 1 MB size cap.
+
 ## [3.0.0] - 2026-04-12
 
 ### Changed — Breaking
@@ -121,6 +129,7 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 3. Re-run the install script: `./claude-code/scripts/install.sh`.
 4. Verify: `./claude-code/scripts/install.sh --check`.
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/v3.0.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/v3.1.0...HEAD
+[3.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/v3.0.0...v3.1.0
 [3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/v2.0.0...v3.0.0
 [2.0.0]: https://github.com/bmjcoding/agent-toolkit/releases/tag/v2.0.0
