@@ -2,8 +2,6 @@
 name: observability-patterns
 description: Structured logging, health checks, metrics, and runbook patterns for SRE review and remediation. Use when reviewing services for operational readiness or remediating observability gaps.
 user-invocable: false
-metadata:
-  version: 1.1.0
 ---
 
 # Observability Patterns Reference

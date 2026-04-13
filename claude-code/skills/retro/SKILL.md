@@ -4,8 +4,6 @@ description: >
   Run a retrospective on any completed run — single agent, subagent, skill, or orchestration
   pipeline. Use when the user wants to debrief, analyze efficiency, or improve a workflow.
 argument-hint: "[run-type or orchestrator-dir]"
-metadata:
-  version: 1.1.0
 ---
 
 # Retrospective

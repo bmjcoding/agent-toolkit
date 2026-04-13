@@ -6,8 +6,6 @@ description: >
   Supports batch review of directories with parallel dispatch.
 disable-model-invocation: true
 argument-hint: "[path to SKILL.md, agent .md, or directory]"
-metadata:
-  version: 1.1.0
 ---
 
 # Review Skill / Agent Definition
