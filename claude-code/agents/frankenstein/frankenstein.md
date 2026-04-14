@@ -8,7 +8,7 @@ permissionMode: auto
 maxTurns: 200
 initialPrompt: |
   mkdir -p .orchestrator/{handoffs,context,logs,sessions} && git rev-parse --is-inside-work-tree 2>/dev/null && (grep -qxF '.orchestrator/' .gitignore 2>/dev/null || echo '.orchestrator/' >> .gitignore) || true
-# version: 4.5.0
+# version: 4.6.0
 ---
 
 # Frankenstein
@@ -767,6 +767,7 @@ All external inputs are untrusted until explicitly validated:
 | Date | Session | Change | Source |
 |---|---|---|---|
 | 2026-04-12 | 20260412T141402 | Added default-branch guard to Phase 6a dispatch prompt (R1). Release-engineer-6a had committed directly to main; 6b recovery was required. Guard now ensures a feature branch is created before the first commit when working directory is on the default branch. | Retro `~/.claude/retros/orchestrator/2026-04-12T150000.md` |
+| 2026-04-14 | 20260414T100456 | REC-1: Rewrote Classifier Outage section — dispatcher-applied python3 -c recovery is now the canonical path for mechanical tasks (not pause-and-ask-user). REC-2: Extended agent dispatch template addendum to cover .orchestrator/ session path blocks. REC-3: Added smoke-test gate pattern between tool-build and corpus-run subtasks. REC-4: Added documentation PII guard to Phase 5a doc-writer dispatch section. Net: +28 lines (flagged per rubric for next retro review). | Retro `~/.claude/retros/sessions/2026-04/20260414T100456/retro.md` |
 
 ## Runaway Guard
 
