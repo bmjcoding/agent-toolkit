@@ -15,8 +15,8 @@ claude-code/
     install.sh  # Symlink manager for ~/.claude/
 ```
 
-Skills (13) and rules (4) for Claude Code live in **this directory** under `claude-code/skills/` and
-`claude-code/rules/`, making this tool directory fully self-contained.
+Rules (4) for Claude Code live in **this directory** under `claude-code/rules/`.
+Skills (13) live in `skills/` at the repo root — tool-agnostic and shared across Claude Code, Copilot, and Codex.
 
 ## Install (Symlinks)
 
@@ -28,7 +28,7 @@ Claude Code loads these components via symlinks from `~/.claude/`:
 ~/.claude/docs     -> /path/to/agent-toolkit/claude-code/docs
 ~/.claude/hooks    -> /path/to/agent-toolkit/claude-code/hooks
 ~/.claude/rules    -> /path/to/agent-toolkit/claude-code/rules
-~/.claude/skills   -> /path/to/agent-toolkit/claude-code/skills
+~/.claude/skills   -> /path/to/agent-toolkit/skills
 ```
 
 Run the install script to create or retarget all six symlinks atomically:

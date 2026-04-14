@@ -210,71 +210,6 @@
     "path": "claude-code/rules/python/python.md"
   },
   {
-    "slug": "backend",
-    "category": "skill",
-    "path": "claude-code/skills/backend/SKILL.md"
-  },
-  {
-    "slug": "changelog",
-    "category": "skill",
-    "path": "claude-code/skills/changelog/SKILL.md"
-  },
-  {
-    "slug": "design-authority",
-    "category": "skill",
-    "path": "claude-code/skills/design-authority/SKILL.md"
-  },
-  {
-    "slug": "design-lint",
-    "category": "skill",
-    "path": "claude-code/skills/design-lint/SKILL.md"
-  },
-  {
-    "slug": "frontend",
-    "category": "skill",
-    "path": "claude-code/skills/frontend/SKILL.md"
-  },
-  {
-    "slug": "git-ship",
-    "category": "skill",
-    "path": "claude-code/skills/git-ship/SKILL.md"
-  },
-  {
-    "slug": "improve",
-    "category": "skill",
-    "path": "claude-code/skills/improve/SKILL.md"
-  },
-  {
-    "slug": "infra",
-    "category": "skill",
-    "path": "claude-code/skills/infra/SKILL.md"
-  },
-  {
-    "slug": "observability-patterns",
-    "category": "skill",
-    "path": "claude-code/skills/observability-patterns/SKILL.md"
-  },
-  {
-    "slug": "owasp-reference",
-    "category": "skill",
-    "path": "claude-code/skills/owasp-reference/SKILL.md"
-  },
-  {
-    "slug": "prod-readiness",
-    "category": "skill",
-    "path": "claude-code/skills/prod-readiness/SKILL.md"
-  },
-  {
-    "slug": "retro",
-    "category": "skill",
-    "path": "claude-code/skills/retro/SKILL.md"
-  },
-  {
-    "slug": "review-skill",
-    "category": "skill",
-    "path": "claude-code/skills/review-skill/SKILL.md"
-  },
-  {
     "slug": "autoresearch-analyst",
     "category": "agent",
     "path": "github-copilot/agents/autoresearch-analyst.agent.md"
@@ -783,5 +718,70 @@
     "slug": "review-skill",
     "category": "skill",
     "path": "openai-codex/skills/review-skill"
+  },
+  {
+    "slug": "backend",
+    "category": "skill",
+    "path": "skills/backend/SKILL.md"
+  },
+  {
+    "slug": "changelog",
+    "category": "skill",
+    "path": "skills/changelog/SKILL.md"
+  },
+  {
+    "slug": "design-authority",
+    "category": "skill",
+    "path": "skills/design-authority/SKILL.md"
+  },
+  {
+    "slug": "design-lint",
+    "category": "skill",
+    "path": "skills/design-lint/SKILL.md"
+  },
+  {
+    "slug": "frontend",
+    "category": "skill",
+    "path": "skills/frontend/SKILL.md"
+  },
+  {
+    "slug": "git-ship",
+    "category": "skill",
+    "path": "skills/git-ship/SKILL.md"
+  },
+  {
+    "slug": "improve",
+    "category": "skill",
+    "path": "skills/improve/SKILL.md"
+  },
+  {
+    "slug": "infra",
+    "category": "skill",
+    "path": "skills/infra/SKILL.md"
+  },
+  {
+    "slug": "observability-patterns",
+    "category": "skill",
+    "path": "skills/observability-patterns/SKILL.md"
+  },
+  {
+    "slug": "owasp-reference",
+    "category": "skill",
+    "path": "skills/owasp-reference/SKILL.md"
+  },
+  {
+    "slug": "prod-readiness",
+    "category": "skill",
+    "path": "skills/prod-readiness/SKILL.md"
+  },
+  {
+    "slug": "retro",
+    "category": "skill",
+    "path": "skills/retro/SKILL.md"
+  },
+  {
+    "slug": "review-skill",
+    "category": "skill",
+    "path": "skills/review-skill/SKILL.md"
   }
 ]

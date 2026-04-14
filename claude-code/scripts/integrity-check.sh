@@ -51,7 +51,7 @@ collect_files() {
     done < <(find -L "${CLAUDE_HOME}/agents" -maxdepth 2 -name "*.md" ! -name "CHANGELOG.md" -type f -print0 2>/dev/null | sort -z)
   fi
 
-  # Skill definitions — follow skills symlink -> claude-code/skills/<name>/SKILL.md
+  # Skill definitions — follow skills symlink -> skills/<name>/SKILL.md
   if [ -d "${CLAUDE_HOME}/skills" ]; then
     while IFS= read -r -d '' f; do
       files+=("$f")

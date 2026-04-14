@@ -75,7 +75,7 @@ in by creating symlinks from `~/.claude/` into the `claude-code/` subtree:
 | `~/.claude/commands` | `claude-code/commands` | 6 slash commands (`/lint`, `/audit`, `/test`, etc.) |
 | `~/.claude/hooks` | `claude-code/hooks` | 9 shell hooks (PreToolUse / PostToolUse) |
 | `~/.claude/rules` | `claude-code/rules` | 4 rule sets (docker, logging, node, python) |
-| `~/.claude/skills` | `claude-code/skills` | 13 skill definitions |
+| `~/.claude/skills` | `skills` | 13 skill definitions |
 
 **Setup — one-time from the toolkit root:**
 
@@ -85,7 +85,7 @@ ln -sfn "$TOOLKIT/claude-code/agents"   ~/.claude/agents
 ln -sfn "$TOOLKIT/claude-code/commands" ~/.claude/commands
 ln -sfn "$TOOLKIT/claude-code/hooks"    ~/.claude/hooks
 ln -sfn "$TOOLKIT/claude-code/rules"    ~/.claude/rules
-ln -sfn "$TOOLKIT/claude-code/skills"   ~/.claude/skills
+ln -sfn "$TOOLKIT/skills"               ~/.claude/skills
 ```
 
 Or use the bundled installer (also handles `docs` and supports `--dry-run` / `--check`):
@@ -106,10 +106,9 @@ After setup, Claude Code auto-discovers all agents, commands, rules, and skills 
 session start. Hooks must additionally be registered in `~/.claude/settings.json`
 (see `claude-code/hooks/README.md`).
 
-> **Breaking change (v3.0.0)**: if you have existing `~/.claude/` symlinks pointing to
-> the repo-root `rules/` or `skills/` directories, re-run `install.sh` to retarget them.
-> Skills and rules now live inside each tool directory (`claude-code/rules/`,
-> `claude-code/skills/`). The root `skills/` and `rules/` directories no longer exist.
+> **Breaking change (v3.0.0)**: rules were moved to `claude-code/rules/`. Re-run `install.sh` to retarget symlinks if upgrading from v2.
+>
+> **Breaking change (v4.0.0)**: skills were relocated back to `skills/` at the repo root (tool-agnostic). Re-run `install.sh` to retarget `~/.claude/skills` if upgrading from v3.
 
 ### GitHub Copilot (VS Code)
 
@@ -166,7 +165,7 @@ openai-codex/<slug>-v<version>     # Codex agents, hooks, skills, rules, config
 
 ## Contributing
 
-When adding a new skill, follow the template in `claude-code/skills/changelog/SKILL.md`.
+When adding a new skill, follow the template in `skills/changelog/SKILL.md`.
 Place the skill in `<tool>/skills/<slug>/` for each tool you want to support, with a
 `SKILL.md` and `CHANGELOG.md` in each copy. If the skill needs Claude Code-specific
 wiring (a command or hook), add those separately under `claude-code/`.

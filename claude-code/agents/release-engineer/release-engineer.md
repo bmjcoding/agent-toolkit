@@ -48,7 +48,7 @@ Before staging files for commit, check each CHANGELOG.md in the touched componen
 1. Identify which component CHANGELOG.md files have been touched (`git diff --name-only` or infer from plan.json owned-files).
 2. For each touched CHANGELOG.md, check whether `## [Unreleased]` is non-empty.
 3. If `## [Unreleased]` is empty for all touched CHANGELOGs, proceed directly to Step 3 — nothing to promote.
-4. If `## [Unreleased]` is **non-empty** for one or more touched CHANGELOGs and a release is requested (via `--release` flag or explicit task instruction), invoke the `/changelog release` subcommand (see `claude-code/skills/changelog/SKILL.md`):
+4. If `## [Unreleased]` is **non-empty** for one or more touched CHANGELOGs and a release is requested (via `--release` flag or explicit task instruction), invoke the `/changelog release` subcommand (see `skills/changelog/SKILL.md`):
    - Single component: `/changelog release <component-slug>`
    - Multiple components: `/changelog release` (processes all non-empty [Unreleased] sections)
    - The skill performs the full atomic pipeline: (a) promote `[Unreleased]` → `[X.Y.Z] - YYYY-MM-DD`, (b) insert fresh empty `[Unreleased]`, (c) update comparison footer links, (d) commit, tag, and push (`chore: release {slug}-v{X.Y.Z}` + `git tag {slug}-v{X.Y.Z}` + `git push origin HEAD {slug}-v{X.Y.Z}`).
