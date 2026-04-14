@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.2.1] - 2026-04-14
+
+### Changed
+
+- Step 7 `file_diffs` entry shape: `unified_diff_truncated` now holds diff content only (no trailing `[truncated at 200 lines]` sentinel). Added sibling boolean field `truncated` (`true` when diff was cut at 200 lines, `false` otherwise). Diff parsers no longer receive embedded plain-text annotations inside the diff string.
+
+## [4.2.0] - 2026-04-14
+
+### Added
+
+- Step 7 schema: `file_diffs` field (array of `{file, unified_diff_truncated}` objects, max 200 lines per diff). Enables retros to grep expected post-state from improve artifacts without re-reading target files. Use empty array `[]` for pattern-only runs.
+
 ## [4.1.0] - 2026-04-13
 
 ### Changed
@@ -71,7 +83,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/improve-v4.1.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/improve-v4.2.1...HEAD
+[4.2.1]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/improve-v4.2.0...claude-code/improve-v4.2.1
+[4.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/improve-v4.1.0...claude-code/improve-v4.2.0
 [4.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/improve-v4.0.0...claude-code/improve-v4.1.0
 [3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/shared/improve-v2.0.0...claude-code/improve-v3.0.0
 [2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/shared/improve-v1.2.0...shared/improve-v2.0.0

@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.0.1] - 2026-04-14
+
+### Fixed
+
+- Improve mode handoff: added `truncated` boolean to `file_diffs` entry shape (`{file, unified_diff_truncated, truncated}`), mirroring the fix-improve-truncation contract addition.
+- Improve mode handoff: confirmed `recommendations_applied` and `recommendations_reverted` are present as required top-level array-of-strings fields (per improve/SKILL.md step 7 and PR #17 canonicalization).
+
+## [5.0.0] - 2026-04-14
+
+### Changed
+
+- BREAKING: Review mode handoff `results[].required_changes` type changed from integer (count) to array of objects `{what, where, why, priority, type}` to match review-skill JSON output schema (D1-1). Consumers must read `required_changes.length` to obtain the count.
+- Full-cycle mode handoff `review_results[].required_changes` updated to the same array-of-objects shape for consistency with the review mode handoff.
+- Improve mode handoff: added `file_diffs` field (array of `{file, unified_diff_truncated}` objects) matching improve/SKILL.md step 7 schema (D1-3).
+
 ## [4.1.1] - 2026-04-14
 
 ### Added
@@ -56,7 +71,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/autoresearch-analyst-v4.1.1...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/autoresearch-analyst-v5.0.1...HEAD
+[5.0.1]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/autoresearch-analyst-v5.0.0...claude-code/autoresearch-analyst-v5.0.1
+[5.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/autoresearch-analyst-v4.1.1...claude-code/autoresearch-analyst-v5.0.0
 [4.1.1]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/autoresearch-analyst-v4.1.0...claude-code/autoresearch-analyst-v4.1.1
 [4.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/autoresearch-analyst-v4.0.0...claude-code/autoresearch-analyst-v4.1.0
 [4.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/autoresearch-analyst-v3.0.0...claude-code/autoresearch-analyst-v4.0.0

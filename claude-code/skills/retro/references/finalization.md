@@ -15,6 +15,20 @@ python3 ${CLAUDE_SKILL_DIR}/scripts/verify-claims.py /tmp/retro-draft-TIMESTAMP.
 
 This checks that cited file paths exist, agent IDs match handoff files, git SHAs resolve, and severity counts match the backlog. Fix any failures before saving to the canonical path. After all checks pass, move the draft to `~/.claude/retros/{subject}/TIMESTAMP.md` in the Save step — do not write to the final path before verification succeeds.
 
+### Per-Recommendation State Verification
+
+For each recommendation in section 3.7 (the Recommendations table), before finalizing the retro, run a target-file check to confirm the proposed fix is NOT already present. If the fix appears to be present, mark the recommendation as `skipped-already-applied` in the output rather than listing it as an open recommendation.
+
+Verification procedure per recommendation type:
+
+- **fix** type: read the target file specified in the `Where` column. Run a focused grep for a distinctive token from the proposed fix (e.g., a function name, a field name, a key phrase from the `what` description). If the token is found in the file, the fix is likely already applied — mark as `skipped-already-applied`.
+- **pattern** type: check `~/.claude/skills/memory/` or project CLAUDE.md for the pattern text. If a semantically equivalent pattern exists, mark as `skipped-already-applied`.
+
+> **Note:**
+> - If the target file named in the recommendation does not exist (deleted or moved since the recommendation was recorded), mark the recommendation as `open` with note: `(target file not found — cannot pre-verify)`. Do NOT auto-skip or auto-close.
+> - Behavioral recs (e.g., "cap return messages at N sentences") cannot be verified from file contents alone — they require observing agent behavior. For behavioral recs, include them as open recs and add a note: `(behavioral — cannot pre-verify from file state)`.
+> - A grep hit is evidence of likely-applied, not proof. If the grep hit is in a comment or in a different context, use judgment. When uncertain, keep the rec open with a note: `(pre-verify: possible match at <file>:<line> — verify before applying)`.
+
 Then manually cross-check what the script can't verify:
 
 1. Every claim that cites a metric (token count, file count, duration) — verify against the source artifact or script output. Don't estimate when data exists.
@@ -132,6 +146,7 @@ Files are organized by subject subdirectory: `~/.claude/retros/{subject}/`
    | `avg_dispatch_prompt_tokens` | integer | Average inline prompt tokens per dispatch (dispatcher_tokens_estimated / dispatch_count) |
    | `net_line_delta` | integer | Delta vs. the prior retro's frankenstein_line_count (negative = improvement). Use null if no prior retro exists for this subject. |
    | `net_growth_flag` | boolean | `true` when `net_line_delta` is positive (frankenstein.md grew this run); `false` when zero or negative; `null` when `net_line_delta` is null. |
+   | `pre_verified_skipped` | integer | Count of recommendations marked `skipped-already-applied` by the per-recommendation state-verification step. Distinguishes verification-time skips from improve-time skips. |
 
    Use `null` for fields where data is unavailable. Do not omit tracked metric fields — `null` is better than missing, because the trends script can distinguish "not logged" from "zero."
 

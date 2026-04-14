@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.0.1] - 2026-04-14
+
+### Fixed
+
+- Publish-phase operating mode: handoff instruction corrected from `status: done` to `status: needs_human` for the publish-phase truncation case. A truncated push/PR-creation phase cannot report done — it requires human intervention to complete.
+
 ## [4.0.0] - 2026-04-13
 
 ### Removed
@@ -46,7 +52,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/release-engineer-v3.0.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/release-engineer-v4.0.1...HEAD
+[4.0.1]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/release-engineer-v4.0.0...claude-code/release-engineer-v4.0.1
+[4.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/release-engineer-v3.0.0...claude-code/release-engineer-v4.0.0
 [3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/release-engineer-v2.0.0...claude-code/release-engineer-v3.0.0
 [2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/release-engineer-v1.3.0...claude-code/release-engineer-v2.0.0
 [1.3.0]: https://github.com/bmjcoding/agent-toolkit/compare/release-engineer-v1.2.0...release-engineer-v1.3.0
