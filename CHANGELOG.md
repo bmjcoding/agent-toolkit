@@ -8,6 +8,17 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [4.1.0] - 2026-04-14
+
+### Added
+
+- `claude-code/tools/retros/`: scrub/normalize/validate/index tooling + JSON Schema for retro corpus migration.
+- `claude-code/retros/`: scrubbed public retro corpus (38 retros, PII-redacted with bmjcoding/ and commit SHAs preserved).
+
+### Changed
+
+- `claude-code/skills/retro` bumped to v5.0.0: finalization Save step updated for canonical v5.0 schema; directory save paths updated for reshaped layout.
+
 ## [4.0.0] - 2026-04-13
 
 ### Changed — Breaking
@@ -166,7 +177,8 @@ No action required for users who install via symlinks (`./claude-code/scripts/in
 3. Re-run the install script: `./claude-code/scripts/install.sh`.
 4. Verify: `./claude-code/scripts/install.sh --check`.
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/v4.0.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/v4.1.0...HEAD
+[4.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/v4.0.0...v4.1.0
 [4.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/v3.2.0...v4.0.0
 [3.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/v3.1.0...v3.2.0
 [3.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/v3.0.0...v3.1.0

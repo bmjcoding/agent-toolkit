@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.0.0] - 2026-04-14
+
+### Added
+
+- Canonical JSON Schema draft-07 at `claude-code/tools/retros/schemas/retro-v5.0.json` (34 fields, 14 required).
+- PII scrubber (`tools/retros/scrub.py`) applying rules R-01..R-07, R-10..R-14. Keeps bmjcoding/ org + commit SHAs per policy.
+- Schema normalizer (`tools/retros/normalize.py`) for Gen1..Gen4 → v5.0 migration. Emits *.normalized.json alongside originals.
+- Structural validator (`tools/retros/validate.py`), Python stdlib-only.
+- Index generator (`tools/retros/index.sh`) producing all.jsonl + by-agent/<slug>.jsonl (15 slugs) + by-skill/<slug>.jsonl (13 slugs) + frankenstein-timeline.jsonl + paired .md tables.
+- Scrubbed public corpus at `claude-code/retros/` (38 historical retros, PII-clean).
+
+### Changed
+
+- BREAKING: `references/finalization.md` Save step requires v5.0 schema: schema_version='5.0', compact session_id (YYYYMMDDTHHMMSS), findings_total, total_cost_usd (renamed from estimated_cost_usd), wall_clock_min (renamed from wall_clock_minutes), fix_churn (renamed). findings object no longer includes 'total' sub-key. Verdict enum canonicalized to underscore-only forms.
+- `SKILL.md` D2.3 autoresearch-analyst path updated for reshaped directory layout.
+- `~/.claude/retros/` reshaped to `sessions/YYYY-MM/<session-id>/`, `agent-reviews/<agent>/YYYY-MM/`, `skill-reviews/<skill>/YYYY-MM/`, `meta/YYYY-MM/`. Old paths (`orchestrator/`, `orchestration/`) now symlink to `sessions/` for a 1-week grace period.
+
 ## [4.2.4] - 2026-04-14
 
 ### Changed
@@ -101,7 +118,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/retro-v4.2.4...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/retro-v5.0.0...HEAD
+[5.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/retro-v4.2.4...claude-code/retro-v5.0.0
 [4.2.4]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/retro-v4.2.3...claude-code/retro-v4.2.4
 [4.2.3]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/retro-v4.2.2...claude-code/retro-v4.2.3
 [4.2.2]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/retro-v4.2.1...claude-code/retro-v4.2.2
