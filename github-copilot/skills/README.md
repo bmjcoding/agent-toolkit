@@ -1,6 +1,6 @@
 # github-copilot/skills/
 
-Copilot-surface skill wrappers. Each subdirectory mirrors a skill from `claude-code/skills/`
+Copilot-surface skill wrappers. Each subdirectory mirrors a skill from `skills/` (repo root)
 with a Copilot-compatible frontmatter header.
 
 ## Target Surface
@@ -21,7 +21,7 @@ Copilot reads skills from these paths (highest priority first):
 
 Skills in this directory use a **pointer strategy**: the SKILL.md file includes the full
 body content inline (so VS Code can load it without a symlink) but the canonical source
-remains `claude-code/skills/<name>/SKILL.md`.
+remains `skills/<name>/SKILL.md`.
 
 The frontmatter is adapted for Copilot by keeping only open-standard fields:
 - `name` — skill identifier
@@ -30,7 +30,7 @@ The frontmatter is adapted for Copilot by keeping only open-standard fields:
 Claude-specific fields (`metadata.version`, `disable-model-invocation`, `user-invocable`,
 `argument-hint`) are stripped. Version is tracked in each skill's `CHANGELOG.md`.
 
-When `claude-code/skills/<name>/SKILL.md` is updated, sync the body content here and
+When `skills/<name>/SKILL.md` is updated, sync the body content here and
 bump the version in `CHANGELOG.md`.
 
 ## Contents

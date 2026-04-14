@@ -18,7 +18,7 @@
  *
  * Content sources per primitive type (claude-code):
  *   agents   → claude-code/agents/<name>/<name>.md          (frontmatter name field)
- *   skills   → claude-code/skills/<name>/SKILL.md           (frontmatter name field)
+ *   skills   → skills/<name>/SKILL.md                       (frontmatter name field; root-level, tool-agnostic)
  *   commands → claude-code/commands/<name>/<name>.md        (frontmatter name field)
  *   rules    → claude-code/rules/<name>/<name>.md           (frontmatter paths field → slug from dir)
  *   hooks    → no .md — stub from directory name
@@ -452,6 +452,47 @@ function collectEntries() {
     }
   }
 
+  // -------------------------------------------------------------------------
+  // Root-level skills/ directory (universal, not under any tool dir).
+  // These skills are tool-agnostic; path prefix will be 'skills'.
+  // -------------------------------------------------------------------------
+  const rootSkillsDir = path.join(REPO_ROOT, 'skills');
+  if (fs.existsSync(rootSkillsDir)) {
+    let skillSubdirs;
+    try {
+      skillSubdirs = fs.readdirSync(rootSkillsDir, { withFileTypes: true });
+    } catch {
+      skillSubdirs = [];
+    }
+
+    for (const dirent of skillSubdirs) {
+      if (!dirent.isDirectory()) continue;
+
+      const name      = dirent.name;
+      const nameDir   = path.join(rootSkillsDir, name);
+      const skillMd   = path.join(nameDir, 'SKILL.md');
+      const content   = readFileSafe(skillMd);
+
+      if (!content) {
+        const relPath = path.relative(REPO_ROOT, nameDir);
+        entries.push(makeEntry(name, 'skill', relPath));
+        continue;
+      }
+
+      const fmBlock = extractFrontmatterBlock(content);
+      if (!fmBlock) {
+        process.stderr.write(
+          `[generate-index] WARNING: no frontmatter block found in ${skillMd} — emitting directory-name stub for "${name}"\n`
+        );
+      }
+      const fm      = parseFrontmatter(fmBlock);
+      const slug    = slugFrom(fm, name);
+      const relPath = path.relative(REPO_ROOT, skillMd);
+
+      entries.push(makeEntry(slug, 'skill', relPath));
+    }
+  }
+
   return entries;
 }
 
@@ -605,12 +646,12 @@ function runTests() {
   // -------------------------------------------------------------------------
   try {
     const syntheticEntries = [
-      { slug: 'retro',   category: 'skill', path: 'claude-code/skills/retro/SKILL.md' },
+      { slug: 'retro',   category: 'skill', path: 'skills/retro/SKILL.md' },
       { slug: 'planner', category: 'agent', path: 'claude-code/agents/planner/planner.md' },
       { slug: 'lint',    category: 'command', path: 'claude-code/commands/lint/lint.md' },
       // Same tool and category as retro — should sort after planner alphabetically
       // but before retro because 'backend' < 'retro'.
-      { slug: 'backend', category: 'skill', path: 'claude-code/skills/backend/SKILL.md' },
+      { slug: 'backend', category: 'skill', path: 'skills/backend/SKILL.md' },
     ];
 
     syntheticEntries.sort((a, b) => {

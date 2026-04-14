@@ -47,7 +47,7 @@ All modes emit a handoff block. The canonical schema below shows every field acr
   "pattern_count": N,
   "model_downgrades": N,
   "metrics": {
-    "_spec": "Field names, types, and null semantics are canonical in claude-code/skills/retro/references/finalization.md (Metric fields table). null is correct when trajectory data is unavailable — do not fabricate values.",
+    "_spec": "Field names, types, and null semantics are canonical in skills/retro/references/finalization.md (Metric fields table). null is correct when trajectory data is unavailable — do not fabricate values.",
     "frankenstein_line_count": null,
     "dispatcher_tokens_estimated": null,
     "dispatch_count": null,
