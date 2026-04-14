@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.1] - 2026-04-14
+
+### Changed
+
+- RG-1: consolidated the Execution section to a single sentence referencing the skill loaded at startup; removed duplicate tool-discovery guidance that was already present in the preamble. Reduces `/prod-readiness` occurrences from 4 to 2 (saves ~2 lines).
+
 ## [4.0.0] - 2026-04-13
 
 ### Removed
@@ -33,7 +39,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/release-gate-v3.0.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/release-gate-v1.2.1...HEAD
+[1.2.1]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/release-gate-v1.2.0...claude-code/release-gate-v1.2.1
 [3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/release-gate-v2.0.0...claude-code/release-gate-v3.0.0
 [2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/release-gate-v1.0.0...claude-code/release-gate-v2.0.0
 [1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/release-gate-v1.0.0

@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.1.1] - 2026-04-14
+
+### Changed
+- Factored standard 4-bullet untrusted-data prelude and instruction sandwich out to `improve/references/security-preamble.md`. Agent-specific preamble, rules, and runaway guard remain inline.
+- Added 2-3 sentence agent-specific framing paragraph in Untrusted Data Boundary section to complement the shared preamble pointer.
+
+## [5.1.0] - 2026-04-14
+
+### Changed
+
+- A-1: Consolidated six mode-specific handoff schemas (retro, improve, review, full-cycle, on-demand, error) into one canonical schema block with a mode-notes table. All field names preserved exactly; only structural repetition removed.
+- A-2: Removed stale hardcoded figures ("57 files", "maxTurns=80") from the improve batch sizing gotcha. Replaced with a general threshold statement (split when a domain exceeds 20 files).
+
+### Added
+
+- A-3: Runaway guard for maxTurns: 200 — emits `RUNAWAY GUARD: exceeded 190 tool calls. Stopping.` if > 190 tool calls complete without a handoff block.
+
 ## [5.0.1] - 2026-04-14
 
 ### Fixed
@@ -71,7 +88,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/autoresearch-analyst-v5.0.1...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/autoresearch-analyst-v5.1.1...HEAD
+[5.1.1]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/autoresearch-analyst-v5.1.0...claude-code/autoresearch-analyst-v5.1.1
+[5.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/autoresearch-analyst-v5.0.1...claude-code/autoresearch-analyst-v5.1.0
 [5.0.1]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/autoresearch-analyst-v5.0.0...claude-code/autoresearch-analyst-v5.0.1
 [5.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/autoresearch-analyst-v4.1.1...claude-code/autoresearch-analyst-v5.0.0
 [4.1.1]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/autoresearch-analyst-v4.1.0...claude-code/autoresearch-analyst-v4.1.1

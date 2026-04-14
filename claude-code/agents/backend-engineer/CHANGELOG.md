@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.1] - 2026-04-14
+
+### Changed
+- Factored standard 4-bullet untrusted-data prelude and instruction sandwich out to `improve/references/security-preamble.md`. Agent-specific preamble, rules, and runaway guard remain inline.
+
+## [1.3.0] - 2026-04-14
+
+### Changed
+
+- Genericized Fixture Creation Rules #2: replaced project-specific `VALID_PREFIXES` symbol and `resetStorageService()` function name with generic language (fixes B-1 and B-2 project-bias findings)
+- Condensed Hono/OpenAPI `c.req.valid` guidance from three bullets into a single reference table (fixes B-3 verbosity finding)
+
 ## [4.0.0] - 2026-04-13
 
 ### Removed
@@ -45,7 +57,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/backend-engineer-v3.0.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/backend-engineer-v1.3.1...HEAD
+[1.3.1]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/backend-engineer-v1.3.0...claude-code/backend-engineer-v1.3.1
+[1.3.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/backend-engineer-v1.2.0...claude-code/backend-engineer-v1.3.0
 [3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/backend-engineer-v2.0.0...claude-code/backend-engineer-v3.0.0
 [2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/backend-engineer-v1.2.0...claude-code/backend-engineer-v2.0.0
 [1.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/backend-engineer-v1.1.0...backend-engineer-v1.2.0

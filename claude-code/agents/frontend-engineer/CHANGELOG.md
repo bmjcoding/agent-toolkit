@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.1] - 2026-04-14
+
+### Changed
+- Factored standard 4-bullet untrusted-data prelude and instruction sandwich out to `improve/references/security-preamble.md`. Agent-specific preamble, rules, and runaway guard remain inline.
+
+## [1.3.0] - 2026-04-14
+
+### Changed
+
+- Remove hardcoded banned Tailwind class names (rounded-md, rounded-sm, shadow-md, shadow-lg, shadow-xl, shadow-2xl) from agent body; delegate to design-authority skill's banned-class reference (F-1, F-3)
+- Replace five hardcoded .claude/skills/design-authority/ installation paths with relative skill-scoped references (F-2)
+- Collapse standalone "Documentation & Spec Mode" section into a single inline note within the Design System section (F-4)
+
 ## [1.2.0] - 2026-04-13
 
 ### Added
@@ -52,7 +65,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/frontend-engineer-v3.0.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/frontend-engineer-v1.3.1...HEAD
+[1.3.1]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/frontend-engineer-v1.3.0...claude-code/frontend-engineer-v1.3.1
+[1.3.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/frontend-engineer-v1.2.0...claude-code/frontend-engineer-v1.3.0
+[1.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/frontend-engineer-v4.0.0...claude-code/frontend-engineer-v1.2.0
+[4.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/frontend-engineer-v3.0.0...claude-code/frontend-engineer-v4.0.0
 [3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/frontend-engineer-v2.0.0...claude-code/frontend-engineer-v3.0.0
 [2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/frontend-engineer-v1.1.1...claude-code/frontend-engineer-v2.0.0
 [1.1.1]: https://github.com/bmjcoding/agent-toolkit/compare/frontend-engineer-v1.1.0...frontend-engineer-v1.1.1

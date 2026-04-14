@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.3.0] - 2026-04-14
+
+### Added
+
+- `/improve remove <rec-id>` subcommand: additive removal primitive. Requires explicit one-word `yes` confirmation. Deletes rule text from host file using `anchor` locator, marks `status="removed"` in `~/.claude/metadata/rule-expiry.json`, bumps host file's frontmatter `# version:`, appends host changelog entry under `### Removed`.
+- Expiry-aware pruning pass in step 5 (Final Quality Gate): reads `~/.claude/metadata/rule-expiry.json` and surfaces entries where `status="active"` AND `review_by < today`. Surfacer-only; does not auto-remove.
+- Rule-expiry recording at step 2g (new substep): every accepted `fix` recommendation writes a `~/.claude/metadata/rule-expiry.json` entry with 90-day default `review_by`. Skipped for memory/reference files.
+- Frontmatter `# version: 4.3.0` explicit version field, matching the retro skill's v4.2.2 precedent.
+
+### Changed
+
+- `argument-hint` updated: `"remove <rec-id> | [retro-output or recommendation] [--validate] [--skip-validation]"` (was: `"[retro-output or recommendation] [--validate] [--skip-validation]"`).
+
+### Fixed
+
+- Step 5 post-gate revert now rolls back the corresponding rule-expiry.json entry (sets status=reverted) to prevent orphan active entries when an accepted change fails the final lint gate.
+
 ## [4.2.1] - 2026-04-14
 
 ### Changed
@@ -83,7 +100,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/improve-v4.2.1...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/improve-v4.3.0...HEAD
+[4.3.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/improve-v4.2.1...claude-code/improve-v4.3.0
 [4.2.1]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/improve-v4.2.0...claude-code/improve-v4.2.1
 [4.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/improve-v4.1.0...claude-code/improve-v4.2.0
 [4.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/improve-v4.0.0...claude-code/improve-v4.1.0

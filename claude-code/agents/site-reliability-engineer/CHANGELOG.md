@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.2] - 2026-04-14
+
+### Changed
+- Factored standard 4-bullet untrusted-data prelude and instruction sandwich out to `improve/references/security-preamble.md`. Agent-specific preamble, rules, and runaway guard remain inline.
+- Softened "identical to security-engineer" cross-reference annotation to "parallel to ..." to reflect that the discipline framework is shared but examples differ by domain.
+
+## [1.4.1] - 2026-04-14
+
+### Removed
+
+- SRE-1: deleted frontmatter comment `# spawned with run_in_background: true by frankenstein Phase 3a` — agent definitions describe behavior, not how a specific orchestrator dispatches them.
+
+### Changed
+
+- SRE-2: added cross-reference comment to the Finding Discipline section noting it is identical to security-engineer's section; prevents future editors from treating independent drift as intentional.
+
+## [1.4.0] - 2026-04-13
+
+### Added
+
+- Handoff-First Rule: agent writes a skeleton handoff JSON as its first write operation before beginning analysis, ensuring the orchestrator has a recoverable artifact even if the agent truncates mid-run.
+
 ## [4.0.0] - 2026-04-13
 
 ### Removed
@@ -47,7 +69,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/site-reliability-engineer-v3.0.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/site-reliability-engineer-v1.4.2...HEAD
+[1.4.2]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/site-reliability-engineer-v1.4.1...claude-code/site-reliability-engineer-v1.4.2
+[1.4.1]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/site-reliability-engineer-v1.4.0...claude-code/site-reliability-engineer-v1.4.1
+[1.4.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/site-reliability-engineer-v3.0.0...claude-code/site-reliability-engineer-v1.4.0
 [3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/site-reliability-engineer-v2.0.0...claude-code/site-reliability-engineer-v3.0.0
 [2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/site-reliability-engineer-v1.3.0...claude-code/site-reliability-engineer-v2.0.0
 [1.3.0]: https://github.com/bmjcoding/agent-toolkit/compare/site-reliability-engineer-v1.2.0...site-reliability-engineer-v1.3.0
