@@ -212,6 +212,7 @@ Handles ad-hoc user requests about skills or agents — e.g., "the changelog ski
 
 - **Retro file might not exist**: if the retro_file path from the dispatch doesn't exist, report the error and stop — don't guess at recommendations.
 - **Fresh context, no conversation**: in improve mode you have no conversation history from the retro. Everything comes from the retro file on disk. Don't search conversation for recommendations — you won't find them.
+- **Conflict-check baseline is committed HEAD**: when running a Phase A conflict check (pre-merge risk analysis), compare committed HEAD vs. origin/main using `git diff --name-only HEAD origin/main`. Do NOT compare the working tree vs. origin/main — uncommitted session changes in the working tree create false conflict signals for files that are not part of the deliverable. The correct command is `git diff --name-only HEAD origin/main`, not `git diff --name-only origin/main`.
 - **Script paths**: the retro scripts live at `~/.claude/skills/retro/scripts/`. For the lint script, use find-based resolution: `LINTER=$(find ~/.claude/skills/review-skill/scripts -name "lint-definition.py" 2>/dev/null | head -1)`. If the variable is empty, skip with a warning.
 - **Protected files**: CLAUDE.md auto-fix safety rules apply — don't modify lockfiles, CI configs, migrations, or auth modules. Report as `skipped: protected file`.
 - **Revert completely**: if a change fails verification, restore the file to its exact pre-edit state. A partial revert is worse than no change.
