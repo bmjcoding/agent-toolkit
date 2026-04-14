@@ -509,39 +509,13 @@ fi
 
 ## Pre-stage version-bump (runs before git add)
 
-Before staging any files, check whether any CHANGELOG.md files in the plan's touched component scope have a non-empty ## [Unreleased] section.
+Before staging any files, check whether any CHANGELOG.md files in the touched component scope have a non-empty ## [Unreleased] section.
 
-Reference skill: `~/.claude/skills/changelog/SKILL.md` (canonical path; also available at `${TOOLKIT_PATH}/shared/skills/changelog/SKILL.md` if toolkit is installed locally). Load it to apply the canonical SemVer bump table and 4-step [Unreleased] promotion workflow.
+**Scope constraint:** Only inspect CHANGELOG.md files whose parent component directory appears in plan.json owned_files. Do not touch unrelated component CHANGELOGs.
 
-```bash
-# Identify CHANGELOG.md files in owned scope from plan.json
-CHANGELOG_FILES=$(jq -r '.subtasks[].owned_files[]' .orchestrator/sessions/$SID/plan.json 2>/dev/null | grep 'CHANGELOG.md' | sort -u)
-```
+If any touched CHANGELOG.md has a non-empty ## [Unreleased] section: invoke `/changelog release <slug>` for that component — the subcommand (skills/changelog/SKILL.md lines 144-193) handles the full atomic promote+commit+tag+push. For multi-component runs, invoke `/changelog release` (no slug) which iterates over all touched components.
 
-For each CHANGELOG.md found:
-1. Check whether ## [Unreleased] has any content below it (non-empty section). If empty → skip that file, set CHANGELOG_PROMOTED=false for it.
-2. If non-empty, inspect category headers under ## [Unreleased] and apply the SemVer bump table:
-   - ### Removed or any entry describing breaking behavior → MAJOR bump. Gate on user confirmation: output 'Proposed version: X.Y.Z — confirm with yes to proceed' and wait for a one-word response before promoting. If both MAJOR and MINOR signals are present, MAJOR wins.
-   - ### Added or ### Changed present (no MAJOR signal) → MINOR bump (autonomous).
-   - Only ### Fixed or ### Security entries present → PATCH bump (autonomous).
-3. Determine the previous version: read the highest ## [X.Y.Z] header in the file (the section immediately below ## [Unreleased]).
-4. Compute the new version by applying the bump type to the previous version.
-5. Execute the 4-step promotion from the /changelog skill:
-   a. Rename ## [Unreleased] to ## [X.Y.Z] - YYYY-MM-DD (today's date in ISO 8601)
-   b. Insert a new empty ## [Unreleased] above the renamed header
-   c. Add comparison link: [X.Y.Z]: {BASE_URL}/compare/{slug}-vPREV...{slug}-v{X.Y.Z}
-   d. Update [Unreleased] link to: {BASE_URL}/compare/{slug}-v{X.Y.Z}...HEAD
-   e. Write the updated CHANGELOG.md
-6. Set CHANGELOG_PROMOTED=true in your working notes for that file.
-7. In your own Step 2 changelog generation: if CHANGELOG_PROMOTED=true for a given CHANGELOG.md, skip re-writing that file — it is already promoted. Do not double-write.
-
-**Scope constraint:** Only process CHANGELOG.md files whose parent component directory appears in plan.json owned_files. Do not touch unrelated component CHANGELOGs.
-
-**Multi-repo awareness:** When the task touches multiple repos, run this version-bump step per repo — not once globally. Derive each repo root via `git rev-parse --show-toplevel` from within the working directory of each repo before processing its CHANGELOGs.
-
-**First-release fallback:** If no prior ## [X.Y.Z] header exists in the file (first release of this component), use `tree/{slug}-v{X.Y.Z}` format for the version link instead of the compare format.
-
-**Graceful degradation:** If [Unreleased] is empty for all touched CHANGELOGs, set CHANGELOG_PROMOTED=false, log the skip, and proceed — release-engineer's normal Step 2 changelog generation runs as usual.
+**Graceful degradation:** If [Unreleased] is empty for all touched CHANGELOGs, skip this step and proceed — release-engineer's normal Step 2 changelog generation runs as usual.
 
 **File count trust**: The file count stated in this dispatch prompt is an estimate. Before staging, independently count modified files via `git diff --name-only HEAD` and use that count — do NOT trust the prompt's stated count. If the counts differ, use the actual `git diff` count and note the discrepancy in your handoff notes.
 
