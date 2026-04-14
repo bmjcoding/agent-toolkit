@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.1.0] - 2026-04-13
+
+### Added
+
+- Dispatcher context audit rules: `wc -l` default for token estimation, targeted `jq` extraction only (no full-file reads), explicit escape hatches documented — Phase 4 Quality Loop triage routing, Phase 3a security fast-path mode for docs-only changesets, render-scope check for security/validation fixes.
+- Mechanical agent model override roster: CHANGELOG backfill agents, explorer roles (`explorer-paths`, `explorer-schema`, `explorer-specs`), release-engineer split phases (`release-engineer-6a`, `release-engineer-6b`) with haiku model guidance and trigger conditions.
+
+### Changed
+
+- Phase 4 Quality Loop backlog-seed logic extracted from inline Python heredoc (~92 lines) into `scripts/backlog-seed.py`; frankenstein.md calls the script via a 3-line bash invocation. Same runtime behavior; reduces frankenstein.md by ~92 lines (778 → 692).
+- Retrospective Notes table appended with 2026-04-12 entry recording default-branch guard addition.
+- LEAN dispatch prompt enforcement tightened: hard 200-token ceiling on inline prompt text per subtask, enforced as a formatting rule in Phase 2 dispatch template.
+
 ## [4.0.0] - 2026-04-13
 
 ### Removed
@@ -169,7 +182,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/frankenstein-v3.0.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/frankenstein-v4.1.0...HEAD
+[4.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/frankenstein-v4.0.0...claude-code/frankenstein-v4.1.0
+[4.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/frankenstein-v3.0.0...claude-code/frankenstein-v4.0.0
 [3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/frankenstein-v2.0.0...claude-code/frankenstein-v3.0.0
 [2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/frankenstein-v1.13.0...claude-code/frankenstein-v2.0.0
 [1.13.0]: https://github.com/bmjcoding/agent-toolkit/compare/frankenstein-v1.12.0...frankenstein-v1.13.0

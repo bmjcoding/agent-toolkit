@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.0.1] - 2026-04-13
+
+### Fixed
+
+- `scripts/parse-metrics.py`: null-token guard added around `sum(e.get("tokens", ...) ...)` aggregation — entries with missing `tokens` keys are now filtered out instead of contributing 0, producing an accurate total (Rec #2 from retro 20260413T211547; improve agent falsely claimed fix was pre-existing, Phase A audit confirmed it was not applied until this run).
+
 ## [4.0.0] - 2026-04-13
 
 ### Removed
@@ -49,7 +55,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/retro-v3.0.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/retro-v4.0.1...HEAD
+[4.0.1]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/retro-v4.0.0...claude-code/retro-v4.0.1
+[4.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/retro-v3.0.0...claude-code/retro-v4.0.0
 [3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/shared/retro-v2.0.0...claude-code/retro-v3.0.0
 [2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/shared/retro-v1.1.0...shared/retro-v2.0.0
 [1.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/shared/retro-v1.0.0...shared/retro-v1.1.0
