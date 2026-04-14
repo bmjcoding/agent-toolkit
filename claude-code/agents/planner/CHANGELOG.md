@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.10.0] - 2026-04-14
+
+### Added
+
+- Completion-criteria line-count freshness rule: when writing `completion_criteria` with line-count targets, run `wc -l` on each target file immediately before writing the criterion. Do not use counts from prior-session audit documents. Prevents stale count mismatches that cost agents extra verification turns.
+- CHANGELOG sequential co-ownership: `changelog_dependency` field for plan.json subtasks — when subtask B appends to a CHANGELOG owned by subtask A, the field makes the sequential single-writer assumption visible and enforced. Subtasks with `changelog_dependency` must appear in a later `parallel_group` and must list the owner in `blockedBy`.
+- Plan-reviewer model hint: `plan_reviewer_model` note guidance in `context_summary` — haiku for plans <= 8 subtasks, sonnet with 30-tool budget cap for plans >= 9 subtasks. Prevents opus context-overflow on large plans (101K tokens, no output, 15-subtask plan).
+
 ## [1.9.1] - 2026-04-14
 
 ### Changed
@@ -99,7 +107,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/planner-v1.9.1...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/planner-v1.10.0...HEAD
+[1.10.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/planner-v1.9.1...claude-code/planner-v1.10.0
 [1.9.1]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/planner-v1.9.0...claude-code/planner-v1.9.1
 [1.9.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/planner-v1.8.0...claude-code/planner-v1.9.0
 [1.8.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/planner-v1.7.0...claude-code/planner-v1.8.0

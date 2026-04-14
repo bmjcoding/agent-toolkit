@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.5.0] - 2026-04-14
+
+### Added
+
+- Haiku-eligible role roster: 7 new entries identified from 2026-04-14T092658 retro per-run metrics (sub-15 tool counts, no reasoning required, mechanical scope): `quality-engineer-post-validation`, `staff-engineer-fix-rollback`, `staff-engineer-fix-framing`, `staff-engineer-fix-changelog-link`, `staff-engineer-backlog-closeout`, and `doc-writer-adr`. (`release-engineer-6b` was already present — not duplicated.)
+- Evidence pointer paragraph below the roster table referencing the 2026-04-14T092658 retro session as the source for the 7 new haiku-eligible agent classifications.
+
+## [4.4.0] - 2026-04-14
+
+### Added
+
+- Phase 1 plan-reviewer dispatch: required scope-bounding instruction block — 30 tool-use hard budget, sample-3 rule for plans >10 subtasks, model hint (sonnet for plans >8 subtasks). Prevents context-overflow truncation that consumed 101K tokens with no output on a 15-subtask plan.
+- Phase 6a release-engineer dispatch: file-count trust instruction — release-engineer must independently count modified files via `git diff --name-only HEAD` and use that count rather than trusting the dispatch prompt's stated count.
+- Haiku-eligible role roster: `quality-loop-fix` entry — post-quality-review targeted fix, <= 4 tool uses, single-file scope, finding ID specified in dispatch.
+- Haiku-eligible role roster: `backlog-closeout` entry — mark resolved finding_ids in .orchestrator/backlog.md, <= 10 tool uses, no code changes.
+
 ## [4.3.1] - 2026-04-14
 
 ### Fixed
@@ -215,7 +231,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/frankenstein-v4.3.1...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/frankenstein-v4.5.0...HEAD
+[4.5.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/frankenstein-v4.4.0...claude-code/frankenstein-v4.5.0
+[4.4.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/frankenstein-v4.3.1...claude-code/frankenstein-v4.4.0
 [4.3.1]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/frankenstein-v4.3.0...claude-code/frankenstein-v4.3.1
 [4.3.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/frankenstein-v4.2.0...claude-code/frankenstein-v4.3.0
 [4.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/frankenstein-v4.1.0...claude-code/frankenstein-v4.2.0

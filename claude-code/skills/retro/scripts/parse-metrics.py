@@ -386,7 +386,7 @@ def build_summary(phases, agents_data, log_data, plan_delta, findings, quality):
     if log_data:
         total_tokens = sum(e.get("tokens") for e in log_data if e.get("tokens") is not None)
         total_duration = sum(e.get("duration_s", 0) for e in log_data)
-        flagged = [e["id"] for e in log_data if e.get("flags")]
+        flagged = [e.get("agent_id", e.get("id", "unknown")) for e in log_data if e.get("flags")]
         if total_tokens:
             summary["total_tokens"] = total_tokens
         if total_duration:
