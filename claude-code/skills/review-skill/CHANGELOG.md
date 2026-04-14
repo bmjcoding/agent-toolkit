@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.0.0] - 2026-04-14
+
+### Added
+
+- JSON output mode (`--format json`): new `### JSON Output Mode` subsection in the Output section specifying the machine-readable schema for review verdicts.
+- `required_changes` field in JSON output is an **array of objects** (each with `what`, `where`, `why`, `priority`, `type`), not an integer count. This is the authoritative shape for the field.
+
+### Changed
+
+- BREAKING: `required_changes` type in the JSON output schema is array-of-objects, not integer. Consumers that read `required_changes` as an integer count must migrate to reading `required_changes.length` instead.
+
 ## [4.0.0] - 2026-04-13
 
 ### Removed
@@ -40,7 +51,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/review-skill-v3.0.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/review-skill-v5.0.0...HEAD
+[5.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/review-skill-v4.0.0...claude-code/review-skill-v5.0.0
+[4.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/review-skill-v3.0.0...claude-code/review-skill-v4.0.0
 [3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/shared/review-skill-v2.0.0...claude-code/review-skill-v3.0.0
 [2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/shared/review-skill-v1.1.0...shared/review-skill-v2.0.0
 [1.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/shared/review-skill-v1.0.0...shared/review-skill-v1.1.0

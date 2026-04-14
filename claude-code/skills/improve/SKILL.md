@@ -202,6 +202,8 @@ Include `model_recommendations` as an array of objects `{"agent": "name", "curre
 
 `recommendations_applied` (array of strings: description of each accepted recommendation) and `recommendations_reverted` (array of strings: description + reason for each reverted recommendation) are required top-level fields. Use empty arrays when none apply.
 
+`file_diffs` (array of objects, required): unified diff per modified file. Each object has `file` (string path), `unified_diff_truncated` (string, diff content only, max 200 lines — no trailing sentinel inside the string), and `truncated` (boolean, `true` if the diff was cut at the 200-line limit, `false` otherwise). Collect with `git diff HEAD <file>` after edits are staged. Use an empty array `[]` if no files were modified (pattern-only improve run).
+
 ```json
 {
   "type": "improve",
@@ -223,7 +225,14 @@ Include `model_recommendations` as an array of objects `{"agent": "name", "curre
     {"file": "agents/quality-engineer.md", "action": "reverted", "reason": "eval fail"}
   ],
   "recommendations_applied": ["#1 description", "#2 description"],
-  "recommendations_reverted": ["#3 description — reason"]
+  "recommendations_reverted": ["#3 description — reason"],
+  "file_diffs": [
+    {
+      "file": "agents/planner.md",
+      "unified_diff_truncated": "@@ -14,6 +14,7 @@\n context\n+## New rule\n",
+      "truncated": false
+    }
+  ]
 }
 ```
 

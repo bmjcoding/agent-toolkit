@@ -3,7 +3,7 @@
   "name": "Autoresearch Analyst",
   "type": "agent",
   "tool": "openai-codex",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "ref": "main",
   "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/autoresearch-analyst.toml",
   "install_path": "",
