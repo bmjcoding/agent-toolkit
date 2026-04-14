@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.1.0] - 2026-04-13
+
+### Changed
+
+- Step 7 schema: `model_recommendations` field promoted from implicit (JSON example only) to explicitly documented in prose. Required to be included as a top-level array field (empty array `[]` when no recommendations). Resolves schema drift vs. autoresearch-analyst.md improve handoff envelope.
+- Step 7 schema: `recommendations_applied` and `recommendations_reverted` documented as required top-level array fields in prose, not just JSON example.
+
 ## [4.0.0] - 2026-04-13
 
 ### Removed
@@ -64,7 +71,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/improve-v3.0.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/improve-v4.1.0...HEAD
+[4.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/improve-v4.0.0...claude-code/improve-v4.1.0
 [3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/shared/improve-v2.0.0...claude-code/improve-v3.0.0
 [2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/shared/improve-v1.2.0...shared/improve-v2.0.0
 [1.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/shared/improve-v1.1.0...shared/improve-v1.2.0

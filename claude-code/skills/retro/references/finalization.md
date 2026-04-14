@@ -46,6 +46,11 @@ Use markdown headers matching the analysis sections. Skip sections that don't ap
 | Fix churn (files modified 2+ times) | N |
 | Model downgrades recommended | N agents |
 | Estimated cost | $N.NN |
+| frankenstein line count | N |
+| dispatcher tokens estimated | N |
+| dispatch count | N |
+| avg dispatch prompt tokens | N |
+| net line delta | +N / -N / null |
 | Root causes | type: N, type: N, ... |
 ```
 
@@ -71,6 +76,22 @@ Also check for improvement records (`*-improve.json` entries in history). If the
 > Prior retro (DATE) produced N recommendations but /improve was not run. The same issues may recur.
 
 If improve WAS run, note the acceptance rate and check if the accepted fixes actually reduced the root causes they targeted. This is the feedback loop — did the treatment work?
+
+### Metrics trajectory check
+
+After running the `retro-history.py trends` script, also check for frankenstein size trajectory:
+
+```bash
+python3 ${CLAUDE_SKILL_DIR}/scripts/retro-history.py trends --history ~/.claude/retros --subject SUBJECT --metric frankenstein_line_count --last 5
+```
+
+If fewer than 5 prior retros exist for this subject (i.e., `--last 5` returns fewer than 5 non-null `frankenstein_line_count` values), **skip the P1 escalation** and note `"insufficient history"` in the retro output rather than flagging a finding. The trajectory check requires a full window of 5 to be meaningful; sparse history produces false positives.
+
+If the script returns 5 consecutive non-null `frankenstein_line_count` values that are monotonically increasing (each value >= the prior), flag as a **P1 finding** in the retro:
+
+> frankenstein.md has grown monotonically across the last N retros (X → Y lines). Each /improve run is adding lines without removing any. Protocol tax is accumulating.
+
+Bake `net_line_delta > 0` as a **soft budget flag**: include `"net_growth_flag": true` in the saved JSON when `net_line_delta` is positive. The trajectory check escalates this flag to P1 only if it persists across 5 or more consecutive retros.
 
 If no history exists, skip the section silently.
 
@@ -105,6 +126,12 @@ Files are organized by subject subdirectory: `~/.claude/retros/{subject}/`
    | `agents_spawned` | integer | Number of agents spawned (use 1 for single-agent runs) |
    | `user_interventions` | integer | Total user interventions (planned + unplanned) |
    | `estimated_cost_usd` | number | Estimated pipeline cost in USD |
+   | `frankenstein_line_count` | integer | Current line count of frankenstein.md at retro time — read via `wc -l` |
+   | `dispatcher_tokens_estimated` | integer | Estimated total tokens consumed by the dispatcher (from agents.log or manual estimate) |
+   | `dispatch_count` | integer | Number of agent dispatches made in this pipeline run |
+   | `avg_dispatch_prompt_tokens` | integer | Average inline prompt tokens per dispatch (dispatcher_tokens_estimated / dispatch_count) |
+   | `net_line_delta` | integer | Delta vs. the prior retro's frankenstein_line_count (negative = improvement). Use null if no prior retro exists for this subject. |
+   | `net_growth_flag` | boolean | `true` when `net_line_delta` is positive (frankenstein.md grew this run); `false` when zero or negative; `null` when `net_line_delta` is null. |
 
    Use `null` for fields where data is unavailable. Do not omit tracked metric fields — `null` is better than missing, because the trends script can distinguish "not logged" from "zero."
 

@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.1.0] - 2026-04-13
+
+### Changed
+
+- Retro handoff envelope: added `metrics` sub-object with five fields (`frankenstein_line_count`, `dispatcher_tokens_estimated`, `dispatch_count`, `avg_dispatch_prompt_tokens`, `net_line_delta`) to synchronize with retro/references/finalization.md canonical schema (C-1).
+- Improve handoff envelope: verified `model_recommendations` and `recommendations_applied` field names match improve/SKILL.md step 7 canonical schema (C-4). Corrected any name mismatches.
+
 ## [4.0.0] - 2026-04-13
 
 ### Removed
@@ -43,7 +50,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/autoresearch-analyst-v3.0.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/autoresearch-analyst-v4.1.0...HEAD
+[4.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/autoresearch-analyst-v4.0.0...claude-code/autoresearch-analyst-v4.1.0
+[4.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/autoresearch-analyst-v3.0.0...claude-code/autoresearch-analyst-v4.0.0
 [3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/autoresearch-analyst-v2.0.0...claude-code/autoresearch-analyst-v3.0.0
 [2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/autoresearch-analyst-v1.5.0...claude-code/autoresearch-analyst-v2.0.0
 [1.5.0]: https://github.com/bmjcoding/agent-toolkit/compare/autoresearch-analyst-v1.4.3...autoresearch-analyst-v1.5.0
