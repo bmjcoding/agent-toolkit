@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.0.1] - 2026-04-14
+
 ### Changed
 
 - Trimmed educational prose: removed Untrusted Data Boundary lede motivation sentence; content now lives in `improve/references/security-preamble.md` reference.
@@ -61,7 +63,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/backend-engineer-v1.3.1...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/backend-engineer-v4.0.1...HEAD
+[4.0.1]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/backend-engineer-v4.0.0...claude-code/backend-engineer-v4.0.1
 [1.3.1]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/backend-engineer-v1.3.0...claude-code/backend-engineer-v1.3.1
 [1.3.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/backend-engineer-v1.2.0...claude-code/backend-engineer-v1.3.0
 [3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/backend-engineer-v2.0.0...claude-code/backend-engineer-v3.0.0
