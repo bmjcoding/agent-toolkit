@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.2] - 2026-04-14
+
+### Changed
+- Factored standard 4-bullet untrusted-data prelude and instruction sandwich out to `improve/references/security-preamble.md`. Agent-specific preamble, rules, and runaway guard remain inline.
+
+## [1.4.1] - 2026-04-14
+
+### Changed
+
+- Handoff-First Rule: replaced the 6-line inline JSON skeleton with a single prose sentence describing the required structure. Actionable instruction preserved; schema duplication removed.
+
 ## [4.0.1] - 2026-04-14
 
 ### Fixed
@@ -45,7 +56,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/plan-reviewer-v4.0.1...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/plan-reviewer-v1.4.2...HEAD
+[1.4.2]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/plan-reviewer-v1.4.1...claude-code/plan-reviewer-v1.4.2
+[1.4.1]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/plan-reviewer-v4.0.1...claude-code/plan-reviewer-v1.4.1
 [4.0.1]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/plan-reviewer-v4.0.0...claude-code/plan-reviewer-v4.0.1
 [3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/plan-reviewer-v2.0.0...claude-code/plan-reviewer-v3.0.0
 [2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/plan-reviewer-v1.3.0...claude-code/plan-reviewer-v2.0.0

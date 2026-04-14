@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.3] - 2026-04-14
+
+### Changed
+- Factored standard 4-bullet untrusted-data prelude and instruction sandwich out to `improve/references/security-preamble.md`. Agent-specific preamble, rules, and runaway guard remain inline.
+
+## [1.2.2] - 2026-04-14
+
+### Changed
+
+- DW-1: replaced inline 13-line ADR fenced template block with a reference to the project's existing ADR section format; format is now maintained in one place rather than embedded in the agent definition
+
 ## [1.2.1] - 2026-04-13
 
 ### Changed
@@ -39,7 +50,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/doc-writer-v3.0.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/doc-writer-v1.2.3...HEAD
+[1.2.3]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/doc-writer-v1.2.2...claude-code/doc-writer-v1.2.3
+[1.2.2]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/doc-writer-v1.2.1...claude-code/doc-writer-v1.2.2
+[1.2.1]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/doc-writer-v4.0.0...claude-code/doc-writer-v1.2.1
+[4.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/doc-writer-v3.0.0...claude-code/doc-writer-v4.0.0
 [3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/doc-writer-v2.0.0...claude-code/doc-writer-v3.0.0
 [2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/doc-writer-v1.0.0...claude-code/doc-writer-v2.0.0
 [1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/doc-writer-v1.0.0

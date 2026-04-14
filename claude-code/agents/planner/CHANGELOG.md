@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.9.1] - 2026-04-14
+
+### Changed
+- Factored standard 4-bullet untrusted-data prelude and instruction sandwich out to `improve/references/security-preamble.md`. Agent-specific preamble, rules, and runaway guard remain inline.
+
+## [1.9.0] - 2026-04-14
+
+### Changed
+
+- PL-1: Download-trigger rule generalized — replaced project-specific identifiers (`window.open(archiveUrl)`, `handleDownload`, `setPhase`) with generic placeholders; principle (verify download trigger fires before phase transition) preserved
+- PL-2: Removed duplicate "Pre-description file state verification" bullet (was repeated verbatim at lines 94–95; canonical copy retained)
+- PL-3: Format-migration audit grep example generalized — replaced `epics.json|stories.json` with `<old-format-artifact>.json`
+- PL-4: Enum-extension rule generalized — replaced `ToolkitCategorySchema` and `bundle` with `[EnumTypeName]` and `<new-variant>`
+- PL-6: Catalog-page layout spec rule updated — added "If the project's UX spec defines layout categories, use those" qualifier before the default vocabulary list, removing the ALT Central vocabulary dependency
+
 ## [1.8.0] - 2026-04-14
 
 ### Added
@@ -84,7 +99,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/planner-v1.8.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/planner-v1.9.1...HEAD
+[1.9.1]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/planner-v1.9.0...claude-code/planner-v1.9.1
+[1.9.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/planner-v1.8.0...claude-code/planner-v1.9.0
 [1.8.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/planner-v1.7.0...claude-code/planner-v1.8.0
 [1.7.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/planner-v1.6.0...claude-code/planner-v1.7.0
 [1.6.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/planner-v4.0.0...claude-code/planner-v1.6.0
