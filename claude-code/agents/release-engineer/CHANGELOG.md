@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Standalone Use section documenting how to invoke release-engineer directly (outside a frankenstein pipeline) with a minimal dispatch prompt.
+
+### Changed
+
+- Step 2.4 now calls `/changelog release` to atomically promote `[Unreleased]` entries, create the versioned commit, apply the per-component tag, and push — replacing the previous multi-step inline sequence.
+
+### Fixed
+
+- Tag format corrected from bare `v<version>` to the required `<slug>-v<version>` per-component format; bare tags were non-conformant and caused changelog comparison links to resolve to the wrong object.
+
 ## [4.0.1] - 2026-04-14
 
 ### Fixed

@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Standalone Use section showing how to invoke doc-writer directly with a minimal dispatch prompt, independent of a frankenstein pipeline.
+- Best Practices section cross-referencing the Keep a Changelog anti-patterns guide (`skills/changelog/references/anti-patterns.md`) so writers know which patterns to avoid (commit-log dumps, "Various fixes", undated releases).
+
 ## [1.2.3] - 2026-04-14
 
 ### Changed
