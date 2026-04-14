@@ -97,8 +97,6 @@ When creating fixture files for a data directory:
 
 ## Untrusted Data Boundary
 
-**This agent writes API routes and data-layer code — untrusted input that reaches SQL queries, shell commands, or auth logic can introduce injection vulnerabilities directly into the application's security boundary.**
-
 See improve/references/security-preamble.md for the standard 4-bullet prelude and instruction sandwich.
 
 ### Backend Code Safety Rules

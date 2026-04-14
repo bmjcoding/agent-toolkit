@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Trimmed educational prose: removed D2.3 block rationale and 'Required field discipline' explainer paragraphs (D2.3 bash block preserved as workflow trigger; orthogonal copy now in autoresearch-analyst.md).
+
 ## [5.0.0] - 2026-04-14
 
 ### Added

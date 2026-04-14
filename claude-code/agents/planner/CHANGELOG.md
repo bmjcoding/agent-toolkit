@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Trimmed educational prose from Model Hints and Description Derivation sections.
+
+### Removed
+
+- Dead `plan_reviewer_notes` field from handoff schema — field was orphaned by frankenstein's advisory-correction path which bypasses the planner entirely.
+
 ## [1.10.0] - 2026-04-14
 
 ### Added

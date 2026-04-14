@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Removed both Gotchas (duplicated content from Auto-fix and Check 0); folded the only net-new clause ('do not attempt to install gitleaks/trufflehog') into Check 0.
+
 ## [4.0.0] - 2026-04-13
 
 ### Removed

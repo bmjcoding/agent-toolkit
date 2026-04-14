@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Removed 2-line motivational preamble under JSON Output Mode header (schema block and argument-hint already fully specify the feature).
+
 ## [5.0.0] - 2026-04-14
 
 ### Added

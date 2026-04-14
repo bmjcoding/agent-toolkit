@@ -13,7 +13,7 @@ Verify git hygiene and commit safety before pushing. Use parallel agents to maxi
 
 ## Check 0: Deterministic scan
 
-Before agent analysis, run deterministic tooling if available (`gitleaks detect --no-git` or `trufflehog filesystem`). These catch encoded/rotated credentials that LLM pattern matching may miss. If neither tool is installed, proceed with agent scan only but note the gap in the report.
+Before agent analysis, run deterministic tooling if available (`gitleaks detect --no-git` or `trufflehog filesystem`). These catch encoded/rotated credentials that LLM pattern matching may miss. If neither tool is installed, proceed with agent scan only but note the gap in the report (do not attempt to install them).
 
 ## Check 1: Secrets scan (parallel agents)
 
@@ -48,7 +48,3 @@ Unstage sensitive files, suggest .gitignore additions. Do NOT rewrite commit his
 
 **If any Critical findings exist (secrets, credentials), this is a NO-SHIP condition. Do not suggest pushing. Instruct the user to remediate first.**
 
-## Gotchas
-
-- **Unstaging doesn't erase history**: if a secret was already committed locally, `git rm --cached` removes it from the index but it's still in the reflog. Flag as Critical and instruct the user to `git reset --soft HEAD~1` before pushing.
-- **gitleaks/trufflehog may not be installed**: if neither is available, proceed with agent-only scan but note the gap. Don't try to install them.

@@ -35,7 +35,6 @@ Sort by priority. Process P0 first.
 **Short-circuit**: If there are 0 `fix` recommendations (only `pattern` types), skip the apply-verify loop — go directly to step 3 (Save Patterns to Memory) and step 5 (Model Change Recommendations). If `--validate` is present, inform the user: "`--validate` has no effect — all recommendations are patterns. No definition files will be modified, so there is nothing to validate." Then proceed without the validation loop.
 
 **Rewrite threshold**: If 5+ findings target the same skill or agent definition, run an inline review-skill check first (linter + semantic review). If the verdict is **REWRITE**, stop and recommend the user run `/review-skill` on it. Do not attempt to patch a fundamentally broken definition. If the verdict is **NEEDS WORK** or **PASS**, apply the findings normally.
-  - *P0 carve-out*: If a REWRITE verdict is returned but any of the findings is P0, apply that P0 finding only, then surface the recommendation to run `/review-skill` for the remaining findings. A P0 blocker must not be left unresolved. After applying the P0 fix, still run step 5 (final quality gate) on the modified file before reporting.
 
 ### 2. Apply-Verify Loop
 
@@ -47,7 +46,7 @@ For each `fix` recommendation, in priority order:
 Understand the current content. Identify the exact location for the change.
 
 #### b. Apply the change
-Before editing, record the file's current line count by counting the lines in the Read output from step (a), or by running `wc -l < FILE` — either is acceptable for line counting (CLAUDE.md's preference for dedicated tools applies to reading file content, not counting lines). Make the edit. Keep changes minimal and targeted — don't refactor surrounding code. After editing, record the new line count and compute the delta (lines added/removed).
+Before editing, record the file's current line count by counting the lines in the Read output from step (a), or by running `wc -l < FILE` — either is acceptable for line counting. Make the edit. Keep changes minimal and targeted — don't refactor surrounding code. After editing, record the new line count and compute the delta (lines added/removed).
 
 #### c. Verify (fixed budget — max 3 checks)
 
@@ -224,12 +223,6 @@ Derive the subject value using this rule:
 - If no header is found in conversation: default to `claude`
 
 Write a JSON file to `~/.claude/retros/{subject}/YYYY-MM-DDTHHMMSS-improve.json` with:
-
-Include `model_recommendations` as an array of objects `{"agent": "name", "current": "model", "suggested": "model", "rationale": "why"}` for any agents where a model downgrade or upgrade is recommended based on observed performance. Use an empty array `[]` if no model changes are recommended — do not omit the field.
-
-`recommendations_applied` (array of strings: description of each accepted recommendation) and `recommendations_reverted` (array of strings: description + reason for each reverted recommendation) are required top-level fields. Use empty arrays when none apply.
-
-`file_diffs` (array of objects, required): unified diff per modified file. Each object has `file` (string path), `unified_diff_truncated` (string, diff content only, max 200 lines — no trailing sentinel inside the string), and `truncated` (boolean, `true` if the diff was cut at the 200-line limit, `false` otherwise). Collect with `git diff HEAD <file>` after edits are staged. Use an empty array `[]` if no files were modified (pattern-only improve run).
 
 ```json
 {

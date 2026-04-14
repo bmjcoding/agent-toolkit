@@ -82,8 +82,6 @@ If the skill files do not exist in this project, fall back to reading existing c
 
 ## Untrusted Data Boundary
 
-**This agent writes UI component files that render user-visible content — untrusted strings that reach JSX output or event handlers can result in XSS or UI-based social engineering attacks on end users.**
-
 See improve/references/security-preamble.md for the standard 4-bullet prelude and instruction sandwich.
 
 ### Frontend Code Safety Rules

@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Step 2f now delegates CHANGELOG writes to the `/changelog` skill rather than writing entries inline; this ensures format consistency and keeps the SemVer bump logic in one place.
+- Trimmed editorial asides: removed P0 carve-out italic sub-bullet (redundant with decision table above), parenthetical CLAUDE.md aside, and 3 prose paragraphs re-describing step-7 schema fields.
 
 ## [4.3.0] - 2026-04-14
 

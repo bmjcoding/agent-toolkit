@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `/changelog release` subcommand: one-shot atomic release flow — promotes `[Unreleased]` to a versioned header, commits, applies the per-component tag, and pushes. Replaces the multi-step manual sequence that release-engineer previously executed inline.
 
+### Changed
+
+- Trimmed educational prose: removed Routing Rules section (now references `improve/SKILL.md` step 2f as canonical source), 'Who triggers' and 'Monorepo scope' orientation paragraphs.
+
 ## [6.0.0] - 2026-04-13
 
 ### Removed

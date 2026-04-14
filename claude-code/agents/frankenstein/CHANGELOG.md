@@ -7,9 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Mechanical-revise fast-path rule in Phase 1 — when plan-reviewer returns `revise` with only deterministic field edits (blockedBy/owned_files additions, completion_criteria text fixes, stale-ID replacements, description typos), apply inline jq patches and re-run plan-reviewer without consuming a planner-revision slot.
+
 ### Changed
 
 - Phase 6a no longer promotes `[Unreleased]` CHANGELOG entries inline; promotion is now fully delegated to release-engineer (via `/changelog release`) so the promote, commit, tag, and push steps happen atomically in one place.
+- Trimmed educational prose: removed Retrospective Notes session log (now in `~/.claude/retros/` archive only), cost/pricing rationale paragraphs (pricing awareness preserved in autoresearch-analyst/retro SKILL), historical session anecdotes embedded in rules, and the 'Why this pattern' Resume Protocol paragraph.
 
 ## [4.5.0] - 2026-04-14
 

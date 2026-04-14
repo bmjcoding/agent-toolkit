@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Trimmed redundant restatements of the 'user-facing summaries, not commit-log dumps' constraint (3x → 1x).
+
 ## [4.0.0] - 2026-04-13
 
 ### Removed

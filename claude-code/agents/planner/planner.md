@@ -166,14 +166,13 @@ The key pattern: provide the exact set of valid values AND the grep command to v
 ## Model Hints
 - **Plan-reviewer model_hint**: Include a `plan_reviewer_model` note in the plan's `context_summary` field to guide the orchestrator's dispatch:
   - Plans with **8 or fewer subtasks**: add the note `plan-reviewer: model=haiku` — small plans are pattern-compliance checks that don't require deep reasoning.
-  - Plans with **9 or more subtasks**: add the note `plan-reviewer: model=sonnet, tool_budget=30` — larger plans need deeper analysis, but the 30-tool budget cap prevents context overflow truncation. Do NOT use opus for plan-reviewer on any plan size; the 2026-04-14 session showed opus consuming 101K tokens with no output on a 15-subtask plan.
+  - Plans with **9 or more subtasks**: add the note `plan-reviewer: model=sonnet, tool_budget=30` — larger plans need deeper analysis, but the 30-tool budget cap prevents context overflow truncation. Do NOT use opus for plan-reviewer on any plan size.
 - For subtasks that are purely structural verification (file existence, tsc --noEmit, test runs), add `"model_hint": "haiku"` to the subtask. This is a placeholder for future SDK support — frankenstein does not currently consume this field, but emitting it prepares plans for when per-dispatch model selection is available. Do not expect it to affect which model is dispatched.
 - Also emit `"model_hint": "haiku"` for: CHANGELOG-only updates (read current CHANGELOG, insert version section, update comparison links), test-only subtasks (no code changes, run existing tests), and single-constant-edit subtasks (change one value in one file). These match the mechanical agent criteria in frankenstein.md and consistently complete with zero errors across multiple pipelines.
 
 ## Description Derivation Level
 - When a subtask description contains verbatim code blocks totaling more than 50 lines, add `"derivation_level": "verbatim"` to the subtask. This signals to the dispatcher that the description contains reference material, not synthesized task scope. The verbatim code is for the agent's reference — it does not define the full implementation scope.
 - Example: a description that includes a full test body to match is `derivation_level: verbatim`. A description that says "implement X to pass tests in Y" without quoting those tests is `derivation_level: synthesized` (default — can be omitted).
-- Motivation: prior session ST-3 was 1,186 words with verbatim test bodies — the dispatcher routed it to a transcription agent instead of an implementation agent. The flag surfaces intent without banning verbatim content.
 
 ## Client-Side State Reconciliation
 - **Apply only if the plan includes browser-based frontend subtasks with client-side state management. Skip entirely for backend, CLI, server-side rendering, or non-browser projects.**
@@ -202,7 +201,6 @@ The key pattern: provide the exact set of valid values AND the grep command to v
   ],
   "findings_resolved": [],
   "notes": "<prose observations>",
-  "plan_reviewer_notes": "<populated after plan-reviewer returns — list advisory corrections and any subtask description changes applied to plan.json>",
   "api_contracts": [],
   "integration_outputs": []
 }

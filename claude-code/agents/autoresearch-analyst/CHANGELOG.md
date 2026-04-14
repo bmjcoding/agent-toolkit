@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `## Periodic Analyst Reminder` section (D2.3 equivalent) — pre-retro check that surfaces agents not retro'd recently as a P2 recommendation.
+
+### Changed
+
+- Trimmed rationale-only tail phrases from 4 Gotchas bullets.
+
 ## [5.1.1] - 2026-04-14
 
 ### Changed
