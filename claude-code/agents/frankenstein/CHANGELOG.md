@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Phase 6a no longer promotes `[Unreleased]` CHANGELOG entries inline; promotion is now fully delegated to release-engineer (via `/changelog release`) so the promote, commit, tag, and push steps happen atomically in one place.
+
 ## [4.5.0] - 2026-04-14
 
 ### Added

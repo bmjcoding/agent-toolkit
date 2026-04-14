@@ -115,46 +115,76 @@ If no history exists, skip the section silently.
 
 **Always complete this before presenting the /improve prompt.** Save both the full retro and the summary metrics to `~/.claude/retros/` for long-term retention and trend analysis.
 
-Files are organized by subject subdirectory: `~/.claude/retros/{subject}/`
+### Save path by retro type
 
-1. Create the subject directory: `mkdir -p ~/.claude/retros/{subject}`
-2. Write the full retro markdown to `~/.claude/retros/{subject}/YYYY-MM-DDTHHMMSS.md`
-3. Write the summary table metrics as JSON to `~/.claude/retros/{subject}/YYYY-MM-DDTHHMMSS.json` — include these required fields plus all applicable metric fields below:
+Choose the save path based on what is being retro'd:
 
-   **Required fields** (always present):
-   - `subject`: the retro subject identifier from Scoping
-   - `version`: current `metadata.version` from the subject's primary definition file (if versioned)
-   - `run_type`: orchestration / custom-pipeline / subagent / single-agent
-   - `project`: git remote URL or project directory name
+| Retro type | Save path |
+|---|---|
+| Orchestration (pipeline run) | `~/.claude/retros/sessions/YYYY-MM/<session-id>/` |
+| Skill review | `~/.claude/retros/skill-reviews/<skill>/YYYY-MM/` |
+| Agent review | `~/.claude/retros/agent-reviews/<agent>/YYYY-MM/` |
 
-   **Metric fields** (include when data is available; `retro-history.py trends` reads these exact key names):
+Use the `session_id` (compact `YYYYMMDDTHHMMSS`) as `<session-id>`. For skill/agent reviews, use the subject identifier as `<skill>` or `<agent>`. Legacy paths under `~/.claude/retros/{subject}/` remain valid for existing retros but new saves must use the type-scoped paths above.
+
+1. Create the target directory: `mkdir -p <path>`
+2. Write the full retro markdown to `<path>/YYYYMMDDTHHMMSS.md`
+3. Write the summary metrics as a v5.0-schema JSON to `<path>/YYYYMMDDTHHMMSS.json`. The JSON must validate against the v5.0 schema:
+
+   ```bash
+   python3 /Users/bmj/Developer/git/agent-toolkit/claude-code/tools/retros/validate.py <retro.json>
+   ```
+
+   Fix any validation errors before saving to the canonical path.
+
+   **Required fields** (always present, `schema_version` must be first):
+
+   | Key | Type | Notes |
+   |---|---|---|
+   | `schema_version` | string const `"5.0"` | Always first field |
+   | `subject` | string | Retro subject identifier from Scoping |
+   | `session_id` | string | Compact ISO-8601: `YYYYMMDDTHHMMSS` |
+   | `date` | string | `YYYY-MM-DD` |
+   | `run_type` | string enum | `single-agent` / `subagent` / `orchestration` / `custom-pipeline` / `meta` |
+   | `depth` | string enum | `lightweight` / `standard` / `full` |
+   | `findings` | object | `{"critical": N, "high": N, "medium": N, "low": N}` — no `total` sub-key |
+   | `findings_total` | integer | Sum of all severity counts |
+   | `recommendations` | object | `{"total": N, "p0": N, "p1": N, "p2": N, "fix": N, "pattern": N}` |
+   | `quality_iterations` | integer | Top-level quality loop iterations (not nested) |
+   | `agents_spawned` | integer | Use 1 for single-agent runs |
+   | `files_changed` | integer | Total files modified |
+   | `user_interventions` | integer | Total (planned + unplanned) |
+   | `root_causes` | object | `{"prompt_gap": N, "spec_gap": N, ...}` — underscore-keyed |
+
+   **Verdict enum** (all underscore-canonical, or null):
+   `CLEAR_TO_SHIP` / `SHIP_WITH_CAUTION` / `BLOCKED` / `SHIPPED_CLEAN` / `null`
+
+   **Optional metric fields** (include when data is available; `retro-history.py trends` reads these exact key names):
 
    | Key | Type | Description |
    |---|---|---|
+   | `version` | string | Current `metadata.version` of the primary skill/agent (if versioned) |
+   | `project` | string | Git remote URL or project directory name |
    | `total_tokens` | integer | Total tokens consumed across all agents |
-   | `quality_iterations` | integer | Number of quality loop iterations (top-level, not nested) |
-   | `findings` | object | `{"critical": N, "high": N, "medium": N, "low": N}` |
+   | `total_cost_usd` | number | Total metered cost in USD |
+   | `wall_clock_min` | integer | Wall-clock duration in minutes |
    | `model_downgrades_recommended` | integer | Number of model downgrade recommendations |
-   | `root_causes` | object | `{"prompt gap": N, "spec gap": N, ...}` — one key per root cause type found |
-   | `files_changed` | integer | Total files modified |
-   | `agents_spawned` | integer | Number of agents spawned (use 1 for single-agent runs) |
-   | `user_interventions` | integer | Total user interventions (planned + unplanned) |
-   | `estimated_cost_usd` | number | Estimated pipeline cost in USD |
-   | `frankenstein_line_count` | integer | Current line count of frankenstein.md at retro time — read via `wc -l` |
-   | `dispatcher_tokens_estimated` | integer | Estimated total tokens consumed by the dispatcher (from agents.log or manual estimate) |
+   | `fix_churn` | integer | Files modified 2+ times (fix didn't stick) |
+   | `frankenstein_line_count` | integer | Current line count of frankenstein.md — read via `wc -l` |
+   | `dispatcher_tokens_estimated` | integer | Estimated total tokens consumed by the dispatcher |
    | `dispatch_count` | integer | Number of agent dispatches made in this pipeline run |
-   | `avg_dispatch_prompt_tokens` | integer | Average inline prompt tokens per dispatch (dispatcher_tokens_estimated / dispatch_count) |
-   | `net_line_delta` | integer | Delta vs. the prior retro's frankenstein_line_count (negative = improvement). Use null if no prior retro exists for this subject. |
-   | `net_growth_flag` | boolean | `true` when `net_line_delta` is positive (frankenstein.md grew this run); `false` when zero or negative; `null` when `net_line_delta` is null. |
-   | `pre_verified_skipped` | integer | Count of recommendations marked `skipped-already-applied` by the per-recommendation state-verification step. Distinguishes verification-time skips from improve-time skips. |
+   | `avg_dispatch_prompt_tokens` | integer | Average inline prompt tokens per dispatch |
+   | `net_line_delta` | integer | Delta vs. prior retro's frankenstein_line_count. Use null if no prior retro exists. |
+   | `net_growth_flag` | boolean | `true` when `net_line_delta` is positive; `false` when zero or negative; `null` when null. |
+   | `pre_verified_skipped` | integer | Recommendations marked `skipped-already-applied` by pre-verification step. |
 
    Use `null` for fields where data is unavailable. Do not omit tracked metric fields — `null` is better than missing, because the trends script can distinguish "not logged" from "zero."
 
 4. Append to global trend history:
 
 ```bash
-python3 ${CLAUDE_SKILL_DIR}/scripts/retro-history.py save ~/.claude/retros/{subject}/YYYY-MM-DDTHHMMSS.json --history ~/.claude/retros
-# fallback: python3 ~/.claude/skills/retro/scripts/retro-history.py save ~/.claude/retros/{subject}/YYYY-MM-DDTHHMMSS.json --history ~/.claude/retros
+python3 ${CLAUDE_SKILL_DIR}/scripts/retro-history.py save <path>/YYYYMMDDTHHMMSS.json --history ~/.claude/retros
+# fallback: python3 ~/.claude/skills/retro/scripts/retro-history.py save <path>/YYYYMMDDTHHMMSS.json --history ~/.claude/retros
 ```
 
 Use the current timestamp for the filename. The script appends to `~/.claude/retros/history.jsonl` (global, cross-subject). All writes must complete before moving on.

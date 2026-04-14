@@ -141,6 +141,82 @@ unrelated component's release.
 release-engineer agent when dispatched by the orchestrator. Automated CI does not cut
 releases without explicit invocation.
 
+## Release Subcommand
+
+### `/changelog release [<component-slug>]`
+
+Performs the full promote-and-tag cycle. Without an argument, operates on every
+component whose `## [Unreleased]` section is non-empty. With a slug, operates on that
+component only.
+
+**Atomicity has two levels:**
+- **Per-component:** the commit + tag + push triple for a single component is atomic. If the tag fails after the commit, reset the commit and retry; if the push fails after the tag, delete the local tag and retry. Do not leave a component in a partially-released state.
+- **Across components:** there is no cross-component rollback by design. Each component's triple is independent. If component B fails, component A's already-pushed tag is not reverted — partial success means earlier components are live. See [Failure Recovery](#failure-recovery) below.
+
+1. Read `CHANGELOG.md`. Abort if `## [Unreleased]` is empty.
+2. Compute bump from category headers (highest level wins):
+   - `### Removed` → MAJOR; `### Added` / `### Changed` / `### Security` → MINOR;
+     `### Fixed` / `### Deprecated` → PATCH.
+3. Prompt for confirmation on MAJOR bumps. Auto-derive for MINOR/PATCH.
+4. Promote: rename `## [Unreleased]` → `## [X.Y.Z] - YYYY-MM-DD`; insert fresh empty
+   `## [Unreleased]` above; update footer comparison links; write file.
+5. Execute the atomic triple:
+
+```bash
+git commit -m "chore: release {slug}-v{X.Y.Z}"
+git tag {slug}-v{X.Y.Z}
+git push origin HEAD {slug}-v{X.Y.Z}
+```
+
+**Slug derivation:** strip the `CHANGELOG.md` filename, strip the type-directory segment
+(`skills`, `agents`, `commands`, `hooks`, `rules`, `bundles`), prepend the tool prefix.
+
+| CHANGELOG.md path                                   | Slug                           | Example tag                           |
+|-----------------------------------------------------|--------------------------------|---------------------------------------|
+| `claude-code/skills/changelog/CHANGELOG.md`        | `claude-code/changelog`        | `claude-code/changelog-v7.0.0`        |
+| `claude-code/agents/release-engineer/CHANGELOG.md` | `claude-code/release-engineer` | `claude-code/release-engineer-v2.0.0` |
+| `claude-code/hooks/changelog-check/CHANGELOG.md`   | `claude-code/changelog-check`  | `claude-code/changelog-check-v3.0.0`  |
+| `claude-code/rules/docker/CHANGELOG.md`            | `claude-code/docker`           | `claude-code/docker-v4.0.0`           |
+
+**Multi-component:** each component gets its own commit, tag, and push triple processed
+in alphabetical path order. A failure on component B does not roll back component A's
+already-pushed tag.
+
+**First-release edge case:** for the first release of a component (no prior `{slug}-v` tag
+exists), the comparison footer link uses the `tree/` form per the Comparison Links section
+(see the sentinel comment in that section for the no-tags-yet case).
+
+**Single-component example:** `/changelog release changelog-check` processes only
+`claude-code/hooks/changelog-check/CHANGELOG.md`.
+
+### Failure Recovery
+
+#### If the per-component triple fails mid-sequence
+
+| State | Recovery |
+|-------|----------|
+| Promoted file but no commit | `git checkout -- <path>/CHANGELOG.md` to revert, then re-run `/changelog release <slug>` |
+| Commit created but tag missing | `git tag {slug}-v{X.Y.Z} HEAD && git push origin HEAD {slug}-v{X.Y.Z}` |
+| Commit + tag created but push failed | `git push origin HEAD {slug}-v{X.Y.Z}` (the tag already exists locally) |
+
+#### If a multi-component release partially failed
+
+1. Check which components shipped: `git tag -l '{tool}/*-v*'` and `git log --oneline -5`.
+2. **Components that shipped:** do nothing — they are live.
+3. **Components with a commit but no tag:** create and push the tag (see table above).
+4. **Components with a promoted CHANGELOG but no commit:** revert via `git checkout -- <path>/CHANGELOG.md` and re-run `/changelog release <slug>`.
+5. **Components not yet touched:** re-run `/changelog release` with just the unprocessed slugs.
+
+### `/changelog append <category> <message>`
+
+Appends `- <message>` under `## [Unreleased]` → `### <category>` in the component's
+`CHANGELOG.md`. Creates the category heading if absent, in canonical order
+(`Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security`). Does not commit.
+
+```
+/changelog append Added "Slug derivation helper now handles bundles/ directory"
+```
+
 ## SemVer Bump Table
 
 | Signal | Bump |

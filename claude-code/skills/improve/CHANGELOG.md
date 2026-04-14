@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Step 2f now delegates CHANGELOG writes to the `/changelog` skill rather than writing entries inline; this ensures format consistency and keeps the SemVer bump logic in one place.
+
 ## [4.3.0] - 2026-04-14
 
 ### Added

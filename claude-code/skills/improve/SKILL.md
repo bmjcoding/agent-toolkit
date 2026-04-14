@@ -93,7 +93,9 @@ After all fixes for a given file are accepted, apply a SemVer bump to `metadata.
 
 #### f. Changelog entry (accepted changes only)
 
-After bumping the version, append a changelog entry to the component's own `CHANGELOG.md`:
+After bumping the version, append a single bullet to the component's own `CHANGELOG.md` under `## [Unreleased]`. Do NOT write a versioned `## [X.Y.Z] - YYYY-MM-DD` header here — version promotion happens at release time via the `/changelog` skill.
+
+Determine the target CHANGELOG.md path using the routing rules table:
 
 - **Skills**: `skills/{name}/CHANGELOG.md`
 - **Agents**: `agents/{name}/CHANGELOG.md`
@@ -105,20 +107,14 @@ After bumping the version, append a changelog entry to the component's own `CHAN
 
 Every component has its own `CHANGELOG.md` in its subdirectory. There are NO aggregated changelogs — do not write to `agents/CHANGELOG.md` or `commands/CHANGELOG.md` at the category root level.
 
-Changelog format — Keep a Changelog 1.1.0 (see skills/changelog/SKILL.md for full spec):
+Write the entry as follows:
+1. Find or create the `## [Unreleased]` section (it must appear before any versioned section).
+2. Under `## [Unreleased]`, find or create the appropriate category header (`### Added`, `### Changed`, `### Fixed`, etc. — choose based on the change type; canonical order per `skills/changelog/SKILL.md`).
+3. Append a verb-prefixed one-liner bullet (`- `) under that category header.
 
-```
-## [VERSION] - YYYY-MM-DD
+For entry content format and category rules, see `skills/changelog/SKILL.md` as the authoritative spec (Keep a Changelog 1.1.0).
 
-### Category
-
-- Verb-prefixed one-liner
-```
-
-Categories in canonical order: Added, Changed, Deprecated, Removed, Fixed, Security.
-Omit empty categories. Dates are required on all released versions.
-
-If the changelog file doesn't exist, create it with a header line.
+If the changelog file doesn't exist, create it with the required header block from `skills/changelog/SKILL.md`, then add `## [Unreleased]` and the entry.
 
 #### g. Record rule in expiry metadata (accepted `fix` recommendations only)
 

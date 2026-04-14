@@ -7,7 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [4.0.0] - 2026-04-13
+### Added
+
+- `/changelog release` subcommand: one-shot atomic release flow — promotes `[Unreleased]` to a versioned header, commits, applies the per-component tag, and pushes. Replaces the multi-step manual sequence that release-engineer previously executed inline.
+
+## [6.0.0] - 2026-04-13
 
 ### Removed
 
@@ -91,7 +95,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial changelog skill defining Keep a Changelog 1.1.0 + SemVer standard for all toolkit components
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/changelog-v5.0.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/changelog-v6.0.0...HEAD
+[6.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/changelog-v5.0.0...claude-code/changelog-v6.0.0
 [5.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/shared/changelog-v4.0.0...claude-code/changelog-v5.0.0
 [4.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/shared/changelog-v3.0.0...shared/changelog-v4.0.0
 [3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/shared/changelog-v2.0.0...shared/changelog-v3.0.0
