@@ -54,7 +54,16 @@ Do NOT prompt the user about /improve — the orchestrator handles the gate.
   "p2": N,
   "fix_count": N,
   "pattern_count": N,
-  "model_downgrades": N
+  "model_downgrades": N,
+  "metrics": {
+    "_spec": "Field names, types, and null semantics are canonical in claude-code/skills/retro/references/finalization.md (Metric fields table). null is correct when trajectory data is unavailable — do not fabricate values.",
+    "frankenstein_line_count": null,
+    "dispatcher_tokens_estimated": null,
+    "dispatch_count": null,
+    "avg_dispatch_prompt_tokens": null,
+    "net_line_delta": null,
+    "net_growth_flag": null
+  }
 }
 ```
 

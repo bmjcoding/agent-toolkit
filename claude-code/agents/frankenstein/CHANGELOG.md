@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.2.0] - 2026-04-13
+
+### Added
+
+- Dispatcher Context Audit Rules section (new, before Rules section): codifies DEFAULT read-only behavior (scalar extractions, jq field reads, git --name-only), 6 legitimate carve-outs with justifications, and OUT OF SCOPE list. Implements retro-loop-analysis.md section 4.8 recommendations.
+- Retrospective Notes archive pointer and net-decrease rubric note added to Retrospective Notes section.
+- New file `retrospective-notes-archive.md` created for entries older than 30 days.
+- Dispatch-prompt lean self-check instruction added to Phase 2 Launch rule: "if inline prompt exceeds 1-2 sentences, the dispatcher is carrying too much context."
+
+### Changed
+
+- Phase 3 dep-check: replaced `git diff HEAD -- <dep-files>` (content read into dispatcher context) with `git diff --name-only` + path delegation to security-engineer. Dispatcher no longer reads dep diff content directly.
+- Phase 3b SRE handoff: replaced all-handoff-JSON scan with predictable path requirement (`site-reliability-engineer.json`). Eliminates `ls | grep` locate pattern; uses predictable filename `site-reliability-engineer.json` directly. Forward-contract HTML comment added at edit site.
+- Project-agnosticism pass: removed hardcoded paths (`/Users/bmj/...`), replaced project-specific repo name examples (`alt-central`, `agent-toolkit` in examples) with generic descriptions, replaced hardcoded changelog skill path with `~/.claude/` canonical form.
+
 ## [4.1.0] - 2026-04-13
 
 ### Added
@@ -182,7 +197,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/frankenstein-v4.1.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/frankenstein-v4.2.0...HEAD
+[4.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/frankenstein-v4.1.0...claude-code/frankenstein-v4.2.0
 [4.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/frankenstein-v4.0.0...claude-code/frankenstein-v4.1.0
 [4.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/frankenstein-v3.0.0...claude-code/frankenstein-v4.0.0
 [3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/frankenstein-v2.0.0...claude-code/frankenstein-v3.0.0
