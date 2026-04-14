@@ -185,7 +185,7 @@ Compare intent to outcome:
 **D2.3 — Periodic analyst reminder (runs for every retro invocation):**
 
 ```bash
-RETRO_DIR=~/.claude/retros/autoresearch-analyst
+RETRO_DIR=~/.claude/retros/agent-reviews/autoresearch-analyst
 if [ -d "$RETRO_DIR" ]; then
   LAST_FILE=$(ls "$RETRO_DIR"/*.json "$RETRO_DIR"/*.md 2>/dev/null \
     | grep -v '/improve' | sort | tail -1)
@@ -201,7 +201,7 @@ if [ -d "$RETRO_DIR" ]; then
 fi
 ```
 
-If the script emits a META-001 line (threshold: more than 30 days since last standalone retro), prepend it as the first bullet in the 3.7 output. If `~/.claude/retros/autoresearch-analyst/` does not exist or contains no matching files, skip silently — this check costs one Bash call and never blocks the retro.
+If the script emits a META-001 line (threshold: more than 30 days since last standalone retro), prepend it as the first bullet in the 3.7 output. If `~/.claude/retros/agent-reviews/autoresearch-analyst/` does not exist or contains no matching files, skip silently — this check costs one Bash call and never blocks the retro.
 
 For each recommendation:
 - **What**: The specific change
