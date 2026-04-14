@@ -4,6 +4,7 @@ description: >
   Run a retrospective on any completed run — single agent, subagent, skill, or orchestration
   pipeline. Use when the user wants to debrief, analyze efficiency, or improve a workflow.
 argument-hint: "[run-type or orchestrator-dir]"
+# version: 4.2.2
 ---
 
 # Retrospective
@@ -169,6 +170,27 @@ Compare intent to outcome:
 
 ### 3.7 Recommendations
 
+**D2.3 — Periodic analyst reminder (runs for every retro invocation):**
+
+```bash
+RETRO_DIR=~/.claude/retros/autoresearch-analyst
+if [ -d "$RETRO_DIR" ]; then
+  LAST_FILE=$(ls "$RETRO_DIR"/*.json "$RETRO_DIR"/*.md 2>/dev/null \
+    | grep -v '/improve' | sort | tail -1)
+  if [ -n "$LAST_FILE" ]; then
+    LAST_DATE=$(basename "$LAST_FILE" | grep -oE '[0-9]{4}-[0-9]{2}-[0-9]{2}' | head -1)
+    TODAY=$(date +%Y-%m-%d)
+    DAYS=$(( ($(date -d "$TODAY" +%s 2>/dev/null || date -j -f "%Y-%m-%d" "$TODAY" +%s) \
+            - $(date -d "$LAST_DATE" +%s 2>/dev/null || date -j -f "%Y-%m-%d" "$LAST_DATE" +%s)) / 86400 ))
+    if [ "$DAYS" -gt 30 ]; then
+      echo "META-001: Last standalone autoresearch-analyst retro was $LAST_DATE, $DAYS days ago. Consider running /retro autoresearch-analyst for a focused review."
+    fi
+  fi
+fi
+```
+
+If the script emits a META-001 line (threshold: more than 30 days since last standalone retro), prepend it as the first bullet in the 3.7 output. If `~/.claude/retros/autoresearch-analyst/` does not exist or contains no matching files, skip silently — this check costs one Bash call and never blocks the retro.
+
 For each recommendation:
 - **What**: The specific change
 - **Where**: Exact file path to modify (agent .md, skill SKILL.md, hook, settings.json, CLAUDE.md, etc.)
@@ -196,6 +218,12 @@ Common retro mistakes — read before analyzing:
 After completing the analysis, read `references/finalization.md` and follow all steps in order: validation, output formatting with summary table, trend analysis, and saving to `~/.claude/retros/`. All steps must complete before presenting the /improve prompt.
 
 Steps in order: (1) write draft to temp path (e.g., `/tmp/retro-draft-TIMESTAMP.md`) → (2) run verify-claims → (3) fix failures → (4) format output with summary table → (5) check trends → (6) save final to `~/.claude/retros/{subject}/`.
+
+**Rule-expiry surfacer (runs after step 1):** Check whether `~/.claude/metadata/rule-expiry.json` exists. If it does, find all entries where `status == "active"` and `review_by < today`. If any exist, append a single P2 recommendation to the 3.7 Recommendations section:
+
+> `Review expired rules: N entries in rule-expiry.json have passed their review_by date. Run /improve remove <rec-id> for each.`
+
+List the expired rec-ids inline (e.g., `REC-12, REC-18`). This is purely informational surfacing — the retro does not modify `rule-expiry.json`. If the file does not exist or has no expired active entries, skip silently.
 
 ## Next Step
 

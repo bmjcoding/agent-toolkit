@@ -5,8 +5,9 @@ description: >
   or anytime you want to improve a skill/agent. Supports --validate for
   autonomous improve-then-review validation cycles.
 disable-model-invocation: true
-argument-hint: "[retro-output or recommendation] [--validate] [--skip-validation]"
+argument-hint: "remove <rec-id> | [retro-output or recommendation] [--validate] [--skip-validation]"
 ---
+# version: 4.3.0
 
 # Improve
 
@@ -119,6 +120,26 @@ Omit empty categories. Dates are required on all released versions.
 
 If the changelog file doesn't exist, create it with a header line.
 
+#### g. Record rule in expiry metadata (accepted `fix` recommendations only)
+
+After the changelog entry, record the applied rule in `~/.claude/metadata/rule-expiry.json` so future `/improve` runs can surface expired rules.
+
+1. Read `~/.claude/metadata/rule-expiry.json` (create with `{"version":"1.0.0","rules":{}}` if it doesn't exist).
+2. Derive `rec-id` from the recommendation row: if the retro table provides one, use it; otherwise synthesize `<SLUG>-<YYYYMMDD-HHMMSS>` from the recommendation slug + current timestamp.
+3. Append an entry under `rules`:
+   - `rec_id`: `<rec-id>`
+   - `target_file`: the path from the recommendation's "Where" column
+   - `anchor`: a short phrase (under 80 chars) that uniquely locates the rule in the target file
+   - `added`: today's date (YYYY-MM-DD)
+   - `source_session`: active SID, or `"manual"` if no active pipeline
+   - `review_by`: today + 90 days (YYYY-MM-DD)
+   - `last_reviewed`: `null`
+   - `status`: `"active"`
+   - `notes`: short free-text context (under 200 chars)
+4. Write the updated JSON atomically (write to `.tmp`, then `mv`).
+
+Skip this step if the target file is a memory/pattern file (under `~/.claude/projects/*/memory/` or `references/`) — rule-expiry tracking applies to executable rules in skills/agents, not to reference material.
+
 ### 3. Save Patterns to Memory
 
 For each `pattern` recommendation:
@@ -164,11 +185,21 @@ done
 
 This is a post-improvement sweep — not a per-change check. It catches regressions that individual changes didn't trigger (e.g., cumulative line count exceeding 500, or a new cross-reference that broke from a different change).
 
-- **S-code errors**: Stop. A change introduced structural damage. Revert the last change that touched the failing file and note it as `reverted: post-gate structural failure`.
+- **S-code errors**: Stop. A change introduced structural damage. Revert the last change that touched the failing file and note it as `reverted: post-gate structural failure`. Also open `~/.claude/metadata/rule-expiry.json` and update the matching rule entry: set `status = "reverted"` and `last_reviewed = <today>`. If no matching entry exists (because step 2g was skipped for a pattern/memory file), skip this rollback silently.
 - **Q-code warnings (new ones only)**: Note in the report but do not revert. The user decides on warnings.
 - **No new issues**: Proceed to save.
 
 If the linter is not found, skip with warning (same as per-change check).
+
+**Rule-expiry pruning pass**:
+
+Read `~/.claude/metadata/rule-expiry.json`. Surface entries where `status == "active"` AND `review_by < today` as:
+
+> N rules past review_by date — run `/improve remove <rec-id>` to evaluate each.
+
+Emit a one-row-per-entry table with `rec-id`, `target_file`, and `anchor`. Do NOT auto-remove; this is a surfacer.
+
+If `~/.claude/metadata/rule-expiry.json` does not exist, or `rules` is empty, skip silently.
 
 ### 6. Model Change Recommendations
 
@@ -256,6 +287,23 @@ This lets future retros answer: "Were the last retro's recommendations applied? 
 - **Max iterations**: Ask user or accept --max-iterations N from $ARGUMENTS
 - **No double version bumps**: Validation iterations append sub-entries, don't create new versions
 - **Convergence**: Exit when all files PASS or no progress after an iteration
+
+### 9. Remove Subcommand (`/improve remove <rec-id>`)
+
+When `/improve` is invoked with `remove <rec-id>` instead of a retro source:
+
+1. **Confirmation gate** — print:
+   > Remove rule `<rec-id>`? This deletes the rule text from its host file AND marks it `removed` in `~/.claude/metadata/rule-expiry.json`. Type `yes` to proceed. Anything else aborts.
+   Wait for a one-word response. Only proceed on exact `yes` (case-insensitive). Any other response → `Aborted. No changes made.`
+2. **Read** `~/.claude/metadata/rule-expiry.json`. Locate the entry for `<rec-id>`. If missing → abort: `No entry for <rec-id> in rule-expiry.json.`
+3. **Delete the rule text** from `target_file` using `anchor` as the locator. If the anchor doesn't match → abort: `Anchor not found in <target_file> — rule may already have been deleted or the file has diverged. Manual review required.`
+4. **Bump the host file's frontmatter `# version:`** per SemVer. Rule removal defaults to MINOR (backward-compatible feature removal); upgrade to MAJOR if the rule governed contract/public behavior. Document the choice in the changelog entry below.
+5. **Update** the entry in `rule-expiry.json`: set `status = "removed"`, set `last_reviewed = <today>`. Write atomically.
+6. **Append changelog entry** to the host file's `CHANGELOG.md` under `### Removed`:
+   - `- Removed rule "<anchor>" (<rec-id>) per /improve remove.`
+7. **Report** the action: host file path, old→new version, removed rule's anchor, link to changelog entry.
+
+This subcommand is disjoint from `/improve`'s main retro-application flow. It does not parse recommendations and does not run the apply-verify loop.
 
 ## Gotchas
 
