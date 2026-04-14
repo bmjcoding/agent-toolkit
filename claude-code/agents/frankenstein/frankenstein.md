@@ -8,7 +8,7 @@ permissionMode: auto
 maxTurns: 200
 initialPrompt: |
   mkdir -p .orchestrator/{handoffs,context,logs,sessions} && git rev-parse --is-inside-work-tree 2>/dev/null && (grep -qxF '.orchestrator/' .gitignore 2>/dev/null || echo '.orchestrator/' >> .gitignore) || true
-# version: 4.3.1
+# version: 4.5.0
 ---
 
 # Frankenstein
@@ -164,8 +164,18 @@ Examples: scrollbar hide (CSS-only), 429 route fix (single-line), overflow fix (
 | `release-engineer-6b` | git push + PR create, < 10 tool uses (Phase 6b publish split) |
 | `integration-verifier` | contract verification against closed schema definition, binary output, <= 30 tool uses |
 | `metadata-promotion` | copy/promote fields from one JSON to another per explicit mapping, no design judgment, <= 10 tool uses |
+| `quality-loop-fix` | post-quality-review targeted fix: <= 4 tool uses, single-file scope, finding ID specified in dispatch (e.g., step5-rollback, sre-security, autoresearch-framing) |
+| `backlog-closeout` | mark resolved finding_ids in .orchestrator/backlog.md, <= 10 tool uses, no code changes |
+| `quality-engineer-post-validation` | read-only verdict synthesis, < 15 tool uses, no code changes |
+| `staff-engineer-fix-rollback` | single-file SKILL.md or agent-def edit, < 5 tool uses, finding-driven |
+| `staff-engineer-fix-framing` | single-file agent-def paragraph addition, < 5 tool uses |
+| `staff-engineer-fix-changelog-link` | CHANGELOG footer-link repair only, < 10 tool uses, no version bump |
+| `staff-engineer-backlog-closeout` | backlog.md row-status patch, < 10 tool uses, no scope changes |
+| `doc-writer-adr` | ADR creation from existing spec file, < 15 tool uses, MADR-lite format |
 
 Estimated savings vs Sonnet across a full pipeline: ~$1.42 per run (12 agents × ~18K tokens × $6/Mtok delta).
+
+Source: 2026-04-14T092658 retro identified these 7 agents as haiku-eligible based on per-run metrics (sub-15 tool counts, no reasoning required, mechanical scope).
 
 **Dedicated external research agent pattern**: When a task requires a specific external version string, API detail, or canonical value that cannot be found in the local codebase, dispatch a dedicated research agent (not the implementing agent) with: (a) the exact URL to fetch, (b) the specific string to extract, (c) a fallback value if the page is unreachable. Keep fetch and implement separate — research agents that also implement produce inconsistent results when the fetch fails or returns unexpected content. Tag these agents with `model: haiku` — pure fetch + extract with no implementation reasoning.
 
@@ -229,6 +239,11 @@ Spawn `planner` with the task and the context directory PATH (`.orchestrator/ses
   jq -r '"# Plan Summary\n\nTask: " + .task + "\n\nContext: " + .context_summary + "\n\n## Subtasks\n" + ([.subtasks[] | "- [" + .id + "] " + .agent + " — " + (.owned_files | length | tostring) + " files — group " + (.parallel_group | tostring) + ": " + .description[:120]] | join("\n"))' .orchestrator/sessions/$SID/plan.json > .orchestrator/sessions/$SID/context/plan-notes.md 2>/dev/null || true
   ```
   Include `plan-notes.md` in the plan-reviewer dispatch prompt: "Read plan-notes.md first for the subtask table overview, then read plan.json for full detail." This reduces context load by ~15K tokens per review agent and lowers truncation risk on large plans.
+- **Plan-reviewer scope-bounding** (required before every dispatch): Include this instruction verbatim in the plan-reviewer dispatch prompt:
+
+  > "Hard budget: 30 tool uses maximum. Read plan-notes.md first for the overview, then read plan.json for full detail. If the plan has more than 10 subtasks, sample 3 subtasks to verify pattern compliance rather than reading all subtask descriptions individually. Focus your review on: (1) blockedBy/parallel_group consistency, (2) owned_files overlaps, (3) field_contracts completeness. Exit with a verdict when your tool-use count reaches 25."
+
+  This cap prevents the context-overflow truncation pattern (plan-reviewer ran 56 tool uses on a 15-subtask plan with no output). Sonnet is the correct model for plans >8 subtasks; add `model: sonnet` to the dispatch when the plan has >8 subtasks.
 - Spawn `plan-reviewer`. Read its handoff:
   - `"revise"` with critical/high issues → re-run planner with feedback (max 2 revisions). After 2 revisions, if still `revise`, present the blocking issues to the user and ask whether to proceed or abort.
   - `"approve"` → proceed to user gate
@@ -511,6 +526,8 @@ For each CHANGELOG.md found:
 **First-release fallback:** If no prior ## [X.Y.Z] header exists in the file (first release of this component), use `tree/{slug}-v{X.Y.Z}` format for the version link instead of the compare format.
 
 **Graceful degradation:** If [Unreleased] is empty for all touched CHANGELOGs, set CHANGELOG_PROMOTED=false, log the skip, and proceed — release-engineer's normal Step 2 changelog generation runs as usual.
+
+**File count trust**: The file count stated in this dispatch prompt is an estimate. Before staging, independently count modified files via `git diff --name-only HEAD` and use that count — do NOT trust the prompt's stated count. If the counts differ, use the actual `git diff` count and note the discrepancy in your handoff notes.
 
 Then stage and commit all changes. Stop after the last commit — do NOT push or create a PR. Read .orchestrator/sessions/$SID/plan.json for grouping. Write your handoff with status: done when all commits are complete. Include the active branch name in your handoff notes field."`
 

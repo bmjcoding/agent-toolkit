@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.2.4] - 2026-04-14
+
+### Changed
+
+- SKILL.md: Model Recommendations required-field discipline block added immediately after the "Produce a recommendation" sentence in section 3.4. Rationale field now requires both task characteristics and per-run evidence. Est. Savings field now requires both token savings and cost savings. Pure price-only recommendations are explicitly prohibited. Example output table added to illustrate the expected format.
+
+## [4.2.3] - 2026-04-14
+
+### Fixed
+
+- scripts/parse-metrics.py line 389: replaced `e["id"]` with `e.get("agent_id", e.get("id", "unknown"))` — fixes `KeyError: 'id'` crash when agents.log entries use the `agent_id` key format written by the frankenstein dispatcher template, rather than the normalized `id` key expected by the script.
+
 ## [4.2.2] - 2026-04-14
 
 ### Changed
@@ -89,7 +101,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/retro-v4.2.2...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/retro-v4.2.4...HEAD
+[4.2.4]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/retro-v4.2.3...claude-code/retro-v4.2.4
+[4.2.3]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/retro-v4.2.2...claude-code/retro-v4.2.3
 [4.2.2]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/retro-v4.2.1...claude-code/retro-v4.2.2
 [4.2.1]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/retro-v4.2.0...claude-code/retro-v4.2.1
 [4.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/retro-v4.1.0...claude-code/retro-v4.2.0

@@ -4,7 +4,7 @@ description: >
   Run a retrospective on any completed run — single agent, subagent, skill, or orchestration
   pipeline. Use when the user wants to debrief, analyze efficiency, or improve a workflow.
 argument-hint: "[run-type or orchestrator-dir]"
-# version: 4.2.2
+# version: 4.2.4
 ---
 
 # Retrospective
@@ -143,6 +143,18 @@ For each agent (or the single agent), assess whether the model used was appropri
 - **Upgrade candidates**: made reasoning errors that required rework, or struggled with complex multi-file dependencies.
 
 Produce a recommendation when model and task complexity are clearly mismatched. Reference the agent's `model` field in its definition file or the orchestrator's dispatch.
+
+**Required field discipline for Model Recommendations**:
+
+- **Rationale** must include BOTH (a) the explicit task characteristics (e.g., "scope check only, no reasoning required, mechanical glob/grep") AND (b) the per-run evidence (e.g., "this run: 12 tools, 23K tokens, 1m30s wall-clock, 0 errors").
+- **Est. Savings** must report BOTH (a) token savings (e.g., "23K → 18K = 5K tokens saved per dispatch") AND (b) cost savings (e.g., "$0.35 → $0.05 per dispatch at current pricing"). Token savings are durable across pricing changes; cost is the user-facing impact.
+- Pure price-only recommendations are insufficient — the dispatcher needs token-impact data to evaluate model fit independently of pricing fluctuations.
+
+Example output table format:
+
+| Agent/Skill | Current | Suggested | Rationale | Est. Savings |
+|---|---|---|---|---|
+| `integration-verifier` | opus | haiku | scope check only, no reasoning required, mechanical glob/grep; this run: 12 tools, 23K tokens, 1m30s wall-clock, 0 errors | 23K → 18K = 5K tokens saved per dispatch; $0.35 → $0.05 per dispatch at current pricing |
 
 **Wasted work**:
 - Were any agents spawned that produced no actionable output?
