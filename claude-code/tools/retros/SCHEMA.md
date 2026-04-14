@@ -105,6 +105,22 @@ bash ~/.claude/retros/index.sh
 
 ---
 
+## Rule Ordering
+
+The redaction rules in `scrub.py` must be applied in a specific order to avoid partial substitutions and malformed output. This constraint is codified in the source comments in `scrub.py` but is reproduced here for documentation purposes.
+
+**Required ordering**:
+
+| Must Come Before | Rules | Reason |
+|---|---|---|
+| R-03 (catch-all path), R-12 (narrative codename) | R-10, R-11 (JSON project-field rules) | R-10 and R-11 match `"project": "/Users/bmj/..."` and `"project": "alt-central..."` as complete JSON field patterns. If R-03 runs first, it consumes the `/Users/bmj/` portion before R-10 can match the full structure, producing malformed JSON. |
+| R-03 (catch-all `/Users/bmj/`) | R-01 (`/Users/bmj/Developer/git/`), R-02 (`/Users/bmj/.claude/`) | R-01 and R-02 map specific path prefixes to distinct placeholders. R-03 would subsume them if it ran first. |
+| R-12 (narrative `alt-central`) | R-06 (`bmjcoding/alt-central` compound) | R-06 must consume the compound form before R-12 processes the standalone name. |
+
+This ordering was identified and fixed during the 2026-04-14 migration pipeline. Any future rule additions that introduce new specific-before-catch-all dependencies must be documented in this table and in the `scrub.py` source comments.
+
+---
+
 ## Known Permanent Gaps
 
 1. **`dispatcher_tokens_estimated` always null**: The Frankenstein orchestrator dispatcher does not write token counts to any hook-visible location. Every retro in the corpus carries `null` for this field. True session costs are understated by an estimated 5–15%.
