@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.1] - 2026-04-14
+
+### Changed
+- Factored standard 4-bullet untrusted-data prelude and instruction sandwich out to `improve/references/security-preamble.md`. Agent-specific preamble, rules, and runaway guard remain inline.
+- Softened "identical to site-reliability-engineer" cross-reference annotation to "parallel to ..." to reflect that the discipline framework is shared but examples differ by domain.
+
+## [1.4.0] - 2026-04-14
+
+### Added
+
+- Standard 4-bullet untrusted data prelude added to Untrusted Data Boundary section for consistency with 11 other agents (S-1 fix: security baseline parity).
+
+### Changed
+
+- Finding Discipline section cross-referenced to site-reliability-engineer as shared discipline (S-2: redundancy annotation).
+
 ## [4.0.0] - 2026-04-13
 
 ### Removed
@@ -46,7 +62,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/security-engineer-v3.0.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/security-engineer-v1.4.1...HEAD
+[1.4.1]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/security-engineer-v1.4.0...claude-code/security-engineer-v1.4.1
+[1.4.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/security-engineer-v1.3.0...claude-code/security-engineer-v1.4.0
 [3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/security-engineer-v2.0.0...claude-code/security-engineer-v3.0.0
 [2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/security-engineer-v1.3.0...claude-code/security-engineer-v2.0.0
 [1.3.0]: https://github.com/bmjcoding/agent-toolkit/compare/security-engineer-v1.2.0...security-engineer-v1.3.0

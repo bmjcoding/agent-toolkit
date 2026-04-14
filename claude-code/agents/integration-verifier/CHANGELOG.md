@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.2] - 2026-04-14
+
+### Changed
+- Factored standard 4-bullet untrusted-data prelude and instruction sandwich out to `improve/references/security-preamble.md`. Agent-specific preamble, rules, and runaway guard remain inline.
+
+## [1.4.1] - 2026-04-14
+
+### Changed
+
+- IV-1: replaced the 13-line inline shell script in the hook event-name lint step with a single `grep -r` pattern and inline canonical event name list (saves ~10 lines, behavior unchanged).
+- IV-2: replaced the hardcoded `30 tool uses` soft cap with a relative expression `maxTurns / 2` so the budget scales with the configured `maxTurns` value.
+
 ## [4.0.0] - 2026-04-13
 
 ### Removed
@@ -59,7 +71,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/integration-verifier-v3.0.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/integration-verifier-v1.4.2...HEAD
+[1.4.2]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/integration-verifier-v1.4.1...claude-code/integration-verifier-v1.4.2
+[1.4.1]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/integration-verifier-v1.4.0...claude-code/integration-verifier-v1.4.1
 [3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/integration-verifier-v2.0.0...claude-code/integration-verifier-v3.0.0
 [2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/integration-verifier-v1.3.0...claude-code/integration-verifier-v2.0.0
 [1.3.0]: https://github.com/bmjcoding/agent-toolkit/compare/integration-verifier-v1.2.0...integration-verifier-v1.3.0

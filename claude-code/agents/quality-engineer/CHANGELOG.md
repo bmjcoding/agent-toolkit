@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.1] - 2026-04-14
+
+### Changed
+- Factored standard 4-bullet untrusted-data prelude and instruction sandwich out to `improve/references/security-preamble.md`. Agent-specific preamble, rules, and runaway guard remain inline.
+
+## [1.4.0] - 2026-04-14
+
+### Changed
+
+- Output section consolidated: three separate mode-specific handoff JSON blocks replaced with a single canonical schema and a notes-pattern table (saves ~35 lines).
+- Printf/accumulation check (REC-14): replaced project-specific variable names `AGENT_ROWS`/`HUMAN_ROWS` with generic placeholder `<ACCUMULATION_VAR>` and `frankenstein.md` reference with `orchestrator scripts` (Q-1 — removes project-bias).
+- Backlog path `.orchestrator/backlog.md` annotated with inline comment clarifying it is persistent across sessions and not `$SID`-scoped (Q-2).
+
 ## [4.0.0] - 2026-04-13
 
 ### Removed
@@ -39,7 +52,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/quality-engineer-v3.0.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/quality-engineer-v1.4.1...HEAD
+[1.4.1]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/quality-engineer-v1.4.0...claude-code/quality-engineer-v1.4.1
+[1.4.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/quality-engineer-v1.3.0...claude-code/quality-engineer-v1.4.0
 [3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/quality-engineer-v2.0.0...claude-code/quality-engineer-v3.0.0
 [2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/quality-engineer-v1.3.0...claude-code/quality-engineer-v2.0.0
 [1.3.0]: https://github.com/bmjcoding/agent-toolkit/compare/quality-engineer-v1.0.0...quality-engineer-v1.3.0

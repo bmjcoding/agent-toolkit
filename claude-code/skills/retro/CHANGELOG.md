@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.2.2] - 2026-04-14
+
+### Changed
+
+- Quoted `$LAST_DATE` in D2.3 date-check bash snippet to harden against shell-metacharacter edge cases (regex gate already prevents exploitation).
+
+### Added
+
+- SKILL.md: D2.3 periodic analyst reminder — at the start of section 3.7, a Bash date-check reads `~/.claude/retros/autoresearch-analyst/` for the most recent non-improve file and prepends a META-001 bullet when the last standalone retro is more than 30 days ago. Fires silently if directory is absent.
+- SKILL.md: rule-expiry surfacer — after writing the retro draft (Finalization step 1), checks `~/.claude/metadata/rule-expiry.json` for `status="active"` entries with `review_by` before today and appends a single P2 recommendation listing expired rec-ids. Informational only; does not modify rule-expiry.json.
+- New file `scripts/meta-retro-batch.py` (D2.2 META-002 history scanner). Reads retro JSON corpus from `~/.claude/retros/orchestrator/*.json` and produces a meta-retro markdown every N pipelines (default 10) covering recurring unresolved findings, category skew, low-signal P2 noise, frankenstein.md size trajectory, and cross-session recommendation persistence. CLI flags: `--retro-dir`, `--out-dir`, `--interval`, `--dry-run`, `--force`. Python 3 stdlib only.
+- Usage note in meta-retro-batch.py argparse block documenting the filesystem-permission trust boundary for --retro-dir / --out-dir.
+
 ## [4.2.1] - 2026-04-14
 
 ### Fixed
@@ -76,7 +89,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/retro-v4.2.1...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/retro-v4.2.2...HEAD
+[4.2.2]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/retro-v4.2.1...claude-code/retro-v4.2.2
 [4.2.1]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/retro-v4.2.0...claude-code/retro-v4.2.1
 [4.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/retro-v4.1.0...claude-code/retro-v4.2.0
 [4.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/retro-v4.0.1...claude-code/retro-v4.1.0
