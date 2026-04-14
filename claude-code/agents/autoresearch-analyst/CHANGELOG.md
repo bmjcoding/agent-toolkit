@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.2.0] - 2026-04-14
+
 ### Added
 
 - `## Periodic Analyst Reminder` section (D2.3 equivalent) — pre-retro check that surfaces agents not retro'd recently as a P2 recommendation.
@@ -96,7 +98,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/autoresearch-analyst-v5.1.1...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/autoresearch-analyst-v5.2.0...HEAD
+[5.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/autoresearch-analyst-v5.1.1...claude-code/autoresearch-analyst-v5.2.0
 [5.1.1]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/autoresearch-analyst-v5.1.0...claude-code/autoresearch-analyst-v5.1.1
 [5.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/autoresearch-analyst-v5.0.1...claude-code/autoresearch-analyst-v5.1.0
 [5.0.1]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/autoresearch-analyst-v5.0.0...claude-code/autoresearch-analyst-v5.0.1
