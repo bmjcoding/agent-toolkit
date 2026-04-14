@@ -5,7 +5,7 @@ description: >
   a contribution before merging, after writing a new skill, or when a skill underperforms.
   Supports batch review of directories with parallel dispatch.
 disable-model-invocation: true
-argument-hint: "[path to SKILL.md, agent .md, or directory]"
+argument-hint: "[path to SKILL.md, agent .md, or directory] [--format json]"
 ---
 
 # Review Skill / Agent Definition
@@ -158,6 +158,55 @@ Criteria: Any of these signals:
 ```
 
 For **NEEDS WORK** verdicts, the required changes table uses the same format as `/retro` recommendations — directly consumable by `/improve`. `Where` is the file path, `Priority` is P0/P1/P2, `Type` is `fix` or `pattern`.
+
+### JSON Output Mode (--format json)
+
+Pass `--format json` in `$ARGUMENTS` to receive machine-readable output instead of the default markdown template. JSON mode produces the same review content in a structured envelope suitable for pipeline consumption (e.g., by `autoresearch-analyst` or `improve` orchestration).
+
+```json
+{
+  "review_output": {
+    "file": "path/to/SKILL.md",
+    "lint_errors": [
+      { "code": "S01", "message": "Missing required frontmatter field: name", "line": null }
+    ],
+    "lint_warnings": [
+      { "code": "Q04", "message": "Description does not include 'when to use' guidance", "line": null }
+    ],
+    "structural_errors": 0,
+    "quality_warnings": 2,
+    "verdict": "NEEDS WORK",
+    "verdict_summary": "One-to-two sentence summary of why this verdict was reached.",
+    "required_changes": [
+      {
+        "what": "Add 'when to use' guidance to description",
+        "where": "claude-code/skills/example/SKILL.md",
+        "why": "Q04: description lacks trigger context",
+        "priority": "P1",
+        "type": "fix"
+      }
+    ]
+  }
+}
+```
+
+**Field definitions:**
+
+- `file` (string): path to the reviewed definition file.
+- `lint_errors` (array of objects): S-code findings; each object has `code` (string), `message` (string), `line` (integer or null).
+- `lint_warnings` (array of objects): Q-code findings; same shape as `lint_errors`.
+- `structural_errors` (integer): count of S-code errors; drives the REWRITE threshold.
+- `quality_warnings` (integer): count of Q-code warnings.
+- `verdict` (string enum): exactly one of `"PASS"`, `"NEEDS WORK"`, `"REWRITE"`.
+- `verdict_summary` (string): 1-2 sentence human-readable explanation of the verdict.
+- `required_changes` (array of objects): present when verdict is `"NEEDS WORK"`; omitted or empty array when verdict is `"PASS"` or `"REWRITE"`. Each object has:
+  - `what` (string): description of the change to make.
+  - `where` (string): file path of the target.
+  - `why` (string): reason for the change, referencing the relevant lint code or semantic finding.
+  - `priority` (string enum): `"P0"`, `"P1"`, or `"P2"`.
+  - `type` (string enum): `"fix"` or `"pattern"`.
+
+Default output (no `--format` flag) produces the markdown template above.
 
 For **REWRITE** verdicts, provide a brief outline of what a good version would look like: what the skill should cover, what structure it should use, and 1-2 concrete instruction examples at the right level of specificity.
 

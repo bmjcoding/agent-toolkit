@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.0.0] - 2026-04-14
+
+### Changed
+
+- BREAKING: `autoresearch-analyst.toml` review mode handoff `results[].required_changes` type changed from integer (count) to array of objects `{what, where, why, priority, type}` to match review-skill JSON output schema (D1-1). Consumers must read `required_changes.length` to obtain the count.
+- BREAKING: `autoresearch-analyst.toml` full-cycle mode handoff `review_results[].required_changes` updated to the same array-of-objects shape for consistency with the review mode handoff.
+- `autoresearch-analyst.toml` improve mode handoff: added `file_diffs` field (array of `{file, unified_diff_truncated}` objects) matching improve/SKILL.md step 7 schema (D1-3).
+
 ## [3.1.0] - 2026-04-13
 
 ### Added

@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.2.1] - 2026-04-14
+
+### Fixed
+
+- finalization.md: added fallback rule in `### Per-Recommendation State Verification` — if the target file named in a recommendation does not exist (deleted or moved since the recommendation was recorded), the recommendation is marked `open` with note `(target file not found — cannot pre-verify)`. Prevents silent auto-skip or auto-close when the target is missing (fixes sre-d1-003 / da-d1-002).
+
+## [4.2.0] - 2026-04-14
+
+### Added
+
+- finalization.md: per-recommendation state-verification step (`### Per-Recommendation State Verification`) in the Validation section. Before listing a recommendation as open, the retro checks target files for evidence the fix is already applied. Recs confirmed present are marked `skipped-already-applied` rather than re-surfaced as open findings.
+- finalization.md: `pre_verified_skipped` metric field in Save section JSON schema to distinguish verification-time skips from improve-time skips.
+
 ## [4.1.0] - 2026-04-13
 
 ### Added
@@ -63,7 +76,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/retro-v4.1.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/retro-v4.2.1...HEAD
+[4.2.1]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/retro-v4.2.0...claude-code/retro-v4.2.1
+[4.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/retro-v4.1.0...claude-code/retro-v4.2.0
 [4.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/retro-v4.0.1...claude-code/retro-v4.1.0
 [4.0.1]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/retro-v4.0.0...claude-code/retro-v4.0.1
 [4.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/retro-v3.0.0...claude-code/retro-v4.0.0

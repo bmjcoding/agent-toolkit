@@ -93,6 +93,13 @@ Do NOT prompt the user for next steps — the orchestrator handles the gate.
   "changes": [
     {"file": "path", "action": "accepted|reverted", "lines_added": N, "lines_removed": N}
   ],
+  "file_diffs": [
+    {
+      "file": "path",
+      "unified_diff_truncated": "@@ ... @@\n...",
+      "truncated": false
+    }
+  ],
   "model_recommendations": [
     {"agent": "name", "current": "model", "suggested": "model", "rationale": "why"}
   ],
@@ -108,12 +115,28 @@ Run the review-skill workflow on specified targets. The dispatch prompt includes
 
 For each target, run the full review-skill workflow: linter + semantic review + verdict. Your final message must contain the complete review output so the orchestrator can present it to the user.
 
+NOTE: `required_changes` is an array of objects matching the review-skill JSON output schema (D1-1). Consumers must read `required_changes.length` to get the count.
+
 ```handoff
 {
   "mode": "review",
   "targets": ["path1", "path2"],
   "results": [
-    {"file": "path", "verdict": "PASS|NEEDS WORK|REWRITE", "structural_errors": N, "quality_warnings": N, "required_changes": N}
+    {
+      "file": "path",
+      "verdict": "PASS|NEEDS WORK|REWRITE",
+      "structural_errors": N,
+      "quality_warnings": N,
+      "required_changes": [
+        {
+          "what": "description of the change",
+          "where": "file/path.md",
+          "why": "reason",
+          "priority": "P0|P1|P2",
+          "type": "fix|pattern"
+        }
+      ]
+    }
   ]
 }
 ```
@@ -145,7 +168,20 @@ Autonomous improve → validate loop. The dispatch prompt includes `max_iteratio
     {"iteration": 1, "accepted": N, "reverted": N, "files_modified": ["path"]}
   ],
   "review_results": [
-    {"iteration": 1, "file": "path", "verdict": "PASS|NEEDS WORK", "required_changes": N}
+    {
+      "iteration": 1,
+      "file": "path",
+      "verdict": "PASS|NEEDS WORK",
+      "required_changes": [
+        {
+          "what": "description of the change",
+          "where": "file/path.md",
+          "why": "reason",
+          "priority": "P0|P1|P2",
+          "type": "fix|pattern"
+        }
+      ]
+    }
   ],
   "outcome_file": "~/.claude/retros/{subject}/YYYY-MM-DDTHHMMSS-improve.json"
 }

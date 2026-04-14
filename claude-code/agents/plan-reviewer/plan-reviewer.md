@@ -58,7 +58,7 @@ Format:
 
 Use `"status": "approve"` when the plan is ready to implement. Use `"status": "revise"` when critical or high findings require the planner to revise before implementation begins. These are the primary verdict values — use `partial`, `needs_human`, or `failed` only for operational failures (truncation, tool error, environment issue), not as plan verdicts.
 Only flag `revise` for critical/high issues that would cause agent failures. Medium issues are advisory.
-**Invariant**: If `issues` contains any item with `severity: critical` or `severity: high`, `status` MUST be `revise`. An `approve` response with critical or high issues is invalid — treat it as `revise`. This is enforced at output time.
+**Invariant**: If `findings` contains any item with `severity: critical` or `severity: high`, `status` MUST be `revise`. An `approve` response with critical or high findings is invalid — treat it as `revise`. This is enforced at output time.
 **Turn limit**: If approaching maxTurns without completing all criteria, emit a partial handoff with `"truncated": true` at the top level so the orchestrator can detect incomplete review.
 
 ## Handoff-First Rule

@@ -24,7 +24,7 @@ You may be dispatched in one of three modes. Read your dispatch prompt to determ
 
 **When to use split mode**: For pipelines with >20 changed files or >10 logical commits, the orchestrator should dispatch commit-phase and publish-phase as separate agents. A single agent attempting to stage 47+ files and push + create a PR in 30 turns will truncate. The split gives each phase ~20 turns of breathing room.
 
-Write a handoff at the end of each mode with the fields below, setting `status: done` (commit-phase) or `status: done` (publish-phase). If you truncate before completing your phase, set `status: needs_human`.
+Write a handoff at the end of each mode with the fields below, setting `status: done` (commit-phase) or `status: needs_human` (publish-phase). If you truncate before completing your phase, set `status: needs_human`.
 
 ## Handoff-First Rule
 
