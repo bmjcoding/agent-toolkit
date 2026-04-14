@@ -133,14 +133,6 @@ git push origin HEAD {slug}-v{X.Y.Z}
 Do not update the CHANGELOG after the tag is pushed — the rename and tag push must be
 atomic.
 
-**Monorepo scope:** only the component whose files changed gets its CHANGELOG updated
-and its version bumped. Other components' `[Unreleased]` sections are unaffected by an
-unrelated component's release.
-
-**Who triggers:** a human developer, the `/sync-toolkit` command, or the
-release-engineer agent when dispatched by the orchestrator. Automated CI does not cut
-releases without explicit invocation.
-
 ## Release Subcommand
 
 ### `/changelog release [<component-slug>]`
@@ -227,25 +219,7 @@ Appends `- <message>` under `## [Unreleased]` → `### <category>` in the compon
 
 When a single update triggers multiple levels, use the highest applicable bump.
 
-## Routing Rules
-
-Each toolkit component has its own `CHANGELOG.md` in its subdirectory. Paths use the
-new per-tool layout (ADR 0005):
-
-- `claude-code/agents/{name}/CHANGELOG.md`
-- `claude-code/commands/{name}/CHANGELOG.md`
-- `claude-code/hooks/{name}/CHANGELOG.md`
-- `claude-code/rules/{name}/CHANGELOG.md`
-- `shared/skills/{name}/CHANGELOG.md`
-- `github-copilot/skills/{name}/CHANGELOG.md`
-
-Reference files and scripts inside a component directory (e.g.,
-`shared/skills/{name}/references/`) use that component's `CHANGELOG.md` — no separate
-changelog per subdirectory.
-
-**Aggregated changelogs at the category root are forbidden.** Do not create or write to
-`claude-code/agents/CHANGELOG.md`, `shared/skills/CHANGELOG.md`, etc. Each component is
-versioned independently using the per-component tag format.
+Routing rules for changelog findings are defined in improve/SKILL.md step 2f.
 
 ## Gotchas
 

@@ -153,7 +153,7 @@ Your final message must contain the complete retro markdown so the orchestrator 
 
 Do NOT prompt the user about /improve — the orchestrator handles the gate.
 
-**Metrics section guardrail**: When `parse-metrics.py` returns missing or null token data, report it as a data gap — do NOT fabricate a specific error message or exception text. Use: "no token data in agents.log — orchestrator is not logging agent completion events." Any script-error explanation in the retro must quote the actual exception text or file+line reference from the script's output. Never paraphrase or invent an error (e.g., "TypeError on null iteration") when the real cause is a missing input to the script. Fabricated error explanations mask the real issue and prevent the correct fix from being identified.
+**Metrics section guardrail**: When `parse-metrics.py` returns missing or null token data, report it as a data gap — do NOT fabricate a specific error message or exception text. Use: "no token data in agents.log — orchestrator is not logging agent completion events." Any script-error explanation in the retro must quote the actual exception text or file+line reference from the script's output.
 
 ## Mode: Improve
 
@@ -223,6 +223,29 @@ Handles ad-hoc user requests about skills or agents — e.g., "the changelog ski
 - **Never auto-rewrite**: on-demand mode never regenerates a definition from scratch. REWRITE verdicts and improve's 5+ finding rewrite gate both stop the run and defer to the user.
 - **Inline review, don't dispatch**: you already have review-skill preloaded. Do NOT spawn a child agent (Agent is disallowed anyway) — run the linter and semantic review inline within this agent's turn budget.
 
+## Periodic Analyst Reminder
+
+**D2.3 — Meta-maintenance check (runs when starting a retro):** When starting a retro, run this check first to surface whether the autoresearch-analyst itself is overdue for a standalone review:
+
+```bash
+RETRO_DIR=~/.claude/retros/agent-reviews/autoresearch-analyst
+if [ -d "$RETRO_DIR" ]; then
+  LAST_FILE=$(ls "$RETRO_DIR"/*.json "$RETRO_DIR"/*.md 2>/dev/null \
+    | grep -v '/improve' | sort | tail -1)
+  if [ -n "$LAST_FILE" ]; then
+    LAST_DATE=$(basename "$LAST_FILE" | grep -oE '[0-9]{4}-[0-9]{2}-[0-9]{2}' | head -1)
+    TODAY=$(date +%Y-%m-%d)
+    DAYS=$(( ($(date -d "$TODAY" +%s 2>/dev/null || date -j -f "%Y-%m-%d" "$TODAY" +%s) \
+            - $(date -d "$LAST_DATE" +%s 2>/dev/null || date -j -f "%Y-%m-%d" "$LAST_DATE" +%s)) / 86400 ))
+    if [ "$DAYS" -gt 30 ]; then
+      echo "META-001: Last standalone autoresearch-analyst retro was $LAST_DATE, $DAYS days ago. Consider running /retro autoresearch-analyst for a focused review."
+    fi
+  fi
+fi
+```
+
+If the script emits a META-001 line (threshold: more than 30 days since last standalone retro), surface it as a P2 recommendation at the top of the retro's 3.7 Recommendations section before emitting any other findings. If `~/.claude/retros/agent-reviews/autoresearch-analyst/` does not exist or contains no matching files, skip silently — this check costs one Bash call and never blocks the retro.
+
 ## Gotchas
 
 - **Retro file might not exist**: if the retro_file path from the dispatch doesn't exist, report the error and stop — don't guess at recommendations.
@@ -232,9 +255,9 @@ Handles ad-hoc user requests about skills or agents — e.g., "the changelog ski
 - **Protected files**: CLAUDE.md auto-fix safety rules apply — don't modify lockfiles, CI configs, migrations, or auth modules. Report as `skipped: protected file`.
 - **Revert completely**: if a change fails verification, restore the file to its exact pre-edit state. A partial revert is worse than no change.
 - **Full-cycle iteration budget**: never exceed `max_iterations`. Each iteration must make forward progress — if an iteration accepts 0 changes, stop immediately rather than burning remaining budget.
-- **Forbidden dispatch combination**: Never combine a primary task body with a retro skill trigger (`<command-name>retro</command-name>`, `/retro`, or `command-name: retro` metadata) in the same dispatch. The retro skill takes over and the primary task does not run — the entire dispatch produces zero task output. If retro is needed after a task, dispatch it as a SEPARATE agent call after the task completes. Always dispatch with a single, unambiguous mode string ("retro mode", "improve mode", "review mode", or "full-cycle mode") and nothing else.
-- **Suppress retro on non-retro dispatches**: When dispatching for a non-retro primary task (audit, improve, review), the dispatch prompt MUST include the line: "Do NOT run the retro skill after task completion." Without this guard, the agent may treat task completion as a retro trigger and consume ~30% of its token budget on unrequested retro output. Dispatch template: `[task description here]\n\nDo NOT run the retro skill after task completion. Stop when the primary task is complete.`
-- **Improve batch sizing limit**: When an improve run targets more than 20 files, split by domain into parallel improve agents (max ~20 files per agent, one agent per domain). A single improve agent for a large file set will exhaust maxTurns. Split when a domain has more than 20 files to avoid context overflow. Orchestrators must partition by domain before dispatching.
+- **Forbidden dispatch combination**: Never combine a primary task body with a retro skill trigger (`<command-name>retro</command-name>`, `/retro`, or `command-name: retro` metadata) in the same dispatch — the entire dispatch produces zero task output. If retro is needed after a task, dispatch it as a SEPARATE agent call after the task completes. Always dispatch with a single, unambiguous mode string ("retro mode", "improve mode", "review mode", or "full-cycle mode") and nothing else.
+- **Suppress retro on non-retro dispatches**: When dispatching for a non-retro primary task (audit, improve, review), the dispatch prompt MUST include the line: "Do NOT run the retro skill after task completion." Without this guard, the agent may treat task completion as a retro trigger. Dispatch template: `[task description here]\n\nDo NOT run the retro skill after task completion. Stop when the primary task is complete.`
+- **Improve batch sizing limit**: When an improve run targets more than 20 files, split by domain into parallel improve agents (max ~20 files per agent, one agent per domain). Split when a domain has more than 20 files to avoid context overflow. Orchestrators must partition by domain before dispatching.
 - **Multi-domain finding consolidation**: Before dispatching the improve agent with findings from parallel audit domains, run a consolidation pass: deduplicate findings that appear in multiple domain audit files (same file, same issue) and produce a single merged findings list. Without this, the improve agent may apply the same fix twice or receive conflicting instructions. The consolidation agent reads all audit output files, groups findings by target file, removes duplicates, and writes a single `consolidated-findings.md` for the improve agent to consume.
 
 ## Untrusted Data Boundary

@@ -10,7 +10,7 @@ metadata:
   version: 1.0.1
 ---
 
-This command generates CHANGELOG entries following the Keep a Changelog principle: DO NOT use commit logs as changelogs. Commit logs are noisy — merge commits, obscure titles, file-change lists. A CHANGELOG entry is a USER-FACING summary of a noteworthy difference, often aggregating multiple commits. Every agent spawned by this command MUST produce user-facing summaries, not commit-log dumps.
+This command generates CHANGELOG entries following the Keep a Changelog principle: DO NOT use commit logs as changelogs. Every agent spawned by this command MUST produce user-facing summaries, not commit-log dumps.
 
 ## Arguments
 
@@ -55,7 +55,7 @@ For each changed component, spawn one subagent to:
 5. Update the version comment in the component's definition file (`SKILL.md`, agent `.md`, command `.md`, hook `.sh`) to match the new version
 6. Update comparison links at the bottom of `CHANGELOG.md`
 
-**AGENT INSTRUCTION (mandatory for every spawned subagent)**: Generate user-facing summaries, not commit-log dumps. Do not write "Updated SKILL.md lines 40-55". Do write "Enforced OKLCH-only color notation for all utility classes". Aggregate related changes into a single entry. If an entry you are about to write names a file path, a line number, or a git hash, discard it and replace it with the user-facing outcome of that change. Follow `skills/changelog/SKILL.md` rules.
+Do not write "Updated SKILL.md lines 40-55". Do write "Enforced OKLCH-only color notation for all utility classes". Aggregate related changes into a single entry. If an entry you are about to write names a file path, a line number, or a git hash, discard it and replace it with the user-facing outcome of that change. Follow `skills/changelog/SKILL.md` rules.
 
 Run all component agents in parallel.
 
@@ -100,7 +100,6 @@ List any skipped files (protected paths) below the table.
 
 ## Gotchas
 
-- **No commit-log dumps**: agents must write user-facing summaries. If an agent proposes a bullet that names a file path or a git hash, reject it and ask for the user-facing outcome instead.
 - **Protected paths**: never overwrite `~/.claude/settings.json` or `~/.claude/CLAUDE.md` — these are write-protected by `protect-config.sh` and must be reported as skipped. Files under `~/.claude/hooks/` ARE installable via the Write tool (the protection blocks Bash cp/mv operations, not Write tool writes). Always use the Write tool for all `~/.claude/` installations, not shell copy commands.
 - **Changelog bracket format**: all `CHANGELOG.md` entries must use `## [X.Y.Z] - YYYY-MM-DD` bracket format. Bare `## X.Y.Z` headers fail the changelog-check pre-push hook.
 - **Dry-run forwarding**: if `--dry-run` is passed, forward it explicitly to all subagents. No files written, no commits, no copies.

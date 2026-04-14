@@ -148,9 +148,6 @@ Produce a recommendation when model and task complexity are clearly mismatched. 
 
 - **Rationale** must include BOTH (a) the explicit task characteristics (e.g., "scope check only, no reasoning required, mechanical glob/grep") AND (b) the per-run evidence (e.g., "this run: 12 tools, 23K tokens, 1m30s wall-clock, 0 errors").
 - **Est. Savings** must report BOTH (a) token savings (e.g., "23K → 18K = 5K tokens saved per dispatch") AND (b) cost savings (e.g., "$0.35 → $0.05 per dispatch at current pricing"). Token savings are durable across pricing changes; cost is the user-facing impact.
-- Pure price-only recommendations are insufficient — the dispatcher needs token-impact data to evaluate model fit independently of pricing fluctuations.
-
-Example output table format:
 
 | Agent/Skill | Current | Suggested | Rationale | Est. Savings |
 |---|---|---|---|---|

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Trimmed educational prose: removed Untrusted Data Boundary lede motivation sentence; content now lives in `improve/references/security-preamble.md` reference.
+
 ## [1.4.1] - 2026-04-14
 
 ### Changed

@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Step 2.4 now calls `/changelog release` to atomically promote `[Unreleased]` entries, create the versioned commit, apply the per-component tag, and push — replacing the previous multi-step inline sequence.
+- Trimmed educational prose: removed redundant 'When to use split mode' paragraph and Untrusted Data Boundary lede sentence.
 
 ### Fixed
 

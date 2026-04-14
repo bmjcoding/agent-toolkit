@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Trimmed educational prose from Sync Protocol section: removed architecture-history rationale ('Why two files exist', 'When to sync', 'Direction' closing paragraph); retained dedup key rules, import filter, section routing, idempotency guarantee.
+
 ## [5.0.0] - 2026-04-13
 
 ### Removed

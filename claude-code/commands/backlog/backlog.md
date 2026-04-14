@@ -90,29 +90,11 @@ Last updated: YYYY-MM-DDTHH:MM
 
 ## Sync Protocol
 
-### Why two files exist
-The Frankenstein pipeline operates on session-scoped paths. Each pipeline run extracts findings from per-session handoffs (`.orchestrator/sessions/<SESSION_ID>/handoffs/*.json`) and appends them to `.orchestrator/backlog.md` (the flat cross-session merged file — a path exception that never moves into per-session directories). The slash command (`/backlog`) operates on `.claude/backlog.md` — the user's personal, manually-refined, durable backlog. These files are kept separate so pipeline runs never clobber user edits and so the pipeline is not coupled to the personal file path.
-
-As of backlog v2.3.0 + frankenstein v1.11.0, `.orchestrator/backlog.md` uses append-with-dedup semantics: prior sessions' open findings are preserved; only new finding_ids are appended. Shipped findings are automatically marked `resolved` in `.orchestrator/backlog.md` by Frankenstein Phase 6c at end of session. Run `/backlog --clear-resolved` (or `--cleanup`) periodically to prune.
-
-### When to sync
-Run `/backlog --sync` any time you want to act on pipeline findings using the slash command. Sync is manual and user-controlled. There is no automatic sync on pipeline completion — this is intentional (the user may want to review `.orchestrator/backlog.md` before importing).
-
-### Deduplication guarantee
-`--sync` is idempotent. Running it twice imports nothing on the second run. Dedup uses `finding_id` as the primary key. When `finding_id` is empty or missing, a surrogate content-hash of `file|item` is used.
-
-### Status-change behavior on dedup match
-`--sync` is strictly pull-only for NEW findings. If a finding_id already exists in `.claude/backlog.md`, the row is not touched — even if its status differs from the pipeline file (e.g., pipeline has `resolved` but personal file has `open`). Users who want to propagate upstream status changes should use `--retriage` manually after reviewing the difference. This avoids clobbering user edits to the personal backlog.
-
-### Import filter
-Only rows with status in (`open`, `in-progress`, `blocked`) are imported. Rows with status `resolved`, `wont-fix`, `deferred-env`, or `deferred-session` in `.orchestrator/backlog.md` are historical audit entries and are NOT imported.
-
-### Section routing
-- Rows from the `Agent Actionable` section in `.orchestrator/backlog.md` are appended to the `Agent Actionable` section in `.claude/backlog.md`.
-- Rows from the `Needs Human Decision` section are appended to the `Needs Human Decision` section.
-
-### Direction
-`--sync` is pull-only. It reads `.orchestrator/backlog.md` (read-only) and writes to `.claude/backlog.md`. It never modifies `.orchestrator/backlog.md`. This keeps the pipeline's audit trail intact and avoids coupling the pipeline to the personal file path.
+- **Dedup key**: `finding_id` is the primary key. When `finding_id` is empty or missing, a surrogate content-hash of `file|item` is used. `--sync` is idempotent — running it twice imports nothing on the second run.
+- **Import filter**: only rows with status in (`open`, `in-progress`, `blocked`) are imported. `resolved`, `wont-fix`, `deferred-env`, and `deferred-session` rows in `.orchestrator/backlog.md` are NOT imported.
+- **Section routing**: rows from `Agent Actionable` in `.orchestrator/backlog.md` append to `Agent Actionable` in `.claude/backlog.md`; rows from `Needs Human Decision` append to `Needs Human Decision`.
+- **Status-change behavior on dedup match**: if a `finding_id` already exists in `.claude/backlog.md`, the row is not touched — even if its status differs from the pipeline file. Use `--retriage` to propagate upstream status changes after reviewing the difference.
+- **Pull-only**: `--sync` reads `.orchestrator/backlog.md` (read-only) and writes to `.claude/backlog.md`. It never modifies `.orchestrator/backlog.md`.
 
 ## Gotchas
 
@@ -120,4 +102,3 @@ Only rows with status in (`open`, `in-progress`, `blocked`) are imported. Rows w
 - **Retriage can auto-resolve**: `--retriage` checks the current codebase and marks items resolved if the underlying file changed. Let retriage do this rather than manually resolving items that have already been fixed.
 - **Severity must be lowercase**: `critical`, `high`, `medium`, `low`. The old ALL-CAPS format is not valid in the unified schema.
 - **When adding items manually**: populate `added_at` with the current timestamp (`YYYY-MM-DDTHH:MM`) and `source` with an appropriate label (`user`, `prod-readiness`, `security-engineer`, etc.).
-- **Both backlog files use the same schema**: `.claude/backlog.md` (slash command) and `.orchestrator/backlog.md` (pipeline) now share this 12-column format. The pipeline file is seeded by Frankenstein Phase 4 Step 2.

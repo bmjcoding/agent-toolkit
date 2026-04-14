@@ -161,8 +161,6 @@ For **NEEDS WORK** verdicts, the required changes table uses the same format as 
 
 ### JSON Output Mode (--format json)
 
-Pass `--format json` in `$ARGUMENTS` to receive machine-readable output instead of the default markdown template. JSON mode produces the same review content in a structured envelope suitable for pipeline consumption (e.g., by `autoresearch-analyst` or `improve` orchestration).
-
 ```json
 {
   "review_output": {
@@ -180,7 +178,7 @@ Pass `--format json` in `$ARGUMENTS` to receive machine-readable output instead 
     "required_changes": [
       {
         "what": "Add 'when to use' guidance to description",
-        "where": "claude-code/skills/example/SKILL.md",
+        "where": "skills/example/SKILL.md",
         "why": "Q04: description lacks trigger context",
         "priority": "P1",
         "type": "fix"

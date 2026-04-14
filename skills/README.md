@@ -1,6 +1,6 @@
-# claude-code/skills/
+# skills/
 
-Claude Code skill definitions — the single source of truth for all skills loaded by Claude Code agents and slash commands. Skills are symlinked to `~/.claude/skills/` by `install.sh`.
+Universal skill definitions — the single source of truth for all skills loaded by Claude Code agents and slash commands. Skills are tool-agnostic and shared across Claude Code, GitHub Copilot, and OpenAI Codex. Skills are symlinked to `~/.claude/skills/` by `install.sh`.
 
 ## Skill Format
 
@@ -58,7 +58,7 @@ Example: `skill/retro-v1.1.0`
 
 ## Adding a Skill
 
-1. Create `claude-code/skills/<slug>/SKILL.md` following the schema above.
-2. Create `claude-code/skills/<slug>/CHANGELOG.md` with the initial version entry.
+1. Create `skills/<slug>/SKILL.md` following the schema above.
+2. Create `skills/<slug>/CHANGELOG.md` with the initial version entry.
 3. Add an entry to the table in this README.
 4. Re-run `install.sh` to create the `~/.claude/skills/<slug>` symlink.
