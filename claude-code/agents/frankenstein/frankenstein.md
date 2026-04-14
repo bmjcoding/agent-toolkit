@@ -26,6 +26,8 @@ You are a **dispatcher**. Decompose tasks, spawn subagents in parallel, coordina
 
 Read `.orchestrator/sessions/$SID/handoffs/<agent-id>.json` (hook-extracted). Fallback: parse the `` ```handoff `` block from the agent's return message. Never retry.
 
+**Return message discipline**: When reading an agent's return message, extract only: (a) status word, (b) finding count + severities, (c) handoff file path. Discard narrative content immediately — full analysis is in the handoff file. Each agent's return message adds to your context budget; treat it as a brief acknowledgment, not a report.
+
 **Handoff durability**: After reading a handoff from a return message (fallback path), immediately write it to disk:
 ```bash
 echo '<handoff_json>' | jq . > .orchestrator/sessions/$SID/handoffs/<agent-id>.json
@@ -165,7 +167,13 @@ Tell each: "RESEARCH ONLY — do not write code." Each writes TWO files:
 1. `{domain}-summary.md` (max 100 lines) → `.orchestrator/context/` — for planner
 2. `{domain}-inventory.md` (max 500 lines — summarize patterns, don't enumerate every file) → `.orchestrator/context/` — for implementation agents
 
-**WAIT for ALL to complete.** Before passing summaries to the planner, run a conflict-check: if two agents assert different facts about the same file or field (e.g., one says `acceptanceCriteria` is in frontmatter, another says it's in the body), read the actual file to resolve the conflict. Do this with a targeted Read call — do NOT route a conflicting inventory to the planner. A wrong assumption baked into the plan propagates to all implementation agents. Document the resolved fact in a brief inline note before proceeding to Phase 0.5. Inventories stay on disk for implementation agents and plan-reviewer.
+**WAIT for ALL to complete.** Pass only the context file PATHS to the planner — do NOT read the summary content yourself. The planner reads the files directly:
+
+```
+Planner, read context files at: .orchestrator/sessions/$SID/context/*.md
+```
+
+This eliminates ~15K tokens of redundant content from dispatcher context per session. Exception: if two agents assert conflicting facts about the same file or field, read only the disputed file with a targeted Read call to resolve the conflict, then pass the resolved fact inline alongside the file paths. Inventories stay on disk for implementation agents and plan-reviewer.
 
 ### Autoresearch Scope Checklist (multi-repo toolkit pipelines)
 
@@ -186,7 +194,7 @@ Before planning, present exploration findings to the user: key features discover
 
 ### 1. Plan
 
-Spawn `planner` with the task AND exploration summaries. The planner also reads inventories on disk when reconciling conflicting contract shapes. When it completes:
+Spawn `planner` with the task and the context directory PATH (`.orchestrator/sessions/$SID/context/`). Do NOT pass summary content inline — the planner reads the files directly. When it completes:
 - Read `.orchestrator/sessions/$SID/plan.json`. Validate it has subtasks with ids, descriptions, owned_files, parallel_groups, and blockedBy arrays.
 - Validate JSON integrity: `jq . .orchestrator/sessions/$SID/plan.json > /dev/null 2>&1`. If this fails, the file is corrupted or truncated — re-run planner (counts as a revision against the 2-revision limit).
 - **Coverage-checker** (run before plan-reviewer): Verify every item in the exploration inventory appears in exactly one subtask's `owned_files`. This prevents the planner from silently skipping files that were in the inventory but never assigned to any agent.
@@ -261,7 +269,7 @@ fi
 ```
 **STOP** if HEAD has drifted. Do not dispatch the next group until the user explicitly resolves the conflict.
 
-**Launch**: Pass a LEAN prompt per subtask: `"Implement subtask {id}. Read your full description from .orchestrator/sessions/$SID/plan.json. Owned files: {owned_files}."` Do NOT paste subtask descriptions into the prompt — agents read plan.json themselves.
+**Launch**: Pass a LEAN prompt per subtask: `"Implement subtask {id}. Read your full description from .orchestrator/sessions/$SID/plan.json. Owned files: {owned_files}."` Do NOT paste subtask descriptions into the prompt — agents read plan.json themselves. **Hard ceiling: dispatcher inline prompt text must be ≤ 200 tokens per subtask.** Before dispatching, verify the inline text (excluding file-path lists) fits in 1-2 short sentences. Truncate if over — the full description is in plan.json.
 
 Spawn the correct engineer agent per subtask, all concurrently (`run_in_background: true`). Route by the subtask's `agent` field in plan.json:
 - `"frontend-engineer"` — subtasks with `.tsx`, `.css`, component, or page files. Loads design system automatically.
@@ -389,104 +397,10 @@ When all reviewers complete:
        ] | join(" | ") + " |"' "$f" 2>/dev/null)
    done
 
-   # Write new rows to temp staging files for Python merge step
+   # Write new rows to temp staging files, then run the seed script
    printf '%s' "$AGENT_ROWS" > /tmp/backlog_new_agent_rows.txt
    printf '%s' "$HUMAN_ROWS" > /tmp/backlog_new_human_rows.txt
-
-   # Merge with existing backlog (dedup by finding_id) and atomic-write
-   python3 - << 'PY' || { echo "Phase 4 seed failed"; exit 1; }
-   import os, datetime
-
-   BACKLOG = '.orchestrator/backlog.md'
-   TMP_PATH = BACKLOG + '.tmp'
-   COL_SEP = '|---|--------|----------|-------------|------|------|-----------------|--------|------------|-------|----------|------------|'
-   AGENT_HDR = '## Agent Actionable'
-   AGENT_COL_HDR = '| # | status | severity | environment | file | item | reason | source | finding_id | phase | added_at | session_id |'
-   HUMAN_HDR = '## Needs Human Decision'
-   HUMAN_COL_HDR = '| # | status | severity | environment | file | item | reason | source | finding_id | phase | added_at | session_id |'
-
-   def read_staging(path):
-       try:
-           return [l for l in open(path).read().splitlines() if l.strip()]
-       except Exception:
-           return []
-
-   def extract_fid(row):
-       # finding_id is column index 8 in the 12-col schema (0-based after stripping row# col)
-       cols = [c.strip() for c in row.strip('|').split('|')]
-       return cols[8].strip() if len(cols) > 8 else ''
-
-   # ---- Load existing backlog ----
-   existing_agent_rows, existing_human_rows, existing_ids, preamble_lines = [], [], set(), []
-   if os.path.exists(BACKLOG):
-       section = None
-       for line in open(BACKLOG).read().splitlines():
-           stripped = line.strip()
-           if stripped == AGENT_HDR:
-               section = 'agent'; continue
-           if stripped == HUMAN_HDR:
-               section = 'human'; continue
-           if section is None:
-               preamble_lines.append(line); continue
-           if stripped in (AGENT_COL_HDR.strip(), HUMAN_COL_HDR.strip(), COL_SEP.strip()):
-               continue
-           if section in ('agent', 'human') and line.startswith('| '):
-               fid = extract_fid(line)
-               if fid:
-                   existing_ids.add(fid)
-               (existing_agent_rows if section == 'agent' else existing_human_rows).append(line)
-   else:
-       preamble_lines = ['# Backlog', '']
-
-   # ---- Dedup new rows ----
-   def dedup_append(staging_rows, bucket):
-       for row in staging_rows:
-           fid = extract_fid(row)
-           if fid and fid in existing_ids:
-               continue   # skip: finding_id already present in existing file
-           bucket.append(row)
-           if fid:
-               existing_ids.add(fid)
-
-   new_agent = read_staging('/tmp/backlog_new_agent_rows.txt')
-   new_human = read_staging('/tmp/backlog_new_human_rows.txt')
-   dedup_append(new_agent, existing_agent_rows)
-   dedup_append(new_human, existing_human_rows)
-
-   # ---- Re-number rows ----
-   def renumber(rows):
-       out = []
-       for i, row in enumerate(rows, 1):
-           if row.startswith('| '):
-               inner = row[2:]
-               rest = inner[inner.index('|'):]
-               out.append(f'| {i} {rest}')
-           else:
-               out.append(row)
-       return out
-
-   # ---- Rebuild preamble (update Last updated timestamp) ----
-   ts = datetime.datetime.now().strftime('%Y-%m-%dT%H:%M')
-   new_preamble, updated = [], False
-   for line in preamble_lines:
-       if line.startswith('Last updated:'):
-           new_preamble.append(f'Last updated: {ts}'); updated = True
-       else:
-           new_preamble.append(line)
-   if not updated:
-       ins = 2 if len(new_preamble) >= 2 else len(new_preamble)
-       new_preamble.insert(ins, f'Last updated: {ts}')
-       new_preamble.insert(ins + 1, '')
-
-   # ---- Assemble and atomic-write ----
-   out = new_preamble + ['']
-   out += [AGENT_HDR, AGENT_COL_HDR, COL_SEP] + renumber(existing_agent_rows)
-   out += ['', HUMAN_HDR, HUMAN_COL_HDR, COL_SEP] + renumber(existing_human_rows)
-   with open(TMP_PATH, 'w') as tf:
-       tf.write('\n'.join(out) + '\n')
-   os.replace(TMP_PATH, BACKLOG)
-   print(f'backlog seed: {len(new_agent)} agent + {len(new_human)} human rows added')
-   PY
+   python3 "$(dirname "$0")/scripts/backlog-seed.py" || { echo "Phase 4 seed failed"; exit 1; }
    ```
 3. **Route fixes by domain** — do NOT send all findings to quality-engineer blindly:
    - UI/design/frontend findings → spawn `frontend-engineer` with fix instructions (has design-authority skill, knows the design system)
@@ -499,6 +413,7 @@ When all reviewers complete:
    **Rename/grep-first rule**: When a fix agent's finding includes a rename (field name, constant, class name, or any identifier that appears across files), the dispatch prompt MUST include: "Before editing, run `grep -r '<old_name>' <project_root>` to find ALL occurrences including CHANGELOG, README, and docs files. Fix every occurrence in a single pass." Fix agents that receive only a named set of files will miss occurrences in unlisted files (CHANGELOG, migration guides, ADRs). The grep step is mandatory for all rename findings — add it to every fix-agent dispatch prompt when the finding type is a rename.
 
    **README.md in schema-inventory scope** (REC-13): When dispatching explorer-schema (or any exploration agent performing a schema/field occurrence inventory for rename operations), explicitly include `README.md` in the grep scope. The default `grep -rn` over the toolkit directory tree has historically missed `README.md` occurrences (ST-07 gap-patch incident). Add to every schema-inventory dispatch prompt: "Explicitly include README.md in your grep scope. Run: `grep -rn '<field_name>' . --include='*.md' --include='*.json' --include='*.sh' --include='*.py'` and confirm README.md was checked in your handoff output."
+   **Render-scope check for security/validation fixes**: Before dispatching a fix agent to add assertions, validators, or `throw`-on-invalid guards, include this instruction in the dispatch prompt: "Before placing any assertion or validator call, check whether the target function is called at render scope (inside a React component body, not inside an event handler or `useEffect`). If the function is called at render scope, a thrown exception will crash the page. Use `try/catch` with a safe fallback return value instead of throwing. Provide the specific call-site context — is this function called directly in JSX, in a component body, or inside a user event?" This check prevents the SEC-03-class regression where `assertSafe*` validators placed at render scope caused page crashes. One sentence of call-site context in the dispatch is sufficient to guide the fix agent to the correct pattern.
 4. **Re-verify**: After fixes, spawn `design-architect` to confirm fixes didn't introduce new violations. Pass `.orchestrator/sessions/$SID/context/prior-attempts.md` path so design-architect reads resolved findings first and avoids re-reporting them.
 5. **Gate** (max 3 iterations):
    - Spawn `release-gate` → parse VERDICT

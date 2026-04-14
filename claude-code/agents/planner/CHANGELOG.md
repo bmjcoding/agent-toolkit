@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.7.0] - 2026-04-13
+
+### Added
+
+- Framework scaffolding rule — "Download-trigger verification for command-shape changes": when a subtask replaces install-command generation in a consumer dialog, `completion_criteria` must include an explicit `window.open(archiveUrl)` presence check in `handleDownload`.
+
 ## [1.6.0] - 2026-04-13
 
 ### Added
@@ -70,7 +76,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/planner-v3.0.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/planner-v1.7.0...HEAD
+[1.7.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/planner-v1.6.0...claude-code/planner-v1.7.0
+[1.6.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/planner-v4.0.0...claude-code/planner-v1.6.0
+[4.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/planner-v3.0.0...claude-code/planner-v4.0.0
 [3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/planner-v2.0.0...claude-code/planner-v3.0.0
 [2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/planner-v1.4.0...claude-code/planner-v2.0.0
 [1.4.0]: https://github.com/bmjcoding/agent-toolkit/compare/planner-v1.3.0...planner-v1.4.0
