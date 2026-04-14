@@ -384,7 +384,7 @@ def build_summary(phases, agents_data, log_data, plan_delta, findings, quality):
             summary["file_conflicts"] = len(agents_data["file_conflicts"])
 
     if log_data:
-        total_tokens = sum(e.get("tokens", 0) for e in log_data)
+        total_tokens = sum(e.get("tokens") for e in log_data if e.get("tokens") is not None)
         total_duration = sum(e.get("duration_s", 0) for e in log_data)
         flagged = [e["id"] for e in log_data if e.get("flags")]
         if total_tokens:
