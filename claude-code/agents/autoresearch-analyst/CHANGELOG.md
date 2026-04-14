@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.1.1] - 2026-04-14
+
+### Added
+
+- Conflict-check baseline gotcha: conflict checks must compare committed HEAD vs. origin/main (not working tree vs. origin/main) to avoid false conflict signals from uncommitted session changes
+
 ## [4.1.0] - 2026-04-13
 
 ### Changed
@@ -50,7 +56,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/autoresearch-analyst-v4.1.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/autoresearch-analyst-v4.1.1...HEAD
+[4.1.1]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/autoresearch-analyst-v4.1.0...claude-code/autoresearch-analyst-v4.1.1
 [4.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/autoresearch-analyst-v4.0.0...claude-code/autoresearch-analyst-v4.1.0
 [4.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/autoresearch-analyst-v3.0.0...claude-code/autoresearch-analyst-v4.0.0
 [3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/autoresearch-analyst-v2.0.0...claude-code/autoresearch-analyst-v3.0.0

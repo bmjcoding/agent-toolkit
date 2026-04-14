@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.8.0] - 2026-04-14
+
+### Added
+
+- Model Hints: extended `model_hint: haiku` to CHANGELOG-only, test-only, and single-constant-edit subtasks — matches frankenstein.md mechanical agent criteria
+- Description Derivation Level: new `derivation_level: verbatim` subtask field flags descriptions with >50 lines of verbatim code so dispatcher routes to implementation agents, not transcription agents
+- Output schema: added `plan_reviewer_notes` field — populated after plan-reviewer returns with advisory corrections and description changes applied to plan.json
+
 ## [1.7.0] - 2026-04-13
 
 ### Added
@@ -76,7 +84,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/planner-v1.7.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/planner-v1.8.0...HEAD
+[1.8.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/planner-v1.7.0...claude-code/planner-v1.8.0
 [1.7.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/planner-v1.6.0...claude-code/planner-v1.7.0
 [1.6.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/planner-v4.0.0...claude-code/planner-v1.6.0
 [4.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/planner-v3.0.0...claude-code/planner-v4.0.0
