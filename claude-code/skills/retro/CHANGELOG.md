@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.1.0] - 2026-04-13
+
+### Added
+
+- `metrics` block in retro output JSON schema: five new fields (`frankenstein_line_count`, `dispatcher_tokens_estimated`, `dispatch_count`, `avg_dispatch_prompt_tokens`, `net_line_delta`) added to finalization.md metric fields table.
+- Trajectory check step in Trends section: reads last 5 `frankenstein_line_count` values, flags monotonic growth as P1, bakes `net_growth_flag: true` soft budget warning when `net_line_delta > 0`.
+- Markdown summary table updated to include all five new metric rows.
+
 ## [4.0.1] - 2026-04-13
 
 ### Fixed
@@ -55,7 +63,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/retro-v4.0.1...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/retro-v4.1.0...HEAD
+[4.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/retro-v4.0.1...claude-code/retro-v4.1.0
 [4.0.1]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/retro-v4.0.0...claude-code/retro-v4.0.1
 [4.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/retro-v3.0.0...claude-code/retro-v4.0.0
 [3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/shared/retro-v2.0.0...claude-code/retro-v3.0.0

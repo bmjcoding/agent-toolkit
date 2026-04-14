@@ -124,12 +124,12 @@ If the changelog file doesn't exist, create it with a header line.
 For each `pattern` recommendation:
 1. Check if a similar memory already exists (search memory files)
 2. If updating: edit the existing memory file
-3. If new: write a memory file to `~/.claude/projects/-Users-bmj--claude/memory/` using this naming convention:
+3. If new: write a memory file to `~/.claude/projects/<project-slug>/memory/` using this naming convention:
    - `feedback_<topic>.md` — lessons learned, anti-patterns, gotchas
    - `reference_<topic>.md` — reference material, lookup tables, conventions
    - `project_<topic>.md` — project state, active constraints, decisions
    Include proper frontmatter (type: feedback/reference/project, Why: one line, How: one-line application rule)
-4. Update `~/.claude/projects/-Users-bmj--claude/memory/MEMORY.md` index
+4. Update `~/.claude/projects/<project-slug>/memory/MEMORY.md` index
 
 ### 4. Report
 
@@ -198,6 +198,10 @@ Derive the subject value using this rule:
 
 Write a JSON file to `~/.claude/retros/{subject}/YYYY-MM-DDTHHMMSS-improve.json` with:
 
+Include `model_recommendations` as an array of objects `{"agent": "name", "current": "model", "suggested": "model", "rationale": "why"}` for any agents where a model downgrade or upgrade is recommended based on observed performance. Use an empty array `[]` if no model changes are recommended — do not omit the field.
+
+`recommendations_applied` (array of strings: description of each accepted recommendation) and `recommendations_reverted` (array of strings: description + reason for each reverted recommendation) are required top-level fields. Use empty arrays when none apply.
+
 ```json
 {
   "type": "improve",
@@ -208,6 +212,9 @@ Write a JSON file to `~/.claude/retros/{subject}/YYYY-MM-DDTHHMMSS-improve.json`
   "saved_patterns": 1,
   "skipped": 0,
   "deferred_model_changes": 2,
+  "model_recommendations": [
+    {"agent": "name", "current": "model", "suggested": "model", "rationale": "why"}
+  ],
   "total_lines_added": 16,
   "total_lines_removed": 3,
   "changes": [
