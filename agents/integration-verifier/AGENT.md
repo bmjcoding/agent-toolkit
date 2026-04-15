@@ -1,6 +1,7 @@
 ---
 name: integration-verifier
 description: "Verifies integration contracts between groups — file existence, type compilation, interface correctness — then reviews boundaries from the provider's perspective. Use between implementation groups and during Phase 3a."
+lifecycle: stable
 model-tier: frontier
 capabilities:
   - read

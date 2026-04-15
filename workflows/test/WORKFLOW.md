@@ -1,6 +1,7 @@
 ---
 name: test
 description: "Write tests to cover gaps and achieve >=80% coverage on changed files."
+lifecycle: stable
 argument-hint: "[paths...] [--dry-run]"
 adapters:
   - claude-code/commands/test/test.md

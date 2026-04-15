@@ -1,6 +1,7 @@
 ---
 name: design-architect
 description: "Senior architect and design authority reviewing implementation for structural integrity, API/code design quality, and visual/UI coherence. Runs deterministic structural checks first, then semantic review."
+lifecycle: stable
 model-tier: frontier
 capabilities:
   - read

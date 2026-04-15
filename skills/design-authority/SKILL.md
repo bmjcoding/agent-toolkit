@@ -1,6 +1,7 @@
 ---
 name: design-authority
 description: Design system guidance for generating and modifying frontend components. Provides token references, canonical patterns, and anti-convergence rules. Use when creating or editing React/Tailwind UI code.
+lifecycle: stable
 ---
 
 # Design Authority — Generator Skill

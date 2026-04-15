@@ -253,6 +253,15 @@ function assertCatalogEntriesExist(agents, workflows) {
     (index.artifacts || []).map(artifact => `${artifact.target_tool}|${artifact.artifact_path}`)
   );
 
+  assert(
+    (index.artifacts || []).every(artifact => typeof artifact.lifecycle === 'string' && artifact.lifecycle.length > 0),
+    'expected every catalog artifact to expose lifecycle'
+  );
+  assert(
+    (index.artifacts || []).every(artifact => typeof artifact.availability === 'string' && artifact.availability.length > 0),
+    'expected every catalog artifact to expose availability'
+  );
+
   for (const agent of agents) {
     assert(
       artifactKeys.has(`claude-code|claude-code/agents/${agent}.md`),
@@ -278,6 +287,11 @@ function assertCatalogEntriesExist(agents, workflows) {
       `missing index.json entry for GitHub Copilot prompt ${workflow}`
     );
   }
+
+  assert(
+    artifactKeys.has('openai-codex|openai-codex/hooks/branch-guard.sh'),
+    'missing index.json entry for OpenAI Codex branch-guard hook'
+  );
 }
 
 function assertRetroStorageContract() {
@@ -310,6 +324,7 @@ function main() {
   runNodeScript('scripts/sync-canonical-adapters.js');
   runNodeScript('scripts/generate-index.js');
   runNodeScript('scripts/generate-index.js', ['--test']);
+  runNodeScript('scripts/generate-index.js', ['--check']);
 
   const { agents, workflows } = assertGeneratedFilesExist();
   assert(exists(path.relative(REPO_ROOT, INDEX_PATH)), 'missing generated index.json');

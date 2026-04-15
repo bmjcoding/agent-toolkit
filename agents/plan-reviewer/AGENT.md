@@ -1,6 +1,7 @@
 ---
 name: plan-reviewer
 description: "Plan quality reviewer that validates subtask granularity, dependency gaps, file ownership, feasibility, and integration contracts before implementation begins."
+lifecycle: stable
 model-tier: balanced
 capabilities:
   - read

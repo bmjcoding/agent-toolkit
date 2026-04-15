@@ -7,7 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [6.1.0] - 2026-04-15
+
 ### Changed
+
+- Declared canonical `lifecycle` metadata in the shared root definition so the distribution catalog can publish maturity separately from per-tool availability for this skill.
+- Clarified the `[Unreleased]` workflow so branch-local work can accumulate there until a
+  PR is opened, but PR-bound components must be promoted into a dated versioned section
+  before validation passes.
 
 - Updated shared skill wording to reference workflow and skill names in a tool-agnostic way instead of assuming Claude slash-command invocation.
 - Added a quick-routing section so simple changelog edits can load only the relevant sections instead of reading the full release workflow every time.
@@ -102,7 +109,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial changelog skill defining Keep a Changelog 1.1.0 + SemVer standard for all toolkit components
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/skill/changelog-v6.0.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/skill/changelog-v6.1.0...HEAD
+[6.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/changelog-v6.0.0...skill/changelog-v6.1.0
 [6.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/changelog-v5.0.0...skill/changelog-v6.0.0
 [5.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/changelog-v4.0.0...skill/changelog-v5.0.0
 [4.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/changelog-v3.0.0...skill/changelog-v4.0.0

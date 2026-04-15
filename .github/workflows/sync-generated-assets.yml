@@ -90,9 +90,15 @@ jobs:
             exit 0
           fi
 
+          extra_args=()
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            extra_args+=(--require-release-version)
+          fi
+
           node scripts/validate-component-changelogs.js \
             --base "${{ steps.diff_base.outputs.base }}" \
-            --head HEAD
+            --head HEAD \
+            "${extra_args[@]}"
 
   validate-definitions:
     needs: validate-component-changelogs

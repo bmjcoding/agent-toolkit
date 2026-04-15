@@ -1,6 +1,7 @@
 ---
 name: planner
 description: "Autonomous planning agent that reads codebases and decomposes tasks into parallel-group implementation plans with file ownership and integration contracts."
+lifecycle: stable
 model-tier: frontier
 capabilities:
   - read

@@ -7,7 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.1.0] - 2026-04-15
+
 ### Changed
+
+- Declared canonical `lifecycle` metadata in the shared root definition so the distribution catalog can publish maturity separately from per-tool availability for this skill.
 
 - Added explicit reference routing and a compact findings template so observability reviews load less context and report results in a consistent format.
 
@@ -43,7 +47,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/skill/observability-patterns-v3.0.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/skill/observability-patterns-v4.1.0...HEAD
+[4.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/observability-patterns-v4.0.0...skill/observability-patterns-v4.1.0
 [3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/observability-patterns-v2.0.0...skill/observability-patterns-v3.0.0
 [2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/observability-patterns-v1.1.0...skill/observability-patterns-v2.0.0
 [1.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/observability-patterns-v1.0.0...skill/observability-patterns-v1.1.0

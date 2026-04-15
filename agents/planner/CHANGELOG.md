@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.0] - 2026-04-15
+
 ### Added
 
 - Added session-aware `plan.json` fields for `session_id`, top-level
@@ -14,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Declared canonical `lifecycle` metadata in the shared root definition so the distribution catalog can publish maturity separately from per-tool availability for this agent.
 - Planner bootstrap guidance now generates missing session context snapshots and treats
   legacy flat orchestrator context as a compatibility fallback instead of a hard
   dependency.
@@ -133,7 +136,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/planner-v2.0.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/planner-v2.1.0...HEAD
+[2.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/planner-v2.0.0...agent/planner-v2.1.0
 [2.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/agent/planner-v2.0.0
 [1.10.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/planner-v1.9.1...agent/planner-v1.10.0
 [1.9.1]: https://github.com/bmjcoding/agent-toolkit/compare/agent/planner-v1.9.0...agent/planner-v1.9.1
