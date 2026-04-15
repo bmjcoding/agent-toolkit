@@ -527,17 +527,6 @@ function syncWorkflows() {
         argumentHint,
       })
     );
-
-    const manifestPath = path.join(REPO_ROOT, 'github-copilot', 'commands', name, 'manifest.json');
-    if (fs.existsSync(manifestPath)) {
-      const manifest = JSON.parse(read(manifestPath));
-      manifest.version = readLatestReleasedVersion(path.join(canonicalWorkflowsDir, name, 'CHANGELOG.md')) || manifest.version;
-      manifest.download_url = `https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/prompts/${name}.prompt.md`;
-      manifest.install_path = '.github/prompts/';
-      manifest.install_command = `mkdir -p .github/prompts && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/prompts/${name}.prompt.md -o .github/prompts/${name}.prompt.md`;
-      manifest.tooltip_text = description;
-      writeIfChanged(manifestPath, JSON.stringify(manifest, null, 2) + '\n');
-    }
   }
 }
 

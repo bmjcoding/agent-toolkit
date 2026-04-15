@@ -7,6 +7,7 @@ description: >
 lifecycle: stable
 disable-model-invocation: true
 argument-hint: "[path to SKILL.md, AGENT.md, or directory] [--format json]"
+lifecycle: stable
 ---
 
 # Review Skill / Agent Definition
@@ -71,6 +72,8 @@ python3 skills/review-skill/scripts/lint-definition.py $ARGUMENTS --format json
 For a directory, the script finds all `SKILL.md` and `AGENT.md` files recursively. Parse the JSON output — it contains structural errors (must fix) and quality warnings (should fix).
 
 If the linter finds structural errors (S-codes), stop here — the definition doesn't meet minimum bar. Report the errors and verdict: **REWRITE**.
+
+Canonical definitions must declare `lifecycle` in frontmatter. Treat missing or invalid values as structural failures. Valid values are exactly `stable`, `beta`, or `experimental`.
 
 **Q-warning handling**: Q-code warnings from the linter are actionable findings, not informational commentary. Each Q-warning must appear as a row in the Required Changes table (if the verdict is NEEDS WORK) with Priority P1. Do not silently absorb Q-warnings into the Lint Results section without surfacing them as Required Changes — this causes Q-warnings to be invisible to `improve` and allows quality regressions to persist across cycles.
 

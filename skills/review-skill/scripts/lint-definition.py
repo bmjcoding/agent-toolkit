@@ -37,6 +37,7 @@ Checks:
     S08  Referenced files (references/, scripts/) exist on disk
     S09  No unsupported frontmatter fields (skills only)
     S10  Name matches directory name
+    S11  Lifecycle is present and one of stable, beta, experimental
 
   Quality (warnings, errors in --strict):
     Q01  Description under 250 chars (truncation threshold in skill listing)
@@ -65,6 +66,7 @@ SUPPORTED_SKILL_FIELDS = {
     "name", "description", "argument-hint", "compatibility",
     "disable-model-invocation", "license", "metadata", "user-invocable",
     "context", "agent", "hooks", "paths", "shell", "model", "effort",
+    "lifecycle",
     "allowed-tools",  # commands support this
 }
 
@@ -97,6 +99,8 @@ AGENT_KNOWLEDGE_PHRASES = [
     "javascript is a",
     "typescript is a",
 ]
+
+VALID_LIFECYCLES = {"stable", "beta", "experimental"}
 
 
 def parse_args(argv):
@@ -214,6 +218,17 @@ def lint_file(filepath, file_type=None, base=None):
         dir_name = os.path.basename(os.path.dirname(filepath))
         if name and dir_name and name != dir_name and dir_name not in (".", ""):
             warn("S10", f"Name '{name}' doesn't match directory name '{dir_name}'")
+
+    # S11: Lifecycle present and valid
+    lifecycle = fm.get("lifecycle", "")
+    normalized_lifecycle = lifecycle.lower().strip() if isinstance(lifecycle, str) else ""
+    if not normalized_lifecycle:
+        error("S11", "Missing required field: lifecycle")
+    elif normalized_lifecycle not in VALID_LIFECYCLES:
+        error(
+            "S11",
+            f"Lifecycle '{lifecycle}' is invalid (must be one of: {', '.join(sorted(VALID_LIFECYCLES))})",
+        )
 
     # S04: Description present
     desc = fm.get("description", "")

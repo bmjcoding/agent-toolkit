@@ -1,118 +1,37 @@
 {
   "hooks": {
     "claude-code": {
-      "branch-guard": {
-        "lifecycle": "stable",
-        "availability": "supported"
-      },
-      "changelog-check": {
-        "lifecycle": "stable",
-        "availability": "supported"
-      },
-      "extract-handoff": {
-        "lifecycle": "stable",
-        "availability": "supported"
-      },
-      "inject-context": {
-        "lifecycle": "stable",
-        "availability": "supported"
-      },
-      "integrity-warn": {
-        "lifecycle": "stable",
-        "availability": "supported"
-      },
-      "pre-push-secrets": {
-        "lifecycle": "stable",
-        "availability": "supported"
-      },
-      "protect-config": {
-        "lifecycle": "stable",
-        "availability": "supported"
-      },
-      "toolkit-drift-check": {
-        "lifecycle": "stable",
-        "availability": "supported"
-      },
-      "toolkit-edit-reminder": {
-        "lifecycle": "stable",
-        "availability": "supported"
-      }
+      "branch-guard": { "lifecycle": "stable" },
+      "changelog-check": { "lifecycle": "stable" },
+      "extract-handoff": { "lifecycle": "stable" },
+      "inject-context": { "lifecycle": "stable" },
+      "integrity-warn": { "lifecycle": "stable" },
+      "pre-push-secrets": { "lifecycle": "stable" },
+      "protect-config": { "lifecycle": "stable" },
+      "toolkit-drift-check": { "lifecycle": "stable" },
+      "toolkit-edit-reminder": { "lifecycle": "stable" }
     },
     "github-copilot": {
-      "branch-guard": {
-        "lifecycle": "stable",
-        "availability": "supported"
-      },
-      "changelog-check": {
-        "lifecycle": "stable",
-        "availability": "supported"
-      },
-      "extract-handoff": {
-        "lifecycle": "stable",
-        "availability": "supported"
-      },
-      "inject-context": {
-        "lifecycle": "stable",
-        "availability": "supported"
-      },
-      "integrity-warn": {
-        "lifecycle": "stable",
-        "availability": "supported"
-      },
-      "pre-push-secrets": {
-        "lifecycle": "stable",
-        "availability": "supported"
-      },
-      "protect-config": {
-        "lifecycle": "stable",
-        "availability": "supported"
-      },
-      "toolkit-drift-check": {
-        "lifecycle": "stable",
-        "availability": "supported"
-      },
-      "toolkit-edit-reminder": {
-        "lifecycle": "stable",
-        "availability": "supported"
-      }
+      "branch-guard": { "lifecycle": "stable" },
+      "changelog-check": { "lifecycle": "stable" },
+      "extract-handoff": { "lifecycle": "stable" },
+      "inject-context": { "lifecycle": "stable" },
+      "integrity-warn": { "lifecycle": "stable" },
+      "pre-push-secrets": { "lifecycle": "stable" },
+      "protect-config": { "lifecycle": "stable" },
+      "toolkit-drift-check": { "lifecycle": "stable" },
+      "toolkit-edit-reminder": { "lifecycle": "stable" }
     },
     "openai-codex": {
-      "branch-guard": {
-        "lifecycle": "stable",
-        "availability": "unverified"
-      },
-      "changelog-check": {
-        "lifecycle": "stable",
-        "availability": "unverified"
-      },
-      "extract-handoff": {
-        "lifecycle": "stable",
-        "availability": "unverified"
-      },
-      "inject-context": {
-        "lifecycle": "stable",
-        "availability": "unverified"
-      },
-      "integrity-warn": {
-        "lifecycle": "stable",
-        "availability": "unverified"
-      },
-      "pre-push-secrets": {
-        "lifecycle": "stable",
-        "availability": "unverified"
-      },
-      "protect-config": {
-        "lifecycle": "stable",
-        "availability": "unverified"
-      },
-      "toolkit-drift-check": {
-        "lifecycle": "stable",
-        "availability": "unverified"
-      },
-      "toolkit-edit-reminder": {
-        "lifecycle": "stable",
-        "availability": "unverified"
-      }
+      "branch-guard": { "lifecycle": "experimental" },
+      "changelog-check": { "lifecycle": "experimental" },
+      "extract-handoff": { "lifecycle": "experimental" },
+      "inject-context": { "lifecycle": "experimental" },
+      "integrity-warn": { "lifecycle": "experimental" },
+      "pre-push-secrets": { "lifecycle": "experimental" },
+      "protect-config": { "lifecycle": "experimental" },
+      "toolkit-drift-check": { "lifecycle": "experimental" },
+      "toolkit-edit-reminder": { "lifecycle": "experimental" }
     }
   }
 }
