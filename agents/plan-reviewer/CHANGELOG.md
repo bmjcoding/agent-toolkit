@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-04-15
+
 ### Changed
 
 - Declared shared execution metadata in the canonical root definition so model tier, capabilities, subagent routing, and skill dependencies no longer need to be inferred from tool-specific wrappers.
@@ -67,11 +69,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/plan-reviewer-v1.4.2...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/plan-reviewer-v2.0.0...HEAD
+[2.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/agent/plan-reviewer-v2.0.0
 [1.4.2]: https://github.com/bmjcoding/agent-toolkit/compare/agent/plan-reviewer-v1.4.1...agent/plan-reviewer-v1.4.2
 [1.4.1]: https://github.com/bmjcoding/agent-toolkit/compare/agent/plan-reviewer-v4.0.1...agent/plan-reviewer-v1.4.1
 [4.0.1]: https://github.com/bmjcoding/agent-toolkit/compare/agent/plan-reviewer-v4.0.0...agent/plan-reviewer-v4.0.1
 [3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/plan-reviewer-v2.0.0...agent/plan-reviewer-v3.0.0
-[2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/plan-reviewer-v1.3.0...agent/plan-reviewer-v2.0.0
 [1.3.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/plan-reviewer-v1.2.0...agent/plan-reviewer-v1.3.0
 [1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/agent/plan-reviewer-v1.0.0
