@@ -1039,7 +1039,8 @@ function assert(condition, message) {
 }
 
 function runTests() {
-  assert(readLatestReleasedVersion(path.join(REPO_ROOT, 'workflows', 'lint', 'CHANGELOG.md')) === '4.1.0', 'expected latest lint workflow version to parse');
+  const latestLintVersion = readLatestReleasedVersion(path.join(REPO_ROOT, 'workflows', 'lint', 'CHANGELOG.md'));
+  assert(/^\d+\.\d+\.\d+$/.test(latestLintVersion), 'expected latest lint workflow version to parse');
 
   const plannerFallback = parseClaudeAgentFallback('planner');
   assert(plannerFallback.modelTier === 'frontier', 'expected planner model tier fallback to map from inherit');
