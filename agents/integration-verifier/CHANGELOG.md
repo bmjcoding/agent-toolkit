@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.0] - 2026-04-15
+
+### Added
+
+- Added structured `contracts_verified`, `contracts_failed`, `files_missing`,
+  `compilation_errors`, and `recommendations` fields to the structural-verification
+  handoff schema.
+
+### Changed
+
+- Declared canonical `lifecycle` metadata in the shared root definition so the distribution catalog can publish maturity separately from per-tool availability for this agent.
+- Documented phase-qualified alias naming for repeated verifier passes so structural and
+  cross-QA outputs can coexist safely in one session.
+- Updated the Claude adapter reference to the flattened `claude-code/agents/<name>.md`
+  layout used by the tool-specific generated surfaces.
+
 ## [2.0.0] - 2026-04-15
 
 ### Changed
@@ -84,7 +100,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/integration-verifier-v2.0.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/integration-verifier-v2.1.0...HEAD
+[2.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/integration-verifier-v2.0.0...agent/integration-verifier-v2.1.0
 [2.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/agent/integration-verifier-v2.0.0
 [1.4.2]: https://github.com/bmjcoding/agent-toolkit/compare/agent/integration-verifier-v1.4.1...agent/integration-verifier-v1.4.2
 [1.4.1]: https://github.com/bmjcoding/agent-toolkit/compare/agent/integration-verifier-v1.4.0...agent/integration-verifier-v1.4.1

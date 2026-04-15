@@ -1,6 +1,7 @@
 ---
 name: backend
 description: Lightweight backend workflow — implement with convention awareness, security review, and lint. Use when making backend-only changes without needing the full orchestrator pipeline.
+lifecycle: stable
 disable-model-invocation: true
 lifecycle: stable
 ---
@@ -8,10 +9,13 @@ lifecycle: stable
 # Backend Workflow
 
 Implement backend changes with security enforcement. Lighter than the full orchestration pipeline.
+Use this path only when the work stays inside backend scope. If the request crosses
+frontend/infra boundaries, needs planning, or includes commit/ship actions, escalate to
+the full orchestrator instead.
 
 ## Process
 
-1. **Implement**: Spawn `backend-engineer` with the task. It reads existing codebase conventions (error envelope, pagination, validation, service layer).
+1. **Implement**: Spawn `backend-engineer` with the concrete task, target files, and any API / schema / data constraints. It reads existing codebase conventions (error envelope, pagination, validation, service layer).
 
 2. **Review**: When implementation completes, spawn `security-engineer` to review. It runs STRIDE threat modeling, OWASP checks, and dependency evaluation on the changed files.
 
@@ -29,6 +33,7 @@ Present a brief summary: what was implemented, any security findings (severity +
 
 - Security review only covers changed files — pre-existing vulnerabilities in untouched files are not reported.
 - Max 1 retry on the fix loop; unresolved critical findings are surfaced to the user, not silently dropped.
+- Cross-domain requests are out of scope for this lightweight workflow. If the task also changes frontend, infra, release flow, or overall architecture, stop and use the full orchestrator.
 
 ## Task
 

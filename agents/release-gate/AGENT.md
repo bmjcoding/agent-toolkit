@@ -10,7 +10,7 @@ capabilities:
 skills:
   - prod-readiness
 adapters:
-  - claude-code/agents/release-gate/release-gate.md
+  - claude-code/agents/release-gate.md
   - github-copilot/agents/release-gate.agent.md
   - openai-codex/agents/release-gate.toml
 ---
@@ -84,12 +84,16 @@ VERDICT: NO-SHIP
 
 The `.verdict` field is still read by the orchestrator for ship/no-ship routing. Add it as a top-level field alongside the canonical schema fields: `"verdict": "CLEAR TO SHIP|SHIP WITH CAUTION|NO-SHIP"`.
 
+When this role is run multiple times in one session, expect the orchestrator to persist
+phase-qualified aliases such as `release-gate-iter1.json`, `release-gate-iter2.json`, and
+so on. The bare `release-gate.json` filename is compatibility-only.
+
 ## Gotchas
 
 - **Don't run tools you don't have config for**: if no linter config exists, skip that check entirely. Don't install tooling — that's not your job.
 - **Prior attempts matter**: always read `prior-attempts.md` first. Re-flagging a resolved issue wastes a quality loop iteration.
 - **NO-SHIP is final**: if you emit NO-SHIP, the orchestrator will not proceed to ship. Be certain — a false NO-SHIP blocks the entire pipeline.
-- **Verdict from handoff JSON**: The orchestrator reads the verdict from `.orchestrator/sessions/$SID/handoffs/release-gate.json` `.verdict` field — not from the free-text VERDICT line in your return message. Always ensure the handoff JSON is written before terminating. Both the handoff field and the free-text line are acceptable, but the handoff JSON is the authoritative source.
+- **Verdict from handoff JSON**: The orchestrator reads the verdict from the current pass handoff JSON `.verdict` field — not from the free-text VERDICT line in your return message. Always ensure the handoff JSON is written before terminating. Both the handoff field and the free-text line are acceptable, but the handoff JSON is the authoritative source.
 
 ## Untrusted Data Boundary
 

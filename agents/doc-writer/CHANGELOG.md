@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.0] - 2026-04-15
+
+### Changed
+
+- Declared canonical `lifecycle` metadata in the shared root definition so the distribution catalog can publish maturity separately from per-tool availability for this agent.
+
+- Switched doc-writer branch discovery to the remote default branch and updated repeated
+  reviewer lookup guidance to consume phase-qualified `design-architect*.json` handoffs.
+- Updated the Claude adapter reference to the flattened `claude-code/agents/<name>.md`
+  layout used by the tool-specific generated surfaces.
+
 ## [2.0.0] - 2026-04-15
 
 ### Changed
@@ -68,7 +79,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/doc-writer-v2.0.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/doc-writer-v2.1.0...HEAD
+[2.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/doc-writer-v2.0.0...agent/doc-writer-v2.1.0
 [2.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/agent/doc-writer-v2.0.0
 [1.2.3]: https://github.com/bmjcoding/agent-toolkit/compare/agent/doc-writer-v1.2.2...agent/doc-writer-v1.2.3
 [1.2.2]: https://github.com/bmjcoding/agent-toolkit/compare/agent/doc-writer-v1.2.1...agent/doc-writer-v1.2.2

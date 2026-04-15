@@ -6,6 +6,13 @@ lifecycle: stable
 
 # Design Authority — Generator Skill
 
+## Scope Check
+
+Decide the operating mode before loading references:
+1. **Existing design system / mature product** — preserve the established visual language and map this skill's rules onto the existing tokens and components. Do not restyle the product into toolkit defaults.
+2. **Small patch** — for one component, one state, or one token issue, skip the full pattern sweep and load only the relevant reference file(s).
+3. **New screen or broad redesign** — run the full design thinking step, then load routed references as needed.
+
 ## Design Thinking Step
 
 Before generating any UI code, explicitly state:
@@ -133,7 +140,7 @@ Full type scale → `references/typography.md`
 
 ## Reference File Routing
 
-Load the relevant reference based on what you're building:
+Load only the relevant reference based on what you're building:
 
 | Building... | Load |
 |-------------|------|

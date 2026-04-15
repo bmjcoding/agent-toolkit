@@ -2,11 +2,11 @@
 # backfill-changelog-tags.sh — Create per-component git tags from a CHANGELOG.md.
 #
 # Reads "## [X.Y.Z] - YYYY-MM-DD" headers from a CHANGELOG.md and tags the commit that
-# introduced each version header with {slug}-v{X.Y.Z}. Existing tags are skipped, not
-# modified.
+# introduced each version header with {full-slug}-v{X.Y.Z}. Existing tags are skipped,
+# not modified.
 #
 # Intended use: one-time migration from monolithic (`vX.Y.Z`) to per-component
-# (`{slug}-vX.Y.Z`) tagging. See references/migration.md.
+# (`{namespace}/{slug}-vX.Y.Z`) tagging. See references/migration.md.
 
 set -euo pipefail
 
@@ -19,7 +19,7 @@ USAGE:
   backfill-changelog-tags.sh --help
 
 OPTIONS:
-  --slug SLUG         Component slug (e.g., changelog, frankenstein). Required.
+  --slug SLUG         Full component slug (e.g., skill/changelog, agent/frankenstein). Required.
   --changelog PATH    Path to the CHANGELOG.md file. Required.
   --dry-run           Print tags that would be created without creating them.
   --help, -h          Show this help.
@@ -28,12 +28,14 @@ BEHAVIOR:
   1. Parse "## [X.Y.Z] - YYYY-MM-DD" headers from the CHANGELOG (skips [Unreleased]).
   2. For each version, use `git log -S "## [X.Y.Z]"` on the CHANGELOG path to find
      the commit that introduced that version header.
-  3. Tag that commit with {slug}-v{X.Y.Z}.
+  3. Tag that commit with {full-slug}-v{X.Y.Z}.
   4. Skip any version whose tag already exists (does not overwrite).
 
 AFTER SUCCESS:
   Run: git push origin --tags
-  Existing monolithic (vX.Y.Z) tags are not modified.
+  After all CHANGELOG footers reference canonical namespaced tags, you may delete
+  superseded flat component tags and redundant mirrored tool-local tags that no
+  longer have live references.
 
 EXIT CODES:
   0  success (or dry-run completed cleanly)

@@ -8,7 +8,7 @@ capabilities:
   - search
   - execute
 adapters:
-  - claude-code/agents/plan-reviewer/plan-reviewer.md
+  - claude-code/agents/plan-reviewer.md
   - github-copilot/agents/plan-reviewer.agent.md
   - openai-codex/agents/plan-reviewer.toml
 ---
