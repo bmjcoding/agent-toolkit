@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-04-15
+
 ### Changed
 
 - Declared shared execution metadata in the canonical root definition so model tier, capabilities, subagent routing, and skill dependencies no longer need to be inferred from tool-specific wrappers.
@@ -56,9 +58,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/design-architect-v1.2.1...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/design-architect-v2.0.0...HEAD
+[2.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/agent/design-architect-v2.0.0
 [1.2.1]: https://github.com/bmjcoding/agent-toolkit/compare/agent/design-architect-v1.2.0...agent/design-architect-v1.2.1
 [1.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/design-architect-v1.1.0...agent/design-architect-v1.2.0
 [3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/design-architect-v2.0.0...agent/design-architect-v3.0.0
-[2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/design-architect-v1.0.0...agent/design-architect-v2.0.0
 [1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/agent/design-architect-v1.0.0
