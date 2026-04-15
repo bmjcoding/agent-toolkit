@@ -1,6 +1,12 @@
 ---
 name: planner
 description: "Autonomous planning agent that reads codebases and decomposes tasks into parallel-group implementation plans with file ownership and integration contracts."
+model-tier: frontier
+capabilities:
+  - read
+  - write
+  - search
+  - execute
 adapters:
   - claude-code/agents/planner/planner.md
   - github-copilot/agents/planner.agent.md

@@ -8,11 +8,26 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- Added a GitHub Actions sync gate that reruns canonical adapter generation on matching
+  pushes and pull requests, fails stale PRs, and smoke-tests that generated tool
+  surfaces and `index.json` are present and internally consistent.
+
 ### Changed
 
 - Re-established repo-root `skills/` and new repo-root `rules/` as the canonical shared
   content surfaces, with `AGENTS.md` as the primary shared instruction source and
   `CLAUDE.md` as a compatibility shim.
+- Began ADR-0008 implementation: `index.json` is now generated as a tool-aware
+  distribution catalog with component versions, install metadata, bundle membership, and
+  checksums instead of a path-only array.
+- Updated the adapter sync generator to support canonical shared execution metadata in
+  root agent/workflow definitions when present, while transparently falling back to
+  existing adapter metadata during the migration.
+- Updated generated OpenAI Codex agent adapters to emit readable multiline TOML for
+  `developer_instructions` instead of a single escaped line, while preserving the exact
+  canonical instruction body in smoke tests.
 
 ## [4.1.0] - 2026-04-14
 

@@ -1,6 +1,15 @@
 ---
 name: frontend-engineer
 description: "Frontend engineer that builds React/Tailwind UI with design system awareness. Always loads the design-authority skill before writing UI code. Use for subtasks with .tsx, .css, or component/page files."
+model-tier: frontier
+capabilities:
+  - read
+  - write
+  - edit
+  - search
+  - execute
+skills:
+  - design-authority
 adapters:
   - claude-code/agents/frontend-engineer/frontend-engineer.md
   - github-copilot/agents/frontend-engineer.agent.md

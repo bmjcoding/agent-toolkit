@@ -1,6 +1,13 @@
 ---
 name: quality-engineer
 description: "Autonomous quality agent that remediates findings from specialist reviews, repairs broken integration contracts, and validates post-finalize changes. Replaces fixer, integration-repairer, and post-validator."
+model-tier: frontier
+capabilities:
+  - read
+  - write
+  - edit
+  - search
+  - execute
 adapters:
   - claude-code/agents/quality-engineer/quality-engineer.md
   - github-copilot/agents/quality-engineer.agent.md

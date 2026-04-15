@@ -1,6 +1,13 @@
 ---
 name: staff-engineer
 description: "General-purpose engineer for subtasks that are not clearly frontend or backend — infrastructure, configuration, shared types, scripts, tooling, CI/CD setup."
+model-tier: frontier
+capabilities:
+  - read
+  - write
+  - edit
+  - search
+  - execute
 adapters:
   - claude-code/agents/staff-engineer/staff-engineer.md
   - github-copilot/agents/staff-engineer.agent.md

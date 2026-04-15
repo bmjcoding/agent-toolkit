@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Declared shared execution metadata in the canonical root definition so model tier, capabilities, subagent routing, and skill dependencies no longer need to be inferred from tool-specific wrappers.
+
 - Moved the canonical agent definition and changelog to `agents/site-reliability-engineer/`; Claude, Copilot, and Codex files are now tool-specific adapters generated from the shared source.
 - Updated comparison links to use the shared `agent/site-reliability-engineer` tag namespace for this root canonical component.
 
