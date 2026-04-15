@@ -33,7 +33,7 @@ universal content shared across all three tools.
 ~/.claude/agents    -> /path/to/agent-toolkit/claude-code/agents
 ~/.claude/commands  -> /path/to/agent-toolkit/claude-code/commands
 ~/.claude/docs      -> /path/to/agent-toolkit/claude-code/docs
-~/.claude/hooks     -> /path/to/agent-toolkit/claude-code/hooks
+~/.claude/hooks     -> /path/to/agent-toolkit/hooks
 ~/.claude/rules     -> /path/to/agent-toolkit/rules
 ~/.claude/skills    -> /path/to/agent-toolkit/skills
 ```
@@ -218,11 +218,7 @@ If it still points to the old location, re-run `bash claude-code/scripts/install
 
 ### Hook scripts not firing
 
-After the restructure, hook scripts reference `agent-toolkit` paths internally. If a hook was pinned to a hardcoded `claude-toolkit/` path in a local customization, that reference needs updating. The canonical hook source files under `claude-code/hooks/` use `agent-toolkit` throughout.
-
-### `toolkit-drift-check` warnings about unrecognized paths
-
-The `COMPONENT_PATTERN` in `toolkit-drift-check.sh` was updated to match the new nested paths including root-level `skills/` and `rules/`. If you see false-positive drift warnings, confirm your local clone has the latest version of `claude-code/hooks/toolkit-drift-check/toolkit-drift-check.sh`.
+After the restructure, hook scripts reference `agent-toolkit` paths internally. If a hook was pinned to a hardcoded `claude-toolkit/` path in a local customization, that reference needs updating. The canonical hook source files now live under repo-root `hooks/` and use `agent-toolkit` throughout.
 
 ---
 

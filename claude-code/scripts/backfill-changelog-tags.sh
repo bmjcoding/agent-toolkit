@@ -311,13 +311,6 @@ emit_tag_command "pre-push-secrets" "hooks/pre-push-secrets" "1.0.0"
 # protect-config — 1.0.0
 emit_tag_command "protect-config" "hooks/protect-config" "1.0.0"
 
-# toolkit-drift-check — 1.0.1, 1.0.0
-emit_tag_command "toolkit-drift-check" "hooks/toolkit-drift-check" "1.0.0"
-emit_tag_command "toolkit-drift-check" "hooks/toolkit-drift-check" "1.0.1"
-
-# toolkit-edit-reminder — 1.0.0
-emit_tag_command "toolkit-edit-reminder" "hooks/toolkit-edit-reminder" "1.0.0"
-
 echo "# ============================================================"
 echo "# rules/ (4 components)"
 echo "# ============================================================"

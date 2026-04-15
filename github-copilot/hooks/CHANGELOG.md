@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Rebased the Copilot hook surface on the canonical root `hooks/` tree and documented the
+  generated manifest-plus-adapter layout as the intended runtime contract.
+- Aligned the retained hook inventory to the final 7-hook set after removing the
+  `toolkit-drift-check` and `toolkit-edit-reminder` maintenance hooks.
+
 ## [3.0.0] - 2026-04-12
 
 ### Added

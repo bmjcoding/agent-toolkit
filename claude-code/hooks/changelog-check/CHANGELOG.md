@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Tag-presence enforcement: the pre-push hook now verifies that any `## [X.Y.Z]` header newly promoted from `[Unreleased]` in this push has a corresponding per-component git tag (`<slug>-vX.Y.Z`). Push is blocked until the tag exists, preventing version headers from landing without an accompanying tag.
 
+### Changed
+
+- Canonical changelog ownership moved to root `hooks/changelog-check/CHANGELOG.md`. This Claude-local file now remains only as a historical redirect.
+
 ## [4.0.0] - 2026-04-13
 
 ### Removed
