@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Aligned exploration, planning, quality-loop repair ownership, post-validation, and
+  repeated-review handoff contracts with the canonical shared agent definitions.
+
 ## [5.0.0] - 2026-04-15
 
 ### Changed

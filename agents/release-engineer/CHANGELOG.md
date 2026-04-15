@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Resolved default-branch handling across PR-description, lint, and publish steps and
+  clarified that publish-phase-only runs must not perform version bumps.
+
 ## [5.0.0] - 2026-04-15
 
 ### Changed

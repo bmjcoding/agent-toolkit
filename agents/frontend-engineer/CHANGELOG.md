@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added an exploration mode that writes session-scoped frontend summaries and
+  inventories for the planner and downstream implementation agents.
+
+### Changed
+
+- Clarified that frontend write boundaries are mode-specific: exploration writes only
+  orchestrator context artifacts, while implementation remains constrained to
+  `owned_files`.
+
 ## [2.0.0] - 2026-04-15
 
 ### Changed

@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Remediation guidance now treats canonical `findings` as the primary upstream contract,
+  requires plan-backed repair scopes before editing, and explicitly allows only the
+  standard post-validation handoff emission in read-only mode.
+
 ## [2.0.0] - 2026-04-15
 
 ### Changed

@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Documented phase-qualified handoff aliases for repeated release-gate verdict passes so
+  iteration-specific reviews no longer rely on a single shared filename.
+
 ## [2.0.0] - 2026-04-15
 
 ### Changed

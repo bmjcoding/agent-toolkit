@@ -26,6 +26,19 @@ echo '<handoff_json>' | jq . > .orchestrator/sessions/$SID/handoffs/<agent-id>.j
 ```
 This ensures the handoff is available to agents that re-read the handoff directory later (integration-verifier, design-architect in re-check mode). Under context pressure, return messages from old turns become unavailable — on-disk handoffs are the only reliable source. If the SubagentStop hook is not writing handoffs automatically, this step is mandatory, not optional.
 
+**Repeated-role aliasing**: When the same role runs more than once in a session, persist a
+phase-qualified alias alongside the compatibility filename and have downstream readers use
+that alias or a matching glob. Examples:
+- `design-architect-review.json`
+- `design-architect-recheck-iter1.json`
+- `integration-verifier-structural-g2.json`
+- `integration-verifier-crossqa-contract-auth.json`
+- `release-gate-iter2.json`
+- `quality-engineer-post-validation.json`
+
+The hook-produced bare filename (`design-architect.json`, `integration-verifier.json`,
+etc.) is compatibility-only and must not be assumed to be unique.
+
 ## Phases
 
 ### 0. Lock
@@ -123,9 +136,9 @@ Launch exploration agents — ALL in ONE message, `run_in_background: true`. Use
 - `staff-engineer` — shared types, schemas, infra, config, build tools — **skip for small projects** (<20 source files or no infra/config layer). Fold its scope into the other two agents' prompts instead.
 
 **Cross-tool model tier mapping**:
-- `frontier tier` — Claude `inherit` / `opus`, Copilot `Claude Opus 4.5 (copilot)`, Codex `gpt-5.4`
-- `balanced tier` — Claude `sonnet`, Copilot `Claude Sonnet 4.5 (copilot)`, Codex `gpt-5.3-codex`
-- `fast tier` — Claude `haiku`, Copilot `Claude Haiku 4.5 (copilot)`, Codex `gpt-5.3-codex-spark`
+- `frontier tier` — Claude `inherit` / `opus`, Copilot `Claude Opus 4.6`, Codex `gpt-5.4`
+- `balanced tier` — Claude `sonnet`, Copilot `Claude Sonnet 4.5`, Codex `gpt-5.3-codex`
+- `fast tier` — Claude `haiku`, Copilot `Claude Haiku 4.5`, Codex `gpt-5.3-codex-spark`
 
 When the guidance below says `frontier tier`, `balanced tier`, or `fast tier`, use the matching model for the active tool surface.
 
@@ -161,15 +174,21 @@ Examples: scrollbar hide (CSS-only), 429 route fix (single-line), overflow fix (
 
 Estimated savings vs Sonnet across a full pipeline: ~$1.42 per run (12 agents × ~18K tokens × $6/Mtok delta).
 
-Tell each: "RESEARCH ONLY — do not write code." Each writes TWO files:
-1. `{domain}-summary.md` (max 100 lines) → `.orchestrator/context/` — for planner
-2. `{domain}-inventory.md` (max 500 lines — summarize patterns, don't enumerate every file) → `.orchestrator/context/` — for implementation agents
+Tell each: "RESEARCH ONLY — exploration mode. Do not write code. Write only the
+session-scoped summary and inventory files." Each writes TWO files under
+`.orchestrator/sessions/$SID/context/`:
+1. `frontend-summary.md`, `backend-summary.md`, or `staff-summary.md` (max 100 lines) — for planner
+2. `frontend-inventory.md`, `backend-inventory.md`, or `staff-inventory.md` (max 500 lines — summarize patterns, don't enumerate every file) — for implementation agents
 
 **WAIT for ALL to complete.** Before passing summaries to the planner, run a conflict-check: if two agents assert different facts about the same file or field (e.g., one says `acceptanceCriteria` is in frontmatter, another says it's in the body), read the actual file to resolve the conflict. Do this with a targeted Read call — do NOT route a conflicting inventory to the planner. A wrong assumption baked into the plan propagates to all implementation agents. Document the resolved fact in a brief inline note before proceeding to Phase 0.5. Inventories stay on disk for implementation agents and plan-reviewer.
 
 ### Autoresearch Scope Checklist (multi-repo toolkit pipelines)
 
-When dispatching `autoresearch-analyst` before the planner for multi-repo toolkit pipelines (e.g., tasks involving both the project repo and a secondary toolkit repo), include this required output checklist in the dispatch prompt:
+When dispatching `autoresearch-analyst` before the planner for multi-repo toolkit pipelines (e.g., tasks involving both the project repo and a secondary toolkit repo), dispatch it in **recon mode** and include this required output checklist in the dispatch prompt:
+
+> Recon mode. Pre-planner multi-repo checklist.
+>
+> Do NOT run the retro skill after task completion. Stop when the primary task is complete.
 
 > Your output MUST confirm all of the following. If any item cannot be confirmed, list it explicitly as a gap:
 > 1. Current hook paths in settings.json (flat vs subdirectory layout)
@@ -186,8 +205,22 @@ Before planning, present exploration findings to the user: key features discover
 
 ### 1. Plan
 
+Before spawning `planner`, ensure the session-scoped bootstrap context exists:
+```bash
+mkdir -p .orchestrator/sessions/$SID/context
+DEFAULT_BRANCH=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's|refs/remotes/origin/||' || echo main)
+MERGE_BASE=$(git merge-base HEAD "origin/$DEFAULT_BRANCH" 2>/dev/null || git rev-parse HEAD)
+git ls-files | sort > .orchestrator/sessions/$SID/context/file-structure.txt
+git log --oneline -20 > .orchestrator/sessions/$SID/context/git-history.txt
+{
+  git diff --name-status "$MERGE_BASE"..HEAD
+  git diff --name-status HEAD
+  git ls-files --others --exclude-standard
+} > .orchestrator/sessions/$SID/context/current-diff.txt
+```
+
 Spawn `planner` with the task AND exploration summaries. The planner also reads inventories on disk when reconciling conflicting contract shapes. When it completes:
-- Read `.orchestrator/sessions/$SID/plan.json`. Validate it has subtasks with ids, descriptions, owned_files, parallel_groups, and blockedBy arrays.
+- Read `.orchestrator/sessions/$SID/plan.json`. Validate it has top-level `session_id` and `parallel_groups`, plus subtasks with ids, descriptions, owned_files, `parallel_group`, `notes`, `scope_override_note`, and `blockedBy` arrays.
 - Validate JSON integrity: `jq . .orchestrator/sessions/$SID/plan.json > /dev/null 2>&1`. If this fails, the file is corrupted or truncated — re-run planner (counts as a revision against the 2-revision limit).
 - Spawn `plan-reviewer`. Read its handoff:
   - `"revise"` with critical/high issues → re-run planner with feedback (max 2 revisions). After 2 revisions, if still `revise`, present the blocking issues to the user and ask whether to proceed or abort.
@@ -288,7 +321,7 @@ Before launching, check for new dependencies: `git diff HEAD -- package.json pyp
 
 **Phase 3a** — Spawn in ONE message (all `background: true`):
 - `security-engineer`, `site-reliability-engineer`
-- For cross-QA: spawn ONE `integration-verifier` per integration contract. If the contract set is large (>5 contracts), split into two agents — one for type/schema contracts, one for mock/fixture alignment — to avoid context overflow. When splitting, use distinct description suffixes (e.g., 'Verify type/schema contracts', 'Verify mock/fixture alignment') so handoff files don't collide. Alternatively, merge outputs from both agents into a single consolidated handoff before seeding the backlog.
+- For cross-QA: spawn ONE `integration-verifier` per integration contract. If the contract set is large (>5 contracts), split into two agents — one for type/schema contracts, one for mock/fixture alignment — to avoid context overflow. Persist each pass to a phase-qualified alias such as `integration-verifier-crossqa-types.json` or `integration-verifier-crossqa-fixtures.json` before seeding the backlog.
 
 **Security-engineer fast-path mode** (REC-18): When the changeset consists solely of documentation, shell scripts, agent markdown, and hook logic (no new runtime dependencies, no web endpoints, no auth flows, no new user-facing data processing), include this scope-limiting instruction in the security-engineer dispatch prompt:
 
@@ -296,13 +329,13 @@ Before launching, check for new dependencies: `git diff HEAD -- package.json pyp
 
 The scope-limit is appropriate when all changed files are `.sh`, `.md`, `.json` (no `.ts`, `.py` web routes, no new package dependencies). In the 2026-04-12 pipeline the security-engineer consumed 90K tokens for a hooks+bash+docs changeset — fast-path mode targets ~50K for this risk profile.
 
-**Scope constraint (required)**: Include this instruction in EVERY review-phase dispatch prompt for security-engineer, site-reliability-engineer, and integration-verifier: "Review ONLY files listed in the owned_files for subtasks in this pipeline (from .orchestrator/plan.json). Do NOT review files from prior pipelines, prior sessions, or branches other than the current one." In multi-pipeline sessions, these agents load all accumulated inject-context summaries and will analyze the most recently seen codebase artifacts if not explicitly scoped. Extract the owned_files list with: `jq '[.subtasks[].owned_files[]] | unique' .orchestrator/sessions/$SID/plan.json`
+**Scope constraint (required)**: Include this instruction in EVERY review-phase dispatch prompt for security-engineer, site-reliability-engineer, and integration-verifier: "Review ONLY files listed in the owned_files for subtasks in this pipeline (from .orchestrator/sessions/$SID/plan.json). Do NOT review files from prior pipelines, prior sessions, or branches other than the current one." In multi-pipeline sessions, these agents load all accumulated inject-context summaries and will analyze the most recently seen codebase artifacts if not explicitly scoped. Extract the owned_files list with: `jq '[.subtasks[].owned_files[]] | unique' .orchestrator/sessions/$SID/plan.json`
 
 Wait for all to complete. Read handoffs — SRE may have fixed files inline.
 
-**Phase 3b** — Spawn `design-architect`. To identify the SRE handoff, read all `.orchestrator/sessions/$SID/handoffs/*.json` files and find the one containing observability or health-check findings in its schema (e.g., fields like `observability`, `health_checks`, or `sre_findings`). Pass that file's path so design-architect knows which files were already fixed and doesn't duplicate findings.
+**Phase 3b** — Spawn `design-architect`. To identify the SRE handoff, read all `.orchestrator/sessions/$SID/handoffs/*.json` files and select the one whose `agent_id` is `site-reliability-engineer` (or whose filename matches `site-reliability-engineer*.json`). Do NOT look for deprecated top-level arrays like `observability`, `health_checks`, or `sre_findings` — the SRE agent folds those categories into canonical `findings` plus `notes`. Pass that file's path so design-architect knows which files were already fixed and doesn't duplicate findings.
 
-**Note on design-architect double-spawn**: design-architect runs twice by design — Phase 3b reviews the raw implementation for architecture violations; Phase 4 step 4 re-runs it to verify that quality-loop fixes did not introduce new violations. The Phase 4 spawn must read the Phase 3b handoff (`.orchestrator/sessions/$SID/handoffs/design-architect.json`) to avoid re-reporting already-flagged findings.
+**Note on design-architect double-spawn**: design-architect runs twice by design — Phase 3b reviews the raw implementation for architecture violations; Phase 4 step 5 re-runs it to verify that quality-loop fixes did not introduce new violations. Persist the first pass as `design-architect-review.json` and later passes as `design-architect-recheck-iter<N>.json`. The Phase 4 spawn must read the Phase 3b alias to avoid re-reporting already-flagged findings.
 
 ### 4. Quality Loop
 
@@ -462,23 +495,32 @@ When all reviewers complete:
    print(f'backlog seed: {len(new_agent)} agent + {len(new_human)} human rows added')
    PY
    ```
-3. **Route fixes by domain** — do NOT send all findings to quality-engineer blindly:
+3. **Establish repair ownership before dispatching** — every Phase 4 fix agent must have a plan-backed write scope. For each repair bundle, either:
+   - reuse the original subtask if all target files already sit inside its `owned_files`, or
+   - append a dedicated repair subtask to `.orchestrator/sessions/$SID/plan.json` with a new id (for example `QR-<iteration>-<n>`), explicit `agent`, `owned_files`, `parallel_group`, `blockedBy`, `notes`, and `scope_override_note`
+   Dispatch the fix agent against that original or repair subtask id. Never rely on free-text prompt notes alone to grant write permission.
+4. **Route fixes by domain** — do NOT send all findings to quality-engineer blindly:
    - UI/design/frontend findings → spawn `frontend-engineer` with fix instructions (has design-authority skill, knows the design system)
    - Design-architect `structural-lint` and `ui-*` findings → spawn `frontend-engineer` (has design-authority skill). Architecture, data-model, naming, patterns → `quality-engineer`.
    - Backend/API findings → spawn `backend-engineer` with fix instructions (has backend patterns context)
    - Security, infra, cross-cutting, or ambiguous findings → spawn `quality-engineer` in remediation mode
    Partition by file ownership — each agent gets only the findings for files in its domain. Run domain agents concurrently.
    **Cross-boundary impact**: When a finding changes a response format, data shape, or shared type, note the downstream consumers in the fix instructions. Tell the fix agent: "This change affects [consuming files] — verify or flag them." If the consumer is in a different domain, add a finding for that domain's agent too. Cross-boundary cascade findings count as sub-findings within the same iteration — cap cascades at 1 level (do not re-cascade across boundaries more than once per loop).
-   **Scope override protocol**: When granting a fix agent explicit permission to modify a file marked out-of-scope in `plan.json`, include a labeled block in the dispatch prompt: `SCOPE OVERRIDE: <what file> — <why the exception is warranted>`. After dispatching, immediately update the corresponding `plan.json` subtask `notes` field with the same rationale via Bash: `jq '.subtasks[] |= if .id == "<id>" then . + {"scope_override_note": "<rationale>"} else . end' .orchestrator/sessions/$SID/plan.json > /tmp/plan.tmp && mv /tmp/plan.tmp .orchestrator/sessions/$SID/plan.json`. This keeps plan.json the authoritative scope record — stale notes mislead agents that re-read it during integration-repair and re-verification.
+   **Scope override protocol**: When granting a fix agent explicit permission to modify a file marked out-of-scope in `plan.json`, include a labeled block in the dispatch prompt: `SCOPE OVERRIDE: <what file> — <why the exception is warranted>`. After dispatching, immediately update the corresponding `plan.json` repair or original subtask with the same rationale via Bash:
+   ```bash
+   jq '.subtasks[] |= if .id == "<id>" then .scope_override_note = "<rationale>" | .notes = ((.notes // []) + ["SCOPE OVERRIDE: <rationale>"]) else . end' \\
+     .orchestrator/sessions/$SID/plan.json > /tmp/plan.tmp && mv /tmp/plan.tmp .orchestrator/sessions/$SID/plan.json
+   ```
+   This keeps `plan.json` the authoritative scope record — stale notes mislead agents that re-read it during remediation and re-verification.
    **Rename/grep-first rule**: When a fix agent's finding includes a rename (field name, constant, class name, or any identifier that appears across files), the dispatch prompt MUST include: "Before editing, run `grep -r '<old_name>' <project_root>` to find ALL occurrences including CHANGELOG, README, and docs files. Fix every occurrence in a single pass." Fix agents that receive only a named set of files will miss occurrences in unlisted files (CHANGELOG, migration guides, ADRs). The grep step is mandatory for all rename findings — add it to every fix-agent dispatch prompt when the finding type is a rename.
 
    **README.md in schema-inventory scope** (REC-13): When dispatching explorer-schema (or any exploration agent performing a schema/field occurrence inventory for rename operations), explicitly include `README.md` in the grep scope. The default `grep -rn` over the toolkit directory tree has historically missed `README.md` occurrences (ST-07 gap-patch incident). Add to every schema-inventory dispatch prompt: "Explicitly include README.md in your grep scope. Run: `grep -rn '<field_name>' . --include='*.md' --include='*.json' --include='*.sh' --include='*.py'` and confirm README.md was checked in your handoff output."
-4. **Re-verify**: After fixes, spawn `design-architect` to confirm fixes didn't introduce new violations. Pass `.orchestrator/sessions/$SID/context/prior-attempts.md` path so design-architect reads resolved findings first and avoids re-reporting them.
-5. **Gate** (max 3 iterations):
+5. **Re-verify**: After fixes, spawn `design-architect` to confirm fixes didn't introduce new violations. Pass `.orchestrator/sessions/$SID/context/prior-attempts.md` path so design-architect reads resolved findings first and avoids re-reporting them. Persist this pass to `design-architect-recheck-iter<N>.json`.
+6. **Gate** (max 3 iterations):
    - Spawn `release-gate` → parse VERDICT
    - CLEAR TO SHIP / SHIP WITH CAUTION → break
    - NO-SHIP → route remaining findings by domain again → repeat
-   After each iteration, write resolved findings to `.orchestrator/sessions/$SID/context/prior-attempts.md` via Bash so future iterations (and quality-engineer/release-gate) can skip already-fixed items.
+   After each iteration, write resolved findings to `.orchestrator/sessions/$SID/context/prior-attempts.md` via Bash so future iterations (and quality-engineer/release-gate) can skip already-fixed items. Persist each verdict pass to `release-gate-iter<N>.json`.
 
 ### 5. Finalize
 
@@ -503,9 +545,9 @@ fi
 
 **Post-delivery changelog rule**: After Phase 5a completes, any agent that commits code outside the main delivery pipeline (quality-fix agents, UI-iteration agents, hotfix agents) MUST be followed by a `release-engineer` dispatch to update CHANGELOG.md before the next commit. Do NOT batch post-delivery commits and update the changelog only at the final gate — this causes changelog entries to be missing for commits that landed between the delivery pipeline and the final gate. If a user commits inline (bypassing `release-engineer`), dispatch `release-engineer` immediately to backfill before proceeding to Phase 6.
 
-**5b**: Spawn `quality-engineer` in post-validation mode with this briefing: "POST-VALIDATION IS READ-ONLY for codebase and service files. Do NOT modify source code, test files, scripts, or configuration. You ARE permitted — and required — to write your handoff file to .orchestrator/handoffs/quality-engineer-post-validation.json. Read the compiled artifacts and run checks only." Wait. When reading the post-validation report, note: uncommitted doc files (CHANGELOG.md, docs/adr/*.md, README.md) after doc-writer are EXPECTED — do not flag these as findings. If post-validation reports non-doc failures (build errors, test failures, unexpected file changes), report to user and ask whether to re-enter the quality loop or proceed to Ship. Do not silently advance to Phase 6.
+**5b**: Spawn `quality-engineer` in post-validation mode with this briefing: "POST-VALIDATION IS READ-ONLY for repository files. Do NOT modify source code, test files, scripts, or configuration. Emit the standard handoff block only. Read the compiled artifacts and run checks only." Wait. Persist this pass as `.orchestrator/sessions/$SID/handoffs/quality-engineer-post-validation.json`. When reading the post-validation report, note: uncommitted doc files (CHANGELOG.md, docs/adr/*.md, README.md) after doc-writer are EXPECTED — do not flag these as findings. If post-validation reports non-doc failures (build errors, test failures, unexpected file changes), report to user and ask whether to re-enter the quality loop or proceed to Ship. Do not silently advance to Phase 6.
 
-**Handoff fallback**: If the post-validation agent's handoff file is missing (agent refused to write it despite the explicit carve-out), parse the `` ```handoff `` block from its return message. Construct the handoff JSON manually from message content if needed — do not block Phase 6 due to a missing handoff file when the agent's message clearly shows a PASS verdict.
+**Handoff fallback**: If the post-validation alias file is missing, parse the `` ```handoff `` block from the agent's return message and persist it to `.orchestrator/sessions/$SID/handoffs/quality-engineer-post-validation.json`. Do not block Phase 6 due to a missing alias file when the agent's message clearly shows a PASS verdict.
 
 ### 6. Ship
 
@@ -530,7 +572,7 @@ fi
 
 Before staging any files, check whether any CHANGELOG.md files in the plan's touched component scope have a non-empty ## [Unreleased] section.
 
-Reference skill: `skills/changelog/SKILL.md` in the toolkit repo when available; otherwise fall back to `.agents/skills/changelog/SKILL.md`, `.claude/skills/changelog/SKILL.md`, `.codex/skills/changelog/SKILL.md`, `~/.agents/skills/changelog/SKILL.md`, `~/.claude/skills/changelog/SKILL.md`, or `~/.codex/skills/changelog/SKILL.md`. Load it to apply the canonical SemVer bump table and 4-step [Unreleased] promotion workflow.
+Load the `changelog` skill to apply the canonical SemVer bump table and 4-step [Unreleased] promotion workflow.
 
 \\`\\`\\`bash
 # Identify CHANGELOG.md files in owned scope from plan.json
@@ -566,7 +608,7 @@ Then stage and commit all changes. Stop after the last commit — do NOT push or
 
 Wait for handoff. If status is `needs_human` or `failed`, report to user and stop — do not proceed to 6b.
 
-**6b. Publish phase** — spawn `release-engineer` with prompt: `"Publish phase only. All commits are already structured. Push to origin and create the PR. Do NOT re-commit anything. Read .orchestrator/sessions/$SID/context/pr-description.md for the PR body, or write a new one from git log if it does not exist. Version bump if requested in the original task."`
+**6b. Publish phase** — spawn `release-engineer` with prompt: `"Publish phase only. All commits are already structured. Push to origin and create the PR. Do NOT re-commit anything. Do NOT bump versions in this phase. If versioning was requested, it must already be complete from 6a. Read .orchestrator/sessions/$SID/context/pr-description.md for the PR body, or write a new one from git log if it does not exist."`
 
 This split makes each phase independently recoverable: if 6b fails after a successful 6a, re-dispatch 6b without re-running commits.
 
@@ -583,10 +625,10 @@ This split makes each phase independently recoverable: if 6b fails after a succe
 ```bash
 # IDs referenced in this pipeline's plan
 jq -r '[.subtasks[].description] | @tsv' .orchestrator/sessions/$SID/plan.json \\
-  | grep -oE 'CLAUD-[0-9]+|sec-[0-9]+|PROD-[0-9]+|[A-Z]{3,}-[0-9]+' | sort -u
+  | grep -oE 'CLAUD-[0-9]+|HB-[0-9]+|sec-[0-9]+|PROD-[0-9]+|[A-Z]{3,}-[0-9]+' | sort -u
 
 # IDs present in the pipeline backlog
-grep -oE 'CLAUD-[0-9]+|sec-[0-9]+|PROD-[0-9]+|[A-Z]{3,}-[0-9]+' .orchestrator/backlog.md | sort -u
+grep -oE 'CLAUD-[0-9]+|HB-[0-9]+|sec-[0-9]+|PROD-[0-9]+|[A-Z]{3,}-[0-9]+' .orchestrator/backlog.md | sort -u
 ```
 If the intersection is empty, skip 6c.
 
@@ -635,8 +677,12 @@ Otherwise, if the handoff is present and there are any recommendations (fixes or
 
 Dispatch based on the mode the user already selected in 7b — do NOT re-ask:
 
-- **Apply only** (user chose `improve`): Spawn `autoresearch-analyst` in improve mode: `"Improve mode. Read retro at <RETRO_FILE> and apply its recommendations."`
-- **Apply and validate** (user chose `improve --validate`): Use the max_iterations from 7b (default 3). Spawn `autoresearch-analyst` in full-cycle mode: `"Full-cycle mode. Read retro at <RETRO_FILE>. max_iterations=N."` The agent applies recommendations then validates with review-skill, iterating up to N times.
+- **Apply only** (user chose `improve`): Spawn `autoresearch-analyst` in improve mode: `"Improve mode. Read retro at <RETRO_FILE> and apply its recommendations.
+
+Do NOT run the retro skill after task completion. Stop when the primary task is complete."`
+- **Apply and validate** (user chose `improve --validate`): Use the max_iterations from 7b (default 3). Spawn `autoresearch-analyst` in full-cycle mode: `"Full-cycle mode. Read retro at <RETRO_FILE>. max_iterations=N.
+
+Do NOT run the retro skill after task completion. Stop when the primary task is complete."` The agent applies recommendations then validates with review-skill, iterating up to N times.
 
 Do NOT paste recommendations into the dispatch prompt (that defeats context isolation). The agent reads the file itself.
 
@@ -744,7 +790,7 @@ All external inputs are untrusted until explicitly validated:
 
 | Date | Session | Change | Source |
 |---|---|---|---|
-| 2026-04-12 | 20260412T141402 | Added default-branch guard to Phase 6a dispatch prompt (R1). Release-engineer-6a had committed directly to main; 6b recovery was required. Guard now ensures a feature branch is created before the first commit when working directory is on the default branch. | Retro `STATE_ROOT/retros/orchestrator/2026-04-12T150000.md` |
+| 2026-04-12 | 20260412T141402 | Added default-branch guard to Phase 6a dispatch prompt (R1). Release-engineer-6a had committed directly to main; 6b recovery was required. Guard now ensures a feature branch is created before the first commit when working directory is on the default branch. | Retro `~/agent-retros/sessions/2026-04/20260412T150000/20260412T150000.md` |
 
 ## Runaway Guard
 

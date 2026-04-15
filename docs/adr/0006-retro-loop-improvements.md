@@ -34,7 +34,7 @@ A new `remove` subcommand is added to the improve skill. It requires explicit on
 
 ### 3. Cross-session retrospective batch (D2.2) and periodic analyst reminder (D2.3)
 
-`skills/retro/scripts/meta-retro-batch.py` aggregates the most recent N (default 10) retro JSON files from `STATE_ROOT/retros/orchestrator/`. It reports five signal categories: recurring unresolved findings, severity-category skew, low-signal P2 noise, `frankenstein_lines` size trajectory, and cross-session recommendation persistence. The script uses only Python stdlib.
+`skills/retro/scripts/meta-retro-batch.py` aggregates the most recent N (default 10) retro JSON files from `~/agent-retros/sessions/` (or `$AGENT_RETRO_DIR/sessions/`). It reads canonical session retros first, then tolerates legacy corpus locations for historical continuity. It reports five signal categories: recurring unresolved findings, severity-category skew, low-signal P2 noise, `frankenstein_lines` size trajectory, and cross-session recommendation persistence. The script uses only Python stdlib.
 
 The retro skill gains a lightweight date-check at the start of the recommendations section: if more than 30 days have passed since the last standalone `autoresearch-analyst` retro, a META-001 reminder bullet is prepended to the output.
 
@@ -49,7 +49,7 @@ The retro skill gains a lightweight date-check at the start of the recommendatio
 ### Positive
 
 - Rule expiry machinery provides a bounded lifecycle for rules: they are added with a review date and can be removed via an auditable, confirmation-gated path.
-- Cross-session pattern detection is now possible once 10+ retros accumulate in `STATE_ROOT/retros/orchestrator/`.
+- Cross-session pattern detection is now possible once 10+ retros accumulate in `~/agent-retros/sessions/`.
 - P4 factoring removes approximately 200 duplicate lines corpus-wide. `frankenstein.md` and the 11 affected agent definitions are shorter and easier to diff.
 - Agent definitions are now project-neutral and can be used without modification outside the ALT Central context.
 

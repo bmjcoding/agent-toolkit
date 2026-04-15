@@ -11,17 +11,22 @@ argument-hint: "[run-type or orchestrator-dir]"
 
 Run a structured retrospective grounded in actual artifacts. Read everything before analyzing.
 
-Resolve `STATE_ROOT` once at the start of the run. Prefer, in order: `.agents/`,
-`.claude/`, `.codex/`, `~/.agents/`, `~/.claude/`, `~/.codex/`. Use the first existing
-directory. If none exist and the workflow needs persistent local state, create `.agents/`
-in the current project and use that as `STATE_ROOT`.
+Resolve `STATE_ROOT` once at the start of the run for metadata and memory lookups. Prefer,
+in order: `.agents/`, `.claude/`, `.codex/`, `~/.agents/`, `~/.claude/`, `~/.codex/`.
+Use the first existing directory. If none exist and the workflow needs persistent local
+state, create `.agents/` in the current project and use that as `STATE_ROOT`.
+
+Resolve `RETRO_ROOT` once at the start of the run for retro persistence:
+- `RETRO_ROOT="${AGENT_RETRO_DIR:-$HOME/agent-retros}"`
+- Do not discover or invent a project-local retro root
+- Legacy retro roots from prior tool-specific storage, resolved `STATE_ROOT` retro dirs, and flat subject directories stay readable for historical lookups, but new retro writes always go to `RETRO_ROOT`
 
 **Depth calibration**: Scale the retro to the run. Use this default:
 - **Lightweight** (single agent, <5 files changed, no errors): sections 3.1, 3.2, 3.7, summary table. Skip verify-claims and parse-metrics scripts. Still save and check trends. Recommendations in 3.7 must derive only from findings in 3.1 and 3.2 — do not invent root causes from sections that were skipped.
 - **Standard** (single agent/subagent with errors or rework, or any skill-based workflow): all applicable sections (3.5 only if multi-agent), run verify-claims.
 - **Full** (orchestration/pipeline, or any run with >3 findings): all sections, all scripts, trends.
 
-Always save to `STATE_ROOT/retros/` regardless of depth — even lightweight retros contribute to trend analysis.
+Always save to `~/agent-retros/` (or `$AGENT_RETRO_DIR`) regardless of depth — even lightweight retros contribute to trend analysis.
 
 Before writing, read the example matching your run type from `references/example-output.md` — Example A for single-agent, Example B for orchestration. For subagent runs, use Example A as the closest match — substitute subagent dispatch quality analysis for skill effectiveness.
 
@@ -201,10 +206,10 @@ Compare intent to outcome:
 **D2.3 — Periodic analyst reminder (runs for every retro invocation):**
 
 ```bash
-RETRO_DIR=STATE_ROOT/retros/agent-reviews/autoresearch-analyst
+RETRO_DIR="${AGENT_RETRO_DIR:-$HOME/agent-retros}/agent-reviews/autoresearch-analyst"
 if [ -d "$RETRO_DIR" ]; then
-  LAST_FILE=$(ls "$RETRO_DIR"/*.json "$RETRO_DIR"/*.md 2>/dev/null \
-    | grep -v '/improve' | sort | tail -1)
+  LAST_FILE=$(find "$RETRO_DIR" -type f \( -name "*.json" -o -name "*.md" \) \
+    ! -name "*-improve.json" ! -name "history.jsonl" 2>/dev/null | sort | tail -1)
   if [ -n "$LAST_FILE" ]; then
     LAST_DATE=$(basename "$LAST_FILE" | grep -oE '[0-9]{4}-[0-9]{2}-[0-9]{2}' | head -1)
     TODAY=$(date +%Y-%m-%d)
@@ -217,7 +222,7 @@ if [ -d "$RETRO_DIR" ]; then
 fi
 ```
 
-If the script emits a META-001 line (threshold: more than 30 days since last standalone retro), prepend it as the first bullet in the 3.7 output. If `STATE_ROOT/retros/agent-reviews/autoresearch-analyst/` does not exist or contains no matching files, skip silently — this check costs one Bash call and never blocks the retro.
+If the script emits a META-001 line (threshold: more than 30 days since last standalone retro), prepend it as the first bullet in the 3.7 output. If `~/agent-retros/agent-reviews/autoresearch-analyst/` (or `$AGENT_RETRO_DIR/...`) does not exist or contains no matching files, skip silently — this check costs one Bash call and never blocks the retro.
 
 For each recommendation:
 - **What**: The specific change
@@ -243,9 +248,9 @@ Common retro mistakes — read before analyzing:
 
 ## Finalization
 
-After completing the analysis, read `references/finalization.md` and follow all steps in order: validation, output formatting with summary table, trend analysis, and saving to `STATE_ROOT/retros/`. All steps must complete before presenting the improve prompt.
+After completing the analysis, read `references/finalization.md` and follow all steps in order: validation, output formatting with summary table, trend analysis, and saving to `RETRO_ROOT`. All steps must complete before presenting the improve prompt.
 
-Steps in order: (1) write draft to temp path (e.g., `/tmp/retro-draft-TIMESTAMP.md`) → (2) run verify-claims → (3) fix failures → (4) format output with summary table → (5) check trends → (6) save final to `STATE_ROOT/retros/{subject}/`.
+Steps in order: (1) write draft to temp path (e.g., `/tmp/retro-draft-TIMESTAMP.md`) → (2) run verify-claims → (3) fix failures → (4) format output with summary table → (5) check trends → (6) save final to `RETRO_ROOT/<type-scoped-retro-dir>/`.
 
 **Rule-expiry surfacer (runs after step 1):** Check whether `STATE_ROOT/metadata/rule-expiry.json` exists. If it does, find all entries where `status == "active"` and `review_by < today`. If any exist, append a single P2 recommendation to the 3.7 Recommendations section:
 
@@ -267,6 +272,6 @@ If there are 0 `fix` recommendations and only `pattern` recommendations, note:
 
 If there are 0 recommendations of any type, skip the improve prompt entirely.
 
-**Important**: The user must invoke `improve` directly — do not attempt to apply recommendations yourself or delegate to an agent. The `improve` skill has its own accept/revert verification loop and saves the outcome to `STATE_ROOT/retros/` for trend tracking. Applying fixes through any other mechanism (agent dispatch, manual edits) bypasses verification and outcome tracking.
+**Important**: The user must invoke `improve` directly — do not attempt to apply recommendations yourself or delegate to an agent. The `improve` skill has its own accept/revert verification loop and saves the outcome to `RETRO_ROOT` for trend tracking. Applying fixes through any other mechanism (agent dispatch, manual edits) bypasses verification and outcome tracking.
 
 $ARGUMENTS

@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Updated follow-up workflow wording to refer to `improve` generically so the shared skill text does not assume Claude slash-command syntax.
+- Normalized retro storage guidance around `~/agent-retros`, clarified compatibility
+  handling for legacy roots, and tightened script-availability expectations for the new
+  runtime layout.
 
 ## [5.0.0] - 2026-04-14
 

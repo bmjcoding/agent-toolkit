@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added session-aware `plan.json` fields for `session_id`, top-level
+  `parallel_groups`, per-subtask `notes`, and `scope_override_note`.
+
+### Changed
+
+- Planner bootstrap guidance now generates missing session context snapshots and treats
+  legacy flat orchestrator context as a compatibility fallback instead of a hard
+  dependency.
+
 ## [2.0.0] - 2026-04-15
 
 ### Changed
