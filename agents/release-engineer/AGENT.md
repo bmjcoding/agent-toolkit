@@ -48,17 +48,23 @@ Run `git rev-parse --abbrev-ref HEAD`. If on the default branch:
 - `git switch -c <branch-name>`
 - Never commit or push directly to the default branch.
 
-## Step 2: Pre-commit: Changelog Generation
+## Step 2: Pre-commit: Changelog Promotion
 
-Before staging files for commit, run the changelog skill:
+Before staging files for a PR-bound commit, run the changelog skill against every
+touched component changelog:
 
-1. Identify changes since the last version tag (`git describe --tags --abbrev=0` or `git log`)
-2. Load the `changelog` skill
-3. Let the skill classify commits and determine the SemVer bump
-4. The skill writes the new CHANGELOG.md entry
-5. Stage CHANGELOG.md alongside all other changes
+1. Identify the touched component `CHANGELOG.md` files in scope.
+2. Load the `changelog` skill.
+3. If a touched component's `## [Unreleased]` section is non-empty and this run will
+   open or update a PR, promote that section into `## [X.Y.Z] - YYYY-MM-DD` using the
+   skill's SemVer bump rules and leave behind a fresh empty `## [Unreleased]`.
+4. If this run is only recording branch-local work and will NOT open a PR yet, append
+   under `## [Unreleased]` instead of promoting.
+5. Stage the resulting `CHANGELOG.md` files alongside all other changes.
 
-If no changelog skill is available or the repo has no CHANGELOG.md, skip this step silently.
+PR-bound runs must not leave touched component changes sitting under a non-empty
+`## [Unreleased]` section. CI validates this on PR open/reopen. If no changelog skill is
+available or the repo has no component changelogs, skip this step silently.
 
 ## Step 3: Structure Commits
 
@@ -80,9 +86,13 @@ Write to `.orchestrator/sessions/$SID/context/pr-description.md`:
 - Resolve `DEFAULT_BRANCH` as in Step 1 if it is not already set, then read `.orchestrator/sessions/$SID/plan.json`, commit history (`git log --oneline $(git merge-base HEAD "${DEFAULT_BRANCH:-main}" 2>/dev/null || git log --oneline -20 | tail -1 | awk '{print $1}')..HEAD`), and quality handoffs
 - Format: Summary, Changes (grouped by area), Architecture Decisions, Testing, Checklist (tests/secrets/docs/breaking changes)
 
-## Step 5: Version Bump (if requested in task prompt)
+## Step 5: Manifest Version Bump (if requested in task prompt)
 
-**Versioning must happen BEFORE PR creation** so CI on the initial PR sees the bumped version in the manifest.
+CHANGELOG promotion in Step 2 is the default PR-time version signal for toolkit
+components. Step 5 is only for repositories that also carry a separate manifest/version
+file (`package.json`, `pyproject.toml`, `VERSION`, etc.).
+
+**Manifest versioning must happen BEFORE PR creation** so CI on the initial PR sees the bumped value in the manifest.
 
 1. Find version file: `package.json`, `pyproject.toml`, `Cargo.toml`, `version.txt`, or `VERSION`
 2. Determine bump type: breaking → major, feat → minor, fix/docs/refactor → patch

@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Declared canonical `lifecycle` metadata in the shared root definition so the distribution catalog can publish maturity separately from per-tool availability for this agent.
+- Release-engineer now treats PR-bound changelog promotion as part of Step 2: touched
+  components must be moved out of `## [Unreleased]` into a versioned section before the
+  PR is opened, while branch-local work can still accumulate under `## [Unreleased]`
+  until that promotion point.
 
 - Resolved default-branch handling across PR-description, lint, and publish steps and
   clarified that publish-phase-only runs must not perform version bumps.
