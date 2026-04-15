@@ -36,4 +36,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/audit-v3.0.0...HEAD
 [3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/audit-v2.0.0...claude-code/audit-v3.0.0
 [2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/audit-v1.0.0...claude-code/audit-v2.0.0
-[1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/audit-v1.0.0
+[1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/claude-code/audit-v1.0.0
