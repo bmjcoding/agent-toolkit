@@ -8,6 +8,14 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [4.2.1] - 2026-04-15
+
+### Fixed
+
+- Updated the generated-asset smoke test to fall back to a built-in filesystem scan
+  when `rg` is unavailable, so `validate-generated-assets` passes on GitHub runners
+  without ripgrep installed.
+
 ## [4.2.0] - 2026-04-15
 
 ### Added
@@ -200,7 +208,8 @@ No action required for users who install via symlinks (`./claude-code/scripts/in
 3. Re-run the install script: `./claude-code/scripts/install.sh`.
 4. Verify: `./claude-code/scripts/install.sh --check`.
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/v4.2.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/v4.2.1...HEAD
+[4.2.1]: https://github.com/bmjcoding/agent-toolkit/compare/v4.2.0...v4.2.1
 [4.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/v4.1.0...v4.2.0
 [4.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/v4.0.0...v4.1.0
 [4.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/v3.2.0...v4.0.0

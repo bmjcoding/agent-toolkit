@@ -41,6 +41,83 @@ function runNodeScript(scriptPath, extraArgs = []) {
   });
 }
 
+function globToRegExp(pattern) {
+  let regexBody = '';
+
+  for (let i = 0; i < pattern.length; i += 1) {
+    const char = pattern[i];
+    const next = pattern[i + 1];
+
+    if (char === '*' && next === '*') {
+      regexBody += '.*';
+      i += 1;
+      continue;
+    }
+
+    if (char === '*') {
+      regexBody += '[^/]*';
+      continue;
+    }
+
+    regexBody += /[.+^${}()|[\]\\]/.test(char) ? `\\${char}` : char;
+  }
+
+  return new RegExp(`^${regexBody}$`);
+}
+
+function parseExcludeGlobs(extraArgs) {
+  const excludes = [];
+  for (let i = 0; i < extraArgs.length; i += 1) {
+    if (extraArgs[i] !== '--glob') continue;
+    const value = extraArgs[i + 1];
+    if (!value || !value.startsWith('!')) continue;
+    excludes.push(globToRegExp(value.slice(1)));
+    i += 1;
+  }
+  return excludes;
+}
+
+function isExcluded(relPath, excludePatterns) {
+  return excludePatterns.some(pattern => pattern.test(relPath));
+}
+
+function walkFiles(relPath, excludePatterns, matches) {
+  const absolutePath = path.join(REPO_ROOT, relPath);
+  if (!fs.existsSync(absolutePath)) return;
+
+  const stat = fs.statSync(absolutePath);
+  if (stat.isDirectory()) {
+    for (const entry of fs.readdirSync(absolutePath, { withFileTypes: true })) {
+      const childRelPath = path.posix.join(relPath, entry.name);
+      if (isExcluded(childRelPath, excludePatterns)) continue;
+      walkFiles(childRelPath, excludePatterns, matches);
+    }
+    return;
+  }
+
+  if (isExcluded(relPath, excludePatterns)) return;
+
+  try {
+    const content = fs.readFileSync(absolutePath, 'utf8');
+    matches.push({ relPath, content });
+  } catch {
+    // Ignore unreadable/binary files in the fallback path; this helper only supports
+    // lightweight text scans for smoke assertions.
+  }
+}
+
+function fallbackMatches(pattern, paths, extraArgs = []) {
+  const excludePatterns = parseExcludeGlobs(extraArgs);
+  const files = [];
+  for (const relPath of paths) {
+    walkFiles(relPath, excludePatterns, files);
+  }
+
+  return files
+    .filter(file => file.content.includes(pattern))
+    .map(file => file.relPath);
+}
+
 function rgMatches(pattern, paths, extraArgs = []) {
   try {
     const output = execFileSync('rg', ['-l', pattern, ...extraArgs, ...paths], {
@@ -51,6 +128,9 @@ function rgMatches(pattern, paths, extraArgs = []) {
   } catch (error) {
     if (error.status === 1) {
       return [];
+    }
+    if (error.code === 'ENOENT') {
+      return fallbackMatches(pattern, paths, extraArgs);
     }
     throw error;
   }
