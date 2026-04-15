@@ -1,0 +1,116 @@
+name: Sync Generated Assets
+
+on:
+  push:
+    paths:
+      - "agents/**"
+      - "workflows/**"
+      - "scripts/sync-canonical-adapters.js"
+      - "scripts/generate-index.js"
+  pull_request:
+    paths:
+      - "agents/**"
+      - "workflows/**"
+      - "scripts/sync-canonical-adapters.js"
+      - "scripts/generate-index.js"
+
+concurrency:
+  group: sync-generated-assets-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate-generated-assets:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Check Out Repository
+        uses: actions/checkout@v4
+
+      - name: Set Up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Run Generator Smoke Test
+        run: node scripts/smoke-generated-assets.js
+
+      - name: Verify Generated Files Are Committed
+        run: |
+          generated_paths=(
+            claude-code/agents
+            claude-code/commands
+            github-copilot/agents
+            github-copilot/commands
+            github-copilot/prompts
+            openai-codex/agents
+            index.json
+          )
+
+          if ! git diff --quiet --exit-code -- "${generated_paths[@]}"; then
+            echo "Generated assets are out of date. Commit the regenerated files:" >&2
+            git status --short >&2
+            git diff -- "${generated_paths[@]}" >&2 || true
+            exit 1
+          fi
+
+  sync-generated-assets:
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/heads/')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Check Out Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set Up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Run Generator Smoke Test
+        run: node scripts/smoke-generated-assets.js
+
+      - name: Detect Generated Changes
+        id: generated_changes
+        run: |
+          generated_paths=(
+            claude-code/agents
+            claude-code/commands
+            github-copilot/agents
+            github-copilot/commands
+            github-copilot/prompts
+            openai-codex/agents
+            index.json
+          )
+
+          if git diff --quiet --exit-code -- "${generated_paths[@]}"; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            git status --short
+          fi
+
+      - name: Commit Generated Changes
+        if: steps.generated_changes.outputs.changed == 'true'
+        run: |
+          generated_paths=(
+            claude-code/agents
+            claude-code/commands
+            github-copilot/agents
+            github-copilot/commands
+            github-copilot/prompts
+            openai-codex/agents
+            index.json
+          )
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "${generated_paths[@]}"
+          git commit -m "chore(sync): regenerate adapters and catalog"
+          git push origin HEAD:${{ github.ref_name }}

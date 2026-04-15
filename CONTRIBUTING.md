@@ -30,8 +30,16 @@ agent-toolkit/
 - Work from `main` on short-lived branches.
 - Keep shareable content at the repo root.
 - Keep tool-specific behavior inside its own tool directory.
-- Regenerate agent/workflow adapters with `node scripts/sync-canonical-adapters.js`
-  after editing root canonical definitions.
+- Edit shared agent definitions in `agents/<slug>/AGENT.md` and shared workflows in
+  `workflows/<slug>/WORKFLOW.md`.
+- Regenerate adapters with `node scripts/sync-canonical-adapters.js` and the catalog with
+  `node scripts/generate-index.js` after editing those canonical definitions.
+- Smoke-test the full generation flow with `node scripts/smoke-generated-assets.js`.
+- CI also re-runs both generators when canonical `agents/` or `workflows/` files change.
+- Pull requests fail if generated agent/workflow surfaces, related GitHub Copilot
+  manifest metadata, or `index.json` are stale.
+- Pushes to branches auto-commit regenerated tool surfaces and `index.json` back to the
+  branch when needed.
 
 ## Commit style
 
