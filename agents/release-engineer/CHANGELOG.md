@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.0.0] - 2026-04-15
+
 ### Changed
 
 - Declared shared execution metadata in the canonical root definition so model tier, capabilities, subagent routing, and skill dependencies no longer need to be inferred from tool-specific wrappers.
@@ -72,7 +74,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/release-engineer-v4.0.1...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/release-engineer-v5.0.0...HEAD
+[5.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/agent/release-engineer-v5.0.0
 [4.0.1]: https://github.com/bmjcoding/agent-toolkit/compare/agent/release-engineer-v4.0.0...agent/release-engineer-v4.0.1
 [4.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/release-engineer-v3.0.0...agent/release-engineer-v4.0.0
 [3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/release-engineer-v2.0.0...agent/release-engineer-v3.0.0
