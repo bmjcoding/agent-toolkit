@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Switched doc-writer branch discovery to the remote default branch and updated repeated
+  reviewer lookup guidance to consume phase-qualified `design-architect*.json` handoffs.
+
 ## [2.0.0] - 2026-04-15
 
 ### Changed

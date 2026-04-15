@@ -8,6 +8,8 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [4.2.0] - 2026-04-15
+
 ### Added
 
 - Added a GitHub Actions sync gate that reruns canonical adapter generation on matching
@@ -22,12 +24,18 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 - Began ADR-0008 implementation: `index.json` is now generated as a tool-aware
   distribution catalog with component versions, install metadata, bundle membership, and
   checksums instead of a path-only array.
+- Aligned the shared orchestration contracts across Frankenstein, planner, verifier,
+  remediation, and release flows so session-scoped context, repeated reviewer passes,
+  and repair ownership use the same canonical schema.
 - Updated the adapter sync generator to support canonical shared execution metadata in
   root agent/workflow definitions when present, while transparently falling back to
   existing adapter metadata during the migration.
 - Updated generated OpenAI Codex agent adapters to emit readable multiline TOML for
   `developer_instructions` instead of a single escaped line, while preserving the exact
   canonical instruction body in smoke tests.
+- Normalized retro/improve storage guidance around `~/agent-retros`, added explicit
+  pre-planner recon mode for `autoresearch-analyst`, and expanded the generated-asset
+  smoke coverage to verify the new release metadata path.
 
 ## [4.1.0] - 2026-04-14
 
@@ -192,7 +200,8 @@ No action required for users who install via symlinks (`./claude-code/scripts/in
 3. Re-run the install script: `./claude-code/scripts/install.sh`.
 4. Verify: `./claude-code/scripts/install.sh --check`.
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/v4.1.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/v4.2.0...HEAD
+[4.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/v4.1.0...v4.2.0
 [4.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/v4.0.0...v4.1.0
 [4.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/v3.2.0...v4.0.0
 [3.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/v3.1.0...v3.2.0

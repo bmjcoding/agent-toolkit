@@ -18,6 +18,12 @@ Resolve `STATE_ROOT` once at the start of the run. Prefer, in order: `.agents/`,
 directory. If none exist and the workflow needs persistent local state, create `.agents/`
 in the current project and use that as `STATE_ROOT`.
 
+Resolve `RETRO_ROOT` once at the start of the run for retro reads and writes:
+- `RETRO_ROOT="${AGENT_RETRO_DIR:-$HOME/agent-retros}"`
+- Search `RETRO_ROOT` first for canonical typed paths
+- Treat legacy retro roots, resolved `STATE_ROOT` retro dirs, and flat subject directories as compatibility read locations only
+- Do not invent a project-local retro write root without an explicit override
+
 ## Workflow
 
 ### 1. Parse Recommendations
@@ -25,7 +31,7 @@ in the current project and use that as `STATE_ROOT`.
 Locate the retro's recommendations table from one of these sources (in priority order):
 1. **`$ARGUMENTS`** — if a file path is passed, read it
 2. **Current conversation** — search backward for section "3.7 Recommendations" or a table with columns What/Where/Why/Priority/Type. Extract the table rows.
-3. **Most recent retro on disk** — list `STATE_ROOT/retros/*/` directories, find the newest `.md` file by timestamp in the filename, read its section 3.7. This handles context compaction and fresh-session invocation.
+3. **Most recent retro on disk** — recursively scan `~/agent-retros/` (or `$AGENT_RETRO_DIR`) for retro markdown files, find the newest `.md` file by timestamp in the filename, and read its section 3.7. If no canonical retro exists, fall back to legacy retro roots and resolved `STATE_ROOT` retro dirs, including flat subject directories. This handles context compaction and fresh-session invocation across the type-scoped retro directory layout.
 4. If none of the above produce recommendations, ask the user to provide the retro output or run `retro` first.
 
 Each recommendation has:
@@ -238,7 +244,14 @@ Derive the subject value using this rule:
 - From conversation (parsing source 2): search backward for the retro header `# Retro: {subject} — {date}` and extract `{subject}`
 - If no header is found in conversation: default to `claude`
 
-Write a JSON file to `STATE_ROOT/retros/{subject}/YYYY-MM-DDTHHMMSS-improve.json` with:
+Derive the retro directory (`<retro-dir>`) using this rule:
+- If `$ARGUMENTS` provided a retro file path, use that file's parent directory
+- If recommendations came from the most recent retro on disk, use that retro file's parent directory
+- If recommendations came from conversation only, try to locate the matching retro on disk by subject/date and use its parent directory
+- If the resolved retro file lives under a legacy root and a canonical equivalent exists under `RETRO_ROOT`, normalize to the canonical directory before writing the outcome
+- If no real retro file can be resolved to a canonical write directory, stop and ask the user for the retro output or a retro file path instead of inventing a save location
+
+Write a JSON file next to the source retro in the same directory, using the filename `YYYYMMDDTHHMMSS-improve.json`, with:
 
 Include `model_recommendations` as an array of objects `{"agent": "name", "current": "model", "suggested": "model", "rationale": "why"}` for any agents where a model downgrade or upgrade is recommended based on observed performance. Use an empty array `[]` if no model changes are recommended — do not omit the field.
 
@@ -288,7 +301,7 @@ HISTORY_SCRIPT=$(find skills/retro/scripts -name "retro-history.py" 2>/dev/null 
 [ -z "$HISTORY_SCRIPT" ] && HISTORY_SCRIPT=$(find ~/.agents/skills/retro/scripts -name "retro-history.py" 2>/dev/null | head -1)
 [ -z "$HISTORY_SCRIPT" ] && HISTORY_SCRIPT=$(find ~/.claude/skills/retro/scripts -name "retro-history.py" 2>/dev/null | head -1)
 [ -z "$HISTORY_SCRIPT" ] && HISTORY_SCRIPT=$(find ~/.codex/skills/retro/scripts -name "retro-history.py" 2>/dev/null | head -1)
-python3 "${HISTORY_SCRIPT:-retro-history.py}" save STATE_ROOT/retros/{subject}/YYYY-MM-DDTHHMMSS-improve.json --history STATE_ROOT/retros
+python3 "${HISTORY_SCRIPT:-retro-history.py}" save <retro-dir>/YYYYMMDDTHHMMSS-improve.json --history "${AGENT_RETRO_DIR:-$HOME/agent-retros}"
 ```
 If the script is not found, warn "retro-history.py not found — outcome not saved to trend history" but do not fail the improve run.
 

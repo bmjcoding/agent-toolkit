@@ -2,6 +2,11 @@
 
 Read this after completing the analysis sections. Follow these steps in order.
 
+Canonical retro root:
+- `RETRO_ROOT="${AGENT_RETRO_DIR:-$HOME/agent-retros}"`
+- Read canonical data first
+- Legacy retro roots from prior tool-specific storage, resolved `STATE_ROOT` retro dirs, and flat subject directories remain readable for historical lookups, but new writes always go to `RETRO_ROOT`
+
 ---
 
 ## Validation
@@ -19,7 +24,7 @@ VERIFY_SCRIPT=$(find skills/retro/scripts -name "verify-claims.py" 2>/dev/null |
 python3 "${VERIFY_SCRIPT:-verify-claims.py}" /tmp/retro-draft-TIMESTAMP.md [--orch-dir DIR]
 ```
 
-This checks that cited file paths exist, agent IDs match handoff files, git SHAs resolve, and severity counts match the backlog. Fix any failures before saving to the canonical path. After all checks pass, move the draft to `STATE_ROOT/retros/{subject}/TIMESTAMP.md` in the Save step — do not write to the final path before verification succeeds.
+This checks that cited file paths exist, agent IDs match handoff files, git SHAs resolve, and severity counts match the backlog. Fix any failures before saving to the canonical path. After all checks pass, move the draft to the correct `RETRO_ROOT/<type-scoped-retro-dir>/TIMESTAMP.md` location in the Save step — do not write to the final path before verification succeeds.
 
 ### Per-Recommendation State Verification
 
@@ -88,7 +93,7 @@ HISTORY_SCRIPT=$(find skills/retro/scripts -name "retro-history.py" 2>/dev/null 
 [ -z "$HISTORY_SCRIPT" ] && HISTORY_SCRIPT=$(find ~/.agents/skills/retro/scripts -name "retro-history.py" 2>/dev/null | head -1)
 [ -z "$HISTORY_SCRIPT" ] && HISTORY_SCRIPT=$(find ~/.claude/skills/retro/scripts -name "retro-history.py" 2>/dev/null | head -1)
 [ -z "$HISTORY_SCRIPT" ] && HISTORY_SCRIPT=$(find ~/.codex/skills/retro/scripts -name "retro-history.py" 2>/dev/null | head -1)
-python3 "${HISTORY_SCRIPT:-retro-history.py}" trends --history STATE_ROOT/retros --subject SUBJECT
+python3 "${HISTORY_SCRIPT:-retro-history.py}" trends --history "${AGENT_RETRO_DIR:-$HOME/agent-retros}" --subject SUBJECT
 ```
 
 Pass the subject identifier from the Scoping step. If history exists (2+ prior retros for this subject), include a **Trends** section after the summary table highlighting:
@@ -108,7 +113,7 @@ If improve WAS run, note the acceptance rate and check if the accepted fixes act
 After running the `retro-history.py trends` script, also check for frankenstein size trajectory:
 
 ```bash
-python3 "${HISTORY_SCRIPT:-retro-history.py}" trends --history STATE_ROOT/retros --subject SUBJECT --metric frankenstein_line_count --last 5
+python3 "${HISTORY_SCRIPT:-retro-history.py}" trends --history "${AGENT_RETRO_DIR:-$HOME/agent-retros}" --subject SUBJECT --metric frankenstein_line_count --last 5
 ```
 
 If fewer than 5 prior retros exist for this subject (i.e., `--last 5` returns fewer than 5 non-null `frankenstein_line_count` values), **skip the P1 escalation** and note `"insufficient history"` in the retro output rather than flagging a finding. The trajectory check requires a full window of 5 to be meaningful; sparse history produces false positives.
@@ -125,7 +130,7 @@ If no history exists, skip the section silently.
 
 ## Save
 
-**Always complete this before presenting the improve prompt.** Save both the full retro and the summary metrics to `STATE_ROOT/retros/` for long-term retention and trend analysis.
+**Always complete this before presenting the improve prompt.** Save both the full retro and the summary metrics to `RETRO_ROOT` for long-term retention and trend analysis.
 
 ### Save path by retro type
 
@@ -133,11 +138,11 @@ Choose the save path based on what is being retro'd:
 
 | Retro type | Save path |
 |---|---|
-| Orchestration (pipeline run) | `STATE_ROOT/retros/sessions/YYYY-MM/<session-id>/` |
-| Skill review | `STATE_ROOT/retros/skill-reviews/<skill>/YYYY-MM/` |
-| Agent review | `STATE_ROOT/retros/agent-reviews/<agent>/YYYY-MM/` |
+| Orchestration (pipeline run) | `~/agent-retros/sessions/YYYY-MM/<session-id>/` |
+| Skill review | `~/agent-retros/skill-reviews/<skill>/YYYY-MM/` |
+| Agent review | `~/agent-retros/agent-reviews/<agent>/YYYY-MM/` |
 
-Use the `session_id` (compact `YYYYMMDDTHHMMSS`) as `<session-id>`. For skill/agent reviews, use the subject identifier as `<skill>` or `<agent>`. Legacy paths under `STATE_ROOT/retros/{subject}/` remain valid for existing retros but new saves must use the type-scoped paths above.
+Use the `session_id` (compact `YYYYMMDDTHHMMSS`) as `<session-id>`. For skill/agent reviews, use the subject identifier as `<skill>` or `<agent>`. Legacy retro roots from prior tool-specific storage, resolved `STATE_ROOT` retro dirs, and flat subject directories remain readable for existing retros, but new saves must use the type-scoped paths above under `RETRO_ROOT`.
 
 1. Create the target directory: `mkdir -p <path>`
 2. Write the full retro markdown to `<path>/YYYYMMDDTHHMMSS.md`
@@ -195,7 +200,7 @@ Use the `session_id` (compact `YYYYMMDDTHHMMSS`) as `<session-id>`. For skill/ag
 4. Append to global trend history:
 
 ```bash
-python3 "${HISTORY_SCRIPT:-retro-history.py}" save <path>/YYYYMMDDTHHMMSS.json --history STATE_ROOT/retros
+python3 "${HISTORY_SCRIPT:-retro-history.py}" save <path>/YYYYMMDDTHHMMSS.json --history "${AGENT_RETRO_DIR:-$HOME/agent-retros}"
 ```
 
-Use the current timestamp for the filename. The script appends to `STATE_ROOT/retros/history.jsonl` (global, cross-subject). All writes must complete before moving on.
+Use the current timestamp for the filename. The script appends to `RETRO_ROOT/history.jsonl` (global, cross-subject). All writes must complete before moving on.

@@ -21,7 +21,7 @@ them into `.github/agents/`.
 | `name` | Yes | Display name in Copilot Chat |
 | `description` | Yes | Shown in agent picker; first 4000 chars used in code review |
 | `tools` | Yes | Use the official aliases `read`, `edit`, `search`, `execute`, `web`, `todo`, or `["*"]` |
-| `model` | Yes | Use a qualified model name such as `Claude Opus 4.5 (copilot)` |
+| `model` | Yes | Use a qualified model name such as `Claude Opus 4.6` |
 | `mcp-servers` | Yes | Per-agent MCP server declarations |
 | `agents` | Yes | VS Code custom-agent handoff declarations |
 | `hooks` | Yes | Event hooks (VS Code only) |
@@ -51,9 +51,9 @@ Shared agent adapters use a cross-tool tier map:
 
 | Claude tier | Copilot model |
 |-------------|---------------|
-| `inherit` / `opus` | `Claude Opus 4.5 (copilot)` |
-| `sonnet` | `Claude Sonnet 4.5 (copilot)` |
-| `haiku` | `Claude Haiku 4.5 (copilot)` |
+| `inherit` / `opus` | `Claude Opus 4.6` |
+| `sonnet` | `Claude Sonnet 4.5` |
+| `haiku` | `Claude Haiku 4.5` |
 
 ## Canonical Source
 
