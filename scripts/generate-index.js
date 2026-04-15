@@ -7,7 +7,10 @@ const path = require('path');
 
 const REPO_ROOT = path.resolve(__dirname, '..');
 const OUTPUT_FILE = path.join(REPO_ROOT, 'index.json');
+const RUNTIME_METADATA_FILE = path.join(REPO_ROOT, 'tools', 'catalog-metadata.json');
 const RAW_BASE_URL = 'https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/';
+const VALID_LIFECYCLES = new Set(['stable', 'beta', 'experimental']);
+
 function readFileSafe(filePath) {
   try {
     return fs.readFileSync(filePath, 'utf8');
@@ -18,6 +21,14 @@ function readFileSafe(filePath) {
 
 function exists(filePath) {
   return fs.existsSync(filePath);
+}
+
+function readJsonSafe(filePath) {
+  try {
+    return JSON.parse(fs.readFileSync(filePath, 'utf8'));
+  } catch {
+    return null;
+  }
 }
 
 function relativePath(filePath) {
@@ -57,6 +68,26 @@ function normalizeQuotedValue(value) {
     return trimmed.slice(1, -1);
   }
   return trimmed;
+}
+
+function normalizeLifecycle(value) {
+  if (value === null || value === undefined || value === '') return null;
+  const normalized = String(value).trim().toLowerCase();
+  return VALID_LIFECYCLES.has(normalized) ? normalized : null;
+}
+
+function describePath(filePath) {
+  return path.isAbsolute(filePath) ? relativePath(filePath) : filePath;
+}
+
+function requireLifecycle(value, { componentKind, componentId, sourcePath }) {
+  const lifecycle = normalizeLifecycle(value);
+  if (!lifecycle) {
+    throw new Error(
+      `missing or invalid lifecycle for ${componentKind} ${componentId} in ${describePath(sourcePath)}`
+    );
+  }
+  return lifecycle;
 }
 
 function parseFrontmatter(block) {
@@ -151,6 +182,29 @@ function parseFrontmatter(block) {
   return result;
 }
 
+function readRuntimeCatalogMetadata() {
+  const metadata = readJsonSafe(RUNTIME_METADATA_FILE);
+  return metadata && typeof metadata === 'object' ? metadata : { hooks: {} };
+}
+
+function readHookRuntimeMetadata(runtimeMetadata, targetTool, hookId) {
+  const metadata = runtimeMetadata.hooks?.[targetTool]?.[hookId];
+  if (!metadata || typeof metadata !== 'object') {
+    throw new Error(`missing hook catalog metadata for ${targetTool} hook ${hookId} in ${relativePath(RUNTIME_METADATA_FILE)}`);
+  }
+
+  return {
+    lifecycle: requireLifecycle(metadata.lifecycle, {
+      componentKind: 'hook',
+      componentId: hookId,
+      sourcePath: `${relativePath(RUNTIME_METADATA_FILE)} (${targetTool})`,
+    }),
+    lifecycleNotes: typeof metadata.lifecycle_notes === 'string' && metadata.lifecycle_notes.trim()
+      ? metadata.lifecycle_notes.trim()
+      : null,
+  };
+}
+
 function splitTopLevelCommaList(value) {
   const parts = [];
   let current = '';
@@ -193,8 +247,9 @@ function readLatestReleasedVersion(changelogPath) {
 }
 
 function parseClaudeAgentFallback(agentId) {
-  const claudePath = path.join(REPO_ROOT, 'claude-code', 'agents', agentId, `${agentId}.md`);
-  const content = readFileSafe(claudePath);
+  const claudePath = path.join(REPO_ROOT, 'claude-code', 'agents', `${agentId}.md`);
+  const legacyClaudePath = path.join(REPO_ROOT, 'claude-code', 'agents', agentId, `${agentId}.md`);
+  const content = readFileSafe(claudePath) || readFileSafe(legacyClaudePath);
   if (!content) {
     return {
       modelTier: null,
@@ -277,6 +332,11 @@ function readCanonicalAgents() {
     results.push({
       id,
       description: frontmatter.description || '',
+      lifecycle: requireLifecycle(frontmatter.lifecycle, {
+        componentKind: 'agent',
+        componentId: id,
+        sourcePath,
+      }),
       version: readLatestReleasedVersion(path.join(agentsDir, id, 'CHANGELOG.md')),
       sourcePath: relativePath(sourcePath),
       adapters: Array.isArray(frontmatter.adapters) ? frontmatter.adapters : [],
@@ -326,6 +386,11 @@ function readCanonicalWorkflows() {
     results.push({
       id,
       description: frontmatter.description || '',
+      lifecycle: requireLifecycle(frontmatter.lifecycle, {
+        componentKind: 'command',
+        componentId: id,
+        sourcePath,
+      }),
       version: readLatestReleasedVersion(path.join(workflowsDir, id, 'CHANGELOG.md')),
       sourcePath: relativePath(sourcePath),
       adapters: Array.isArray(frontmatter.adapters) ? frontmatter.adapters : [],
@@ -353,6 +418,11 @@ function readSharedSkills() {
     results.push({
       id,
       description: frontmatter.description || '',
+      lifecycle: requireLifecycle(frontmatter.lifecycle, {
+        componentKind: 'skill',
+        componentId: id,
+        sourcePath: skillPath,
+      }),
       version: readLatestReleasedVersion(path.join(skillsDir, id, 'CHANGELOG.md')),
       sourcePath: relativePath(skillPath),
       metadata: {},
@@ -375,6 +445,11 @@ function readRootRules() {
     const frontmatter = parseFrontmatter(extractFrontmatterBlock(content));
     results.push({
       id,
+      lifecycle: requireLifecycle(frontmatter.lifecycle, {
+        componentKind: 'rule',
+        componentId: id,
+        sourcePath: rulePath,
+      }),
       version: readLatestReleasedVersion(path.join(rulesDir, id, 'CHANGELOG.md')),
       sourcePath: relativePath(rulePath),
       metadata: {
@@ -478,12 +553,16 @@ function readBundles(tool) {
     results.push({
       tool,
       id: parsed.id || id,
+      lifecycle: requireLifecycle(parsed.status, {
+        componentKind: 'bundle',
+        componentId: parsed.id || id,
+        sourcePath: bundlePath,
+      }),
       version: readLatestReleasedVersion(path.join(bundlesDir, id, 'CHANGELOG.md')),
       artifactPath: relativePath(bundlePath),
       metadata: {
         name: parsed.name,
         description: parsed.description,
-        status: parsed.status,
         tags: parsed.tags,
         components: parsed.components,
       },
@@ -515,7 +594,7 @@ function buildBundleMembershipMap(bundles) {
 
 function installPathForArtifact(targetTool, componentKind, componentId) {
   if (targetTool === 'claude-code') {
-    if (componentKind === 'agent') return `~/.claude/agents/${componentId}/${componentId}.md`;
+    if (componentKind === 'agent') return `~/.claude/agents/${componentId}.md`;
     if (componentKind === 'command') return `~/.claude/commands/${componentId}/${componentId}.md`;
     if (componentKind === 'bundle') return `~/.claude/bundles/${componentId}/bundle.yaml`;
     if (componentKind === 'hook') return `~/.claude/hooks/${componentId}/${componentId}.sh`;
@@ -574,6 +653,44 @@ function membershipFor(bundleMembership, targetTool, componentKind, componentId)
   return bundleMembership.get(`${targetTool}|${componentKind}|${componentId}`) || [];
 }
 
+function createArtifactRecord({
+  componentId,
+  componentKind,
+  componentVersion,
+  targetTool,
+  artifactPath,
+  sourcePath,
+  installPath,
+  installCommand,
+  bundleMembership,
+  metadata,
+  lifecycle,
+  lifecycleNotes = null,
+}) {
+  const artifact = {
+    component_id: componentId,
+    component_kind: componentKind,
+    component_version: componentVersion,
+    lifecycle: requireLifecycle(lifecycle, {
+      componentKind,
+      componentId,
+      sourcePath,
+    }),
+    target_tool: targetTool,
+    artifact_path: artifactPath,
+    source_path: sourcePath,
+    install_path: installPath,
+    install_command: installCommand,
+    download_url: downloadUrlFor(artifactPath),
+    checksum_sha256: sha256For(artifactPath),
+    bundle_membership: bundleMembership,
+    metadata,
+  };
+
+  if (lifecycleNotes) artifact.lifecycle_notes = lifecycleNotes;
+  return artifact;
+}
+
 function buildCatalog() {
   const catalog = {
     schema: 'agent-toolkit.distribution-catalog/v1',
@@ -590,6 +707,7 @@ function buildCatalog() {
     ...readBundles('github-copilot'),
   ];
   const bundleMembership = buildBundleMembershipMap(bundles);
+  const runtimeMetadata = readRuntimeCatalogMetadata();
 
   for (const agent of canonicalAgents) {
     for (const adapterPath of agent.adapters) {
@@ -597,26 +715,25 @@ function buildCatalog() {
       if (!exists(path.join(REPO_ROOT, adapterPath))) continue;
 
       const installPath = installPathForArtifact(targetTool, 'agent', agent.id);
-      catalog.artifacts.push({
-        component_id: agent.id,
-        component_kind: 'agent',
-        component_version: agent.version,
-        target_tool: targetTool,
-        artifact_path: adapterPath,
-        source_path: agent.sourcePath,
-        install_path: installPath,
-        install_command: buildInstallCommand({
+      catalog.artifacts.push(createArtifactRecord({
+        componentId: agent.id,
+        componentKind: 'agent',
+        componentVersion: agent.version,
+        lifecycle: agent.lifecycle,
+        targetTool,
+        artifactPath: adapterPath,
+        sourcePath: agent.sourcePath,
+        installPath,
+        installCommand: buildInstallCommand({
           targetTool,
           componentKind: 'agent',
           componentId: agent.id,
           artifactPath: adapterPath,
           installPath,
         }),
-        download_url: downloadUrlFor(adapterPath),
-        checksum_sha256: sha256For(adapterPath),
-        bundle_membership: membershipFor(bundleMembership, targetTool, 'agent', agent.id),
+        bundleMembership: membershipFor(bundleMembership, targetTool, 'agent', agent.id),
         metadata: agent.metadata,
-      });
+      }));
     }
   }
 
@@ -626,174 +743,173 @@ function buildCatalog() {
       if (!exists(path.join(REPO_ROOT, adapterPath))) continue;
 
       const installPath = installPathForArtifact(targetTool, 'command', workflow.id);
-      catalog.artifacts.push({
-        component_id: workflow.id,
-        component_kind: 'command',
-        component_version: workflow.version,
-        target_tool: targetTool,
-        artifact_path: adapterPath,
-        source_path: workflow.sourcePath,
-        install_path: installPath,
-        install_command: buildInstallCommand({
+      catalog.artifacts.push(createArtifactRecord({
+        componentId: workflow.id,
+        componentKind: 'command',
+        componentVersion: workflow.version,
+        lifecycle: workflow.lifecycle,
+        targetTool,
+        artifactPath: adapterPath,
+        sourcePath: workflow.sourcePath,
+        installPath,
+        installCommand: buildInstallCommand({
           targetTool,
           componentKind: 'command',
           componentId: workflow.id,
           artifactPath: adapterPath,
           installPath,
         }),
-        download_url: downloadUrlFor(adapterPath),
-        checksum_sha256: sha256For(adapterPath),
-        bundle_membership: membershipFor(bundleMembership, targetTool, 'command', workflow.id),
+        bundleMembership: membershipFor(bundleMembership, targetTool, 'command', workflow.id),
         metadata: workflow.metadata,
-      });
+      }));
     }
   }
 
   for (const skill of sharedSkills) {
     for (const targetTool of ['claude-code', 'openai-codex']) {
       const installPath = installPathForArtifact(targetTool, 'skill', skill.id);
-      catalog.artifacts.push({
-        component_id: skill.id,
-        component_kind: 'skill',
-        component_version: skill.version,
-        target_tool: targetTool,
-        artifact_path: skill.sourcePath,
-        source_path: skill.sourcePath,
-        install_path: installPath,
-        install_command: buildInstallCommand({
+      catalog.artifacts.push(createArtifactRecord({
+        componentId: skill.id,
+        componentKind: 'skill',
+        componentVersion: skill.version,
+        lifecycle: skill.lifecycle,
+        targetTool,
+        artifactPath: skill.sourcePath,
+        sourcePath: skill.sourcePath,
+        installPath,
+        installCommand: buildInstallCommand({
           targetTool,
           componentKind: 'skill',
           componentId: skill.id,
           artifactPath: skill.sourcePath,
           installPath,
         }),
-        download_url: downloadUrlFor(skill.sourcePath),
-        checksum_sha256: sha256For(skill.sourcePath),
-        bundle_membership: membershipFor(bundleMembership, targetTool, 'skill', skill.id),
+        bundleMembership: membershipFor(bundleMembership, targetTool, 'skill', skill.id),
         metadata: skill.metadata,
-      });
+      }));
     }
   }
 
   for (const rule of sharedRules) {
     const claudeInstallPath = installPathForArtifact('claude-code', 'rule', rule.id);
-    catalog.artifacts.push({
-      component_id: rule.id,
-      component_kind: 'rule',
-      component_version: rule.version,
-      target_tool: 'claude-code',
-      artifact_path: rule.sourcePath,
-      source_path: rule.sourcePath,
-      install_path: claudeInstallPath,
-      install_command: buildInstallCommand({
+    catalog.artifacts.push(createArtifactRecord({
+      componentId: rule.id,
+      componentKind: 'rule',
+      componentVersion: rule.version,
+      lifecycle: rule.lifecycle,
+      targetTool: 'claude-code',
+      artifactPath: rule.sourcePath,
+      sourcePath: rule.sourcePath,
+      installPath: claudeInstallPath,
+      installCommand: buildInstallCommand({
         targetTool: 'claude-code',
         componentKind: 'rule',
         componentId: rule.id,
         artifactPath: rule.sourcePath,
         installPath: claudeInstallPath,
       }),
-      download_url: downloadUrlFor(rule.sourcePath),
-      checksum_sha256: sha256For(rule.sourcePath),
-      bundle_membership: membershipFor(bundleMembership, 'claude-code', 'rule', rule.id),
+      bundleMembership: membershipFor(bundleMembership, 'claude-code', 'rule', rule.id),
       metadata: rule.metadata,
-    });
+    }));
 
     const instructionPath = `github-copilot/instructions/${rule.id}.instructions.md`;
     if (exists(path.join(REPO_ROOT, instructionPath))) {
       const copilotInstallPath = installPathForArtifact('github-copilot', 'rule', rule.id);
-      catalog.artifacts.push({
-        component_id: rule.id,
-        component_kind: 'rule',
-        component_version: rule.version,
-        target_tool: 'github-copilot',
-        artifact_path: instructionPath,
-        source_path: rule.sourcePath,
-        install_path: copilotInstallPath,
-        install_command: buildInstallCommand({
+      catalog.artifacts.push(createArtifactRecord({
+        componentId: rule.id,
+        componentKind: 'rule',
+        componentVersion: rule.version,
+        lifecycle: rule.lifecycle,
+        targetTool: 'github-copilot',
+        artifactPath: instructionPath,
+        sourcePath: rule.sourcePath,
+        installPath: copilotInstallPath,
+        installCommand: buildInstallCommand({
           targetTool: 'github-copilot',
           componentKind: 'rule',
           componentId: rule.id,
           artifactPath: instructionPath,
           installPath: copilotInstallPath,
         }),
-        download_url: downloadUrlFor(instructionPath),
-        checksum_sha256: sha256For(instructionPath),
-        bundle_membership: membershipFor(bundleMembership, 'github-copilot', 'rule', rule.id),
+        bundleMembership: membershipFor(bundleMembership, 'github-copilot', 'rule', rule.id),
         metadata: rule.metadata,
-      });
+      }));
     }
   }
 
   for (const bundle of bundles) {
     const installPath = installPathForArtifact(bundle.tool, 'bundle', bundle.id);
-    catalog.artifacts.push({
-      component_id: bundle.id,
-      component_kind: 'bundle',
-      component_version: bundle.version,
-      target_tool: bundle.tool,
-      artifact_path: bundle.artifactPath,
-      source_path: bundle.artifactPath,
-      install_path: installPath,
-      install_command: buildInstallCommand({
+    catalog.artifacts.push(createArtifactRecord({
+      componentId: bundle.id,
+      componentKind: 'bundle',
+      componentVersion: bundle.version,
+      lifecycle: bundle.lifecycle,
+      targetTool: bundle.tool,
+      artifactPath: bundle.artifactPath,
+      sourcePath: bundle.artifactPath,
+      installPath,
+      installCommand: buildInstallCommand({
         targetTool: bundle.tool,
         componentKind: 'bundle',
         componentId: bundle.id,
         artifactPath: bundle.artifactPath,
         installPath,
       }),
-      download_url: downloadUrlFor(bundle.artifactPath),
-      checksum_sha256: sha256For(bundle.artifactPath),
-      bundle_membership: [],
+      bundleMembership: [],
       metadata: bundle.metadata,
-    });
+    }));
   }
 
-  const claudeHooksDir = path.join(REPO_ROOT, 'claude-code', 'hooks');
-  for (const entry of fs.readdirSync(claudeHooksDir, { withFileTypes: true }).filter(dirent => dirent.isDirectory()).sort((a, b) => a.name.localeCompare(b.name))) {
+  const canonicalHooksDir = path.join(REPO_ROOT, 'hooks');
+  for (const entry of fs.readdirSync(canonicalHooksDir, { withFileTypes: true }).filter(dirent => dirent.isDirectory()).sort((a, b) => a.name.localeCompare(b.name))) {
     const id = entry.name;
-    const artifactPath = `claude-code/hooks/${id}/${id}.sh`;
+    const artifactPath = `hooks/${id}/${id}.sh`;
     if (!exists(path.join(REPO_ROOT, artifactPath))) continue;
 
+    const hookMetadata = readHookRuntimeMetadata(runtimeMetadata, 'claude-code', id);
     const installPath = installPathForArtifact('claude-code', 'hook', id);
-    catalog.artifacts.push({
-      component_id: id,
-      component_kind: 'hook',
-      component_version: readLatestReleasedVersion(path.join(claudeHooksDir, id, 'CHANGELOG.md')),
-      target_tool: 'claude-code',
-      artifact_path: artifactPath,
-      source_path: artifactPath,
-      install_path: installPath,
-      install_command: buildInstallCommand({
+    catalog.artifacts.push(createArtifactRecord({
+      componentId: id,
+      componentKind: 'hook',
+      componentVersion: readLatestReleasedVersion(path.join(canonicalHooksDir, id, 'CHANGELOG.md')),
+      lifecycle: hookMetadata.lifecycle,
+      lifecycleNotes: hookMetadata.lifecycleNotes,
+      targetTool: 'claude-code',
+      artifactPath,
+      sourcePath: artifactPath,
+      installPath,
+      installCommand: buildInstallCommand({
         targetTool: 'claude-code',
         componentKind: 'hook',
         componentId: id,
         artifactPath,
         installPath,
       }),
-      download_url: downloadUrlFor(artifactPath),
-      checksum_sha256: sha256For(artifactPath),
-      bundle_membership: membershipFor(bundleMembership, 'claude-code', 'hook', id),
+      bundleMembership: membershipFor(bundleMembership, 'claude-code', 'hook', id),
       metadata: {},
-    });
+    }));
   }
 
   const copilotHooksDir = path.join(REPO_ROOT, 'github-copilot', 'hooks');
-  for (const fileName of fs.readdirSync(copilotHooksDir).filter(name => name.endsWith('.json')).sort()) {
-    const id = fileName.replace(/\.json$/, '');
-    const artifactPath = `github-copilot/hooks/${fileName}`;
-    const shellPath = `github-copilot/hooks/${id}.sh`;
+  for (const entry of fs.readdirSync(copilotHooksDir, { withFileTypes: true }).filter(dirent => dirent.isDirectory()).sort((a, b) => a.name.localeCompare(b.name))) {
+    const id = entry.name;
+    const artifactPath = `github-copilot/hooks/${id}/${id}.json`;
+    const shellPath = `github-copilot/hooks/${id}/${id}.sh`;
     if (!exists(path.join(REPO_ROOT, shellPath))) continue;
 
+    const hookMetadata = readHookRuntimeMetadata(runtimeMetadata, 'github-copilot', id);
     const installPath = installPathForArtifact('github-copilot', 'hook', id);
-    catalog.artifacts.push({
-      component_id: id,
-      component_kind: 'hook',
-      component_version: readLatestReleasedVersion(path.join(copilotHooksDir, 'CHANGELOG.md')),
-      target_tool: 'github-copilot',
-      artifact_path: artifactPath,
-      source_path: artifactPath,
-      install_path: installPath,
-      install_command: buildInstallCommand({
+    catalog.artifacts.push(createArtifactRecord({
+      componentId: id,
+      componentKind: 'hook',
+      componentVersion: readLatestReleasedVersion(path.join(canonicalHooksDir, id, 'CHANGELOG.md')),
+      lifecycle: hookMetadata.lifecycle,
+      lifecycleNotes: hookMetadata.lifecycleNotes,
+      targetTool: 'github-copilot',
+      artifactPath,
+      sourcePath: artifactPath,
+      installPath,
+      installCommand: buildInstallCommand({
         targetTool: 'github-copilot',
         componentKind: 'hook',
         componentId: id,
@@ -806,13 +922,50 @@ function buildCatalog() {
           },
         ],
       }),
-      download_url: downloadUrlFor(artifactPath),
-      checksum_sha256: sha256For(artifactPath),
-      bundle_membership: membershipFor(bundleMembership, 'github-copilot', 'hook', id),
+      bundleMembership: membershipFor(bundleMembership, 'github-copilot', 'hook', id),
       metadata: {
         companion_artifacts: [shellPath],
       },
-    });
+    }));
+  }
+
+  const codexHooksDir = path.join(REPO_ROOT, 'openai-codex', 'hooks');
+  const codexHooksRegistry = 'openai-codex/hooks/hooks.json';
+  for (const entry of fs.readdirSync(codexHooksDir, { withFileTypes: true }).filter(dirent => dirent.isDirectory()).sort((a, b) => a.name.localeCompare(b.name))) {
+    const id = entry.name;
+    const artifactPath = `openai-codex/hooks/${id}/${id}.sh`;
+    if (!exists(path.join(REPO_ROOT, artifactPath))) continue;
+
+    const hookMetadata = readHookRuntimeMetadata(runtimeMetadata, 'openai-codex', id);
+    const installPath = `~/.codex/hooks/${id}.sh`;
+    catalog.artifacts.push(createArtifactRecord({
+      componentId: id,
+      componentKind: 'hook',
+      componentVersion: readLatestReleasedVersion(path.join(canonicalHooksDir, id, 'CHANGELOG.md')),
+      lifecycle: hookMetadata.lifecycle,
+      lifecycleNotes: hookMetadata.lifecycleNotes,
+      targetTool: 'openai-codex',
+      artifactPath,
+      sourcePath: artifactPath,
+      installPath,
+      installCommand: buildInstallCommand({
+        targetTool: 'openai-codex',
+        componentKind: 'hook',
+        componentId: id,
+        artifactPath,
+        installPath,
+        companionArtifacts: [
+          {
+            url: downloadUrlFor(codexHooksRegistry),
+            path: '~/.codex/hooks.json',
+          },
+        ],
+      }),
+      bundleMembership: [],
+      metadata: {
+        companion_artifacts: [codexHooksRegistry],
+      },
+    }));
   }
 
   return catalog;
@@ -823,7 +976,8 @@ function assert(condition, message) {
 }
 
 function runTests() {
-  assert(readLatestReleasedVersion(path.join(REPO_ROOT, 'workflows', 'lint', 'CHANGELOG.md')) === '4.1.0', 'expected latest lint workflow version to parse');
+  const lintWorkflowVersion = readLatestReleasedVersion(path.join(REPO_ROOT, 'workflows', 'lint', 'CHANGELOG.md'));
+  assert(/^\d+\.\d+\.\d+$/.test(lintWorkflowVersion || ''), 'expected latest lint workflow version to parse as semver');
 
   const plannerFallback = parseClaudeAgentFallback('planner');
   assert(plannerFallback.modelTier === 'frontier', 'expected planner model tier fallback to map from inherit');
@@ -842,6 +996,24 @@ function runTests() {
   assert(Array.isArray(catalog.artifacts) && catalog.artifacts.length > 0, 'expected catalog to contain artifacts');
   assert(catalog.artifacts.some(entry => entry.component_id === 'planner' && entry.target_tool === 'openai-codex'), 'expected planner codex artifact in catalog');
   assert(catalog.artifacts.some(entry => entry.component_id === 'logging' && entry.target_tool === 'github-copilot'), 'expected github-copilot logging rule artifact in catalog');
+  assert(
+    catalog.artifacts.some(
+      entry => entry.component_id === 'lint'
+        && entry.component_kind === 'command'
+        && entry.component_version === lintWorkflowVersion
+    ),
+    'expected lint command artifacts to use the latest canonical workflow version'
+  );
+  assert(
+    catalog.artifacts.every(entry => VALID_LIFECYCLES.has(entry.lifecycle)),
+    'expected every artifact to expose a valid lifecycle'
+  );
+
+  const plannerCodexArtifact = catalog.artifacts.find(entry => entry.component_id === 'planner' && entry.target_tool === 'openai-codex');
+  assert(plannerCodexArtifact && plannerCodexArtifact.lifecycle === 'stable', 'expected planner codex artifact lifecycle to come from canonical root metadata');
+
+  const bundleArtifact = catalog.artifacts.find(entry => entry.component_id === 'frontend-development' && entry.component_kind === 'bundle');
+  assert(bundleArtifact && bundleArtifact.lifecycle === 'stable', 'expected bundle lifecycle to normalize from bundle status');
 
   process.stdout.write('All tests passed.\n');
 }
@@ -859,7 +1031,16 @@ function main() {
     return leftKey.localeCompare(rightKey);
   });
 
-  fs.writeFileSync(OUTPUT_FILE, `${JSON.stringify(catalog, null, 2)}\n`, 'utf8');
+  const output = `${JSON.stringify(catalog, null, 2)}\n`;
+  if (process.argv.includes('--check')) {
+    const existing = readFileSafe(OUTPUT_FILE);
+    assert(existing !== null, `missing ${relativePath(OUTPUT_FILE)}; run scripts/generate-index.js`);
+    assert(existing === output, `${relativePath(OUTPUT_FILE)} is stale; run scripts/generate-index.js`);
+    process.stdout.write(`${relativePath(OUTPUT_FILE)} is up to date.\n`);
+    return;
+  }
+
+  fs.writeFileSync(OUTPUT_FILE, output, 'utf8');
   process.stdout.write(`Generated ${OUTPUT_FILE} — ${catalog.artifacts.length} artifacts\n`);
 }
 

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Generate a meta-retro markdown from the orchestrator retro JSON corpus.
+"""Generate a meta-retro markdown from the session retro JSON corpus.
 
-Reads retro JSON files from the resolved STATE_ROOT retro corpus
-(`STATE_ROOT/retros/orchestrator/*.json`) or --retro-dir
+Reads retro JSON files from the canonical retro corpus
+(`~/agent-retros/sessions/**`) or --retro-dir
 and produces a timestamped meta-retro markdown file every N pipelines (default 10).
 
 Both primary retros (YYYYMMDDTHHMMSS.json) and improve-cycle retros
@@ -15,9 +15,9 @@ Usage:
 
 Options:
     --retro-dir DIR   Directory containing retro JSON files
-                      (default: resolved STATE_ROOT/retros/orchestrator)
+                      (default: ~/agent-retros/sessions or $AGENT_RETRO_DIR/sessions)
     --out-dir DIR     Directory for meta-retro output files
-                      (default: resolved STATE_ROOT/retros/meta)
+                      (default: ~/agent-retros/meta or $AGENT_RETRO_DIR/meta)
     --interval N      Produce meta-retro every N primary pipelines (default: 10)
     --dry-run         Print output to stdout instead of writing a file
     --force           Generate meta-retro regardless of interval check
@@ -37,20 +37,11 @@ from collections import Counter, defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
 
-
-def resolve_state_root() -> Path:
-    candidates = [
-        Path(".agents"),
-        Path(".claude"),
-        Path(".codex"),
-        Path.home() / ".agents",
-        Path.home() / ".claude",
-        Path.home() / ".codex",
-    ]
-    for candidate in candidates:
-        if candidate.is_dir():
-            return candidate
-    return Path(".agents")
+from retro_paths import (
+    candidate_meta_dirs,
+    candidate_session_roots,
+    default_meta_dir,
+)
 
 
 # ---------------------------------------------------------------------------
@@ -69,12 +60,12 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--retro-dir",
         default=None,
-        help="Directory containing retro JSON files (default: resolved STATE_ROOT/retros/orchestrator)",
+        help="Directory containing retro JSON files (default: ~/agent-retros/sessions)",
     )
     parser.add_argument(
         "--out-dir",
         default=None,
-        help="Directory for meta-retro output files (default: resolved STATE_ROOT/retros/meta)",
+        help="Directory for meta-retro output files (default: ~/agent-retros/meta)",
     )
     parser.add_argument(
         "--interval",
@@ -113,8 +104,8 @@ def load_json_file(path: Path) -> dict | None:
         return None
 
 
-def load_corpus(retro_dir: Path, *, dir_missing_is_error: bool = True) -> tuple[list[dict], list[dict]]:
-    """Load all retro JSON files from retro_dir.
+def load_corpus(retro_dirs: list[Path], *, dirs_missing_are_error: bool = True) -> tuple[list[dict], list[dict]]:
+    """Load all retro JSON files from the provided retro roots.
 
     Returns:
         (primary_retros, improve_retros)
@@ -122,31 +113,38 @@ def load_corpus(retro_dir: Path, *, dir_missing_is_error: bool = True) -> tuple[
         improve_retros: sorted list of improve-cycle records (*-improve.json)
 
     Args:
-        dir_missing_is_error: when True (default), a missing retro_dir exits with code 1.
-            Set to False when using the default path so a fresh install (no retros yet)
-            is treated as an empty corpus and exits 0 rather than erroring.
+        dirs_missing_are_error: when True (default), a missing explicit retro_dir exits
+            with code 1. Default canonical/legacy search paths are allowed to be absent so
+            a fresh install is treated as an empty corpus.
     """
-    if not retro_dir.is_dir():
-        if dir_missing_is_error:
-            print(f"ERROR: retro-dir not found: {retro_dir}", file=sys.stderr)
+    existing_roots = [retro_dir for retro_dir in retro_dirs if retro_dir.is_dir()]
+    if not existing_roots:
+        if dirs_missing_are_error and retro_dirs:
+            print(f"ERROR: retro-dir not found: {retro_dirs[0]}", file=sys.stderr)
             sys.exit(1)
-        # Default path does not exist yet — no retros produced; treat as empty corpus.
         return [], []
 
     primary: list[dict] = []
     improve: list[dict] = []
+    seen_paths: set[str] = set()
 
-    for path in sorted(retro_dir.glob("*.json")):
-        data = load_json_file(path)
-        if data is None:
-            continue
-        # Tag with source filename for downstream reference
-        data["_source_file"] = path.name
+    for retro_dir in existing_roots:
+        for path in sorted(retro_dir.rglob("*.json")):
+            path_key = str(path.resolve()) if path.exists() else str(path)
+            if path_key in seen_paths:
+                continue
+            seen_paths.add(path_key)
 
-        if path.stem.endswith("-improve") or data.get("type") == "improve":
-            improve.append(data)
-        else:
-            primary.append(data)
+            data = load_json_file(path)
+            if data is None:
+                continue
+            # Tag with source filename for downstream reference
+            data["_source_file"] = path.name
+
+            if path.stem.endswith("-improve") or data.get("type") == "improve":
+                improve.append(data)
+            else:
+                primary.append(data)
 
     return primary, improve
 
@@ -160,20 +158,20 @@ _META_FILENAME_RE = re.compile(
 )
 
 
-def find_last_meta(out_dir: Path) -> tuple[str | None, int]:
+def find_last_meta(out_dirs: list[Path]) -> tuple[str | None, int]:
     """Return (filename, count) for the most recent meta-retro file.
 
     The count is extracted from the Ncount suffix in the filename.
     Returns (None, 0) if no prior meta-retro exists.
     """
-    if not out_dir.is_dir():
-        return None, 0
-
     candidates: list[tuple[str, int]] = []
-    for path in out_dir.glob("*-meta-retro-N*.md"):
-        m = _META_FILENAME_RE.match(path.name)
-        if m:
-            candidates.append((path.name, int(m.group(2))))
+    for out_dir in out_dirs:
+        if not out_dir.is_dir():
+            continue
+        for path in out_dir.glob("*-meta-retro-N*.md"):
+            m = _META_FILENAME_RE.match(path.name)
+            if m:
+                candidates.append((path.name, int(m.group(2))))
 
     if not candidates:
         return None, 0
@@ -735,23 +733,24 @@ def main() -> None:
     args = parser.parse_args()
 
     using_default_retro_dir = args.retro_dir is None
-    retro_dir = Path(
-        args.retro_dir
-        if args.retro_dir
-        else resolve_state_root() / "retros" / "orchestrator"
+    retro_dirs = (
+        candidate_session_roots(include_legacy=True)
+        if using_default_retro_dir
+        else [Path(args.retro_dir).expanduser()]
     )
-    out_dir = Path(
-        args.out_dir
-        if args.out_dir
-        else resolve_state_root() / "retros" / "meta"
+    out_dir = Path(args.out_dir).expanduser() if args.out_dir else default_meta_dir()
+    meta_search_dirs = (
+        candidate_meta_dirs(include_legacy=True)
+        if args.out_dir is None
+        else [out_dir]
     )
     interval: int = args.interval
     dry_run: bool = args.dry_run
     force: bool = args.force
 
-    # Load corpus; missing default dir is a no-op (fresh install), not an error
+    # Load corpus; missing default dirs are a no-op (fresh install), not an error
     primary_retros, improve_retros = load_corpus(
-        retro_dir, dir_missing_is_error=not using_default_retro_dir
+        retro_dirs, dirs_missing_are_error=not using_default_retro_dir
     )
     total_count = len(primary_retros)
 
@@ -760,7 +759,7 @@ def main() -> None:
         sys.exit(0)
 
     # Find last meta-retro baseline
-    _, last_meta_count = find_last_meta(out_dir)
+    _, last_meta_count = find_last_meta(meta_search_dirs)
 
     since_last = total_count - last_meta_count
 

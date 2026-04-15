@@ -4,10 +4,10 @@ description: >
   Apply retro recommendations with automated verification. Use after `retro`
   or anytime you want to improve a skill/agent. Supports --validate for
   autonomous improve-then-review validation cycles.
+lifecycle: stable
 disable-model-invocation: true
 argument-hint: "remove <rec-id> | [retro-output or recommendation] [--validate] [--skip-validation]"
 ---
-# version: 4.3.0
 
 # Improve
 
@@ -18,6 +18,12 @@ Resolve `STATE_ROOT` once at the start of the run. Prefer, in order: `.agents/`,
 directory. If none exist and the workflow needs persistent local state, create `.agents/`
 in the current project and use that as `STATE_ROOT`.
 
+Resolve `RETRO_ROOT` once at the start of the run for retro reads and writes:
+- `RETRO_ROOT="${AGENT_RETRO_DIR:-$HOME/agent-retros}"`
+- Search `RETRO_ROOT` first for canonical typed paths
+- Treat legacy retro roots, resolved `STATE_ROOT` retro dirs, and flat subject directories as compatibility read locations only
+- Do not invent a project-local retro write root without an explicit override
+
 ## Workflow
 
 ### 1. Parse Recommendations
@@ -25,7 +31,7 @@ in the current project and use that as `STATE_ROOT`.
 Locate the retro's recommendations table from one of these sources (in priority order):
 1. **`$ARGUMENTS`** — if a file path is passed, read it
 2. **Current conversation** — search backward for section "3.7 Recommendations" or a table with columns What/Where/Why/Priority/Type. Extract the table rows.
-3. **Most recent retro on disk** — list `STATE_ROOT/retros/*/` directories, find the newest `.md` file by timestamp in the filename, read its section 3.7. This handles context compaction and fresh-session invocation.
+3. **Most recent retro on disk** — recursively scan `~/agent-retros/` (or `$AGENT_RETRO_DIR`) for retro markdown files, find the newest `.md` file by timestamp in the filename, and read its section 3.7. If no canonical retro exists, fall back to legacy retro roots and resolved `STATE_ROOT` retro dirs, including flat subject directories. This handles context compaction and fresh-session invocation across the type-scoped retro directory layout.
 4. If none of the above produce recommendations, ask the user to provide the retro output or run `retro` first.
 
 Each recommendation has:
@@ -70,7 +76,7 @@ LINTER=$(find skills/review-skill/scripts -name "lint-definition.py" 2>/dev/null
 [ -z "$LINTER" ] && LINTER=$(find ~/.codex/skills/review-skill/scripts -name "lint-definition.py" 2>/dev/null | head -1)
 python3 "${LINTER:-lint-definition.py}" TARGET_FILE --format json
 ```
-If the linter is not found, warn "lint-definition.py not found — skipping structural validation" and proceed without it. Do not fail the change because the linter is missing. Any S-code error = structural failure. Q-code warnings are informational — in particular, Q14 (version not bumped) will fire during improve because the lint runs before the version bump step. This is expected; ignore Q14 during improve.
+If the linter is not found, warn "lint-definition.py not found — skipping structural validation" and proceed without it. Do not fail the change because the linter is missing. Any S-code error = structural failure. Q-code warnings are informational unless they are new regressions introduced by the edit.
 
 **Q-warning regression check** (always run alongside structural):
 Compare Q-warnings before and after the change. If the change introduced a NEW Q-warning that wasn't present before the edit, treat it as a quality regression:
@@ -97,13 +103,18 @@ If the change modifies an agent prompt, verify the new instruction doesn't contr
 
 If reverted: restore the file to its pre-change state, note the recommendation as `reverted` with the reason, and move to the next recommendation. Do NOT retry with a different approach — flag it for manual review.
 
-#### e. Version bump (accepted changes only)
+#### e. Version ownership (accepted changes only)
 
-After all fixes for a given file are accepted, apply a SemVer bump to `metadata.version` in the frontmatter. Rules, examples, and the tiebreaker (highest applicable bump wins) are in `references/version-bump.md`. If no version exists, initialize at `1.0.0` then apply the computed bump. Record old→new for each file in the report summary table and the outcome JSON.
+Do **not** edit inline version markers or frontmatter version fields in definition files.
+Released versions are tracked in the component's `CHANGELOG.md`, and version promotion
+only happens through the changelog/release flow. If a file still contains a legacy inline
+version marker, remove it as part of the accepted change rather than updating it.
 
 #### f. Changelog entry (accepted changes only)
 
-After bumping the version, append a single bullet to the component's own `CHANGELOG.md` under `## [Unreleased]`. Do NOT write a versioned `## [X.Y.Z] - YYYY-MM-DD` header here — version promotion happens at release time via the `changelog` skill.
+After applying the accepted change, append a single bullet to the component's own
+`CHANGELOG.md` under `## [Unreleased]`. Do NOT write a versioned `## [X.Y.Z] - YYYY-MM-DD`
+header here — version promotion happens at release time via the `changelog` skill.
 
 Determine the target CHANGELOG.md path using the routing rules table:
 
@@ -163,12 +174,12 @@ For each `pattern` recommendation:
 Present a summary table:
 
 ```
-| # | Recommendation | File | Action | Diff | Version | Verification |
-|---|---|---|---|---|---|---|
-| 1 | Add zod validation convention to AGENTS.md | AGENTS.md | accepted | +3 lines | — | structural: pass |
-| 2 | Require exact types in contracts | agents/planner/AGENT.md | accepted | +5 -1 lines | 1.2.0→1.2.1 | structural: pass, semantic: pass |
-| 3 | Add auth-check context to quality-engineer | agents/quality-engineer/AGENT.md | reverted | +8 lines (reverted) | — | eval: fail (broke existing test) |
-| 4 | Save routing heuristic | memory/feedback_dispatch.md | saved | — | — | — |
+| # | Recommendation | File | Action | Diff | Verification |
+|---|---|---|---|---|---|
+| 1 | Add zod validation convention to AGENTS.md | AGENTS.md | accepted | +3 lines | structural: pass |
+| 2 | Require exact types in contracts | agents/planner/AGENT.md | accepted | +5 -1 lines | structural: pass, semantic: pass |
+| 3 | Add auth-check context to quality-engineer | agents/quality-engineer/AGENT.md | reverted | +8 lines (reverted) | eval: fail (broke existing test) |
+| 4 | Save routing heuristic | memory/feedback_dispatch.md | saved | — | — |
 ```
 
 End with:
@@ -179,7 +190,7 @@ End with:
 
 ### 5. Final Quality Gate
 
-After all changes are applied, versioned, and changelogged, run a final lint pass on every modified file:
+After all changes are applied and changelogged, run a final lint pass on every modified file:
 
 ```bash
 LINTER=$(find skills/review-skill/scripts -name "lint-definition.py" 2>/dev/null | head -1)
@@ -238,7 +249,14 @@ Derive the subject value using this rule:
 - From conversation (parsing source 2): search backward for the retro header `# Retro: {subject} — {date}` and extract `{subject}`
 - If no header is found in conversation: default to `claude`
 
-Write a JSON file to `STATE_ROOT/retros/{subject}/YYYY-MM-DDTHHMMSS-improve.json` with:
+Derive the retro directory (`<retro-dir>`) using this rule:
+- If `$ARGUMENTS` provided a retro file path, use that file's parent directory
+- If recommendations came from the most recent retro on disk, use that retro file's parent directory
+- If recommendations came from conversation only, try to locate the matching retro on disk by subject/date and use its parent directory
+- If the resolved retro file lives under a legacy root and a canonical equivalent exists under `RETRO_ROOT`, normalize to the canonical directory before writing the outcome
+- If no real retro file can be resolved to a canonical write directory, stop and ask the user for the retro output or a retro file path instead of inventing a save location
+
+Write a JSON file next to the source retro in the same directory, using the filename `YYYYMMDDTHHMMSS-improve.json`, with:
 
 Include `model_recommendations` as an array of objects `{"agent": "name", "current": "model", "suggested": "model", "rationale": "why"}` for any agents where a model downgrade or upgrade is recommended based on observed performance. Use an empty array `[]` if no model changes are recommended — do not omit the field.
 
@@ -262,7 +280,7 @@ Include `model_recommendations` as an array of objects `{"agent": "name", "curre
   "total_lines_added": 16,
   "total_lines_removed": 3,
   "changes": [
-    {"file": "agents/planner/AGENT.md", "action": "accepted", "lines_added": 5, "lines_removed": 1, "version_before": "1.2.0", "version_after": "1.2.1"},
+    {"file": "agents/planner/AGENT.md", "action": "accepted", "lines_added": 5, "lines_removed": 1},
     {"file": "AGENTS.md", "action": "accepted", "lines_added": 3, "lines_removed": 0},
     {"file": "agents/quality-engineer/AGENT.md", "action": "reverted", "reason": "eval fail"}
   ],
@@ -288,7 +306,7 @@ HISTORY_SCRIPT=$(find skills/retro/scripts -name "retro-history.py" 2>/dev/null 
 [ -z "$HISTORY_SCRIPT" ] && HISTORY_SCRIPT=$(find ~/.agents/skills/retro/scripts -name "retro-history.py" 2>/dev/null | head -1)
 [ -z "$HISTORY_SCRIPT" ] && HISTORY_SCRIPT=$(find ~/.claude/skills/retro/scripts -name "retro-history.py" 2>/dev/null | head -1)
 [ -z "$HISTORY_SCRIPT" ] && HISTORY_SCRIPT=$(find ~/.codex/skills/retro/scripts -name "retro-history.py" 2>/dev/null | head -1)
-python3 "${HISTORY_SCRIPT:-retro-history.py}" save STATE_ROOT/retros/{subject}/YYYY-MM-DDTHHMMSS-improve.json --history STATE_ROOT/retros
+python3 "${HISTORY_SCRIPT:-retro-history.py}" save <retro-dir>/YYYYMMDDTHHMMSS-improve.json --history "${AGENT_RETRO_DIR:-$HOME/agent-retros}"
 ```
 If the script is not found, warn "retro-history.py not found — outcome not saved to trend history" but do not fail the improve run.
 
@@ -313,11 +331,10 @@ When `improve` is invoked with `remove <rec-id>` instead of a retro source:
    Wait for a one-word response. Only proceed on exact `yes` (case-insensitive). Any other response → `Aborted. No changes made.`
 2. **Read** `STATE_ROOT/metadata/rule-expiry.json`. Locate the entry for `<rec-id>`. If missing → abort: `No entry for <rec-id> in rule-expiry.json.`
 3. **Delete the rule text** from `target_file` using `anchor` as the locator. If the anchor doesn't match → abort: `Anchor not found in <target_file> — rule may already have been deleted or the file has diverged. Manual review required.`
-4. **Bump the host file's frontmatter `# version:`** per SemVer. Rule removal defaults to MINOR (backward-compatible feature removal); upgrade to MAJOR if the rule governed contract/public behavior. Document the choice in the changelog entry below.
-5. **Update** the entry in `rule-expiry.json`: set `status = "removed"`, set `last_reviewed = <today>`. Write atomically.
-6. **Append changelog entry** to the host file's `CHANGELOG.md` under `### Removed`:
+4. **Update** the entry in `rule-expiry.json`: set `status = "removed"`, set `last_reviewed = <today>`. Write atomically.
+5. **Append changelog entry** to the host file's `CHANGELOG.md` under `### Removed`:
    - `- Removed rule "<anchor>" (<rec-id>) per improve remove.`
-7. **Report** the action: host file path, old→new version, removed rule's anchor, link to changelog entry.
+6. **Report** the action: host file path, removed rule's anchor, link to changelog entry.
 
 This subcommand is disjoint from `improve`'s main retro-application flow. It does not parse recommendations and does not run the apply-verify loop.
 
@@ -328,7 +345,7 @@ This subcommand is disjoint from `improve`'s main retro-application flow. It doe
 - **Respect protected files.** Do not modify lockfiles, CI configs, migration files, or auth modules (per `AGENTS.md` auto-fix safety rules). Report these as `skipped: protected file` in the summary.
 - **Memory deduplication matters.** Before writing a new memory file, grep existing memories for the key concept. Duplicate memories cause contradictory guidance in future sessions.
 - **Validation loop is post-improve only.** The `--validate` loop runs AFTER the main improve workflow finishes — it does not replace the per-change verification in step 2c. The per-change checks catch individual regressions; the validation loop catches definition-level quality gaps.
-- **No double version bumps.** Validation iterations must NOT call step 2e (version bump). The initial pass owns versioning. If you're in iteration N>0 of the validation loop, skip version bump. For changelog: append a sub-entry under the existing version header, not a new header.
+- **No inline versioning.** Improve never edits inline definition versions. Validation iterations also avoid version headers; keep recording follow-up work under `## [Unreleased]`.
 - **Single outcome file.** The validation loop updates the existing outcome JSON from step 7 — it does not create additional outcome files. One improve run = one outcome file, regardless of validation iterations.
 - **Bad retro file path is not a fallback trigger.** If `$ARGUMENTS` contains a retro file path that doesn't exist, do not silently fall back to conversation history — report the bad path and stop. Fallbacks (conversation, disk) are for missing arguments, not bad arguments.
 - **`--validate` blocks on user input.** Orchestrators and full-cycle agents should pass `--max-iterations N` in `$ARGUMENTS` rather than relying on the interactive prompt, to avoid blocking mid-execution.

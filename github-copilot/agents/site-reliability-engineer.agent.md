@@ -1,7 +1,7 @@
 ---
 name: site-reliability-engineer
 description: "SRE reviewing and remediating operational readiness — health checks, observability, timeouts, graceful degradation. Can fix self-contained issues inline. Use during Phase 3a specialist reviews."
-model: "Claude Opus 4.5 (copilot)"
+model: "Claude Opus 4.6"
 tools:
   - read
   - edit

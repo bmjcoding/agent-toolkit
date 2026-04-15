@@ -11,7 +11,7 @@
         "Structural validation (lint-definition.py) was run on the modified file",
         "Report table shows the recommendation as 'accepted'",
         "Report table includes a Diff column with lines added/removed",
-        "Improve outcome JSON was saved to STATE_ROOT/retros/ with 'type': 'improve'",
+        "Improve outcome JSON was saved to ~/agent-retros/ with 'type': 'improve'",
         "Outcome JSON includes 'changes' array with per-file lines_added/lines_removed"
       ]
     },

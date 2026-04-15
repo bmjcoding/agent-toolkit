@@ -7,13 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.4.0] - 2026-04-15
+
 ### Changed
 
+- Declared canonical `lifecycle` metadata in the shared root definition so the distribution catalog can publish maturity separately from per-tool availability for this skill.
+
 - Updated shared wording to refer to `retro`, `review-skill`, and `improve` as cross-tool workflows rather than Claude-specific slash-command forms.
+- Clarified improve workflow guidance for runtimes where helper scripts are unavailable,
+  so missing script surfaces are treated as warnings instead of implicit fallback paths.
+- `argument-hint` now uses bracket placeholders (`[rec-id]`) instead of angle brackets so
+  the canonical definition passes the deterministic `review-skill` structural lint used in CI.
+- Removed inline definition version ownership from the workflow. `improve` now records changes only in changelogs and explicitly treats any remaining inline version markers as legacy cleanup.
 
 ### Changed
 
 - Step 2f now delegates CHANGELOG writes to the `/changelog` skill rather than writing entries inline; this ensures format consistency and keeps the SemVer bump logic in one place.
+
+## [4.3.1] - 2026-04-15
+
+### Fixed
+
+- Replaced the `argument-hint` angle-bracket placeholder for the remove subcommand with a
+  bracket placeholder so the frontmatter no longer trips `review-skill` lint rule `S06`.
 
 ## [4.3.0] - 2026-04-14
 
@@ -108,7 +124,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/skill/improve-v4.3.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/skill/improve-v4.4.0...HEAD
+[4.4.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/improve-v4.3.1...skill/improve-v4.4.0
+[4.3.1]: https://github.com/bmjcoding/agent-toolkit/compare/skill/improve-v4.3.0...skill/improve-v4.3.1
 [4.3.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/improve-v4.2.1...skill/improve-v4.3.0
 [4.2.1]: https://github.com/bmjcoding/agent-toolkit/compare/skill/improve-v4.2.0...skill/improve-v4.2.1
 [4.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/improve-v4.1.0...skill/improve-v4.2.0

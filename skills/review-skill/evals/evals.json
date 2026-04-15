@@ -19,6 +19,7 @@
       "expected_output": "REWRITE verdict — name is invalid, description is vague, instructions are entirely declarative with no procedure.",
       "assertions": [
         "lint-definition.py reports at least 1 S-code error (name not kebab-case)",
+        "lint-definition.py reports at least 1 S-code error when lifecycle is missing or invalid",
         "lint-definition.py reports Q03 warning (vague description)",
         "lint-definition.py reports Q04 warning (no actionable steps)",
         "Semantic review identifies instructions as declarative not procedural",

@@ -4,8 +4,10 @@ description: >
   Full production readiness check — build, lint, audit, test, simplify, final validation (internal
   phase, not a --validate flag), git verify, and ship verdict. Use when preparing code for
   production or before shipping.
+lifecycle: stable
 disable-model-invocation: true
 argument-hint: "[--dry-run] [--ship [--draft] [--auto-merge]]"
+lifecycle: stable
 ---
 
 # Production Readiness

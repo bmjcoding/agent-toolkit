@@ -3,8 +3,10 @@ name: git-ship
 description: >
   Git shipping workflow — commit, push, open PRs, enable auto-merge, and clean up worktrees.
   Use when the user wants to ship code, open a PR, merge, or clean up branches.
+lifecycle: stable
 disable-model-invocation: true
 argument-hint: "[pr | merge | cleanup | --draft | --auto-merge | --force]"
+lifecycle: stable
 ---
 
 # Git Ship

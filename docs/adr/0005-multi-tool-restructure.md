@@ -17,7 +17,6 @@ ownership model:
 - shared agent bodies should be edited once, not triplicated across tool formats
 - shared workflow bodies should be edited once, not duplicated as Claude commands and Copilot prompts
 - `AGENTS.md` should be the primary shared instruction surface
-- `CLAUDE.md` should exist only as a Claude compatibility shim
 - GitHub Copilot for VS Code should rely on its supported `.github/*` discovery surfaces
   and not on Claude-specific compatibility paths
 - OpenAI Codex should point directly at root shared skills and consume shared instructions
@@ -37,8 +36,6 @@ ownership model:
 ### 2. Shared instructions are rooted in `AGENTS.md`
 
 - `AGENTS.md` is the canonical shared instruction file for all tools.
-- Root `CLAUDE.md` remains only as a thin compatibility shim that imports `AGENTS.md`
-  and adds Claude-specific runtime notes.
 
 ### 3. Tool directories contain only tool-native assets or adapters
 

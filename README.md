@@ -1,11 +1,11 @@
 # agent-toolkit — Multi-tool agent scaffolding
 
 A configuration library for AI coding assistants. It provides shared skills, shared rules,
-and tool-specific agents, commands, hooks, prompts, bundles, and install assets for
-**Claude Code**, **GitHub Copilot for VS Code**, and **OpenAI Codex**.
+and tool-specific agents, commands, hooks, prompts, and install assets, plus bundle
+manifests where the target tool supports them, for **Claude Code**, **GitHub Copilot for
+VS Code**, and **OpenAI Codex**.
 
-`AGENTS.md` is the primary shared instruction source across tools. `CLAUDE.md` is a thin
-compatibility shim for Claude-native consumers that import or read it directly.
+`AGENTS.md` is the primary shared instruction source across tools, including Claude Code.
 
 ## Repository layout
 
@@ -19,10 +19,9 @@ agent-toolkit/
   rules/                  # Canonical shared rules
   workflows/              # Canonical shared workflow definitions
   claude-code/            # Claude-native agents, commands, hooks, bundles, docs, scripts
-  github-copilot/         # VS Code Copilot-native agents, prompts, instructions, hooks, bundles
-  openai-codex/           # Codex-native agents, hooks, bundles, config templates, rule build assets
+  github-copilot/         # VS Code Copilot-native agents, prompts, instructions, hooks, scripts
+  openai-codex/           # Codex-native agents, hooks, config templates, rule build assets
   AGENTS.md               # Primary shared instructions
-  CLAUDE.md               # Compatibility shim that imports AGENTS.md
 ```
 
 ## Ownership model
@@ -32,11 +31,10 @@ agent-toolkit/
 - Root `agents/` is the single source of truth for shared agent instruction bodies.
 - Root `workflows/` is the single source of truth for shared workflow bodies.
 - `AGENTS.md` is the canonical shared instruction file.
-- `CLAUDE.md` is a compatibility shim, not the canonical shared instruction source.
 - Tool directories contain only tool-native assets or adapters:
   - `claude-code/`: Claude frontmatter wrappers, slash-command adapters, hooks, bundles, docs, install scripts.
-  - `github-copilot/`: VS Code Copilot agent adapters, prompt adapters, instruction adapters, hooks, bundles.
-  - `openai-codex/`: Codex TOML agent adapters, hooks, bundles, config templates, rule composition assets.
+  - `github-copilot/`: VS Code Copilot agent adapters, prompt adapters, instruction adapters, hooks, install scripts.
+  - `openai-codex/`: Codex TOML agent adapters, hooks, config templates, rule composition assets.
 - Shared skills and shared rules are versioned once only at the root:
   - `skill/<slug>-vX.Y.Z`
   - `rule/<slug>-vX.Y.Z`
@@ -93,7 +91,6 @@ at the repo root and is adapted into the Copilot-native files under `github-copi
 ```sh
 TOOLKIT=$(pwd)
 ln -sfn "$TOOLKIT/github-copilot/agents"       .github/agents
-ln -sfn "$TOOLKIT/github-copilot/bundles"      .github/bundles
 ln -sfn "$TOOLKIT/github-copilot/hooks"        .github/hooks
 ln -sfn "$TOOLKIT/github-copilot/instructions" .github/instructions
 ln -sfn "$TOOLKIT/github-copilot/prompts"      .github/prompts
