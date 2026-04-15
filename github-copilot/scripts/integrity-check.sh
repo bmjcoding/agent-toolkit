@@ -9,6 +9,7 @@ set -uo pipefail
 # Locate the github-copilot directory — one level up from scripts/
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
 TOOL_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
+REPO_DIR="$(cd "${TOOL_DIR}/.." && pwd)"
 
 SECURITY_DIR="${TOOL_DIR}/.security"
 BASELINE_FILE="${SECURITY_DIR}/integrity-baseline.sha256"
@@ -34,18 +35,25 @@ header() { printf "\n${BOLD}%s${RESET}\n" "$1"; }
 collect_files() {
   local files=()
 
+  # Canonical shared hook scripts that Copilot adapters delegate to.
+  if [ -d "${REPO_DIR}/hooks" ]; then
+    while IFS= read -r -d '' f; do
+      files+=("$f")
+    done < <(find "${REPO_DIR}/hooks" -maxdepth 2 -name "*.sh" -type f -print0 2>/dev/null | sort -z)
+  fi
+
   # Hook scripts
   if [ -d "${TOOL_DIR}/hooks" ]; then
     while IFS= read -r -d '' f; do
       files+=("$f")
-    done < <(find "${TOOL_DIR}/hooks" -maxdepth 1 -name "*.sh" -type f -print0 2>/dev/null | sort -z)
+    done < <(find "${TOOL_DIR}/hooks" -maxdepth 2 -name "*.sh" -type f -print0 2>/dev/null | sort -z)
   fi
 
   # Hook manifests
   if [ -d "${TOOL_DIR}/hooks" ]; then
     while IFS= read -r -d '' f; do
       files+=("$f")
-    done < <(find "${TOOL_DIR}/hooks" -maxdepth 1 -name "*.json" -type f -print0 2>/dev/null | sort -z)
+    done < <(find "${TOOL_DIR}/hooks" -maxdepth 2 -name "*.json" -type f -print0 2>/dev/null | sort -z)
   fi
 
   # Agent definitions

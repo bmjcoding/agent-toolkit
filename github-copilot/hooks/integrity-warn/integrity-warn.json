@@ -1,0 +1,10 @@
+{
+  "hooks": {
+    "SubagentStop": [
+      {
+        "type": "command",
+        "command": "bash \"$AGENT_TOOLKIT_DIR/github-copilot/hooks/integrity-warn/integrity-warn.sh\""
+      }
+    ]
+  }
+}

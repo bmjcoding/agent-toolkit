@@ -1,6 +1,9 @@
 # Hooks
 
-Claude Code hooks that enforce safety and orchestration constraints. Wire these in `~/.claude/settings.json` under the `hooks` key.
+Claude Code hooks that enforce safety and orchestration constraints.
+
+Canonical shared hook logic now lives at repo-root `hooks/<slug>/<slug>.sh`, and that root
+tree is now the active `~/.claude/hooks` symlink target.
 
 ## Universal (use as-is)
 
@@ -48,7 +51,7 @@ Blocks Bash commands that would write to Claude Code control-plane files (`setti
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/hooks/protect-config.sh",
+            "command": "~/.claude/hooks/protect-config/protect-config.sh",
             "timeout": 5
           }
         ]
@@ -58,12 +61,12 @@ Blocks Bash commands that would write to Claude Code control-plane files (`setti
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/hooks/branch-guard.sh",
+            "command": "~/.claude/hooks/branch-guard/branch-guard.sh",
             "timeout": 3
           },
           {
             "type": "command",
-            "command": "~/.claude/hooks/pre-push-secrets.sh",
+            "command": "~/.claude/hooks/pre-push-secrets/pre-push-secrets.sh",
             "timeout": 30
           }
         ]
@@ -75,7 +78,7 @@ Blocks Bash commands that would write to Claude Code control-plane files (`setti
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/hooks/inject-context.sh",
+            "command": "~/.claude/hooks/inject-context/inject-context.sh",
             "timeout": 5
           }
         ]
@@ -87,7 +90,7 @@ Blocks Bash commands that would write to Claude Code control-plane files (`setti
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/hooks/extract-handoff.sh",
+            "command": "~/.claude/hooks/extract-handoff/extract-handoff.sh",
             "timeout": 5
           }
         ]
@@ -102,9 +105,11 @@ Blocks Bash commands that would write to Claude Code control-plane files (`setti
 After wiring hooks, lock down control-plane files from your terminal:
 
 ```bash
-chmod 444 ~/.claude/settings.json ~/.claude/CLAUDE.md ~/.claude/hooks/*.sh
+chmod 444 ~/.claude/settings.json ~/.claude/CLAUDE.md ~/.claude/hooks/*/*.sh
 # Optional (macOS): immutable flag — survives chmod attempts
-chflags uchg ~/.claude/settings.json ~/.claude/CLAUDE.md ~/.claude/hooks/*.sh
+chflags uchg ~/.claude/settings.json ~/.claude/CLAUDE.md ~/.claude/hooks/*/*.sh
 ```
 
 To edit a protected file: `chflags nouchg <file> && chmod 644 <file>`, edit, then re-lock.
+
+`claude-code/hooks/` now remains only for documentation and historical changelog redirects.

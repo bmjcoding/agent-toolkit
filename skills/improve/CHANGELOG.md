@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.4.1] - 2026-04-15
+
+### Fixed
+
+- Replaced the `remove` subcommand `argument-hint` angle-bracket placeholder with a
+  bracket placeholder so the canonical definition passes deterministic `review-skill`
+  lint in CI.
+
 ## [4.4.0] - 2026-04-15
 
 ### Changed
@@ -124,7 +132,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/skill/improve-v4.4.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/skill/improve-v4.4.1...HEAD
+[4.4.1]: https://github.com/bmjcoding/agent-toolkit/compare/skill/improve-v4.4.0...skill/improve-v4.4.1
 [4.4.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/improve-v4.3.1...skill/improve-v4.4.0
 [4.3.1]: https://github.com/bmjcoding/agent-toolkit/compare/skill/improve-v4.3.0...skill/improve-v4.3.1
 [4.3.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/improve-v4.2.1...skill/improve-v4.3.0

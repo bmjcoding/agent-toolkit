@@ -1,19 +1,16 @@
 # openai-codex/
 
 This directory contains **OpenAI Codex-specific adapters and runtime assets** — TOML
-agent wrappers, hooks, configuration templates, and Codex-specific rule
-composition assets. Canonical agent bodies, workflow bodies, skills, and rules live at
-the repo root.
-agent wrappers, hooks, a configuration template, and Codex-specific rule composition
-assets. Canonical agent bodies, workflow bodies, skills, and rules live at the repo
-root.
+agent wrappers, hook registry assets, configuration templates, and Codex-specific rule
+composition assets. Canonical agent bodies, workflow bodies, skills, rules, and shared
+hook logic live at the repo root.
 
 ## Subdirectory layout
 
 ```text
 openai-codex/
   agents/              # Codex TOML adapters for root agents/
-  hooks/               # Shell hook scripts + hooks.json manifest
+  hooks/               # Codex hook registry plus any tool-local adapters
   rules/               # Codex rule-composition assets
   config.toml.template # Skills config pointing at repo-root skills/
   scripts/
@@ -30,8 +27,9 @@ bash openai-codex/scripts/install.sh
 Or manually:
 
 ```sh
+export AGENT_TOOLKIT_DIR=/path/to/agent-toolkit
 cp openai-codex/agents/*.toml ~/.codex/agents/
-cp openai-codex/hooks/hooks.json ~/.codex/hooks.json
+ln -sfn /path/to/agent-toolkit/openai-codex/hooks/hooks.json ~/.codex/hooks.json
 cp openai-codex/config.toml.template ~/.codex/config.toml
 ln -sfn /path/to/agent-toolkit/skills .agents/skills
 ```
