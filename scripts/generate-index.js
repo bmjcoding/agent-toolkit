@@ -1,247 +1,13 @@
 #!/usr/bin/env node
-/**
- * generate-index.js
- *
- * Walks all content files under agent-toolkit and writes index.json at the repo
- * root as a deterministic JSON array sorted by: tool → category → slug.
- *
- * Entry shape: { slug: string, category: string, path: string }
- *
- *   slug     — component name/id (from frontmatter `name` field, or directory name)
- *   category — singular primitive type: agent | skill | command | hook | rule | bundle
- *   path     — canonical resolution key: relative path to the primary content file from
- *              repo root. This is the authoritative locator for the entry — consumers that
- *              need to read the actual file MUST use this field rather than reconstructing
- *              paths from slug/category. Non-trivial because each primitive type has its
- *              own filename convention (hooks have no .md; skills use SKILL.md; rules use
- *              <name>.md; bundles use bundle.yaml; github-copilot agents use <name>.agent.md).
- *
- * Canonical shared sources live at the repo root:
- *   agents    → agents/<name>/AGENT.md
- *   workflows → workflows/<name>/WORKFLOW.md
- *   skills    → skills/<name>/SKILL.md
- *   rules     → rules/<name>/<name>.md
- *
- * This index is intentionally adapter/install-surface oriented, so the concrete
- * indexed paths below still point at tool-native runtime assets where applicable.
- *
- * claude-code adapters:
- *   agents   → claude-code/agents/<name>/<name>.md          (frontmatter name field)
- *   commands → claude-code/commands/<name>/<name>.md        (frontmatter name field; adapter for root workflows/)
- *   hooks    → no .md — stub from directory name
- *   bundles  → claude-code/bundles/<name>/bundle.yaml       (id field parsed with minimal YAML)
- *   skills/rules remain rooted at shared canonical paths
- *
- * github-copilot adapters:
- *   agents   → github-copilot/agents/<name>.agent.md        (flat, not in subdirs)
- *   prompts  → github-copilot/prompts/<name>.prompt.md      (adapter for root workflows/)
- *   other    → stub from directory name (no content .md for commands/hooks)
- *   bundles  → bundle.yaml (same as claude-code, handle missing gracefully)
- *
- * openai-codex adapters:
- *   all      → stubs from directory name
- *
- * Usage (run from repo root or any directory):
- *   node scripts/generate-index.js
- *   node scripts/generate-index.js --test
- *
- * Idempotent — safe to re-run as more content files are added.
- * Uses only Node.js built-ins (fs, path) — no npm dependencies.
- */
-
 'use strict';
 
-const fs   = require('fs');
+const crypto = require('crypto');
+const fs = require('fs');
 const path = require('path');
 
-// Resolve repo root relative to this script's location (scripts/ is one level below root).
-const REPO_ROOT   = path.resolve(__dirname, '..');
+const REPO_ROOT = path.resolve(__dirname, '..');
 const OUTPUT_FILE = path.join(REPO_ROOT, 'index.json');
-
-// Known tool directories — explicit allowlist avoids accidentally pulling in
-// top-level dirs (docs/, scripts/) that could contain stray files.
-const TOOL_DIRS = ['claude-code', 'github-copilot', 'openai-codex'];
-
-// Known primitive-type directories per tool.
-// 'commands-unsupported' is the openai-codex category for command stubs.
-const PRIMITIVE_DIRS = [
-  'agents',
-  'hooks',
-  'commands',
-  'commands-unsupported',
-  'bundles',
-];
-
-// Maps plural directory name → singular category label used in index entries.
-const CATEGORY_MAP = {
-  'agents':              'agent',
-  'commands':            'command',
-  'commands-unsupported': 'command',
-  'hooks':               'hook',
-  'bundles':             'bundle',
-};
-
-// ---------------------------------------------------------------------------
-// YAML frontmatter parser — pure built-in string operations, no npm imports.
-// ---------------------------------------------------------------------------
-
-/**
- * Extract the raw YAML frontmatter string from a Markdown document.
- *
- * Returns the text between the first `---` line and the next `---` line.
- * Returns null if the document has no frontmatter block.
- *
- * @param {string} content - Raw file text
- * @returns {string|null}
- */
-function extractFrontmatterBlock(content) {
-  const lines = content.split('\n');
-  if (lines.length < 2 || lines[0].trimEnd() !== '---') return null;
-
-  const closing = lines.slice(1).findIndex(l => l.trimEnd() === '---');
-  if (closing === -1) return null;
-
-  // lines[1 .. closing] (exclusive end)
-  return lines.slice(1, closing + 1).join('\n');
-}
-
-/**
- * Parse a YAML frontmatter block into a flat key→value object.
- *
- * Handles:
- *   - Simple scalar:       `name: planner`
- *   - Quoted scalar:       `name: "planner"`
- *   - Multiline (>/-):     collapses the block into a single trimmed string
- *   - Inline lists:        paths: ["**\/\*.py", "*.ts"]  (used by rules)
- *   - Block lists:         YAML `- item` list (used by github-copilot tools)
- *   - Comment lines:       `# version: 1.0.0`  → ignored
- *   - Nested scalar maps:  `metadata:\n  version: 1.0.0`  → stored as nested object
- *     (shallow only — sufficient for our index needs)
- *   - Missing block (null input): returns {}
- *
- * @param {string|null} block - Raw YAML text (without `---` delimiters)
- * @returns {Object}
- */
-function parseFrontmatter(block) {
-  if (!block) return {};
-
-  const result  = {};
-  const lines   = block.split('\n');
-  let   i       = 0;
-
-  while (i < lines.length) {
-    const raw = lines[i];
-
-    // Skip comment-only lines (e.g., `# version: 1.0.0`) and blank lines.
-    const trimmed = raw.trimEnd();
-    if (!trimmed || /^\s*#/.test(trimmed)) {
-      i++;
-      continue;
-    }
-
-    // Check for a top-level key (no leading whitespace).
-    const keyMatch = trimmed.match(/^([A-Za-z_][A-Za-z0-9_-]*):\s*(.*)/);
-    if (!keyMatch) {
-      i++;
-      continue;
-    }
-
-    const key    = keyMatch[1];
-    const rest   = keyMatch[2].trim();
-    i++;
-
-    // ------------------------------------------------------------------
-    // Multiline block scalar: `>` (folded) or `|` (literal)
-    // ------------------------------------------------------------------
-    if (rest === '>' || rest === '|') {
-      const blockLines = [];
-      while (i < lines.length && (lines[i].startsWith('  ') || lines[i] === '')) {
-        blockLines.push(lines[i].trim());
-        i++;
-      }
-      // Collapse multiline to single trimmed string.
-      result[key] = blockLines.filter(Boolean).join(' ').trim();
-      continue;
-    }
-
-    // ------------------------------------------------------------------
-    // Inline JSON-style list: `paths: ["**/*.py", "*.ts"]`
-    // ------------------------------------------------------------------
-    if (rest.startsWith('[')) {
-      // Accumulate across continuation lines until the bracket closes.
-      let accumulated = rest;
-      while (!accumulated.includes(']') && i < lines.length) {
-        accumulated += ' ' + lines[i].trim();
-        i++;
-      }
-      try {
-        // Strip trailing YAML comment before parsing.
-        const jsonStr = accumulated.replace(/#[^"]*$/, '').trim();
-        result[key] = JSON.parse(jsonStr);
-      } catch {
-        // Fallback: store raw string.
-        result[key] = accumulated;
-      }
-      continue;
-    }
-
-    // ------------------------------------------------------------------
-    // Block list: lines following the key are `  - item`
-    // ------------------------------------------------------------------
-    if (rest === '') {
-      const listItems = [];
-      const nestedObj = {};
-      let   isList    = false;
-      let   isNested  = false;
-
-      while (i < lines.length) {
-        const nextLine = lines[i];
-        const nextTrimmed = nextLine.trimEnd();
-
-        // Block list item
-        if (/^\s+-\s/.test(nextLine)) {
-          isList = true;
-          listItems.push(nextTrimmed.replace(/^\s+-\s*/, '').trim());
-          i++;
-          continue;
-        }
-
-        // Nested scalar (indented key: value)
-        const nestedMatch = nextLine.match(/^(\s+)([A-Za-z_][A-Za-z0-9_-]*):\s*(.*)/);
-        if (nestedMatch && nestedMatch[1].length > 0) {
-          isNested = true;
-          nestedObj[nestedMatch[2]] = nestedMatch[3].trim().replace(/^["']|["']$/g, '');
-          i++;
-          continue;
-        }
-
-        break; // Next top-level key — stop collecting.
-      }
-
-      if (isList) {
-        result[key] = listItems;
-      } else if (isNested) {
-        result[key] = nestedObj;
-      }
-      // If neither, key had no value and no children — skip it.
-      continue;
-    }
-
-    // ------------------------------------------------------------------
-    // Simple scalar (possibly quoted).
-    // ------------------------------------------------------------------
-    result[key] = rest.replace(/^["']|["']$/g, '');
-  }
-
-  return result;
-}
-
-/**
- * Read a file and return its text content, or null on any error.
- *
- * @param {string} filePath
- * @returns {string|null}
- */
+const RAW_BASE_URL = 'https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/';
 function readFileSafe(filePath) {
   try {
     return fs.readFileSync(filePath, 'utf8');
@@ -250,467 +16,851 @@ function readFileSafe(filePath) {
   }
 }
 
-/**
- * Derive the slug from a frontmatter object and a fallback directory/file name.
- * Uses the `name` field when present; otherwise the `id` field; otherwise
- * falls back to the supplied directory name.
- *
- * @param {Object} fm     - Parsed frontmatter
- * @param {string} dirName - Directory name to use as fallback
- * @returns {string}
- */
-function slugFrom(fm, dirName) {
-  if (fm.name && typeof fm.name === 'string') return fm.name.trim();
-  if (fm.id   && typeof fm.id   === 'string') return fm.id.trim();
-  return dirName;
+function exists(filePath) {
+  return fs.existsSync(filePath);
 }
 
-// ---------------------------------------------------------------------------
-// Index collection
-// ---------------------------------------------------------------------------
-
-/**
- * Build a single index entry.
- *
- * @param {string} slug
- * @param {string} category
- * @param {string} relPath - Path relative to REPO_ROOT
- * @returns {{slug: string, category: string, path: string}}
- */
-function makeEntry(slug, category, relPath) {
-  return { slug, category, path: relPath };
+function relativePath(filePath) {
+  return path.relative(REPO_ROOT, filePath).split(path.sep).join('/');
 }
 
-/**
- * Walk all tool/primitive directories and produce the flat index entries.
- *
- * @returns {{slug: string, category: string, path: string}[]}
- */
-function collectEntries() {
-  const entries = [];
+function downloadUrlFor(relPath) {
+  return `${RAW_BASE_URL}${relPath}`;
+}
 
-  for (const tool of TOOL_DIRS) {
-    const toolDir = path.join(REPO_ROOT, tool);
-    if (!fs.existsSync(toolDir)) continue;
+function sha256For(relPath) {
+  const absolutePath = path.join(REPO_ROOT, relPath);
+  const buffer = fs.readFileSync(absolutePath);
+  return crypto.createHash('sha256').update(buffer).digest('hex');
+}
 
-    for (const primitive of PRIMITIVE_DIRS) {
-      const primitiveDir = path.join(toolDir, primitive);
-      if (!fs.existsSync(primitiveDir)) continue;
+function extractFrontmatterBlock(content) {
+  const lines = content.split('\n');
+  if (lines.length < 2 || lines[0].trimEnd() !== '---') return null;
 
-      const category = CATEGORY_MAP[primitive];
+  const closingIndex = lines.slice(1).findIndex(line => line.trimEnd() === '---');
+  if (closingIndex === -1) return null;
 
-      // ----------------------------------------------------------------
-      // github-copilot agents: content lives in flat <name>.agent.md files
-      // in the agents/ directory (not in per-name subdirs).
-      // ----------------------------------------------------------------
-      if (tool === 'github-copilot' && primitive === 'agents') {
-        let dirEntries;
-        try {
-          dirEntries = fs.readdirSync(primitiveDir, { withFileTypes: true });
-        } catch {
-          continue;
-        }
+  return lines.slice(1, closingIndex + 1).join('\n');
+}
 
-        for (const dirent of dirEntries) {
-          if (!dirent.isFile() || !dirent.name.endsWith('.agent.md')) continue;
+function normalizeQuotedValue(value) {
+  const trimmed = value.trim();
+  if (trimmed.startsWith('"') && trimmed.endsWith('"')) {
+    try {
+      return JSON.parse(trimmed);
+    } catch {
+      return trimmed.slice(1, -1);
+    }
+  }
+  if (trimmed.startsWith("'") && trimmed.endsWith("'")) {
+    return trimmed.slice(1, -1);
+  }
+  return trimmed;
+}
 
-          const filePath = path.join(primitiveDir, dirent.name);
-          const content  = readFileSafe(filePath);
-          const fm       = parseFrontmatter(extractFrontmatterBlock(content || ''));
-          // Derive slug from frontmatter name or strip the .agent.md suffix.
-          const fallback = dirent.name.replace(/\.agent\.md$/, '');
-          const slug     = slugFrom(fm, fallback);
-          const relPath  = path.relative(REPO_ROOT, filePath);
+function parseFrontmatter(block) {
+  if (!block) return {};
 
-          entries.push(makeEntry(slug, category, relPath));
-        }
-        continue; // Done with github-copilot/agents.
+  const result = {};
+  const lines = block.split('\n');
+  let i = 0;
+
+  while (i < lines.length) {
+    const raw = lines[i];
+    const trimmed = raw.trimEnd();
+    if (!trimmed || /^\s*#/.test(trimmed)) {
+      i += 1;
+      continue;
+    }
+
+    const keyMatch = trimmed.match(/^([A-Za-z_][A-Za-z0-9_-]*):\s*(.*)$/);
+    if (!keyMatch) {
+      i += 1;
+      continue;
+    }
+
+    const key = keyMatch[1];
+    const rest = keyMatch[2].trim();
+    i += 1;
+
+    if (rest === '>' || rest === '|') {
+      const blockLines = [];
+      while (i < lines.length && (lines[i].startsWith('  ') || lines[i] === '')) {
+        blockLines.push(lines[i].trim());
+        i += 1;
+      }
+      result[key] = blockLines.filter(Boolean).join(' ').trim();
+      continue;
+    }
+
+    if (rest.startsWith('[')) {
+      let accumulated = rest;
+      while (!accumulated.includes(']') && i < lines.length) {
+        accumulated += ` ${lines[i].trim()}`;
+        i += 1;
       }
 
-      // ----------------------------------------------------------------
-      // All other tools/primitives: per-name subdirectory layout.
-      // ----------------------------------------------------------------
-      let subdirs;
       try {
-        subdirs = fs.readdirSync(primitiveDir, { withFileTypes: true });
+        result[key] = JSON.parse(accumulated);
       } catch {
+        result[key] = accumulated;
+      }
+      continue;
+    }
+
+    if (rest === '') {
+      const listItems = [];
+      const nestedObject = {};
+      let isList = false;
+      let isNested = false;
+
+      while (i < lines.length) {
+        const nextLine = lines[i];
+        const nextTrimmed = nextLine.trimEnd();
+
+        if (/^\s+-\s/.test(nextLine)) {
+          isList = true;
+          listItems.push(nextTrimmed.replace(/^\s+-\s*/, '').trim());
+          i += 1;
+          continue;
+        }
+
+        const nestedMatch = nextLine.match(/^(\s+)([A-Za-z_][A-Za-z0-9_-]*):\s*(.*)$/);
+        if (nestedMatch && nestedMatch[1].length > 0) {
+          isNested = true;
+          nestedObject[nestedMatch[2]] = normalizeQuotedValue(nestedMatch[3]);
+          i += 1;
+          continue;
+        }
+
+        break;
+      }
+
+      if (isList) {
+        result[key] = listItems;
+      } else if (isNested) {
+        result[key] = nestedObject;
+      }
+      continue;
+    }
+
+    result[key] = normalizeQuotedValue(rest);
+  }
+
+  return result;
+}
+
+function splitTopLevelCommaList(value) {
+  const parts = [];
+  let current = '';
+  let depth = 0;
+
+  for (const char of value) {
+    if (char === '(') depth += 1;
+    if (char === ')' && depth > 0) depth -= 1;
+
+    if (char === ',' && depth === 0) {
+      if (current.trim()) parts.push(current.trim());
+      current = '';
+      continue;
+    }
+
+    current += char;
+  }
+
+  if (current.trim()) parts.push(current.trim());
+  return parts;
+}
+
+function parseYamlList(frontmatter, fieldName) {
+  const match = frontmatter.match(new RegExp(`^${fieldName}:\\s*\\n((?:\\s+-\\s+.+\\n?)*)`, 'm'));
+  if (!match || !match[1].trim()) return [];
+
+  return match[1]
+    .split('\n')
+    .map(line => line.match(/^\s+-\s+(.+)$/))
+    .filter(Boolean)
+    .map(item => normalizeQuotedValue(item[1]));
+}
+
+function readLatestReleasedVersion(changelogPath) {
+  const changelog = readFileSafe(changelogPath);
+  if (!changelog) return null;
+
+  const match = changelog.match(/^## \[(?!Unreleased\])([^\]]+)\]/m);
+  return match ? match[1] : null;
+}
+
+function parseClaudeAgentFallback(agentId) {
+  const claudePath = path.join(REPO_ROOT, 'claude-code', 'agents', agentId, `${agentId}.md`);
+  const content = readFileSafe(claudePath);
+  if (!content) {
+    return {
+      modelTier: null,
+      capabilities: [],
+      subagents: [],
+      skills: [],
+      metadataSource: 'missing',
+    };
+  }
+
+  const frontmatter = extractFrontmatterBlock(content) || '';
+  const model = normalizeQuotedValue((frontmatter.match(/^model:\s*(.+)$/m) || [null, 'inherit'])[1]);
+  const toolsRaw = (frontmatter.match(/^tools:\s*(.+)$/m) || [null, ''])[1];
+  const tools = splitTopLevelCommaList(toolsRaw);
+  const subagents = [];
+  const capabilities = [];
+
+  if (tools.some(tool => tool === 'Read')) capabilities.push('read');
+  if (tools.some(tool => tool === 'Write')) capabilities.push('write');
+  if (tools.some(tool => tool === 'Edit')) capabilities.push('edit');
+  if (tools.some(tool => tool === 'Glob' || tool === 'Grep')) capabilities.push('search');
+  if (tools.some(tool => tool === 'Bash')) capabilities.push('execute');
+  if (tools.some(tool => tool === 'WebSearch' || tool === 'WebFetch')) capabilities.push('web');
+  if (tools.some(tool => tool === 'TodoWrite')) capabilities.push('todo');
+
+  const agentTool = tools.find(tool => /^Agent\(/.test(tool));
+  if (agentTool) {
+    capabilities.push('delegate');
+    subagents.push(
+      ...agentTool
+        .replace(/^Agent\(/, '')
+        .replace(/\)$/, '')
+        .split(',')
+        .map(name => name.trim())
+        .filter(Boolean)
+    );
+  }
+
+  const modelTier = model === 'sonnet'
+    ? 'balanced'
+    : model === 'haiku'
+      ? 'fast'
+      : 'frontier';
+
+  return {
+    modelTier,
+    capabilities,
+    subagents,
+    skills: parseYamlList(frontmatter, 'skills'),
+    metadataSource: 'claude-adapter-fallback',
+  };
+}
+
+function readCanonicalAgents() {
+  const agentsDir = path.join(REPO_ROOT, 'agents');
+  const results = [];
+
+  for (const entry of fs.readdirSync(agentsDir, { withFileTypes: true }).filter(dirent => dirent.isDirectory()).sort((a, b) => a.name.localeCompare(b.name))) {
+    const id = entry.name;
+    const sourcePath = path.join(agentsDir, id, 'AGENT.md');
+    const content = readFileSafe(sourcePath);
+    if (!content) continue;
+
+    const frontmatter = parseFrontmatter(extractFrontmatterBlock(content));
+    const fallback = parseClaudeAgentFallback(id);
+    const modelTier = frontmatter['model-tier'] || fallback.modelTier;
+    const capabilities = Array.isArray(frontmatter.capabilities) && frontmatter.capabilities.length > 0
+      ? frontmatter.capabilities
+      : fallback.capabilities;
+    const subagents = Array.isArray(frontmatter.subagents) && frontmatter.subagents.length > 0
+      ? frontmatter.subagents
+      : fallback.subagents;
+    const skills = Array.isArray(frontmatter.skills) && frontmatter.skills.length > 0
+      ? frontmatter.skills
+      : fallback.skills;
+    const metadataSource = frontmatter['model-tier'] || (Array.isArray(frontmatter.capabilities) && frontmatter.capabilities.length > 0)
+      ? 'canonical'
+      : fallback.metadataSource;
+
+    results.push({
+      id,
+      description: frontmatter.description || '',
+      version: readLatestReleasedVersion(path.join(agentsDir, id, 'CHANGELOG.md')),
+      sourcePath: relativePath(sourcePath),
+      adapters: Array.isArray(frontmatter.adapters) ? frontmatter.adapters : [],
+      metadata: {
+        model_tier: modelTier,
+        capabilities,
+        subagents,
+        skills,
+        metadata_source: metadataSource,
+      },
+    });
+  }
+
+  return results;
+}
+
+function readWorkflowArgumentHint(workflowId) {
+  const claudePath = path.join(REPO_ROOT, 'claude-code', 'commands', workflowId, `${workflowId}.md`);
+  const copilotPath = path.join(REPO_ROOT, 'github-copilot', 'prompts', `${workflowId}.prompt.md`);
+  const candidates = [claudePath, copilotPath];
+
+  for (const candidate of candidates) {
+    const content = readFileSafe(candidate);
+    if (!content) continue;
+    const frontmatter = extractFrontmatterBlock(content) || '';
+    const match = frontmatter.match(/^argument-hint:\s*(.+)$/m);
+    if (match) return normalizeQuotedValue(match[1]);
+  }
+
+  return null;
+}
+
+function readCanonicalWorkflows() {
+  const workflowsDir = path.join(REPO_ROOT, 'workflows');
+  const results = [];
+
+  for (const entry of fs.readdirSync(workflowsDir, { withFileTypes: true }).filter(dirent => dirent.isDirectory()).sort((a, b) => a.name.localeCompare(b.name))) {
+    const id = entry.name;
+    const sourcePath = path.join(workflowsDir, id, 'WORKFLOW.md');
+    const content = readFileSafe(sourcePath);
+    if (!content) continue;
+
+    const frontmatter = parseFrontmatter(extractFrontmatterBlock(content));
+    const canonicalArgumentHint = frontmatter['argument-hint'] || null;
+    const argumentHint = canonicalArgumentHint || readWorkflowArgumentHint(id);
+
+    results.push({
+      id,
+      description: frontmatter.description || '',
+      version: readLatestReleasedVersion(path.join(workflowsDir, id, 'CHANGELOG.md')),
+      sourcePath: relativePath(sourcePath),
+      adapters: Array.isArray(frontmatter.adapters) ? frontmatter.adapters : [],
+      metadata: {
+        argument_hint: argumentHint,
+        metadata_source: canonicalArgumentHint ? 'canonical' : 'adapter-fallback',
+      },
+    });
+  }
+
+  return results;
+}
+
+function readSharedSkills() {
+  const skillsDir = path.join(REPO_ROOT, 'skills');
+  const results = [];
+
+  for (const entry of fs.readdirSync(skillsDir, { withFileTypes: true }).filter(dirent => dirent.isDirectory()).sort((a, b) => a.name.localeCompare(b.name))) {
+    const id = entry.name;
+    const skillPath = path.join(skillsDir, id, 'SKILL.md');
+    const content = readFileSafe(skillPath);
+    if (!content) continue;
+
+    const frontmatter = parseFrontmatter(extractFrontmatterBlock(content));
+    results.push({
+      id,
+      description: frontmatter.description || '',
+      version: readLatestReleasedVersion(path.join(skillsDir, id, 'CHANGELOG.md')),
+      sourcePath: relativePath(skillPath),
+      metadata: {},
+    });
+  }
+
+  return results;
+}
+
+function readRootRules() {
+  const rulesDir = path.join(REPO_ROOT, 'rules');
+  const results = [];
+
+  for (const entry of fs.readdirSync(rulesDir, { withFileTypes: true }).filter(dirent => dirent.isDirectory()).sort((a, b) => a.name.localeCompare(b.name))) {
+    const id = entry.name;
+    const rulePath = path.join(rulesDir, id, `${id}.md`);
+    const content = readFileSafe(rulePath);
+    if (!content) continue;
+
+    const frontmatter = parseFrontmatter(extractFrontmatterBlock(content));
+    results.push({
+      id,
+      version: readLatestReleasedVersion(path.join(rulesDir, id, 'CHANGELOG.md')),
+      sourcePath: relativePath(rulePath),
+      metadata: {
+        apply_to: frontmatter.applyTo || null,
+        paths: Array.isArray(frontmatter.paths) ? frontmatter.paths : [],
+      },
+    });
+  }
+
+  return results;
+}
+
+function parseBundleManifest(bundlePath) {
+  const content = readFileSafe(bundlePath);
+  if (!content) return null;
+
+  const lines = content.split('\n');
+  const bundle = {
+    id: null,
+    name: null,
+    description: null,
+    status: null,
+    tags: [],
+    components: [],
+  };
+
+  let mode = null;
+  let currentComponent = null;
+
+  for (const rawLine of lines) {
+    const line = rawLine.trimEnd();
+
+    if (/^id:\s*/.test(line) && mode === null) {
+      bundle.id = normalizeQuotedValue(line.replace(/^id:\s*/, ''));
+      continue;
+    }
+    if (/^name:\s*/.test(line)) {
+      bundle.name = normalizeQuotedValue(line.replace(/^name:\s*/, ''));
+      continue;
+    }
+    if (/^description:\s*/.test(line)) {
+      bundle.description = normalizeQuotedValue(line.replace(/^description:\s*/, ''));
+      continue;
+    }
+    if (/^status:\s*/.test(line)) {
+      bundle.status = normalizeQuotedValue(line.replace(/^status:\s*/, ''));
+      continue;
+    }
+    if (/^tags:\s*$/.test(line)) {
+      mode = 'tags';
+      currentComponent = null;
+      continue;
+    }
+    if (/^components:\s*$/.test(line)) {
+      mode = 'components';
+      currentComponent = null;
+      continue;
+    }
+
+    if (mode === 'tags') {
+      const tagMatch = line.match(/^\s*-\s+(.+)$/);
+      if (tagMatch) {
+        bundle.tags.push(normalizeQuotedValue(tagMatch[1]));
+        continue;
+      }
+      mode = null;
+    }
+
+    if (mode === 'components') {
+      const componentStart = line.match(/^\s*-\s+type:\s*(.+)$/);
+      if (componentStart) {
+        currentComponent = { type: normalizeQuotedValue(componentStart[1]), id: null, role: null };
+        bundle.components.push(currentComponent);
         continue;
       }
 
-      for (const dirent of subdirs) {
-        if (!dirent.isDirectory()) continue;
-
-        const name    = dirent.name;
-        const nameDir = path.join(primitiveDir, name);
-
-        // --------------------------------------------------------------
-        // Hooks: no content .md file — produce a stub from directory name.
-        // All three tools follow this pattern for hooks.
-        // --------------------------------------------------------------
-        if (primitive === 'hooks') {
-          const relPath = path.relative(REPO_ROOT, nameDir);
-          entries.push(makeEntry(name, category, relPath));
-          continue;
-        }
-
-        // --------------------------------------------------------------
-        // openai-codex: all primitives → stub from directory name.
-        // Content lives in flat .toml files one level above; we record
-        // the subdir path as a stable reference point.
-        // --------------------------------------------------------------
-        if (tool === 'openai-codex') {
-          const relPath = path.relative(REPO_ROOT, nameDir);
-          entries.push(makeEntry(name, category, relPath));
-          continue;
-        }
-
-        // --------------------------------------------------------------
-        // Bundles: read bundle.yaml for slug/path.
-        // Handle missing bundle.yaml gracefully (produce no entry).
-        // --------------------------------------------------------------
-        if (primitive === 'bundles') {
-          const bundleYaml = path.join(nameDir, 'bundle.yaml');
-          if (!fs.existsSync(bundleYaml)) {
-            // Missing bundle.yaml — skip this bundle silently.
-            continue;
-          }
-          const content = readFileSafe(bundleYaml);
-          if (!content) continue;
-
-          // Minimal YAML scalar extraction for bundle.yaml (not frontmatter-delimited).
-          // Only need the `id` field; fallback to directory name.
-          const idMatch = content.match(/^id:\s*["']?([^\s"'\n]+)["']?/m);
-          const slug    = idMatch ? idMatch[1].trim() : name;
-          const relPath = path.relative(REPO_ROOT, bundleYaml);
-
-          entries.push(makeEntry(slug, category, relPath));
-          continue;
-        }
-
-        // --------------------------------------------------------------
-        // github-copilot non-agent primitives:
-        //   - commands: no content .md in subdir — stub from dir name
-        // --------------------------------------------------------------
-        if (tool === 'github-copilot') {
-          const relPath = path.relative(REPO_ROOT, nameDir);
-          entries.push(makeEntry(name, category, relPath));
-          continue;
-        }
-
-        // --------------------------------------------------------------
-        // claude-code: read the primary .md file for each primitive.
-        //
-        //   agents   → <name>/<name>.md
-        //   commands → <name>/<name>.md
-        // --------------------------------------------------------------
-        const contentFile = path.join(nameDir, `${name}.md`);
-
-        const content = readFileSafe(contentFile);
-        if (!content) {
-          // No content file — emit a stub using the directory name.
-          const relPath = path.relative(REPO_ROOT, nameDir);
-          entries.push(makeEntry(name, category, relPath));
-          continue;
-        }
-
-        const fmBlock = extractFrontmatterBlock(content);
-        if (!fmBlock) {
-          // Expected-frontmatter category has a content file but no parseable frontmatter
-          // block. Warn loudly so frontmatter typos surface in CI logs. The stub entry is
-          // still emitted (silent degradation is intentional); only the warning is new.
-          process.stderr.write(
-            `[generate-index] WARNING: no frontmatter block found in ${contentFile} — emitting directory-name stub for "${name}"\n`
-          );
-        }
-        const fm      = parseFrontmatter(fmBlock);
-        const slug    = slugFrom(fm, name);
-        const relPath = path.relative(REPO_ROOT, contentFile);
-
-        entries.push(makeEntry(slug, category, relPath));
+      const fieldMatch = line.match(/^\s+(id|role):\s*(.+)$/);
+      if (fieldMatch && currentComponent) {
+        currentComponent[fieldMatch[1]] = normalizeQuotedValue(fieldMatch[2]);
+        continue;
       }
     }
   }
 
-  // -------------------------------------------------------------------------
-  // Root-level skills/ directory (universal, not under any tool dir).
-  // -------------------------------------------------------------------------
-  const rootSkillsDir = path.join(REPO_ROOT, 'skills');
-  if (fs.existsSync(rootSkillsDir)) {
-    let skillSubdirs;
-    try {
-      skillSubdirs = fs.readdirSync(rootSkillsDir, { withFileTypes: true });
-    } catch {
-      skillSubdirs = [];
-    }
+  return bundle;
+}
 
-    for (const dirent of skillSubdirs) {
-      if (!dirent.isDirectory()) continue;
+function readBundles(tool) {
+  const bundlesDir = path.join(REPO_ROOT, tool, 'bundles');
+  if (!exists(bundlesDir)) return [];
 
-      const name      = dirent.name;
-      const nameDir   = path.join(rootSkillsDir, name);
-      const skillMd   = path.join(nameDir, 'SKILL.md');
-      const content   = readFileSafe(skillMd);
+  const results = [];
+  for (const entry of fs.readdirSync(bundlesDir, { withFileTypes: true }).filter(dirent => dirent.isDirectory()).sort((a, b) => a.name.localeCompare(b.name))) {
+    const id = entry.name;
+    const bundlePath = path.join(bundlesDir, id, 'bundle.yaml');
+    if (!exists(bundlePath)) continue;
 
-      if (!content) {
-        const relPath = path.relative(REPO_ROOT, nameDir);
-        entries.push(makeEntry(name, 'skill', relPath));
-        continue;
-      }
+    const parsed = parseBundleManifest(bundlePath);
+    if (!parsed) continue;
 
-      const fmBlock = extractFrontmatterBlock(content);
-      if (!fmBlock) {
-        process.stderr.write(
-          `[generate-index] WARNING: no frontmatter block found in ${skillMd} — emitting directory-name stub for "${name}"\n`
-        );
-      }
-      const fm      = parseFrontmatter(fmBlock);
-      const slug    = slugFrom(fm, name);
-      const relPath = path.relative(REPO_ROOT, skillMd);
+    results.push({
+      tool,
+      id: parsed.id || id,
+      version: readLatestReleasedVersion(path.join(bundlesDir, id, 'CHANGELOG.md')),
+      artifactPath: relativePath(bundlePath),
+      metadata: {
+        name: parsed.name,
+        description: parsed.description,
+        status: parsed.status,
+        tags: parsed.tags,
+        components: parsed.components,
+      },
+    });
+  }
 
-      entries.push(makeEntry(slug, 'skill', relPath));
+  return results;
+}
+
+function buildBundleMembershipMap(bundles) {
+  const membership = new Map();
+
+  for (const bundle of bundles) {
+    for (const component of bundle.metadata.components) {
+      if (!component.type || !component.id) continue;
+
+      const key = `${bundle.tool}|${component.type}|${component.id}`;
+      const existing = membership.get(key) || [];
+      existing.push({
+        bundle_id: bundle.id,
+        role: component.role || 'core',
+      });
+      membership.set(key, existing);
     }
   }
 
-  // -------------------------------------------------------------------------
-  // Root-level rules/ directory (universal, not under any tool dir).
-  // -------------------------------------------------------------------------
-  const rootRulesDir = path.join(REPO_ROOT, 'rules');
-  if (fs.existsSync(rootRulesDir)) {
-    let ruleSubdirs;
-    try {
-      ruleSubdirs = fs.readdirSync(rootRulesDir, { withFileTypes: true });
-    } catch {
-      ruleSubdirs = [];
+  return membership;
+}
+
+function installPathForArtifact(targetTool, componentKind, componentId) {
+  if (targetTool === 'claude-code') {
+    if (componentKind === 'agent') return `~/.claude/agents/${componentId}/${componentId}.md`;
+    if (componentKind === 'command') return `~/.claude/commands/${componentId}/${componentId}.md`;
+    if (componentKind === 'bundle') return `~/.claude/bundles/${componentId}/bundle.yaml`;
+    if (componentKind === 'hook') return `~/.claude/hooks/${componentId}/${componentId}.sh`;
+    if (componentKind === 'skill') return `~/.claude/skills/${componentId}/SKILL.md`;
+    if (componentKind === 'rule') return `~/.claude/rules/${componentId}/${componentId}.md`;
+  }
+
+  if (targetTool === 'github-copilot') {
+    if (componentKind === 'agent') return `.github/agents/${componentId}.agent.md`;
+    if (componentKind === 'command') return `.github/prompts/${componentId}.prompt.md`;
+    if (componentKind === 'bundle') return `.github/bundles/${componentId}/bundle.yaml`;
+    if (componentKind === 'hook') return `.github/hooks/${componentId}.json`;
+    if (componentKind === 'rule') return `.github/instructions/${componentId}.instructions.md`;
+  }
+
+  if (targetTool === 'openai-codex') {
+    if (componentKind === 'agent') return `~/.codex/agents/${componentId}.toml`;
+    if (componentKind === 'skill') return `.agents/skills/${componentId}/SKILL.md`;
+  }
+
+  return null;
+}
+
+function buildInstallCommand({ targetTool, componentKind, componentId, artifactPath, installPath, companionArtifacts = [] }) {
+  if (!installPath) return null;
+
+  const downloads = [
+    {
+      url: downloadUrlFor(artifactPath),
+      path: installPath,
+    },
+    ...companionArtifacts,
+  ];
+
+  const createdDirectories = new Set();
+  const commands = [];
+  for (const download of downloads) {
+    const directory = path.posix.dirname(download.path);
+    const shellDirectory = directory.startsWith('~/') ? `$HOME/${directory.slice(2)}` : directory;
+    const shellPath = download.path.startsWith('~/') ? `$HOME/${download.path.slice(2)}` : download.path;
+    if (!createdDirectories.has(directory)) {
+      commands.push(`mkdir -p "${shellDirectory}"`);
+      createdDirectories.add(directory);
     }
+    commands.push(`curl -fsSL "${download.url}" -o "${shellPath}"`);
+  }
 
-    for (const dirent of ruleSubdirs) {
-      if (!dirent.isDirectory()) continue;
+  if (targetTool === 'github-copilot' && componentKind === 'hook') {
+    commands.push(`# register ${componentId} through the paired .json hook definition`);
+  }
 
-      const name      = dirent.name;
-      const nameDir   = path.join(rootRulesDir, name);
-      const ruleMd    = path.join(nameDir, `${name}.md`);
-      const content   = readFileSafe(ruleMd);
+  return commands.join(' && ');
+}
 
-      if (!content) {
-        const relPath = path.relative(REPO_ROOT, nameDir);
-        entries.push(makeEntry(name, 'rule', relPath));
-        continue;
-      }
+function membershipFor(bundleMembership, targetTool, componentKind, componentId) {
+  return bundleMembership.get(`${targetTool}|${componentKind}|${componentId}`) || [];
+}
 
-      const relPath = path.relative(REPO_ROOT, ruleMd);
-      entries.push(makeEntry(name, 'rule', relPath));
+function buildCatalog() {
+  const catalog = {
+    schema: 'agent-toolkit.distribution-catalog/v1',
+    repository: 'bmjcoding/agent-toolkit',
+    artifacts: [],
+  };
+
+  const canonicalAgents = readCanonicalAgents();
+  const canonicalWorkflows = readCanonicalWorkflows();
+  const sharedSkills = readSharedSkills();
+  const sharedRules = readRootRules();
+  const bundles = [
+    ...readBundles('claude-code'),
+    ...readBundles('github-copilot'),
+  ];
+  const bundleMembership = buildBundleMembershipMap(bundles);
+
+  for (const agent of canonicalAgents) {
+    for (const adapterPath of agent.adapters) {
+      const targetTool = adapterPath.split('/')[0];
+      if (!exists(path.join(REPO_ROOT, adapterPath))) continue;
+
+      const installPath = installPathForArtifact(targetTool, 'agent', agent.id);
+      catalog.artifacts.push({
+        component_id: agent.id,
+        component_kind: 'agent',
+        component_version: agent.version,
+        target_tool: targetTool,
+        artifact_path: adapterPath,
+        source_path: agent.sourcePath,
+        install_path: installPath,
+        install_command: buildInstallCommand({
+          targetTool,
+          componentKind: 'agent',
+          componentId: agent.id,
+          artifactPath: adapterPath,
+          installPath,
+        }),
+        download_url: downloadUrlFor(adapterPath),
+        checksum_sha256: sha256For(adapterPath),
+        bundle_membership: membershipFor(bundleMembership, targetTool, 'agent', agent.id),
+        metadata: agent.metadata,
+      });
     }
   }
 
-  return entries;
+  for (const workflow of canonicalWorkflows) {
+    for (const adapterPath of workflow.adapters) {
+      const targetTool = adapterPath.split('/')[0];
+      if (!exists(path.join(REPO_ROOT, adapterPath))) continue;
+
+      const installPath = installPathForArtifact(targetTool, 'command', workflow.id);
+      catalog.artifacts.push({
+        component_id: workflow.id,
+        component_kind: 'command',
+        component_version: workflow.version,
+        target_tool: targetTool,
+        artifact_path: adapterPath,
+        source_path: workflow.sourcePath,
+        install_path: installPath,
+        install_command: buildInstallCommand({
+          targetTool,
+          componentKind: 'command',
+          componentId: workflow.id,
+          artifactPath: adapterPath,
+          installPath,
+        }),
+        download_url: downloadUrlFor(adapterPath),
+        checksum_sha256: sha256For(adapterPath),
+        bundle_membership: membershipFor(bundleMembership, targetTool, 'command', workflow.id),
+        metadata: workflow.metadata,
+      });
+    }
+  }
+
+  for (const skill of sharedSkills) {
+    for (const targetTool of ['claude-code', 'openai-codex']) {
+      const installPath = installPathForArtifact(targetTool, 'skill', skill.id);
+      catalog.artifacts.push({
+        component_id: skill.id,
+        component_kind: 'skill',
+        component_version: skill.version,
+        target_tool: targetTool,
+        artifact_path: skill.sourcePath,
+        source_path: skill.sourcePath,
+        install_path: installPath,
+        install_command: buildInstallCommand({
+          targetTool,
+          componentKind: 'skill',
+          componentId: skill.id,
+          artifactPath: skill.sourcePath,
+          installPath,
+        }),
+        download_url: downloadUrlFor(skill.sourcePath),
+        checksum_sha256: sha256For(skill.sourcePath),
+        bundle_membership: membershipFor(bundleMembership, targetTool, 'skill', skill.id),
+        metadata: skill.metadata,
+      });
+    }
+  }
+
+  for (const rule of sharedRules) {
+    const claudeInstallPath = installPathForArtifact('claude-code', 'rule', rule.id);
+    catalog.artifacts.push({
+      component_id: rule.id,
+      component_kind: 'rule',
+      component_version: rule.version,
+      target_tool: 'claude-code',
+      artifact_path: rule.sourcePath,
+      source_path: rule.sourcePath,
+      install_path: claudeInstallPath,
+      install_command: buildInstallCommand({
+        targetTool: 'claude-code',
+        componentKind: 'rule',
+        componentId: rule.id,
+        artifactPath: rule.sourcePath,
+        installPath: claudeInstallPath,
+      }),
+      download_url: downloadUrlFor(rule.sourcePath),
+      checksum_sha256: sha256For(rule.sourcePath),
+      bundle_membership: membershipFor(bundleMembership, 'claude-code', 'rule', rule.id),
+      metadata: rule.metadata,
+    });
+
+    const instructionPath = `github-copilot/instructions/${rule.id}.instructions.md`;
+    if (exists(path.join(REPO_ROOT, instructionPath))) {
+      const copilotInstallPath = installPathForArtifact('github-copilot', 'rule', rule.id);
+      catalog.artifacts.push({
+        component_id: rule.id,
+        component_kind: 'rule',
+        component_version: rule.version,
+        target_tool: 'github-copilot',
+        artifact_path: instructionPath,
+        source_path: rule.sourcePath,
+        install_path: copilotInstallPath,
+        install_command: buildInstallCommand({
+          targetTool: 'github-copilot',
+          componentKind: 'rule',
+          componentId: rule.id,
+          artifactPath: instructionPath,
+          installPath: copilotInstallPath,
+        }),
+        download_url: downloadUrlFor(instructionPath),
+        checksum_sha256: sha256For(instructionPath),
+        bundle_membership: membershipFor(bundleMembership, 'github-copilot', 'rule', rule.id),
+        metadata: rule.metadata,
+      });
+    }
+  }
+
+  for (const bundle of bundles) {
+    const installPath = installPathForArtifact(bundle.tool, 'bundle', bundle.id);
+    catalog.artifacts.push({
+      component_id: bundle.id,
+      component_kind: 'bundle',
+      component_version: bundle.version,
+      target_tool: bundle.tool,
+      artifact_path: bundle.artifactPath,
+      source_path: bundle.artifactPath,
+      install_path: installPath,
+      install_command: buildInstallCommand({
+        targetTool: bundle.tool,
+        componentKind: 'bundle',
+        componentId: bundle.id,
+        artifactPath: bundle.artifactPath,
+        installPath,
+      }),
+      download_url: downloadUrlFor(bundle.artifactPath),
+      checksum_sha256: sha256For(bundle.artifactPath),
+      bundle_membership: [],
+      metadata: bundle.metadata,
+    });
+  }
+
+  const claudeHooksDir = path.join(REPO_ROOT, 'claude-code', 'hooks');
+  for (const entry of fs.readdirSync(claudeHooksDir, { withFileTypes: true }).filter(dirent => dirent.isDirectory()).sort((a, b) => a.name.localeCompare(b.name))) {
+    const id = entry.name;
+    const artifactPath = `claude-code/hooks/${id}/${id}.sh`;
+    if (!exists(path.join(REPO_ROOT, artifactPath))) continue;
+
+    const installPath = installPathForArtifact('claude-code', 'hook', id);
+    catalog.artifacts.push({
+      component_id: id,
+      component_kind: 'hook',
+      component_version: readLatestReleasedVersion(path.join(claudeHooksDir, id, 'CHANGELOG.md')),
+      target_tool: 'claude-code',
+      artifact_path: artifactPath,
+      source_path: artifactPath,
+      install_path: installPath,
+      install_command: buildInstallCommand({
+        targetTool: 'claude-code',
+        componentKind: 'hook',
+        componentId: id,
+        artifactPath,
+        installPath,
+      }),
+      download_url: downloadUrlFor(artifactPath),
+      checksum_sha256: sha256For(artifactPath),
+      bundle_membership: membershipFor(bundleMembership, 'claude-code', 'hook', id),
+      metadata: {},
+    });
+  }
+
+  const copilotHooksDir = path.join(REPO_ROOT, 'github-copilot', 'hooks');
+  for (const fileName of fs.readdirSync(copilotHooksDir).filter(name => name.endsWith('.json')).sort()) {
+    const id = fileName.replace(/\.json$/, '');
+    const artifactPath = `github-copilot/hooks/${fileName}`;
+    const shellPath = `github-copilot/hooks/${id}.sh`;
+    if (!exists(path.join(REPO_ROOT, shellPath))) continue;
+
+    const installPath = installPathForArtifact('github-copilot', 'hook', id);
+    catalog.artifacts.push({
+      component_id: id,
+      component_kind: 'hook',
+      component_version: readLatestReleasedVersion(path.join(copilotHooksDir, 'CHANGELOG.md')),
+      target_tool: 'github-copilot',
+      artifact_path: artifactPath,
+      source_path: artifactPath,
+      install_path: installPath,
+      install_command: buildInstallCommand({
+        targetTool: 'github-copilot',
+        componentKind: 'hook',
+        componentId: id,
+        artifactPath,
+        installPath,
+        companionArtifacts: [
+          {
+            url: downloadUrlFor(shellPath),
+            path: `.github/hooks/${id}.sh`,
+          },
+        ],
+      }),
+      download_url: downloadUrlFor(artifactPath),
+      checksum_sha256: sha256For(artifactPath),
+      bundle_membership: membershipFor(bundleMembership, 'github-copilot', 'hook', id),
+      metadata: {
+        companion_artifacts: [shellPath],
+      },
+    });
+  }
+
+  return catalog;
 }
 
-// ---------------------------------------------------------------------------
-// Sort
-// ---------------------------------------------------------------------------
-
-/**
- * Deterministic sort key: tool (derived from path prefix) → category → slug.
- *
- * @param {string} entryPath - Relative path from the entry
- * @param {string} category
- * @param {string} slug
- * @returns {string}
- */
-function sortKey(entryPath, category, slug) {
-  // Derive tool from the leading path segment.
-  const tool = entryPath.split(path.sep)[0] || '';
-  return `${tool}|${category}|${slug}`;
-}
-
-// ---------------------------------------------------------------------------
-// Main
-// ---------------------------------------------------------------------------
-
-function main() {
-  const entries = collectEntries();
-
-  entries.sort((a, b) => {
-    const ka = sortKey(a.path, a.category, a.slug);
-    const kb = sortKey(b.path, b.category, b.slug);
-    if (ka < kb) return -1;
-    if (ka > kb) return  1;
-    return 0;
-  });
-
-  const output = JSON.stringify(entries, null, 2) + '\n';
-  fs.writeFileSync(OUTPUT_FILE, output, 'utf8');
-
-  process.stdout.write(
-    `Generated ${OUTPUT_FILE} — ${entries.length} entr${entries.length === 1 ? 'y' : 'ies'}\n`
-  );
-}
-
-// ---------------------------------------------------------------------------
-// Inline test harness — run with: node scripts/generate-index.js --test
-// ---------------------------------------------------------------------------
-
-/**
- * Minimal assertion helper. Throws on failure so a single bad assertion
- * does not silence subsequent tests.
- */
 function assert(condition, message) {
-  if (!condition) throw new Error(`FAIL: ${message}`);
+  if (!condition) throw new Error(message);
 }
 
 function runTests() {
-  let passed = 0;
-  let failed = 0;
+  assert(readLatestReleasedVersion(path.join(REPO_ROOT, 'workflows', 'lint', 'CHANGELOG.md')) === '4.0.0', 'expected latest lint workflow version to parse');
 
-  // -------------------------------------------------------------------------
-  // Test 1 — Frontmatter extraction from a synthetic .md string
-  // -------------------------------------------------------------------------
-  try {
-    const syntheticMd = [
-      '---',
-      'name: planner',
-      'description: >',
-      '  Autonomous planning agent that reads codebases and decomposes tasks.',
-      '# version: 1.5.0',
-      'permissionMode: auto',
-      'maxTurns: 50',
-      '---',
-      '',
-      '# Body text here',
-    ].join('\n');
+  const plannerFallback = parseClaudeAgentFallback('planner');
+  assert(plannerFallback.modelTier === 'frontier', 'expected planner model tier fallback to map from inherit');
+  assert(plannerFallback.capabilities.includes('write'), 'expected planner fallback to include write capability');
+  assert(!plannerFallback.capabilities.includes('edit'), 'expected planner fallback to exclude edit capability');
 
-    const block = extractFrontmatterBlock(syntheticMd);
-    assert(block !== null, 'extractFrontmatterBlock should return non-null for valid frontmatter');
+  const frankensteinFallback = parseClaudeAgentFallback('frankenstein');
+  assert(frankensteinFallback.capabilities.includes('delegate'), 'expected frankenstein fallback to include delegate capability');
+  assert(frankensteinFallback.subagents.includes('planner'), 'expected frankenstein fallback to parse subagents');
 
-    const fm = parseFrontmatter(block);
-    assert(fm.name === 'planner', `name should be 'planner', got '${fm.name}'`);
-    assert(
-      typeof fm.description === 'string' && fm.description.length > 0,
-      'description should be a non-empty string'
-    );
-    // Comment line should NOT produce a `version` key.
-    assert(
-      !Object.prototype.hasOwnProperty.call(fm, 'version'),
-      'comment line `# version:` must not produce a version key'
-    );
-    assert(fm.permissionMode === 'auto', `permissionMode should be 'auto', got '${fm.permissionMode}'`);
-    assert(fm.maxTurns === '50', `maxTurns should be '50', got '${fm.maxTurns}'`);
+  const bundle = parseBundleManifest(path.join(REPO_ROOT, 'claude-code', 'bundles', 'frankenstein-orchestration', 'bundle.yaml'));
+  assert(bundle && bundle.components.length > 0, 'expected bundle manifest parser to extract components');
+  assert(bundle.components.some(component => component.type === 'agent' && component.id === 'frankenstein'), 'expected bundle parser to extract agent component ids');
 
-    // Test missing frontmatter block returns empty object.
-    const noFm = parseFrontmatter(null);
-    assert(
-      typeof noFm === 'object' && Object.keys(noFm).length === 0,
-      'parseFrontmatter(null) should return empty object'
-    );
+  const catalog = buildCatalog();
+  assert(Array.isArray(catalog.artifacts) && catalog.artifacts.length > 0, 'expected catalog to contain artifacts');
+  assert(catalog.artifacts.some(entry => entry.component_id === 'planner' && entry.target_tool === 'openai-codex'), 'expected planner codex artifact in catalog');
+  assert(catalog.artifacts.some(entry => entry.component_id === 'logging' && entry.target_tool === 'github-copilot'), 'expected github-copilot logging rule artifact in catalog');
 
-    // Test paths inline list parsing (rule frontmatter).
-    const ruleFm = parseFrontmatter(
-      extractFrontmatterBlock(
-        '---\npaths: ["**/Dockerfile*", "**/docker-compose*.yml"]\n---\n'
-      )
-    );
-    assert(Array.isArray(ruleFm.paths), 'paths should be an array');
-    assert(ruleFm.paths.length === 2, `paths should have 2 entries, got ${ruleFm.paths.length}`);
-
-    process.stdout.write('  PASS test 1 — frontmatter extraction and parsing\n');
-    passed++;
-  } catch (err) {
-    process.stdout.write(`  FAIL test 1 — frontmatter extraction: ${err.message}\n`);
-    failed++;
-  }
-
-  // -------------------------------------------------------------------------
-  // Test 2 — Slug derivation from directory name when no .md exists
-  // -------------------------------------------------------------------------
-  try {
-    // Empty frontmatter → slugFrom should fall back to dirName.
-    const fm1 = {};
-    const slug1 = slugFrom(fm1, 'pre-push-secrets');
-    assert(slug1 === 'pre-push-secrets', `slug from empty fm should be dir name, got '${slug1}'`);
-
-    // Frontmatter with `name` → use name.
-    const fm2 = { name: 'retro' };
-    const slug2 = slugFrom(fm2, 'retro-dir');
-    assert(slug2 === 'retro', `slug should use fm.name 'retro', got '${slug2}'`);
-
-    // Frontmatter with `id` but no `name` → use id.
-    const fm3 = { id: 'backend-development' };
-    const slug3 = slugFrom(fm3, 'backend-development-dir');
-    assert(slug3 === 'backend-development', `slug should use fm.id, got '${slug3}'`);
-
-    // Frontmatter with both `name` and `id` → name wins.
-    const fm4 = { name: 'my-name', id: 'my-id' };
-    const slug4 = slugFrom(fm4, 'fallback');
-    assert(slug4 === 'my-name', `slug should prefer name over id, got '${slug4}'`);
-
-    process.stdout.write('  PASS test 2 — slug derivation from directory name and frontmatter\n');
-    passed++;
-  } catch (err) {
-    process.stdout.write(`  FAIL test 2 — slug derivation: ${err.message}\n`);
-    failed++;
-  }
-
-  // -------------------------------------------------------------------------
-  // Test 3 — Sort order determinism across two synthetic entries
-  // -------------------------------------------------------------------------
-  try {
-    const syntheticEntries = [
-      { slug: 'retro',   category: 'skill', path: 'skills/retro/SKILL.md' },
-      { slug: 'planner', category: 'agent', path: 'claude-code/agents/planner/planner.md' },
-      { slug: 'lint',    category: 'command', path: 'claude-code/commands/lint/lint.md' },
-      // Same tool and category as retro — should sort after planner alphabetically
-      // but before retro because 'backend' < 'retro'.
-      { slug: 'backend', category: 'skill', path: 'skills/backend/SKILL.md' },
-    ];
-
-    syntheticEntries.sort((a, b) => {
-      const ka = sortKey(a.path, a.category, a.slug);
-      const kb = sortKey(b.path, b.category, b.slug);
-      return ka < kb ? -1 : ka > kb ? 1 : 0;
-    });
-
-    // All entries are claude-code, so sort is category then slug.
-    // category order: agent < command < skill
-    assert(syntheticEntries[0].slug === 'planner', `first should be planner (agent), got '${syntheticEntries[0].slug}'`);
-    assert(syntheticEntries[1].slug === 'lint',    `second should be lint (command), got '${syntheticEntries[1].slug}'`);
-    assert(syntheticEntries[2].slug === 'backend', `third should be backend (skill), got '${syntheticEntries[2].slug}'`);
-    assert(syntheticEntries[3].slug === 'retro',   `fourth should be retro (skill), got '${syntheticEntries[3].slug}'`);
-
-    // Verify idempotence: sorting an already-sorted array produces the same order.
-    const copy = [...syntheticEntries];
-    copy.sort((a, b) => {
-      const ka = sortKey(a.path, a.category, a.slug);
-      const kb = sortKey(b.path, b.category, b.slug);
-      return ka < kb ? -1 : ka > kb ? 1 : 0;
-    });
-    for (let i = 0; i < syntheticEntries.length; i++) {
-      assert(
-        copy[i].slug === syntheticEntries[i].slug,
-        `sort idempotence failed at index ${i}: expected '${syntheticEntries[i].slug}', got '${copy[i].slug}'`
-      );
-    }
-
-    process.stdout.write('  PASS test 3 — sort order determinism and idempotence\n');
-    passed++;
-  } catch (err) {
-    process.stdout.write(`  FAIL test 3 — sort order: ${err.message}\n`);
-    failed++;
-  }
-
-  // -------------------------------------------------------------------------
-  // Summary
-  // -------------------------------------------------------------------------
-  process.stdout.write(`\nTests: ${passed} passed, ${failed} failed\n`);
-  if (failed > 0) process.exit(1);
+  process.stdout.write('All tests passed.\n');
 }
 
-// ---------------------------------------------------------------------------
-// Entry point
-// ---------------------------------------------------------------------------
+function main() {
+  if (process.argv.includes('--test')) {
+    runTests();
+    return;
+  }
 
-if (process.argv.includes('--test')) {
-  process.stdout.write('Running inline tests for generate-index.js...\n\n');
-  runTests();
-} else {
-  main();
+  const catalog = buildCatalog();
+  catalog.artifacts.sort((left, right) => {
+    const leftKey = `${left.target_tool}|${left.component_kind}|${left.component_id}|${left.artifact_path}`;
+    const rightKey = `${right.target_tool}|${right.component_kind}|${right.component_id}|${right.artifact_path}`;
+    return leftKey.localeCompare(rightKey);
+  });
+
+  fs.writeFileSync(OUTPUT_FILE, `${JSON.stringify(catalog, null, 2)}\n`, 'utf8');
+  process.stdout.write(`Generated ${OUTPUT_FILE} — ${catalog.artifacts.length} artifacts\n`);
 }
+
+main();

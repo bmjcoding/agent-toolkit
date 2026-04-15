@@ -1,6 +1,13 @@
 ---
 name: integration-verifier
 description: "Verifies integration contracts between groups — file existence, type compilation, interface correctness — then reviews boundaries from the provider's perspective. Use between implementation groups and during Phase 3a."
+model-tier: frontier
+capabilities:
+  - read
+  - write
+  - edit
+  - search
+  - execute
 adapters:
   - claude-code/agents/integration-verifier/integration-verifier.md
   - github-copilot/agents/integration-verifier.agent.md

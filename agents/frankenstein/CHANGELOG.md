@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Declared shared execution metadata in the canonical root definition so model tier, capabilities, subagent routing, and skill dependencies no longer need to be inferred from tool-specific wrappers.
+
 - Moved the canonical agent definition and changelog to `agents/frankenstein/`; Claude, Copilot, and Codex files are now tool-specific adapters generated from the shared source.
 - Updated comparison links to use the shared `agent/frankenstein` tag namespace for this root canonical component.
 - Phase 6a no longer promotes `[Unreleased]` CHANGELOG entries inline; promotion is now fully delegated to release-engineer (via `/changelog release`) so the promote, commit, tag, and push steps happen atomically in one place.

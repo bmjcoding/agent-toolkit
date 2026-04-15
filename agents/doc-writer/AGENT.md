@@ -1,6 +1,13 @@
 ---
 name: doc-writer
 description: "Technical writer that updates README, CHANGELOG, API docs, JSDoc/docstrings, config docs, and Architecture Decision Records after feature implementation."
+model-tier: balanced
+capabilities:
+  - read
+  - write
+  - edit
+  - search
+  - execute
 adapters:
   - claude-code/agents/doc-writer/doc-writer.md
   - github-copilot/agents/doc-writer.agent.md

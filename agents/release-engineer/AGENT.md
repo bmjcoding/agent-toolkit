@@ -1,6 +1,15 @@
 ---
 name: release-engineer
 description: "Structures commits, writes PR descriptions, pushes code, creates pull requests, and optionally bumps versions and creates releases. Use during Phase 5-6."
+model-tier: balanced
+capabilities:
+  - read
+  - write
+  - edit
+  - search
+  - execute
+skills:
+  - changelog
 adapters:
   - claude-code/agents/release-engineer/release-engineer.md
   - github-copilot/agents/release-engineer.agent.md

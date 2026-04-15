@@ -1,6 +1,14 @@
 ---
 name: design-architect
 description: "Senior architect and design authority reviewing implementation for structural integrity, API/code design quality, and visual/UI coherence. Runs deterministic structural checks first, then semantic review."
+model-tier: frontier
+capabilities:
+  - read
+  - search
+  - execute
+skills:
+  - design-lint
+  - design-authority
 adapters:
   - claude-code/agents/design-architect/design-architect.md
   - github-copilot/agents/design-architect.agent.md

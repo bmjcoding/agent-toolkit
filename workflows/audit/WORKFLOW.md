@@ -1,6 +1,7 @@
 ---
 name: audit
 description: "Comprehensive code audit covering correctness, security, accessibility, type safety, and operational resilience."
+argument-hint: "[paths...] [--dry-run]"
 adapters:
   - claude-code/commands/audit/audit.md
   - github-copilot/prompts/audit.prompt.md
