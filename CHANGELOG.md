@@ -8,6 +8,15 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [4.4.0] - 2026-04-15
+
+### Changed
+
+- Retired overlapping `claude-code/*` tag references for mirrored shared agents and
+  workflows. Shared component docs and changelog footers now point only at canonical
+  `agent/*`, `workflow/*`, `skill/*`, and `rule/*` tags, leaving `claude-code/*`
+  reserved for tool-native Claude hooks and bundles.
+
 ## [4.3.0] - 2026-04-15
 
 ### Added
@@ -40,10 +49,6 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 - Release-engineer and the changelog skill now treat `## [Unreleased]` as branch-local
   scratch space only: PR-bound work is expected to be promoted into the next versioned
   section before the PR is opened.
-- Retired overlapping `claude-code/*` tag references for mirrored shared agents and
-  workflows. Shared component docs and changelog footers now point only at canonical
-  `agent/*`, `workflow/*`, `skill/*`, and `rule/*` tags, leaving `claude-code/*`
-  reserved for tool-native Claude hooks and bundles.
 
 ## [4.2.1] - 2026-04-15
 
@@ -245,7 +250,8 @@ No action required for users who install via symlinks (`./claude-code/scripts/in
 3. Re-run the install script: `./claude-code/scripts/install.sh`.
 4. Verify: `./claude-code/scripts/install.sh --check`.
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/v4.3.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/v4.4.0...HEAD
+[4.4.0]: https://github.com/bmjcoding/agent-toolkit/compare/v4.3.0...v4.4.0
 [4.3.0]: https://github.com/bmjcoding/agent-toolkit/compare/v4.2.1...v4.3.0
 [4.2.1]: https://github.com/bmjcoding/agent-toolkit/compare/v4.2.0...v4.2.1
 [4.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/v4.1.0...v4.2.0
