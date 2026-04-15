@@ -6,7 +6,15 @@ user-invocable: false
 
 # Observability Patterns Reference
 
-Load relevant reference files based on what you're reviewing:
+Load only the references needed for the current review:
+
+| Scope | Load |
+|---|---|
+| Structured logging fields, request context, correlation IDs | `references/structured-logging.md` |
+| Liveness/readiness/startup endpoints | `references/health-checks.md` |
+| Operational handoff and on-call documentation | `references/runbook-template.md` |
+
+Reference selection by scope:
 - Logging review: `references/structured-logging.md`
 - Health endpoints: `references/health-checks.md`
 - Oncall documentation: `references/runbook-template.md`
@@ -19,6 +27,14 @@ Use these as checklists against the code under review. For self-contained fixes 
 2. **Check each item** — run each checklist entry against the code; flag violations with file and line reference.
 3. **Remediate inline** — apply self-contained fixes (missing timeout, missing log field, missing health route) directly.
 4. **Report** — present findings by category with severity; note which were fixed inline vs. requiring follow-up.
+
+## Output Format
+
+Report findings as: `[SEVERITY] [CATEGORY] — description — file:line`.
+End with:
+- summary counts by category
+- fixes applied inline
+- follow-up items left for the user
 
 ## Gotchas
 

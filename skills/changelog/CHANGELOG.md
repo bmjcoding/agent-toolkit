@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Updated shared skill wording to reference workflow and skill names in a tool-agnostic way instead of assuming Claude slash-command invocation.
+- Added a quick-routing section so simple changelog edits can load only the relevant sections instead of reading the full release workflow every time.
+- Updated migration guidance so renumbering removes legacy inline `# version:` markers instead of trying to keep definition files in sync with released versions.
 
 ### Added
 
