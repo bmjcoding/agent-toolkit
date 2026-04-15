@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Non-retro dispatch guidance now explicitly covers recon, improve, and full-cycle runs
   so retro suppression is part of every non-retro orchestration path.
+- Updated the Claude adapter reference to the flattened `claude-code/agents/<name>.md`
+  layout used by the tool-specific generated surfaces.
 
 ## [6.0.0] - 2026-04-15
 

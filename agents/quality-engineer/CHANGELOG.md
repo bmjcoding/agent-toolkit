@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Remediation guidance now treats canonical `findings` as the primary upstream contract,
   requires plan-backed repair scopes before editing, and explicitly allows only the
   standard post-validation handoff emission in read-only mode.
+- Updated the Claude adapter reference to the flattened `claude-code/agents/<name>.md`
+  layout used by the tool-specific generated surfaces.
 
 ## [2.0.0] - 2026-04-15
 
