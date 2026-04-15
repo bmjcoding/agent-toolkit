@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.1.0] - 2026-04-15
+
 ### Changed
 
 - Rebased the Copilot hook surface on the canonical root `hooks/` tree and documented the
@@ -20,4 +22,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - 9 hook JSON manifests and 9 shell scripts. Events: PreToolUse (branch-guard, changelog-check, pre-push-secrets, protect-config), PostToolUse (toolkit-edit-reminder), SubagentStart (inject-context), SubagentStop (extract-handoff, integrity-warn, toolkit-drift-check). Parity gap #3 Copilot resolved.
 
-<!-- No tags pushed yet for this component — compare links omitted until first tag -->
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/github-copilot-hooks-v3.1.0...HEAD
+[3.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/github-copilot-hooks-v3.0.0...github-copilot-hooks-v3.1.0
+[3.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/github-copilot-hooks-v3.0.0
