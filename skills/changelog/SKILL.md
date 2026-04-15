@@ -89,11 +89,10 @@ Canonical tag format: `<namespace>/<slug>-v{version}`
 | `rules/docker/`                        | `rule/docker`    | `rule/docker-v1.0.0`               |
 
 Rules:
-- The slug is the component's directory name (the `{name}` segment in `skills/{name}/`).
-- Hyphens are allowed in slugs. Do not use slashes, `@`, or spaces — they require URL
-  encoding and cause routing issues on Bitbucket Cloud and Datacenter.
-- Shared skills and shared rules always use the `skill/` and `rule/` namespaces.
-- Tool-specific assets use their tool namespace (`claude-code/`, `github-copilot/`, `openai-codex/`).
+- The slug segment is the component's directory name (the `{name}` segment in `skills/{name}/`).
+- Use exactly one namespace separator slash between the component family and slug, as in `skill/changelog`. The slug segment itself may include hyphens but should not include additional slashes, `@`, or spaces.
+- Shared components use canonical namespaces: `agent/`, `skill/`, `workflow/`, and `rule/`.
+- Tool-specific namespaces such as `claude-code/`, `github-copilot/`, and `openai-codex/` are reserved for genuinely tool-native assets that do not mirror a canonical shared component.
 - All tags are lowercase.
 
 ## Comparison Links

@@ -40,6 +40,10 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 - Release-engineer and the changelog skill now treat `## [Unreleased]` as branch-local
   scratch space only: PR-bound work is expected to be promoted into the next versioned
   section before the PR is opened.
+- Retired overlapping `claude-code/*` tag references for mirrored shared agents and
+  workflows. Shared component docs and changelog footers now point only at canonical
+  `agent/*`, `workflow/*`, `skill/*`, and `rule/*` tags, leaving `claude-code/*`
+  reserved for tool-native Claude hooks and bundles.
 
 ## [4.2.1] - 2026-04-15
 
@@ -215,7 +219,7 @@ No action required for users who install via symlinks (`./claude-code/scripts/in
 - **Rules path changed**: `rules/` briefly moved through `shared/rules/` during the
   migration path and was later restored as the root canonical location.
 - **Tag format changed**: component tags now use `<tool>/<slug>-v<version>` (e.g.
-  `claude-code/frankenstein-v3.0.0`, `skill/changelog-v3.0.0`) instead of the
+  `agent/frankenstein-v3.0.0`, `skill/changelog-v3.0.0`, `claude-code/branch-guard-v3.0.0`) instead of the
   previous flat `<slug>-v<version>` format.
 - **All 48 components bumped to next major version** to signal the breaking layout
   change. Each component's own `CHANGELOG.md` records the specific version bump.

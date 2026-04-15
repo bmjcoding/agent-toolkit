@@ -33,7 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/test-v3.0.0...HEAD
-[3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/test-v2.0.0...claude-code/test-v3.0.0
-[2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/test-v1.0.0...claude-code/test-v2.0.0
-[1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/claude-code/test-v1.0.0
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/workflow/test-v3.0.0...HEAD
+[3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/workflow/test-v2.0.0...workflow/test-v3.0.0
+[2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/workflow/test-v1.0.0...workflow/test-v2.0.0
+[1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/workflow/test-v1.0.0
