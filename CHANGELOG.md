@@ -8,6 +8,15 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [4.4.0] - 2026-04-15
+
+### Changed
+
+- Retired overlapping `claude-code/*` tag references for mirrored shared agents and
+  workflows. Shared component docs and changelog footers now point only at canonical
+  `agent/*`, `workflow/*`, `skill/*`, and `rule/*` tags, leaving `claude-code/*`
+  reserved for tool-native Claude hooks and bundles.
+
 ## [4.3.0] - 2026-04-15
 
 ### Added
@@ -215,7 +224,7 @@ No action required for users who install via symlinks (`./claude-code/scripts/in
 - **Rules path changed**: `rules/` briefly moved through `shared/rules/` during the
   migration path and was later restored as the root canonical location.
 - **Tag format changed**: component tags now use `<tool>/<slug>-v<version>` (e.g.
-  `claude-code/frankenstein-v3.0.0`, `skill/changelog-v3.0.0`) instead of the
+  `agent/frankenstein-v3.0.0`, `skill/changelog-v3.0.0`, `claude-code/branch-guard-v3.0.0`) instead of the
   previous flat `<slug>-v<version>` format.
 - **All 48 components bumped to next major version** to signal the breaking layout
   change. Each component's own `CHANGELOG.md` records the specific version bump.
@@ -241,7 +250,8 @@ No action required for users who install via symlinks (`./claude-code/scripts/in
 3. Re-run the install script: `./claude-code/scripts/install.sh`.
 4. Verify: `./claude-code/scripts/install.sh --check`.
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/v4.3.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/v4.4.0...HEAD
+[4.4.0]: https://github.com/bmjcoding/agent-toolkit/compare/v4.3.0...v4.4.0
 [4.3.0]: https://github.com/bmjcoding/agent-toolkit/compare/v4.2.1...v4.3.0
 [4.2.1]: https://github.com/bmjcoding/agent-toolkit/compare/v4.2.0...v4.2.1
 [4.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/v4.1.0...v4.2.0

@@ -16,7 +16,7 @@ to migrate.
 grep -r '^\[.*\]: .*compare/v[0-9]' **/CHANGELOG.md
 ```
 
-### 2. Rewrite footers to dash-style
+### 2. Rewrite footers to canonical namespaced tags
 
 Replace monolithic tag refs with per-component tags following the exemplar in
 `skills/changelog/CHANGELOG.md`. The oldest-version footer switches from
@@ -27,20 +27,24 @@ Replace monolithic tag refs with per-component tags following the exemplar in
 Do not delete historical flat tags until both of these are true:
 - every affected `CHANGELOG.md` footer has been rewritten to the canonical namespaced
   tag format
-- the replacement `{slug}-v{version}` tags already exist locally and on the remote
+- the replacement `<namespace>/<slug>-v{version}` tags already exist locally and on the remote
 
 Once the changelog links and replacement tags are in place, delete only the superseded
 flat component tags that no longer have any live references. Keep repo-wide release tags
 such as `v{version}` when the root `CHANGELOG.md` still uses them.
 
+If the repository previously created mirrored tool-local tags for shared components
+(for example `claude-code/frankenstein-v3.0.0` alongside `agent/frankenstein-v3.0.0`),
+rewrite the live refs first and then delete the redundant mirrored tool-local tags too.
+
 ### 4. Order of operations
 
-1. Rewrite all CHANGELOG footers to use `{slug}-v{version}` format.
+1. Rewrite all CHANGELOG footers to use `<namespace>/<slug>-v{version}` format.
 2. Commit the footer changes.
-3. Run `scripts/backfill-changelog-tags.sh --slug <slug> --changelog <path>` to generate
+3. Run `scripts/backfill-changelog-tags.sh --slug <namespace>/<slug> --changelog <path>` to generate
    historical per-component tags. Use `--dry-run` first to preview.
 4. Push the new tags: `git push origin --tags`.
-5. Delete only the now-unreferenced flat component tags locally and on the remote.
+5. Delete only the now-unreferenced flat component tags and redundant mirrored tool-local tags locally and on the remote.
 
 ---
 

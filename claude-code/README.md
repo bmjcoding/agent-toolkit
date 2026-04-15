@@ -59,8 +59,21 @@ Hooks must also be registered in `~/.claude/settings.json` under the `hooks` key
 
 ## Tag Format
 
+Shared Claude adapters use the canonical tag lineage of the root component they mirror:
+
+```text
+agent/<slug>-v<major>.<minor>.<patch>
+workflow/<slug>-v<major>.<minor>.<patch>
 ```
+
+Examples: `agent/frankenstein-v3.1.0`, `workflow/backlog-v5.0.0`
+
+Claude-only runtime assets keep the `claude-code/` namespace:
+
+```text
 claude-code/<slug>-v<major>.<minor>.<patch>
 ```
 
-Example: `claude-code/frankenstein-v3.1.0`
+Example: `claude-code/branch-guard-v3.0.0`
+
+Use `claude-code/*` only for tool-native surfaces such as hooks and bundles.

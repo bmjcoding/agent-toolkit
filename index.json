@@ -1531,7 +1531,7 @@
     {
       "component_id": "changelog",
       "component_kind": "skill",
-      "component_version": "6.1.0",
+      "component_version": "6.2.0",
       "lifecycle": "stable",
       "availability": "supported",
       "target_tool": "claude-code",
@@ -1540,7 +1540,7 @@
       "install_path": "~/.claude/skills/changelog/SKILL.md",
       "install_command": "mkdir -p \"$HOME/.claude/skills/changelog\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/changelog/SKILL.md\" -o \"$HOME/.claude/skills/changelog/SKILL.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/changelog/SKILL.md",
-      "checksum_sha256": "b59dd1f6ab3da4b0518d793edeed6e01620dd1611faf9b76da40dc350d7d5234",
+      "checksum_sha256": "5facc3813efdd186e86cad5a1b3a2b1b291b06bb8f64c8abcb08be99f426c2d2",
       "bundle_membership": [
         {
           "bundle_id": "frankenstein-orchestration",
@@ -3297,7 +3297,7 @@
     {
       "component_id": "changelog",
       "component_kind": "skill",
-      "component_version": "6.1.0",
+      "component_version": "6.2.0",
       "lifecycle": "stable",
       "availability": "supported",
       "target_tool": "openai-codex",
@@ -3306,7 +3306,7 @@
       "install_path": ".agents/skills/changelog/SKILL.md",
       "install_command": "mkdir -p \".agents/skills/changelog\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/changelog/SKILL.md\" -o \".agents/skills/changelog/SKILL.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/changelog/SKILL.md",
-      "checksum_sha256": "b59dd1f6ab3da4b0518d793edeed6e01620dd1611faf9b76da40dc350d7d5234",
+      "checksum_sha256": "5facc3813efdd186e86cad5a1b3a2b1b291b06bb8f64c8abcb08be99f426c2d2",
       "bundle_membership": [],
       "metadata": {}
     },
