@@ -8,6 +8,16 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- GitHub Actions now runs the `skills/review-skill/scripts/lint-definition.py`
+  deterministic schema checks for canonical `skills/**` and `agents/**` before the
+  generated-asset validation/sync jobs, so malformed definitions fail CI before
+  adapter sync proceeds.
+- Added a component-specific CI changelog gate. Pull requests and pushes that modify a
+  monitored component surface now fail unless the associated `CHANGELOG.md` for that
+  exact component is updated in the same diff.
+
 ## [4.2.1] - 2026-04-15
 
 ### Fixed
