@@ -9,7 +9,7 @@ capabilities:
   - search
   - execute
 adapters:
-  - claude-code/agents/doc-writer/doc-writer.md
+  - claude-code/agents/doc-writer.md
   - github-copilot/agents/doc-writer.agent.md
   - openai-codex/agents/doc-writer.toml
 ---

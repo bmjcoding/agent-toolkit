@@ -19,6 +19,9 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
   exact component is updated in the same diff.
 - Fixed the component-changelog CI gate on first pushes to new branches by fetching the
   repository default branch before computing the fallback diff base.
+- Normalized the remaining workflow, rule, Claude command, and Claude hook changelog
+  footer links to canonical namespaced tags so historical compare/tree links no longer
+  depend on obsolete flat component tags.
 
 ## [4.2.1] - 2026-04-15
 
@@ -176,7 +179,7 @@ No action required for users who install via symlinks (`./claude-code/scripts/in
   `openai-codex/README.md`, and `skills/changelog/SKILL.md`
   based on design-architect and SRE review findings (phase 4-b).
 - Minor inline corrections to `CHANGELOG.md` and
-  `claude-code/agents/frankenstein/frankenstein.md`
+  `claude-code/agents/frankenstein.md`
   from integration-verifier review (phase 3a).
 
 ## [2.0.0] - 2026-04-12

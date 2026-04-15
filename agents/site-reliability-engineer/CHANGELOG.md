@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Updated the Claude adapter reference to the flattened `claude-code/agents/<name>.md`
+  layout used by the tool-specific generated surfaces.
+
 ## [2.0.0] - 2026-04-15
 
 ### Changed

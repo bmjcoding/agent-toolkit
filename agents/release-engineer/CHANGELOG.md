@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Resolved default-branch handling across PR-description, lint, and publish steps and
   clarified that publish-phase-only runs must not perform version bumps.
+- Updated the Claude adapter reference to the flattened `claude-code/agents/<name>.md`
+  layout used by the tool-specific generated surfaces.
 
 ## [5.0.0] - 2026-04-15
 

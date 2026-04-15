@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Documented phase-qualified alias naming for repeated verifier passes so structural and
   cross-QA outputs can coexist safely in one session.
+- Updated the Claude adapter reference to the flattened `claude-code/agents/<name>.md`
+  layout used by the tool-specific generated surfaces.
 
 ## [2.0.0] - 2026-04-15
 

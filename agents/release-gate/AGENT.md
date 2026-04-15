@@ -9,7 +9,7 @@ capabilities:
 skills:
   - prod-readiness
 adapters:
-  - claude-code/agents/release-gate/release-gate.md
+  - claude-code/agents/release-gate.md
   - github-copilot/agents/release-gate.agent.md
   - openai-codex/agents/release-gate.toml
 ---
