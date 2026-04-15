@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.4.0] - 2026-04-15
+
 ### Changed
 
 - Declared canonical `lifecycle` metadata in the shared root definition so the distribution catalog can publish maturity separately from per-tool availability for this skill.
@@ -122,7 +124,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/skill/improve-v4.3.1...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/skill/improve-v4.4.0...HEAD
+[4.4.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/improve-v4.3.1...skill/improve-v4.4.0
 [4.3.1]: https://github.com/bmjcoding/agent-toolkit/compare/skill/improve-v4.3.0...skill/improve-v4.3.1
 [4.3.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/improve-v4.2.1...skill/improve-v4.3.0
 [4.2.1]: https://github.com/bmjcoding/agent-toolkit/compare/skill/improve-v4.2.0...skill/improve-v4.2.1

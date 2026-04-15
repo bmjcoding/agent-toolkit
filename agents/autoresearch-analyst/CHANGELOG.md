@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [6.1.0] - 2026-04-15
+
 ### Added
 
 - Added a dedicated recon mode for pre-planner repository reconnaissance so multi-repo
@@ -114,7 +116,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/autoresearch-analyst-v6.0.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/autoresearch-analyst-v6.1.0...HEAD
+[6.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/autoresearch-analyst-v6.0.0...agent/autoresearch-analyst-v6.1.0
 [6.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/agent/autoresearch-analyst-v6.0.0
 [5.1.1]: https://github.com/bmjcoding/agent-toolkit/compare/agent/autoresearch-analyst-v5.1.0...agent/autoresearch-analyst-v5.1.1
 [5.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/autoresearch-analyst-v5.0.1...agent/autoresearch-analyst-v5.1.0

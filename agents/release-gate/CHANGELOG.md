@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.0] - 2026-04-15
+
 ### Changed
 
 - Declared canonical `lifecycle` metadata in the shared root definition so the distribution catalog can publish maturity separately from per-tool availability for this agent.
@@ -61,7 +63,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/release-gate-v2.0.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/release-gate-v2.1.0...HEAD
+[2.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/release-gate-v2.0.0...agent/release-gate-v2.1.0
 [2.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/agent/release-gate-v2.0.0
 [1.2.1]: https://github.com/bmjcoding/agent-toolkit/compare/agent/release-gate-v1.2.0...agent/release-gate-v1.2.1
 [3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/release-gate-v2.0.0...agent/release-gate-v3.0.0

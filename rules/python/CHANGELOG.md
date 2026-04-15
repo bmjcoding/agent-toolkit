@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.1.0] - 2026-04-15
+
 ### Changed
 
 - Declared canonical `lifecycle` metadata in the shared root definition so the distribution catalog can publish maturity separately from per-tool availability for this rule.
@@ -37,7 +39,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/rule/python-v3.0.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/rule/python-v4.1.0...HEAD
+[4.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/rule/python-v4.0.0...rule/python-v4.1.0
 [3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/rule/python-v2.0.0...rule/python-v3.0.0
 [2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/rule/python-v1.0.0...rule/python-v2.0.0
 [1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/rule/python-v1.0.0
