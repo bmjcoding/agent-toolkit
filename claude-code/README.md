@@ -10,7 +10,7 @@ event wiring, and install surfaces that differ from other tools.
 claude-code/
   agents/     # Claude frontmatter wrappers for canonical root agents/
   commands/   # Claude slash-command wrappers for canonical root workflows/
-  hooks/      # 9 shell scripts wired to Claude Code hook events (PreToolUse, PostToolUse, SubagentStart, SubagentStop)
+  hooks/      # Hook docs plus historical redirect changelogs
   bundles/    # YAML bundle files grouping related components for bulk install
   docs/       # Architecture decision records, migration guides, UX design docs
   scripts/
@@ -18,7 +18,8 @@ claude-code/
 ```
 
 Canonical agents live at repo-root `agents/`. Canonical workflows live at repo-root
-`workflows/`. Shared skills and rules live at repo-root `skills/` and `rules/`.
+`workflows/`. Shared skills and rules live at repo-root `skills/` and `rules/`. Canonical
+shared hook logic now also lives at repo-root `hooks/`.
 
 ## Install (Symlinks)
 
@@ -28,7 +29,7 @@ Claude Code loads these components via symlinks from `~/.claude/`:
 ~/.claude/agents   -> /path/to/agent-toolkit/claude-code/agents
 ~/.claude/commands -> /path/to/agent-toolkit/claude-code/commands
 ~/.claude/docs     -> /path/to/agent-toolkit/claude-code/docs
-~/.claude/hooks    -> /path/to/agent-toolkit/claude-code/hooks
+~/.claude/hooks    -> /path/to/agent-toolkit/hooks
 ~/.claude/rules    -> /path/to/agent-toolkit/claude-code/rules
 ~/.claude/skills   -> /path/to/agent-toolkit/skills
 ```
@@ -48,13 +49,17 @@ Run the install script to create or retarget all six symlinks atomically:
 
 Hooks must also be registered in `~/.claude/settings.json` under the `hooks` key with the correct event type and matcher. See `claude-code/hooks/README.md` for wiring details.
 
+Claude now installs `~/.claude/hooks` from the canonical repo-root `hooks/` tree. The
+remaining files under `claude-code/hooks/` are documentation plus historical changelog
+redirects for the old Claude-owned hook path.
+
 ## Component Format Reference
 
 - **Agent** (`<name>.md`): Claude-native frontmatter wrapper around the canonical root
   `agents/<name>/AGENT.md` body.
 - **Command** (`<name>.md`): Claude-native slash-command wrapper around the canonical root
   `workflows/<name>/WORKFLOW.md` body.
-- **Hook** (`<name>.sh`): Plain Bash, registered by event type in `settings.json`; exit 2 blocks, exit 1 warns, exit 0 continues.
+- **Hook** (`<name>/<name>.sh`): Plain Bash, registered by event type in `settings.json`; exit 2 blocks, exit 1 warns, exit 0 continues.
 - **Bundle** (`bundle.yaml`): YAML file with `id`, `name`, `description`, `status`, `tags[]`, `components[]` (each entry has `type`, `id`, `role`). Dependency metadata for agents and skills is declared in the component's own `.md` frontmatter (`tools:` for agents, `skills:` for skills/commands), not in the bundle file. Valid `role` values: `core` (required for the bundle to function), `optional` (nice-to-have, installable separately), `deprecated` (scheduled for removal). All current entries use `core`. The generated `index.json` distribution catalog is the stable lookup surface for bundle artifacts; use each entry's `artifact_path`, `component_version`, checksum, and install metadata instead of reconstructing paths from slugs.
 
 ## Tag Format

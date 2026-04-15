@@ -32,7 +32,7 @@ if ! command -v jq >/dev/null 2>&1; then
 fi
 
 SETTINGS="$HOME/.claude/settings.json"
-PROTECT="$HOME/.claude/hooks/protect-config.sh"
+PROTECT="$HOME/.claude/hooks/protect-config/protect-config.sh"
 INTEGRITY_SCRIPT="$HOME/.claude/integrity-check.sh"
 DESKTOP_CFG="$HOME/Library/Application Support/Claude/claude_desktop_config.json"
 AGENTS_LOG="$HOME/.claude/.orchestrator/logs/agents.log"

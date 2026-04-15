@@ -11,7 +11,7 @@
 #   ~/.claude/agents   ->  <REPO>/claude-code/agents
 #   ~/.claude/commands ->  <REPO>/claude-code/commands
 #   ~/.claude/docs     ->  <REPO>/claude-code/docs
-#   ~/.claude/hooks    ->  <REPO>/claude-code/hooks
+#   ~/.claude/hooks    ->  <REPO>/hooks
 #   ~/.claude/rules    ->  <REPO>/rules
 #   ~/.claude/skills   ->  <REPO>/skills
 #
@@ -112,7 +112,7 @@ declare -a SYMLINKS=(
   "agents|claude-code/agents"
   "commands|claude-code/commands"
   "docs|claude-code/docs"
-  "hooks|claude-code/hooks"
+  "hooks|hooks"
   "rules|rules"
   "skills|skills"
 )

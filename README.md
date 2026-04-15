@@ -154,7 +154,6 @@ Editing a canonical workflow under `workflows/<slug>/WORKFLOW.md` regenerates:
 
 - `claude-code/commands/`
 - `github-copilot/prompts/`
-- related GitHub Copilot command manifest metadata under `github-copilot/commands/`
 - `index.json`
 
 Pull requests fail if those generated surfaces are stale. Pushes to branches auto-commit

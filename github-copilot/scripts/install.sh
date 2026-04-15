@@ -9,7 +9,7 @@
 # SYMLINK MAP:
 #   .github/agents       -> <REPO>/github-copilot/agents
 #   .github/bundles      -> <REPO>/github-copilot/bundles
-#   .github/hooks        -> <REPO>/github-copilot/hooks
+#   .github/hooks/*.json -> <REPO>/github-copilot/hooks/<slug>/<slug>.json
 #   .github/instructions -> <REPO>/github-copilot/instructions
 #   .github/prompts      -> <REPO>/github-copilot/prompts
 # USAGE:
@@ -78,9 +78,18 @@ GITHUB_DIR="${TARGET_DIR}/.github"
 declare -a GITHUB_SYMLINKS=(
   "agents|${REPO_DIR}/github-copilot/agents"
   "bundles|${REPO_DIR}/github-copilot/bundles"
-  "hooks|${REPO_DIR}/github-copilot/hooks"
   "instructions|${REPO_DIR}/github-copilot/instructions"
   "prompts|${REPO_DIR}/github-copilot/prompts"
+)
+
+declare -a HOOK_MANIFESTS=(
+  "branch-guard|${REPO_DIR}/github-copilot/hooks/branch-guard/branch-guard.json"
+  "changelog-check|${REPO_DIR}/github-copilot/hooks/changelog-check/changelog-check.json"
+  "extract-handoff|${REPO_DIR}/github-copilot/hooks/extract-handoff/extract-handoff.json"
+  "inject-context|${REPO_DIR}/github-copilot/hooks/inject-context/inject-context.json"
+  "integrity-warn|${REPO_DIR}/github-copilot/hooks/integrity-warn/integrity-warn.json"
+  "pre-push-secrets|${REPO_DIR}/github-copilot/hooks/pre-push-secrets/pre-push-secrets.json"
+  "protect-config|${REPO_DIR}/github-copilot/hooks/protect-config/protect-config.json"
 )
 
 print_header() {
@@ -145,6 +154,74 @@ dry_run_link_set() {
   done
 }
 
+check_hook_manifests() {
+  local hooks_dir="$1"
+  shift
+
+  if [[ -L "${hooks_dir}" ]]; then
+    printf '  [DIFF]     %-18s current=%s expected=directory with manifest symlinks\n' ".github/hooks" "$(readlink "${hooks_dir}")"
+    return 1
+  fi
+  if [[ -e "${hooks_dir}" && ! -d "${hooks_dir}" ]]; then
+    printf '  [DIFF]     %-18s existing path is not a directory\n' ".github/hooks"
+    return 1
+  fi
+  if [[ ! -d "${hooks_dir}" ]]; then
+    printf '  [MISS]     %-18s (%s)\n' ".github/hooks" "${hooks_dir}"
+    return 1
+  fi
+
+  local all_ok=true
+  local entry
+  for entry in "$@"; do
+    local slug="${entry%%|*}"
+    local abs_target="${entry##*|}"
+    local link_path="${hooks_dir}/${slug}.json"
+
+    if [[ ! -L "${link_path}" ]]; then
+      printf '  [MISS]     %-18s (%s)\n' ".github/hooks/${slug}.json" "${link_path}"
+      all_ok=false
+      continue
+    fi
+
+    local current_target
+    current_target="$(readlink "${link_path}")"
+    if [[ "${current_target}" == "${abs_target}" ]]; then
+      printf '  [MATCH]    %-18s -> %s\n' ".github/hooks/${slug}.json" "${current_target}"
+    else
+      printf '  [DIFF]     %-18s current=%s expected=%s\n' ".github/hooks/${slug}.json" "${current_target}" "${abs_target}"
+      all_ok=false
+    fi
+  done
+
+  [[ "${all_ok}" == "true" ]]
+}
+
+dry_run_hook_manifests() {
+  local hooks_dir="$1"
+  shift
+
+  if [[ -L "${hooks_dir}" ]]; then
+    printf '  would replace symlink: %s -> %s\n' "${hooks_dir}" "$(readlink "${hooks_dir}")"
+    printf '    with directory: %s\n' "${hooks_dir}"
+  elif [[ ! -d "${hooks_dir}" ]]; then
+    printf '  would create directory: %s\n' "${hooks_dir}"
+  fi
+
+  local entry
+  for entry in "$@"; do
+    local slug="${entry%%|*}"
+    local abs_target="${entry##*|}"
+    local link_path="${hooks_dir}/${slug}.json"
+
+    if [[ -L "${link_path}" ]]; then
+      printf '  would update: %s -> %s\n' "${link_path}" "${abs_target}"
+    else
+      printf '  would create: %s -> %s\n' "${link_path}" "${abs_target}"
+    fi
+  done
+}
+
 apply_link_set() {
   local prefix_dir="$1"
   shift
@@ -168,6 +245,41 @@ apply_link_set() {
   done
 }
 
+apply_hook_manifests() {
+  local hooks_dir="$1"
+  shift
+
+  if [[ -L "${hooks_dir}" ]]; then
+    local current_target
+    current_target="$(readlink "${hooks_dir}")"
+    rm "${hooks_dir}"
+    printf '  [OK]       %s (replaced symlink to %s with directory)\n' "${hooks_dir}" "${current_target}"
+  elif [[ -e "${hooks_dir}" && ! -d "${hooks_dir}" ]]; then
+    echo "ERROR: ${hooks_dir} exists and is not a directory." >&2
+    exit 1
+  fi
+
+  mkdir -p "${hooks_dir}"
+
+  local entry
+  for entry in "$@"; do
+    local slug="${entry%%|*}"
+    local abs_target="${entry##*|}"
+    local link_path="${hooks_dir}/${slug}.json"
+
+    if [[ ! -f "${abs_target}" ]]; then
+      printf '  [SKIP]     %s (missing source %s)\n' "${link_path}" "${abs_target}"
+      continue
+    fi
+    if [[ -e "${link_path}" && ! -L "${link_path}" ]]; then
+      echo "ERROR: ${link_path} exists and is not a symlink." >&2
+      exit 1
+    fi
+    ln -sfn "${abs_target}" "${link_path}"
+    printf '  [OK]       %s -> %s\n' "${link_path}" "${abs_target}"
+  done
+}
+
 print_header
 
 if [[ "$CHECK_MODE" == "true" ]]; then
@@ -175,6 +287,7 @@ if [[ "$CHECK_MODE" == "true" ]]; then
   echo ""
   all_ok=true
   check_link_set "${GITHUB_DIR}" ".github/" "${GITHUB_SYMLINKS[@]}" || all_ok=false
+  check_hook_manifests "${GITHUB_DIR}/hooks" "${HOOK_MANIFESTS[@]}" || all_ok=false
   echo ""
   if [[ "$all_ok" == "true" ]]; then
     echo "All symlinks match expected targets."
@@ -188,11 +301,13 @@ if [[ "$DRY_RUN" == "true" ]]; then
   echo "Mode: DRY RUN"
   echo ""
   dry_run_link_set "${GITHUB_DIR}" "${GITHUB_SYMLINKS[@]}"
+  dry_run_hook_manifests "${GITHUB_DIR}/hooks" "${HOOK_MANIFESTS[@]}"
   exit 0
 fi
 
 echo "Mode: APPLY"
 echo ""
 apply_link_set "${GITHUB_DIR}" "${GITHUB_SYMLINKS[@]}"
+apply_hook_manifests "${GITHUB_DIR}/hooks" "${HOOK_MANIFESTS[@]}"
 echo ""
 echo "Done."

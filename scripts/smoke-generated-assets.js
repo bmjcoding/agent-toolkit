@@ -34,6 +34,14 @@ function listCanonicalSlugs(rootDir, markerFile) {
     .sort();
 }
 
+function listCanonicalHookSlugs() {
+  return fs.readdirSync(path.join(REPO_ROOT, 'hooks'), { withFileTypes: true })
+    .filter(entry => entry.isDirectory())
+    .map(entry => entry.name)
+    .filter(name => exists(path.join('hooks', name, `${name}.sh`)))
+    .sort();
+}
+
 function runNodeScript(scriptPath, extraArgs = []) {
   execFileSync(process.execPath, [path.join(REPO_ROOT, scriptPath), ...extraArgs], {
     cwd: REPO_ROOT,
@@ -93,6 +101,7 @@ function parseTomlMultilineBasicString(text, key) {
 function assertGeneratedFilesExist() {
   const agents = listCanonicalSlugs('agents', 'AGENT.md');
   const workflows = listCanonicalSlugs('workflows', 'WORKFLOW.md');
+  const hooks = listCanonicalHookSlugs();
 
   for (const agent of agents) {
     assert(exists(path.join('claude-code', 'agents', agent, `${agent}.md`)), `missing Claude agent adapter for ${agent}`);
@@ -103,10 +112,17 @@ function assertGeneratedFilesExist() {
   for (const workflow of workflows) {
     assert(exists(path.join('claude-code', 'commands', workflow, `${workflow}.md`)), `missing Claude command adapter for ${workflow}`);
     assert(exists(path.join('github-copilot', 'prompts', `${workflow}.prompt.md`)), `missing GitHub Copilot prompt adapter for ${workflow}`);
-    assert(exists(path.join('github-copilot', 'commands', workflow, 'manifest.json')), `missing GitHub Copilot command manifest for ${workflow}`);
   }
 
-  return { agents, workflows };
+  for (const hook of hooks) {
+    assert(exists(path.join('github-copilot', 'hooks', hook, `${hook}.json`)), `missing GitHub Copilot hook manifest for ${hook}`);
+    assert(exists(path.join('github-copilot', 'hooks', hook, `${hook}.sh`)), `missing GitHub Copilot hook adapter for ${hook}`);
+    assert(exists(path.join('openai-codex', 'hooks', hook, `${hook}.sh`)), `missing OpenAI Codex hook adapter for ${hook}`);
+  }
+
+  assert(exists(path.join('openai-codex', 'hooks', 'hooks.json')), 'missing OpenAI Codex hooks registry');
+
+  return { agents, workflows, hooks };
 }
 
 function assertCodexAgentBodiesMatch(agents) {
@@ -161,13 +177,13 @@ function main() {
   runNodeScript('scripts/generate-index.js');
   runNodeScript('scripts/generate-index.js', ['--test']);
 
-  const { agents, workflows } = assertGeneratedFilesExist();
+  const { agents, workflows, hooks } = assertGeneratedFilesExist();
   assert(exists(path.relative(REPO_ROOT, INDEX_PATH)), 'missing generated index.json');
   assertCodexAgentBodiesMatch(agents);
   assertCatalogEntriesExist(agents, workflows);
 
   process.stdout.write(
-    `Smoke test passed: ${agents.length} canonical agents, ${workflows.length} canonical workflows, and index.json are all generated.\n`
+    `Smoke test passed: ${agents.length} canonical agents, ${workflows.length} canonical workflows, ${hooks.length} canonical hooks, and index.json are all generated.\n`
   );
 }
 

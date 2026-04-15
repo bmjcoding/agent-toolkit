@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Rebased the Codex hook surface on the canonical root `hooks/` tree and documented the
+  generated adapter-plus-`hooks.json` layout as the intended runtime contract.
+- Aligned the active Codex hook registry to the final 7-hook set after removing the
+  `toolkit-drift-check` and `toolkit-edit-reminder` maintenance hooks.
+
 ## [3.0.0] - 2026-04-12
 
 ### Changed

@@ -10,7 +10,8 @@
 #   Agents:   openai-codex/agents/*.toml   -> ~/.codex/agents/  (user-global)
 #             OR .codex/agents/             (project-local with --project)
 #   Hooks:    openai-codex/hooks/hooks.json -> ~/.codex/hooks.json  (sibling to config.toml)
-#             Hook scripts remain in openai-codex/hooks/ (referenced by path in hooks.json)
+#             hooks.json may reference thin Codex adapters under openai-codex/hooks/<slug>/<slug>.sh
+#             which delegate to the canonical root hooks/<slug>/<slug>.sh implementation
 #   Config:   Appends [[skills.config]] blocks from config.toml.template
 #             to ~/.codex/config.toml  (with prompt — NEVER overwrites existing)
 #   Feature:  Adds features.codex_hooks=true to ~/.codex/config.toml (with prompt)
@@ -336,8 +337,9 @@ if [[ "$SKIP_HOOKS" == "true" ]]; then
 else
   echo "  NOTE: Codex hooks are experimental. They require Codex CLI v0.120.0+."
   echo "        You will be prompted before enabling features.codex_hooks in config."
-  echo "        Hook scripts stay in openai-codex/hooks/; hooks.json is symlinked"
-  echo "        to ~/.codex/hooks.json (sibling to config.toml) per the official spec."
+  echo "        hooks.json stays symlinked to ~/.codex/hooks.json (sibling to config.toml)"
+  echo "        per the official spec; any remaining Codex shell files are thin adapters"
+  echo "        that delegate to the canonical root hooks/ implementations."
   echo ""
 
   hooks_json_src="${HOOKS_SRC}/hooks.json"

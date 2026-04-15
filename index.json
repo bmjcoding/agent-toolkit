@@ -5,7 +5,7 @@
     {
       "component_id": "autoresearch-analyst",
       "component_kind": "agent",
-      "component_version": "5.1.1",
+      "component_version": "6.0.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/agents/autoresearch-analyst/autoresearch-analyst.md",
       "source_path": "agents/autoresearch-analyst/AGENT.md",
@@ -45,7 +45,7 @@
     {
       "component_id": "backend-engineer",
       "component_kind": "agent",
-      "component_version": "1.3.1",
+      "component_version": "2.0.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/agents/backend-engineer/backend-engineer.md",
       "source_path": "agents/backend-engineer/AGENT.md",
@@ -80,7 +80,7 @@
     {
       "component_id": "design-architect",
       "component_kind": "agent",
-      "component_version": "1.2.1",
+      "component_version": "2.0.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/agents/design-architect/design-architect.md",
       "source_path": "agents/design-architect/AGENT.md",
@@ -112,7 +112,7 @@
     {
       "component_id": "doc-writer",
       "component_kind": "agent",
-      "component_version": "1.2.3",
+      "component_version": "2.0.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/agents/doc-writer/doc-writer.md",
       "source_path": "agents/doc-writer/AGENT.md",
@@ -143,7 +143,7 @@
     {
       "component_id": "frankenstein",
       "component_kind": "agent",
-      "component_version": "4.5.0",
+      "component_version": "5.0.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/agents/frankenstein/frankenstein.md",
       "source_path": "agents/frankenstein/AGENT.md",
@@ -188,7 +188,7 @@
     {
       "component_id": "frontend-engineer",
       "component_kind": "agent",
-      "component_version": "1.3.1",
+      "component_version": "2.0.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/agents/frontend-engineer/frontend-engineer.md",
       "source_path": "agents/frontend-engineer/AGENT.md",
@@ -225,7 +225,7 @@
     {
       "component_id": "integration-verifier",
       "component_kind": "agent",
-      "component_version": "1.4.2",
+      "component_version": "2.0.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/agents/integration-verifier/integration-verifier.md",
       "source_path": "agents/integration-verifier/AGENT.md",
@@ -256,7 +256,7 @@
     {
       "component_id": "plan-reviewer",
       "component_kind": "agent",
-      "component_version": "1.4.2",
+      "component_version": "2.0.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/agents/plan-reviewer/plan-reviewer.md",
       "source_path": "agents/plan-reviewer/AGENT.md",
@@ -285,7 +285,7 @@
     {
       "component_id": "planner",
       "component_kind": "agent",
-      "component_version": "1.10.0",
+      "component_version": "2.0.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/agents/planner/planner.md",
       "source_path": "agents/planner/AGENT.md",
@@ -315,7 +315,7 @@
     {
       "component_id": "quality-engineer",
       "component_kind": "agent",
-      "component_version": "1.4.1",
+      "component_version": "2.0.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/agents/quality-engineer/quality-engineer.md",
       "source_path": "agents/quality-engineer/AGENT.md",
@@ -346,7 +346,7 @@
     {
       "component_id": "release-engineer",
       "component_kind": "agent",
-      "component_version": "4.0.1",
+      "component_version": "5.0.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/agents/release-engineer/release-engineer.md",
       "source_path": "agents/release-engineer/AGENT.md",
@@ -379,7 +379,7 @@
     {
       "component_id": "release-gate",
       "component_kind": "agent",
-      "component_version": "1.2.1",
+      "component_version": "2.0.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/agents/release-gate/release-gate.md",
       "source_path": "agents/release-gate/AGENT.md",
@@ -410,7 +410,7 @@
     {
       "component_id": "security-engineer",
       "component_kind": "agent",
-      "component_version": "1.4.1",
+      "component_version": "2.0.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/agents/security-engineer/security-engineer.md",
       "source_path": "agents/security-engineer/AGENT.md",
@@ -445,7 +445,7 @@
     {
       "component_id": "site-reliability-engineer",
       "component_kind": "agent",
-      "component_version": "1.4.2",
+      "component_version": "2.0.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/agents/site-reliability-engineer/site-reliability-engineer.md",
       "source_path": "agents/site-reliability-engineer/AGENT.md",
@@ -482,7 +482,7 @@
     {
       "component_id": "staff-engineer",
       "component_kind": "agent",
-      "component_version": "4.0.0",
+      "component_version": "5.0.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/agents/staff-engineer/staff-engineer.md",
       "source_path": "agents/staff-engineer/AGENT.md",
@@ -1025,7 +1025,7 @@
     {
       "component_id": "audit",
       "component_kind": "command",
-      "component_version": "4.0.0",
+      "component_version": "4.1.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/commands/audit/audit.md",
       "source_path": "workflows/audit/WORKFLOW.md",
@@ -1051,7 +1051,7 @@
     {
       "component_id": "backlog",
       "component_kind": "command",
-      "component_version": "5.0.0",
+      "component_version": "5.1.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/commands/backlog/backlog.md",
       "source_path": "workflows/backlog/WORKFLOW.md",
@@ -1073,7 +1073,7 @@
     {
       "component_id": "git-verify",
       "component_kind": "command",
-      "component_version": "4.0.0",
+      "component_version": "4.1.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/commands/git-verify/git-verify.md",
       "source_path": "workflows/git-verify/WORKFLOW.md",
@@ -1099,7 +1099,7 @@
     {
       "component_id": "lint",
       "component_kind": "command",
-      "component_version": "4.0.0",
+      "component_version": "4.1.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/commands/lint/lint.md",
       "source_path": "workflows/lint/WORKFLOW.md",
@@ -1125,7 +1125,7 @@
     {
       "component_id": "sync-toolkit",
       "component_kind": "command",
-      "component_version": "4.0.0",
+      "component_version": "4.1.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/commands/sync-toolkit/sync-toolkit.md",
       "source_path": "workflows/sync-toolkit/WORKFLOW.md",
@@ -1142,7 +1142,7 @@
     {
       "component_id": "test",
       "component_kind": "command",
-      "component_version": "4.0.0",
+      "component_version": "4.1.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/commands/test/test.md",
       "source_path": "workflows/test/WORKFLOW.md",
@@ -1164,178 +1164,6 @@
         "argument_hint": "[paths...] [--dry-run]",
         "metadata_source": "canonical"
       }
-    },
-    {
-      "component_id": "branch-guard",
-      "component_kind": "hook",
-      "component_version": "4.0.0",
-      "target_tool": "claude-code",
-      "artifact_path": "claude-code/hooks/branch-guard/branch-guard.sh",
-      "source_path": "claude-code/hooks/branch-guard/branch-guard.sh",
-      "install_path": "~/.claude/hooks/branch-guard/branch-guard.sh",
-      "install_command": "mkdir -p \"$HOME/.claude/hooks/branch-guard\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/hooks/branch-guard/branch-guard.sh\" -o \"$HOME/.claude/hooks/branch-guard/branch-guard.sh\"",
-      "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/hooks/branch-guard/branch-guard.sh",
-      "checksum_sha256": "0a071e2eff13627b2712642564774378c9573402285f5f78dfdcef8f0b8a3425",
-      "bundle_membership": [
-        {
-          "bundle_id": "frankenstein-orchestration",
-          "role": "core"
-        },
-        {
-          "bundle_id": "git-workflow",
-          "role": "core"
-        }
-      ],
-      "metadata": {}
-    },
-    {
-      "component_id": "changelog-check",
-      "component_kind": "hook",
-      "component_version": "4.0.0",
-      "target_tool": "claude-code",
-      "artifact_path": "claude-code/hooks/changelog-check/changelog-check.sh",
-      "source_path": "claude-code/hooks/changelog-check/changelog-check.sh",
-      "install_path": "~/.claude/hooks/changelog-check/changelog-check.sh",
-      "install_command": "mkdir -p \"$HOME/.claude/hooks/changelog-check\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/hooks/changelog-check/changelog-check.sh\" -o \"$HOME/.claude/hooks/changelog-check/changelog-check.sh\"",
-      "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/hooks/changelog-check/changelog-check.sh",
-      "checksum_sha256": "e6b0d374f4a70e24c3f1eb9d119643a470072fcf0a3e1392467220338a55c966",
-      "bundle_membership": [],
-      "metadata": {}
-    },
-    {
-      "component_id": "extract-handoff",
-      "component_kind": "hook",
-      "component_version": "4.0.0",
-      "target_tool": "claude-code",
-      "artifact_path": "claude-code/hooks/extract-handoff/extract-handoff.sh",
-      "source_path": "claude-code/hooks/extract-handoff/extract-handoff.sh",
-      "install_path": "~/.claude/hooks/extract-handoff/extract-handoff.sh",
-      "install_command": "mkdir -p \"$HOME/.claude/hooks/extract-handoff\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/hooks/extract-handoff/extract-handoff.sh\" -o \"$HOME/.claude/hooks/extract-handoff/extract-handoff.sh\"",
-      "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/hooks/extract-handoff/extract-handoff.sh",
-      "checksum_sha256": "0e7ddd1e4c913b67162077576c2932e3ddcfc573e187c24b88682fabcd9a0be2",
-      "bundle_membership": [
-        {
-          "bundle_id": "frankenstein-orchestration",
-          "role": "core"
-        }
-      ],
-      "metadata": {}
-    },
-    {
-      "component_id": "inject-context",
-      "component_kind": "hook",
-      "component_version": "4.0.0",
-      "target_tool": "claude-code",
-      "artifact_path": "claude-code/hooks/inject-context/inject-context.sh",
-      "source_path": "claude-code/hooks/inject-context/inject-context.sh",
-      "install_path": "~/.claude/hooks/inject-context/inject-context.sh",
-      "install_command": "mkdir -p \"$HOME/.claude/hooks/inject-context\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/hooks/inject-context/inject-context.sh\" -o \"$HOME/.claude/hooks/inject-context/inject-context.sh\"",
-      "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/hooks/inject-context/inject-context.sh",
-      "checksum_sha256": "c613c77cd0bde2496ef4db4e563b307dc04b8a1cb3aa993dc25d66fead24c885",
-      "bundle_membership": [
-        {
-          "bundle_id": "frankenstein-orchestration",
-          "role": "core"
-        }
-      ],
-      "metadata": {}
-    },
-    {
-      "component_id": "integrity-warn",
-      "component_kind": "hook",
-      "component_version": "4.0.0",
-      "target_tool": "claude-code",
-      "artifact_path": "claude-code/hooks/integrity-warn/integrity-warn.sh",
-      "source_path": "claude-code/hooks/integrity-warn/integrity-warn.sh",
-      "install_path": "~/.claude/hooks/integrity-warn/integrity-warn.sh",
-      "install_command": "mkdir -p \"$HOME/.claude/hooks/integrity-warn\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/hooks/integrity-warn/integrity-warn.sh\" -o \"$HOME/.claude/hooks/integrity-warn/integrity-warn.sh\"",
-      "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/hooks/integrity-warn/integrity-warn.sh",
-      "checksum_sha256": "914ef49eea841727c0b7ea9f83a2b087f1829053e0ac5bcf55d9f04398a0a19c",
-      "bundle_membership": [
-        {
-          "bundle_id": "frankenstein-orchestration",
-          "role": "core"
-        }
-      ],
-      "metadata": {}
-    },
-    {
-      "component_id": "pre-push-secrets",
-      "component_kind": "hook",
-      "component_version": "4.0.0",
-      "target_tool": "claude-code",
-      "artifact_path": "claude-code/hooks/pre-push-secrets/pre-push-secrets.sh",
-      "source_path": "claude-code/hooks/pre-push-secrets/pre-push-secrets.sh",
-      "install_path": "~/.claude/hooks/pre-push-secrets/pre-push-secrets.sh",
-      "install_command": "mkdir -p \"$HOME/.claude/hooks/pre-push-secrets\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/hooks/pre-push-secrets/pre-push-secrets.sh\" -o \"$HOME/.claude/hooks/pre-push-secrets/pre-push-secrets.sh\"",
-      "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/hooks/pre-push-secrets/pre-push-secrets.sh",
-      "checksum_sha256": "7813abc8da80d43016284448dcf2217efd5baced3f790231489d24bd5581403e",
-      "bundle_membership": [
-        {
-          "bundle_id": "frankenstein-orchestration",
-          "role": "core"
-        },
-        {
-          "bundle_id": "git-workflow",
-          "role": "core"
-        },
-        {
-          "bundle_id": "security-hardening",
-          "role": "core"
-        }
-      ],
-      "metadata": {}
-    },
-    {
-      "component_id": "protect-config",
-      "component_kind": "hook",
-      "component_version": "4.0.0",
-      "target_tool": "claude-code",
-      "artifact_path": "claude-code/hooks/protect-config/protect-config.sh",
-      "source_path": "claude-code/hooks/protect-config/protect-config.sh",
-      "install_path": "~/.claude/hooks/protect-config/protect-config.sh",
-      "install_command": "mkdir -p \"$HOME/.claude/hooks/protect-config\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/hooks/protect-config/protect-config.sh\" -o \"$HOME/.claude/hooks/protect-config/protect-config.sh\"",
-      "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/hooks/protect-config/protect-config.sh",
-      "checksum_sha256": "f7b5833bcacea7c8d866f0410f3e479a6d1ac113ddbdc8d865e16be68965e9a5",
-      "bundle_membership": [
-        {
-          "bundle_id": "frankenstein-orchestration",
-          "role": "core"
-        },
-        {
-          "bundle_id": "security-hardening",
-          "role": "core"
-        }
-      ],
-      "metadata": {}
-    },
-    {
-      "component_id": "toolkit-drift-check",
-      "component_kind": "hook",
-      "component_version": "4.0.0",
-      "target_tool": "claude-code",
-      "artifact_path": "claude-code/hooks/toolkit-drift-check/toolkit-drift-check.sh",
-      "source_path": "claude-code/hooks/toolkit-drift-check/toolkit-drift-check.sh",
-      "install_path": "~/.claude/hooks/toolkit-drift-check/toolkit-drift-check.sh",
-      "install_command": "mkdir -p \"$HOME/.claude/hooks/toolkit-drift-check\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/hooks/toolkit-drift-check/toolkit-drift-check.sh\" -o \"$HOME/.claude/hooks/toolkit-drift-check/toolkit-drift-check.sh\"",
-      "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/hooks/toolkit-drift-check/toolkit-drift-check.sh",
-      "checksum_sha256": "45409d77ab35e1665a36e0836e97b3e4b720819f3b0174284ed57689f6893db5",
-      "bundle_membership": [],
-      "metadata": {}
-    },
-    {
-      "component_id": "toolkit-edit-reminder",
-      "component_kind": "hook",
-      "component_version": "4.0.0",
-      "target_tool": "claude-code",
-      "artifact_path": "claude-code/hooks/toolkit-edit-reminder/toolkit-edit-reminder.sh",
-      "source_path": "claude-code/hooks/toolkit-edit-reminder/toolkit-edit-reminder.sh",
-      "install_path": "~/.claude/hooks/toolkit-edit-reminder/toolkit-edit-reminder.sh",
-      "install_command": "mkdir -p \"$HOME/.claude/hooks/toolkit-edit-reminder\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/hooks/toolkit-edit-reminder/toolkit-edit-reminder.sh\" -o \"$HOME/.claude/hooks/toolkit-edit-reminder/toolkit-edit-reminder.sh\"",
-      "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/hooks/toolkit-edit-reminder/toolkit-edit-reminder.sh",
-      "checksum_sha256": "54c05138fbb3afb2f191a349380acd3fe5265932f71e73090eb3e6587a6c522a",
-      "bundle_membership": [],
-      "metadata": {}
     },
     {
       "component_id": "docker",
@@ -1717,7 +1545,7 @@
     {
       "component_id": "autoresearch-analyst",
       "component_kind": "agent",
-      "component_version": "5.1.1",
+      "component_version": "6.0.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/agents/autoresearch-analyst.agent.md",
       "source_path": "agents/autoresearch-analyst/AGENT.md",
@@ -1748,7 +1576,7 @@
     {
       "component_id": "backend-engineer",
       "component_kind": "agent",
-      "component_version": "1.3.1",
+      "component_version": "2.0.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/agents/backend-engineer.agent.md",
       "source_path": "agents/backend-engineer/AGENT.md",
@@ -1774,7 +1602,7 @@
     {
       "component_id": "design-architect",
       "component_kind": "agent",
-      "component_version": "1.2.1",
+      "component_version": "2.0.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/agents/design-architect.agent.md",
       "source_path": "agents/design-architect/AGENT.md",
@@ -1801,7 +1629,7 @@
     {
       "component_id": "doc-writer",
       "component_kind": "agent",
-      "component_version": "1.2.3",
+      "component_version": "2.0.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/agents/doc-writer.agent.md",
       "source_path": "agents/doc-writer/AGENT.md",
@@ -1827,7 +1655,7 @@
     {
       "component_id": "frankenstein",
       "component_kind": "agent",
-      "component_version": "4.5.0",
+      "component_version": "5.0.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/agents/frankenstein.agent.md",
       "source_path": "agents/frankenstein/AGENT.md",
@@ -1867,7 +1695,7 @@
     {
       "component_id": "frontend-engineer",
       "component_kind": "agent",
-      "component_version": "1.3.1",
+      "component_version": "2.0.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/agents/frontend-engineer.agent.md",
       "source_path": "agents/frontend-engineer/AGENT.md",
@@ -1895,7 +1723,7 @@
     {
       "component_id": "integration-verifier",
       "component_kind": "agent",
-      "component_version": "1.4.2",
+      "component_version": "2.0.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/agents/integration-verifier.agent.md",
       "source_path": "agents/integration-verifier/AGENT.md",
@@ -1921,7 +1749,7 @@
     {
       "component_id": "plan-reviewer",
       "component_kind": "agent",
-      "component_version": "1.4.2",
+      "component_version": "2.0.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/agents/plan-reviewer.agent.md",
       "source_path": "agents/plan-reviewer/AGENT.md",
@@ -1945,7 +1773,7 @@
     {
       "component_id": "planner",
       "component_kind": "agent",
-      "component_version": "1.10.0",
+      "component_version": "2.0.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/agents/planner.agent.md",
       "source_path": "agents/planner/AGENT.md",
@@ -1970,7 +1798,7 @@
     {
       "component_id": "quality-engineer",
       "component_kind": "agent",
-      "component_version": "1.4.1",
+      "component_version": "2.0.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/agents/quality-engineer.agent.md",
       "source_path": "agents/quality-engineer/AGENT.md",
@@ -1996,7 +1824,7 @@
     {
       "component_id": "release-engineer",
       "component_kind": "agent",
-      "component_version": "4.0.1",
+      "component_version": "5.0.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/agents/release-engineer.agent.md",
       "source_path": "agents/release-engineer/AGENT.md",
@@ -2024,7 +1852,7 @@
     {
       "component_id": "release-gate",
       "component_kind": "agent",
-      "component_version": "1.2.1",
+      "component_version": "2.0.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/agents/release-gate.agent.md",
       "source_path": "agents/release-gate/AGENT.md",
@@ -2050,7 +1878,7 @@
     {
       "component_id": "security-engineer",
       "component_kind": "agent",
-      "component_version": "1.4.1",
+      "component_version": "2.0.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/agents/security-engineer.agent.md",
       "source_path": "agents/security-engineer/AGENT.md",
@@ -2076,7 +1904,7 @@
     {
       "component_id": "site-reliability-engineer",
       "component_kind": "agent",
-      "component_version": "1.4.2",
+      "component_version": "2.0.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/agents/site-reliability-engineer.agent.md",
       "source_path": "agents/site-reliability-engineer/AGENT.md",
@@ -2104,7 +1932,7 @@
     {
       "component_id": "staff-engineer",
       "component_kind": "agent",
-      "component_version": "4.0.0",
+      "component_version": "5.0.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/agents/staff-engineer.agent.md",
       "source_path": "agents/staff-engineer/AGENT.md",
@@ -2130,7 +1958,7 @@
     {
       "component_id": "audit",
       "component_kind": "command",
-      "component_version": "4.0.0",
+      "component_version": "4.1.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/prompts/audit.prompt.md",
       "source_path": "workflows/audit/WORKFLOW.md",
@@ -2147,7 +1975,7 @@
     {
       "component_id": "backlog",
       "component_kind": "command",
-      "component_version": "5.0.0",
+      "component_version": "5.1.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/prompts/backlog.prompt.md",
       "source_path": "workflows/backlog/WORKFLOW.md",
@@ -2164,7 +1992,7 @@
     {
       "component_id": "git-verify",
       "component_kind": "command",
-      "component_version": "4.0.0",
+      "component_version": "4.1.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/prompts/git-verify.prompt.md",
       "source_path": "workflows/git-verify/WORKFLOW.md",
@@ -2181,7 +2009,7 @@
     {
       "component_id": "lint",
       "component_kind": "command",
-      "component_version": "4.0.0",
+      "component_version": "4.1.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/prompts/lint.prompt.md",
       "source_path": "workflows/lint/WORKFLOW.md",
@@ -2198,7 +2026,7 @@
     {
       "component_id": "sync-toolkit",
       "component_kind": "command",
-      "component_version": "4.0.0",
+      "component_version": "4.1.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/prompts/sync-toolkit.prompt.md",
       "source_path": "workflows/sync-toolkit/WORKFLOW.md",
@@ -2215,7 +2043,7 @@
     {
       "component_id": "test",
       "component_kind": "command",
-      "component_version": "4.0.0",
+      "component_version": "4.1.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/prompts/test.prompt.md",
       "source_path": "workflows/test/WORKFLOW.md",
@@ -2227,168 +2055,6 @@
       "metadata": {
         "argument_hint": "[paths...] [--dry-run]",
         "metadata_source": "canonical"
-      }
-    },
-    {
-      "component_id": "branch-guard",
-      "component_kind": "hook",
-      "component_version": "3.0.0",
-      "target_tool": "github-copilot",
-      "artifact_path": "github-copilot/hooks/branch-guard.json",
-      "source_path": "github-copilot/hooks/branch-guard.json",
-      "install_path": ".github/hooks/branch-guard.json",
-      "install_command": "mkdir -p \".github/hooks\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/branch-guard.json\" -o \".github/hooks/branch-guard.json\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/branch-guard.sh\" -o \".github/hooks/branch-guard.sh\" && # register branch-guard through the paired .json hook definition",
-      "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/branch-guard.json",
-      "checksum_sha256": "24f02ed89bfaa6b24f592f331f9c056d66efa4273d4bc998b81b6e6526220226",
-      "bundle_membership": [],
-      "metadata": {
-        "companion_artifacts": [
-          "github-copilot/hooks/branch-guard.sh"
-        ]
-      }
-    },
-    {
-      "component_id": "changelog-check",
-      "component_kind": "hook",
-      "component_version": "3.0.0",
-      "target_tool": "github-copilot",
-      "artifact_path": "github-copilot/hooks/changelog-check.json",
-      "source_path": "github-copilot/hooks/changelog-check.json",
-      "install_path": ".github/hooks/changelog-check.json",
-      "install_command": "mkdir -p \".github/hooks\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/changelog-check.json\" -o \".github/hooks/changelog-check.json\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/changelog-check.sh\" -o \".github/hooks/changelog-check.sh\" && # register changelog-check through the paired .json hook definition",
-      "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/changelog-check.json",
-      "checksum_sha256": "25118d3bf0afcb97459a18bdf01ca5898b44d7ccd256974561851f731d208115",
-      "bundle_membership": [],
-      "metadata": {
-        "companion_artifacts": [
-          "github-copilot/hooks/changelog-check.sh"
-        ]
-      }
-    },
-    {
-      "component_id": "extract-handoff",
-      "component_kind": "hook",
-      "component_version": "3.0.0",
-      "target_tool": "github-copilot",
-      "artifact_path": "github-copilot/hooks/extract-handoff.json",
-      "source_path": "github-copilot/hooks/extract-handoff.json",
-      "install_path": ".github/hooks/extract-handoff.json",
-      "install_command": "mkdir -p \".github/hooks\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/extract-handoff.json\" -o \".github/hooks/extract-handoff.json\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/extract-handoff.sh\" -o \".github/hooks/extract-handoff.sh\" && # register extract-handoff through the paired .json hook definition",
-      "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/extract-handoff.json",
-      "checksum_sha256": "596dc6ffa3d7cd1a02b2590e2d5aebea58b8ef8279989757967c79c0f854bce1",
-      "bundle_membership": [],
-      "metadata": {
-        "companion_artifacts": [
-          "github-copilot/hooks/extract-handoff.sh"
-        ]
-      }
-    },
-    {
-      "component_id": "inject-context",
-      "component_kind": "hook",
-      "component_version": "3.0.0",
-      "target_tool": "github-copilot",
-      "artifact_path": "github-copilot/hooks/inject-context.json",
-      "source_path": "github-copilot/hooks/inject-context.json",
-      "install_path": ".github/hooks/inject-context.json",
-      "install_command": "mkdir -p \".github/hooks\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/inject-context.json\" -o \".github/hooks/inject-context.json\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/inject-context.sh\" -o \".github/hooks/inject-context.sh\" && # register inject-context through the paired .json hook definition",
-      "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/inject-context.json",
-      "checksum_sha256": "f0bd389439a9248fa097056eb97fe3895ebb2858eedd8b02003e473275e2258a",
-      "bundle_membership": [],
-      "metadata": {
-        "companion_artifacts": [
-          "github-copilot/hooks/inject-context.sh"
-        ]
-      }
-    },
-    {
-      "component_id": "integrity-warn",
-      "component_kind": "hook",
-      "component_version": "3.0.0",
-      "target_tool": "github-copilot",
-      "artifact_path": "github-copilot/hooks/integrity-warn.json",
-      "source_path": "github-copilot/hooks/integrity-warn.json",
-      "install_path": ".github/hooks/integrity-warn.json",
-      "install_command": "mkdir -p \".github/hooks\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/integrity-warn.json\" -o \".github/hooks/integrity-warn.json\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/integrity-warn.sh\" -o \".github/hooks/integrity-warn.sh\" && # register integrity-warn through the paired .json hook definition",
-      "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/integrity-warn.json",
-      "checksum_sha256": "09a69223ba9b3bce608a8d76fba91951623f16a62ef00b610a7decd7c2850118",
-      "bundle_membership": [],
-      "metadata": {
-        "companion_artifacts": [
-          "github-copilot/hooks/integrity-warn.sh"
-        ]
-      }
-    },
-    {
-      "component_id": "pre-push-secrets",
-      "component_kind": "hook",
-      "component_version": "3.0.0",
-      "target_tool": "github-copilot",
-      "artifact_path": "github-copilot/hooks/pre-push-secrets.json",
-      "source_path": "github-copilot/hooks/pre-push-secrets.json",
-      "install_path": ".github/hooks/pre-push-secrets.json",
-      "install_command": "mkdir -p \".github/hooks\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/pre-push-secrets.json\" -o \".github/hooks/pre-push-secrets.json\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/pre-push-secrets.sh\" -o \".github/hooks/pre-push-secrets.sh\" && # register pre-push-secrets through the paired .json hook definition",
-      "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/pre-push-secrets.json",
-      "checksum_sha256": "4a2ac4771860708e65c08377b8910f961689e0725da1b93e3b819b56b723a8e7",
-      "bundle_membership": [],
-      "metadata": {
-        "companion_artifacts": [
-          "github-copilot/hooks/pre-push-secrets.sh"
-        ]
-      }
-    },
-    {
-      "component_id": "protect-config",
-      "component_kind": "hook",
-      "component_version": "3.0.0",
-      "target_tool": "github-copilot",
-      "artifact_path": "github-copilot/hooks/protect-config.json",
-      "source_path": "github-copilot/hooks/protect-config.json",
-      "install_path": ".github/hooks/protect-config.json",
-      "install_command": "mkdir -p \".github/hooks\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/protect-config.json\" -o \".github/hooks/protect-config.json\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/protect-config.sh\" -o \".github/hooks/protect-config.sh\" && # register protect-config through the paired .json hook definition",
-      "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/protect-config.json",
-      "checksum_sha256": "7ba6a8964b7defad59171798846e592c6bc4cf76b947aeebe4beb10cbfcd3aff",
-      "bundle_membership": [],
-      "metadata": {
-        "companion_artifacts": [
-          "github-copilot/hooks/protect-config.sh"
-        ]
-      }
-    },
-    {
-      "component_id": "toolkit-drift-check",
-      "component_kind": "hook",
-      "component_version": "3.0.0",
-      "target_tool": "github-copilot",
-      "artifact_path": "github-copilot/hooks/toolkit-drift-check.json",
-      "source_path": "github-copilot/hooks/toolkit-drift-check.json",
-      "install_path": ".github/hooks/toolkit-drift-check.json",
-      "install_command": "mkdir -p \".github/hooks\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/toolkit-drift-check.json\" -o \".github/hooks/toolkit-drift-check.json\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/toolkit-drift-check.sh\" -o \".github/hooks/toolkit-drift-check.sh\" && # register toolkit-drift-check through the paired .json hook definition",
-      "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/toolkit-drift-check.json",
-      "checksum_sha256": "2ddebfa8a8d27340d19a11810adb6a6445f826426abe23596fcb62ee1fd1f021",
-      "bundle_membership": [],
-      "metadata": {
-        "companion_artifacts": [
-          "github-copilot/hooks/toolkit-drift-check.sh"
-        ]
-      }
-    },
-    {
-      "component_id": "toolkit-edit-reminder",
-      "component_kind": "hook",
-      "component_version": "3.0.0",
-      "target_tool": "github-copilot",
-      "artifact_path": "github-copilot/hooks/toolkit-edit-reminder.json",
-      "source_path": "github-copilot/hooks/toolkit-edit-reminder.json",
-      "install_path": ".github/hooks/toolkit-edit-reminder.json",
-      "install_command": "mkdir -p \".github/hooks\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/toolkit-edit-reminder.json\" -o \".github/hooks/toolkit-edit-reminder.json\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/toolkit-edit-reminder.sh\" -o \".github/hooks/toolkit-edit-reminder.sh\" && # register toolkit-edit-reminder through the paired .json hook definition",
-      "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/toolkit-edit-reminder.json",
-      "checksum_sha256": "3bade916c8a611f6e3f1d423cb21ae18161db41d167ebedb3e0988cc0ee4338f",
-      "bundle_membership": [],
-      "metadata": {
-        "companion_artifacts": [
-          "github-copilot/hooks/toolkit-edit-reminder.sh"
-        ]
       }
     },
     {
@@ -2488,7 +2154,7 @@
     {
       "component_id": "autoresearch-analyst",
       "component_kind": "agent",
-      "component_version": "5.1.1",
+      "component_version": "6.0.0",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/agents/autoresearch-analyst.toml",
       "source_path": "agents/autoresearch-analyst/AGENT.md",
@@ -2519,7 +2185,7 @@
     {
       "component_id": "backend-engineer",
       "component_kind": "agent",
-      "component_version": "1.3.1",
+      "component_version": "2.0.0",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/agents/backend-engineer.toml",
       "source_path": "agents/backend-engineer/AGENT.md",
@@ -2545,7 +2211,7 @@
     {
       "component_id": "design-architect",
       "component_kind": "agent",
-      "component_version": "1.2.1",
+      "component_version": "2.0.0",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/agents/design-architect.toml",
       "source_path": "agents/design-architect/AGENT.md",
@@ -2572,7 +2238,7 @@
     {
       "component_id": "doc-writer",
       "component_kind": "agent",
-      "component_version": "1.2.3",
+      "component_version": "2.0.0",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/agents/doc-writer.toml",
       "source_path": "agents/doc-writer/AGENT.md",
@@ -2598,7 +2264,7 @@
     {
       "component_id": "frankenstein",
       "component_kind": "agent",
-      "component_version": "4.5.0",
+      "component_version": "5.0.0",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/agents/frankenstein.toml",
       "source_path": "agents/frankenstein/AGENT.md",
@@ -2638,7 +2304,7 @@
     {
       "component_id": "frontend-engineer",
       "component_kind": "agent",
-      "component_version": "1.3.1",
+      "component_version": "2.0.0",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/agents/frontend-engineer.toml",
       "source_path": "agents/frontend-engineer/AGENT.md",
@@ -2666,7 +2332,7 @@
     {
       "component_id": "integration-verifier",
       "component_kind": "agent",
-      "component_version": "1.4.2",
+      "component_version": "2.0.0",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/agents/integration-verifier.toml",
       "source_path": "agents/integration-verifier/AGENT.md",
@@ -2692,7 +2358,7 @@
     {
       "component_id": "plan-reviewer",
       "component_kind": "agent",
-      "component_version": "1.4.2",
+      "component_version": "2.0.0",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/agents/plan-reviewer.toml",
       "source_path": "agents/plan-reviewer/AGENT.md",
@@ -2716,7 +2382,7 @@
     {
       "component_id": "planner",
       "component_kind": "agent",
-      "component_version": "1.10.0",
+      "component_version": "2.0.0",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/agents/planner.toml",
       "source_path": "agents/planner/AGENT.md",
@@ -2741,7 +2407,7 @@
     {
       "component_id": "quality-engineer",
       "component_kind": "agent",
-      "component_version": "1.4.1",
+      "component_version": "2.0.0",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/agents/quality-engineer.toml",
       "source_path": "agents/quality-engineer/AGENT.md",
@@ -2767,7 +2433,7 @@
     {
       "component_id": "release-engineer",
       "component_kind": "agent",
-      "component_version": "4.0.1",
+      "component_version": "5.0.0",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/agents/release-engineer.toml",
       "source_path": "agents/release-engineer/AGENT.md",
@@ -2795,7 +2461,7 @@
     {
       "component_id": "release-gate",
       "component_kind": "agent",
-      "component_version": "1.2.1",
+      "component_version": "2.0.0",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/agents/release-gate.toml",
       "source_path": "agents/release-gate/AGENT.md",
@@ -2821,7 +2487,7 @@
     {
       "component_id": "security-engineer",
       "component_kind": "agent",
-      "component_version": "1.4.1",
+      "component_version": "2.0.0",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/agents/security-engineer.toml",
       "source_path": "agents/security-engineer/AGENT.md",
@@ -2847,7 +2513,7 @@
     {
       "component_id": "site-reliability-engineer",
       "component_kind": "agent",
-      "component_version": "1.4.2",
+      "component_version": "2.0.0",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/agents/site-reliability-engineer.toml",
       "source_path": "agents/site-reliability-engineer/AGENT.md",
@@ -2875,7 +2541,7 @@
     {
       "component_id": "staff-engineer",
       "component_kind": "agent",
-      "component_version": "4.0.0",
+      "component_version": "5.0.0",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/agents/staff-engineer.toml",
       "source_path": "agents/staff-engineer/AGENT.md",

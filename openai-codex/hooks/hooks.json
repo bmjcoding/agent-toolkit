@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${AGENT_TOOLKIT_DIR:-$HOME/.codex}/openai-codex/hooks/branch-guard.sh",
+            "command": "${AGENT_TOOLKIT_DIR:-$HOME/.codex}/openai-codex/hooks/branch-guard/branch-guard.sh",
             "statusMessage": "Checking branch guard..."
           }
         ]
@@ -16,7 +16,17 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${AGENT_TOOLKIT_DIR:-$HOME/.codex}/openai-codex/hooks/pre-push-secrets.sh",
+            "command": "${AGENT_TOOLKIT_DIR:-$HOME/.codex}/openai-codex/hooks/changelog-check/changelog-check.sh",
+            "statusMessage": "Validating changelog entry..."
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${AGENT_TOOLKIT_DIR:-$HOME/.codex}/openai-codex/hooks/pre-push-secrets/pre-push-secrets.sh",
             "statusMessage": "Scanning for secrets before push..."
           }
         ]
@@ -26,50 +36,20 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${AGENT_TOOLKIT_DIR:-$HOME/.codex}/openai-codex/hooks/protect-config.sh",
+            "command": "${AGENT_TOOLKIT_DIR:-$HOME/.codex}/openai-codex/hooks/protect-config/protect-config.sh",
             "statusMessage": "Checking config protection..."
-          }
-        ]
-      },
-      {
-        "matcher": "Edit|Write",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "${AGENT_TOOLKIT_DIR:-$HOME/.codex}/openai-codex/hooks/changelog-check.sh",
-            "statusMessage": "Validating changelog entry..."
-          }
-        ]
-      },
-      {
-        "matcher": "Edit|Write",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "${AGENT_TOOLKIT_DIR:-$HOME/.codex}/openai-codex/hooks/toolkit-edit-reminder.sh",
-            "statusMessage": "Checking toolkit edit reminder..."
           }
         ]
       }
     ],
     "PostToolUse": [
       {
-        "matcher": "Bash|Edit|Write",
+        "matcher": "Bash",
         "hooks": [
           {
             "type": "command",
-            "command": "${AGENT_TOOLKIT_DIR:-$HOME/.codex}/openai-codex/hooks/integrity-warn.sh",
+            "command": "${AGENT_TOOLKIT_DIR:-$HOME/.codex}/openai-codex/hooks/integrity-warn/integrity-warn.sh",
             "statusMessage": "Running integrity check..."
-          }
-        ]
-      },
-      {
-        "matcher": "Bash|Edit|Write",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "${AGENT_TOOLKIT_DIR:-$HOME/.codex}/openai-codex/hooks/toolkit-drift-check.sh",
-            "statusMessage": "Checking toolkit drift..."
           }
         ]
       }
@@ -80,7 +60,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${AGENT_TOOLKIT_DIR:-$HOME/.codex}/openai-codex/hooks/inject-context.sh",
+            "command": "${AGENT_TOOLKIT_DIR:-$HOME/.codex}/openai-codex/hooks/inject-context/inject-context.sh",
             "statusMessage": "Injecting session context..."
           }
         ]
@@ -92,7 +72,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${AGENT_TOOLKIT_DIR:-$HOME/.codex}/openai-codex/hooks/extract-handoff.sh",
+            "command": "${AGENT_TOOLKIT_DIR:-$HOME/.codex}/openai-codex/hooks/extract-handoff/extract-handoff.sh",
             "statusMessage": "Extracting handoff JSON..."
           }
         ]

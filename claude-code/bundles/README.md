@@ -26,7 +26,7 @@ Each bundle is a `.json` file with the following required fields:
 | `agent`  | `claude-code/agents/<itemId>.md` |
 | `skill`  | `skills/<itemId>/SKILL.md` |
 | `command`| `claude-code/commands/<itemId>.md` |
-| `hook`   | `claude-code/hooks/<itemId>/<itemId>.sh` |
+| `hook`   | `hooks/<itemId>/<itemId>.sh` |
 | `rule`   | `claude-code/rules/<itemId>/<itemId>.md` |
 
 ## Bundles

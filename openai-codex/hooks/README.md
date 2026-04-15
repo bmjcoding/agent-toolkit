@@ -2,103 +2,77 @@
 
 Experimental hooks adapted for the OpenAI Codex CLI hook surface.
 
+## Source layout
+
+- `hooks/<slug>/<slug>.sh` — canonical shared hook logic
+- `openai-codex/hooks/hooks.json` — Codex hook registry
+- `openai-codex/hooks/<slug>/<slug>.sh` — generated Codex adapter where needed
+
+The Codex public surface stays centered on the single `hooks.json` registry. Tool-local
+shell files remain only where Codex still needs adapter behavior instead of a direct call
+to the shared root script.
+
 ## Status
 
 Codex hooks are **experimental** and require an opt-in feature flag:
 
 ```toml
-# ~/.codex/config.toml
 [features]
 codex_hooks = true
 ```
 
-Without this flag the hooks directory and `hooks.json` are ignored.
+## How to install
+
+Preferred:
+
+```sh
+bash openai-codex/scripts/install.sh
+```
+
+Manual wiring:
+
+1. Point `AGENT_TOOLKIT_DIR` at this repo checkout.
+2. Symlink or copy `openai-codex/hooks/hooks.json` to `~/.codex/hooks.json`.
+3. Enable `features.codex_hooks = true` in `~/.codex/config.toml`.
+
+The shared hook scripts stay in the repo under `hooks/<slug>/`. Generated Codex adapters,
+where still needed, remain under `openai-codex/hooks/<slug>/`; do not copy a flat `*.sh`
+set into `~/.codex/hooks/`.
+
+Refresh the generated adapters and registry with:
+
+```sh
+node scripts/sync-canonical-adapters.js --hooks
+```
 
 ## Supported events and matchers
 
-Only **Bash** commands are currently supported for `PreToolUse` and `PostToolUse`
-matchers in the Codex CLI hook system. `Edit` and `Write` matchers are listed in
-`hooks.json` for forward compatibility but may not fire in all Codex versions —
-validate in your environment.
+Only `Bash` is confirmed for `PreToolUse` and `PostToolUse`. This repo keeps the active
+Codex registry aligned to that documented limitation instead of assuming Claude-style
+`Edit` or `Write` parity.
 
 | Event | Supported matchers |
 |---|---|
-| `PreToolUse` | `Bash` (confirmed), `Edit`, `Write` (experimental) |
-| `PostToolUse` | `Bash` (confirmed), `Edit`, `Write` (experimental) |
+| `PreToolUse` | `Bash` |
+| `PostToolUse` | `Bash` |
 | `UserPromptSubmit` | `*` |
 | `Stop` | `*` |
 | `SessionStart` | `*` (empty in this release) |
 
-## How to install
-
-1. Create the hooks directory if it does not exist:
-
-   ```bash
-   mkdir -p ~/.codex/hooks
-   ```
-
-2. Copy the hook scripts:
-
-   ```bash
-   cp openai-codex/hooks/*.sh ~/.codex/hooks/
-   chmod +x ~/.codex/hooks/*.sh
-   ```
-
-3. Copy the registry:
-
-   ```bash
-   cp openai-codex/hooks/hooks.json ~/.codex/hooks.json
-   ```
-
-4. Enable the feature flag in `~/.codex/config.toml` (see above).
-
-5. Verify by running Codex and checking that hook output appears.
-
 ## Hooks in this release
 
-| Script | Codex event | Matcher | Purpose |
+| Hook | Codex event | Matcher | Purpose |
 |---|---|---|---|
-| `branch-guard.sh` | `PreToolUse` | `Bash` | Block direct pushes to main/master |
-| `changelog-check.sh` | `PreToolUse` | `Bash` | Enforce CHANGELOG.md updates before git push |
-| `extract-handoff.sh` | `Stop` | `*` | Extract and validate handoff JSON from agent final message |
-| `inject-context.sh` | `UserPromptSubmit` | `*` | Inject orchestrator project-brief and constraints |
-| `integrity-warn.sh` | `PostToolUse` | `Bash\|Edit\|Write` | Advisory integrity check after tool use |
-| `pre-push-secrets.sh` | `PreToolUse` | `Bash` | Secrets scan (gitleaks or grep fallback) before git push |
-| `protect-config.sh` | `PreToolUse` | `Bash` | Block writes to control-plane files |
-| `toolkit-drift-check.sh` | `Stop` (or `PostToolUse`) | `*` | Warn when components edited without CHANGELOG update |
-| `toolkit-edit-reminder.sh` | `PreToolUse` | `Edit\|Write` | Remind agents to update CHANGELOG.md per KaC 1.1.0 |
+| `branch-guard` | `PreToolUse` | `Bash` | Block direct pushes to `main` or `master` |
+| `changelog-check` | `PreToolUse` | `Bash` | Enforce changelog updates before git push |
+| `extract-handoff` | `Stop` | `*` | Extract and validate handoff JSON from the final message |
+| `inject-context` | `UserPromptSubmit` | `*` | Inject orchestrator project brief and constraints |
+| `integrity-warn` | `PostToolUse` | `Bash` | Advisory integrity check after tool use |
+| `pre-push-secrets` | `PreToolUse` | `Bash` | Secrets scan before git push |
+| `protect-config` | `PreToolUse` | `Bash` | Block writes to control-plane files |
 
 ## Known caveats
 
-- **Windows not supported**: Hook script execution relies on a POSIX shell
-  (`/usr/bin/env bash`). Codex hooks do not run on Windows.
-
-- **Stdin payload schema**: These scripts read JSON from stdin and currently
-  expect fields such as `.tool_name`, `.tool_input.command`,
-  `.tool_input.file_path`, `.agent_id`, and `.last_assistant_message`. Verify
-  those field names against your Codex version and update the `jq` expressions
-  if the payload shape differs.
-
-- **Session/config paths**: `toolkit-drift-check.sh` reads
-  `$CLAUDE_SESSION_ID` as a compatibility fallback for per-session dedup.
-  Replace it with the equivalent Codex session env var if one exists, or use
-  the PID fallback. `protect-config.sh` guards compatibility shims and
-  canonical toolkit paths by default; extend the `PROTECTED` regex if your
-  Codex install uses additional config directories.
-
-- **`changelog-check.sh`** was originally a `git pre-push` hook invoked with
-  positional args and refs on stdin. In Codex `PreToolUse` context, the script
-  receives a JSON payload instead. The core validation logic is preserved; a
-  thin wrapper to inspect the JSON payload for push commands is needed for full
-  integration.
-
-- **`integrity-warn.sh`** delegates to `integrity-check.sh` at
-  `../integrity-check.sh` relative to the hooks directory. This script is not
-  included in the Codex port. Place it at `~/.codex/integrity-check.sh` and
-  make it executable, or update `INTEGRITY_SCRIPT` in the hook.
-
-## Behavioral reference
-
-For implementation details, inspect the corresponding shell scripts in this
-directory and the shared integrity helper at
-[`openai-codex/scripts/integrity-check.sh`](../scripts/integrity-check.sh).
+- Windows is not supported because hook execution relies on POSIX shell scripts.
+- Generated adapter scripts still expect a Codex JSON stdin payload. Verify field names in your local Codex build if a hook appears inert.
+- `integrity-warn` ultimately delegates to [`openai-codex/scripts/integrity-check.sh`](../scripts/integrity-check.sh).

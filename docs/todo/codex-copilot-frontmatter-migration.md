@@ -13,9 +13,11 @@ subtrees have not yet received this treatment.
 
 - Agent definitions are TOML files (`openai-codex/agents/*.toml`), not JSON — the dependency
   aggregation script must parse TOML or accept a different manifest format.
-- Hooks are flat `.sh` scripts with companion `manifest.json` files rather than the claude-code
-  hook structure. Confirm whether manifest.json already carries a `dependencies` key; if not,
-  add one before wiring the aggregator.
+- Canonical shared hook logic now lives under `hooks/<slug>/<slug>.sh`, while
+  `openai-codex/hooks/hooks.json` remains the Codex registry surface and
+  `openai-codex/hooks/<slug>/` may still carry thin adapters where payload normalization is
+  needed. If hook dependency metadata is needed, decide whether it belongs in the shared
+  hook owner or in the Codex registry layer before wiring the aggregator.
 - `openai-codex/bundles/` and `openai-codex/hooks/hooks.json` serve as the bundle/hook registries;
   update both as part of the migration.
 
@@ -23,8 +25,8 @@ subtrees have not yet received this treatment.
 
 - [ ] Add TOML-manifest support to the dependency aggregation script (or add a shim that converts
   TOML agent manifests to the expected format).
-- [ ] Audit each `hooks/*.sh` companion `manifest.json` for a `dependencies` field; backfill where
-  missing.
+- [ ] Decide where hook dependency metadata should live for Codex now that hook scripts are
+  nested per component and the tool-facing registry is `hooks.json`.
 - [ ] Re-run aggregation and verify `openai-codex/dependencies.json` reflects all per-manifest deps.
 - [ ] Add `[Unreleased]` CHANGELOG entries for hooks/ and agents/ CHANGELOGs.
 
@@ -37,7 +39,10 @@ subtrees have not yet received this treatment.
 - Uses `instructions/`, `prompts/`, and `rules/` directories with `.instructions.md` files and
   `applyTo` frontmatter globs — confirm the aggregator ignores `applyTo` and only reads
   `dependencies` frontmatter keys.
-- No hooks equivalent in github-copilot/; skip hooks migration step for this subtree.
+- Canonical shared hook logic now lives under `hooks/<slug>/<slug>.sh`, while GitHub
+  Copilot keeps `github-copilot/hooks/<slug>/` as the manifest-plus-adapter surface. If
+  dependency metadata is needed for hooks, decide whether it belongs on the Copilot
+  manifest, the shared hook owner, or both.
 
 **Work items:**
 
