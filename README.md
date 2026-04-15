@@ -1,8 +1,9 @@
 # agent-toolkit — Multi-tool agent scaffolding
 
 A configuration library for AI coding assistants. It provides shared skills, shared rules,
-and tool-specific agents, commands, hooks, prompts, bundle manifests, and install assets
-for **Claude Code**, **GitHub Copilot for VS Code**, and **OpenAI Codex**.
+and tool-specific agents, commands, hooks, prompts, and install assets, plus bundle
+manifests where the target tool supports them, for **Claude Code**, **GitHub Copilot for
+VS Code**, and **OpenAI Codex**.
 
 `AGENTS.md` is the primary shared instruction source across tools, including Claude Code.
 
@@ -150,7 +151,6 @@ Editing a canonical workflow under `workflows/<slug>/WORKFLOW.md` regenerates:
 
 - `claude-code/commands/`
 - `github-copilot/prompts/`
-- related GitHub Copilot command manifest metadata under `github-copilot/commands/`
 - `index.json`
 
 Pull requests fail if those generated surfaces are stale. Pushes to branches auto-commit

@@ -5,6 +5,7 @@ description: >
   pipeline. Use when the user wants to debrief, analyze efficiency, or improve a workflow.
 lifecycle: stable
 argument-hint: "[run-type or orchestrator-dir]"
+# version: 4.2.4
 ---
 
 # Retrospective

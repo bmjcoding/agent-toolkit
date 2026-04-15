@@ -65,6 +65,9 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 - Added a GitHub Actions sync gate that reruns canonical adapter generation on matching
   pushes and pull requests, fails stale PRs, and smoke-tests that generated tool
   surfaces and `index.json` are present and internally consistent.
+- Added canonical lifecycle validation for shared agents, skills, workflows, rules, and
+  hook catalog metadata. CI now fails missing or invalid lifecycle values instead of
+  allowing them to drift.
 
 ### Changed
 
@@ -83,9 +86,20 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 - Updated generated OpenAI Codex agent adapters to emit readable multiline TOML for
   `developer_instructions` instead of a single escaped line, while preserving the exact
   canonical instruction body in smoke tests.
+- Removed the remaining GitHub Copilot command manifest layer and the stale docs,
+  installer wiring, integrity checks, and CI expectations that still referenced it.
+- Replaced the hardcoded lint workflow version assertion in `scripts/generate-index.js`
+  with a dynamic SemVer/parity check so generator smoke tests follow the current release
+  state instead of a frozen version constant.
 - Normalized retro/improve storage guidance around `~/agent-retros`, added explicit
   pre-planner recon mode for `autoresearch-analyst`, and expanded the generated-asset
   smoke coverage to verify the new release metadata path.
+
+### Removed
+
+- Deleted the last unused `github-copilot/commands/*/manifest.json` files and the
+  obsolete migration TODO that still described per-manifest dependency work no longer
+  present in the repository.
 
 ## [4.1.0] - 2026-04-14
 

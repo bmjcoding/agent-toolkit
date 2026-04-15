@@ -1,9 +1,9 @@
 # github-copilot/
 
 This directory contains **GitHub Copilot for VS Code-specific content** — agents,
-instructions, prompts, hooks, and install assets. Canonical agent bodies, workflow
-bodies, skills, and rules live at the repo root; this directory keeps only the VS Code
-Copilot adapters and wiring those canonical files require.
+instructions, prompts, hooks, and install assets. Canonical agent bodies,
+workflow bodies, skills, and rules live at the repo root; this directory keeps only the
+VS Code Copilot adapters and wiring those canonical files require.
 
 ## Subdirectory layout
 

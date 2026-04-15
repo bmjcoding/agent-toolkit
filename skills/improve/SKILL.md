@@ -6,7 +6,7 @@ description: >
   autonomous improve-then-review validation cycles.
 lifecycle: stable
 disable-model-invocation: true
-argument-hint: "remove [rec-id] | [retro-output or recommendation] [--validate] [--skip-validation]"
+argument-hint: "remove <rec-id> | [retro-output or recommendation] [--validate] [--skip-validation]"
 ---
 
 # Improve

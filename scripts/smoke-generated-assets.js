@@ -227,7 +227,6 @@ function assertGeneratedFilesExist() {
   for (const workflow of workflows) {
     assert(exists(path.join('claude-code', 'commands', workflow, `${workflow}.md`)), `missing Claude command adapter for ${workflow}`);
     assert(exists(path.join('github-copilot', 'prompts', `${workflow}.prompt.md`)), `missing GitHub Copilot prompt adapter for ${workflow}`);
-    assert(exists(path.join('github-copilot', 'commands', workflow, 'manifest.json')), `missing GitHub Copilot command manifest for ${workflow}`);
   }
 
   return { agents, workflows };
@@ -256,10 +255,6 @@ function assertCatalogEntriesExist(agents, workflows) {
   assert(
     (index.artifacts || []).every(artifact => typeof artifact.lifecycle === 'string' && artifact.lifecycle.length > 0),
     'expected every catalog artifact to expose lifecycle'
-  );
-  assert(
-    (index.artifacts || []).every(artifact => typeof artifact.availability === 'string' && artifact.availability.length > 0),
-    'expected every catalog artifact to expose availability'
   );
 
   for (const agent of agents) {

@@ -20,7 +20,9 @@ on:
       - "scripts/sync-canonical-adapters.js"
       - "scripts/generate-index.js"
       - "scripts/validate-component-changelogs.js"
+      - "scripts/validate-lifecycle-metadata.js"
       - "skills/review-skill/scripts/lint-definition.py"
+      - "tools/catalog-metadata.json"
       - ".github/workflows/sync-generated-assets.yml"
   pull_request:
     paths:
@@ -41,7 +43,9 @@ on:
       - "scripts/sync-canonical-adapters.js"
       - "scripts/generate-index.js"
       - "scripts/validate-component-changelogs.js"
+      - "scripts/validate-lifecycle-metadata.js"
       - "skills/review-skill/scripts/lint-definition.py"
+      - "tools/catalog-metadata.json"
       - ".github/workflows/sync-generated-assets.yml"
 
 concurrency:
@@ -137,6 +141,9 @@ jobs:
         with:
           node-version: 22
 
+      - name: Validate Lifecycle Metadata
+        run: node scripts/validate-lifecycle-metadata.js
+
       - name: Run Generator Smoke Test
         run: node scripts/smoke-generated-assets.js
 
@@ -146,7 +153,6 @@ jobs:
             claude-code/agents
             claude-code/commands
             github-copilot/agents
-            github-copilot/commands
             github-copilot/prompts
             openai-codex/agents
             index.json
@@ -177,6 +183,9 @@ jobs:
         with:
           node-version: 22
 
+      - name: Validate Lifecycle Metadata
+        run: node scripts/validate-lifecycle-metadata.js
+
       - name: Run Generator Smoke Test
         run: node scripts/smoke-generated-assets.js
 
@@ -187,7 +196,6 @@ jobs:
             claude-code/agents
             claude-code/commands
             github-copilot/agents
-            github-copilot/commands
             github-copilot/prompts
             openai-codex/agents
             index.json
@@ -207,7 +215,6 @@ jobs:
             claude-code/agents
             claude-code/commands
             github-copilot/agents
-            github-copilot/commands
             github-copilot/prompts
             openai-codex/agents
             index.json

@@ -10,7 +10,6 @@ const OUTPUT_FILE = path.join(REPO_ROOT, 'index.json');
 const RUNTIME_METADATA_FILE = path.join(REPO_ROOT, 'tools', 'catalog-metadata.json');
 const RAW_BASE_URL = 'https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/';
 const VALID_LIFECYCLES = new Set(['stable', 'beta', 'experimental']);
-const VALID_AVAILABILITIES = new Set(['supported', 'unverified', 'unavailable']);
 
 function readFileSafe(filePath) {
   try {
@@ -77,17 +76,6 @@ function normalizeLifecycle(value) {
   return VALID_LIFECYCLES.has(normalized) ? normalized : null;
 }
 
-function normalizeAvailability(value) {
-  if (value === null || value === undefined || value === '') return null;
-
-  const normalized = String(value).trim().toLowerCase();
-  if (normalized === 'available') return 'supported';
-  if (normalized === 'supported') return 'supported';
-  if (normalized === 'unverified') return 'unverified';
-  if (normalized === 'unavailable') return 'unavailable';
-  return null;
-}
-
 function describePath(filePath) {
   return path.isAbsolute(filePath) ? relativePath(filePath) : filePath;
 }
@@ -100,16 +88,6 @@ function requireLifecycle(value, { componentKind, componentId, sourcePath }) {
     );
   }
   return lifecycle;
-}
-
-function requireAvailability(value, { componentKind, componentId, sourcePath }) {
-  const availability = normalizeAvailability(value);
-  if (!availability) {
-    throw new Error(
-      `missing or invalid availability for ${componentKind} ${componentId} in ${describePath(sourcePath)}`
-    );
-  }
-  return availability;
 }
 
 function parseFrontmatter(block) {
@@ -209,26 +187,6 @@ function readRuntimeCatalogMetadata() {
   return metadata && typeof metadata === 'object' ? metadata : { hooks: {} };
 }
 
-function readGitHubCopilotCommandManifest(workflowId) {
-  const manifestPath = path.join(REPO_ROOT, 'github-copilot', 'commands', workflowId, 'manifest.json');
-  const manifest = readJsonSafe(manifestPath);
-  if (!manifest) {
-    return {
-      sourcePath: relativePath(manifestPath),
-      availability: 'supported',
-    };
-  }
-
-  return {
-    sourcePath: relativePath(manifestPath),
-    availability: requireAvailability(manifest.status || 'supported', {
-      componentKind: 'command',
-      componentId: workflowId,
-      sourcePath: manifestPath,
-    }),
-  };
-}
-
 function readHookRuntimeMetadata(runtimeMetadata, targetTool, hookId) {
   const metadata = runtimeMetadata.hooks?.[targetTool]?.[hookId];
   if (!metadata || typeof metadata !== 'object') {
@@ -237,11 +195,6 @@ function readHookRuntimeMetadata(runtimeMetadata, targetTool, hookId) {
 
   return {
     lifecycle: requireLifecycle(metadata.lifecycle, {
-      componentKind: 'hook',
-      componentId: hookId,
-      sourcePath: `${relativePath(RUNTIME_METADATA_FILE)} (${targetTool})`,
-    }),
-    availability: requireAvailability(metadata.availability, {
       componentKind: 'hook',
       componentId: hookId,
       sourcePath: `${relativePath(RUNTIME_METADATA_FILE)} (${targetTool})`,
@@ -712,7 +665,6 @@ function createArtifactRecord({
   bundleMembership,
   metadata,
   lifecycle,
-  availability,
   lifecycleNotes = null,
 }) {
   const artifact = {
@@ -720,11 +672,6 @@ function createArtifactRecord({
     component_kind: componentKind,
     component_version: componentVersion,
     lifecycle: requireLifecycle(lifecycle, {
-      componentKind,
-      componentId,
-      sourcePath,
-    }),
-    availability: requireAvailability(availability, {
       componentKind,
       componentId,
       sourcePath,
@@ -773,7 +720,6 @@ function buildCatalog() {
         componentKind: 'agent',
         componentVersion: agent.version,
         lifecycle: agent.lifecycle,
-        availability: 'supported',
         targetTool,
         artifactPath: adapterPath,
         sourcePath: agent.sourcePath,
@@ -792,7 +738,6 @@ function buildCatalog() {
   }
 
   for (const workflow of canonicalWorkflows) {
-    const copilotCommandManifest = readGitHubCopilotCommandManifest(workflow.id);
     for (const adapterPath of workflow.adapters) {
       const targetTool = adapterPath.split('/')[0];
       if (!exists(path.join(REPO_ROOT, adapterPath))) continue;
@@ -803,7 +748,6 @@ function buildCatalog() {
         componentKind: 'command',
         componentVersion: workflow.version,
         lifecycle: workflow.lifecycle,
-        availability: targetTool === 'github-copilot' ? copilotCommandManifest.availability : 'supported',
         targetTool,
         artifactPath: adapterPath,
         sourcePath: workflow.sourcePath,
@@ -829,7 +773,6 @@ function buildCatalog() {
         componentKind: 'skill',
         componentVersion: skill.version,
         lifecycle: skill.lifecycle,
-        availability: 'supported',
         targetTool,
         artifactPath: skill.sourcePath,
         sourcePath: skill.sourcePath,
@@ -854,7 +797,6 @@ function buildCatalog() {
       componentKind: 'rule',
       componentVersion: rule.version,
       lifecycle: rule.lifecycle,
-      availability: 'supported',
       targetTool: 'claude-code',
       artifactPath: rule.sourcePath,
       sourcePath: rule.sourcePath,
@@ -878,7 +820,6 @@ function buildCatalog() {
         componentKind: 'rule',
         componentVersion: rule.version,
         lifecycle: rule.lifecycle,
-        availability: 'supported',
         targetTool: 'github-copilot',
         artifactPath: instructionPath,
         sourcePath: rule.sourcePath,
@@ -903,7 +844,6 @@ function buildCatalog() {
       componentKind: 'bundle',
       componentVersion: bundle.version,
       lifecycle: bundle.lifecycle,
-      availability: 'supported',
       targetTool: bundle.tool,
       artifactPath: bundle.artifactPath,
       sourcePath: bundle.artifactPath,
@@ -933,7 +873,6 @@ function buildCatalog() {
       componentKind: 'hook',
       componentVersion: readLatestReleasedVersion(path.join(claudeHooksDir, id, 'CHANGELOG.md')),
       lifecycle: hookMetadata.lifecycle,
-      availability: hookMetadata.availability,
       lifecycleNotes: hookMetadata.lifecycleNotes,
       targetTool: 'claude-code',
       artifactPath,
@@ -965,7 +904,6 @@ function buildCatalog() {
       componentKind: 'hook',
       componentVersion: readLatestReleasedVersion(path.join(copilotHooksDir, 'CHANGELOG.md')),
       lifecycle: hookMetadata.lifecycle,
-      availability: hookMetadata.availability,
       lifecycleNotes: hookMetadata.lifecycleNotes,
       targetTool: 'github-copilot',
       artifactPath,
@@ -1005,7 +943,6 @@ function buildCatalog() {
       componentKind: 'hook',
       componentVersion: readLatestReleasedVersion(path.join(codexHooksDir, 'CHANGELOG.md')),
       lifecycle: hookMetadata.lifecycle,
-      availability: hookMetadata.availability,
       lifecycleNotes: hookMetadata.lifecycleNotes,
       targetTool: 'openai-codex',
       artifactPath,
@@ -1039,8 +976,8 @@ function assert(condition, message) {
 }
 
 function runTests() {
-  const latestLintVersion = readLatestReleasedVersion(path.join(REPO_ROOT, 'workflows', 'lint', 'CHANGELOG.md'));
-  assert(/^\d+\.\d+\.\d+$/.test(latestLintVersion), 'expected latest lint workflow version to parse');
+  const lintWorkflowVersion = readLatestReleasedVersion(path.join(REPO_ROOT, 'workflows', 'lint', 'CHANGELOG.md'));
+  assert(/^\d+\.\d+\.\d+$/.test(lintWorkflowVersion || ''), 'expected latest lint workflow version to parse as semver');
 
   const plannerFallback = parseClaudeAgentFallback('planner');
   assert(plannerFallback.modelTier === 'frontier', 'expected planner model tier fallback to map from inherit');
@@ -1060,22 +997,20 @@ function runTests() {
   assert(catalog.artifacts.some(entry => entry.component_id === 'planner' && entry.target_tool === 'openai-codex'), 'expected planner codex artifact in catalog');
   assert(catalog.artifacts.some(entry => entry.component_id === 'logging' && entry.target_tool === 'github-copilot'), 'expected github-copilot logging rule artifact in catalog');
   assert(
-    catalog.artifacts.every(entry => VALID_LIFECYCLES.has(entry.lifecycle)),
-    'expected every artifact to expose a valid lifecycle'
+    catalog.artifacts.some(
+      entry => entry.component_id === 'lint'
+        && entry.component_kind === 'command'
+        && entry.component_version === lintWorkflowVersion
+    ),
+    'expected lint command artifacts to use the latest canonical workflow version'
   );
   assert(
-    catalog.artifacts.every(entry => VALID_AVAILABILITIES.has(entry.availability)),
-    'expected every artifact to expose a valid availability'
+    catalog.artifacts.every(entry => VALID_LIFECYCLES.has(entry.lifecycle)),
+    'expected every artifact to expose a valid lifecycle'
   );
 
   const plannerCodexArtifact = catalog.artifacts.find(entry => entry.component_id === 'planner' && entry.target_tool === 'openai-codex');
   assert(plannerCodexArtifact && plannerCodexArtifact.lifecycle === 'stable', 'expected planner codex artifact lifecycle to come from canonical root metadata');
-
-  const auditCopilotArtifact = catalog.artifacts.find(entry => entry.component_id === 'audit' && entry.target_tool === 'github-copilot');
-  assert(auditCopilotArtifact && auditCopilotArtifact.availability === 'supported', 'expected github-copilot command availability to normalize from manifest status');
-
-  const codexHookArtifact = catalog.artifacts.find(entry => entry.component_id === 'branch-guard' && entry.target_tool === 'openai-codex');
-  assert(codexHookArtifact && codexHookArtifact.availability === 'unverified', 'expected codex hook availability to come from runtime metadata');
 
   const bundleArtifact = catalog.artifacts.find(entry => entry.component_id === 'frontend-development' && entry.component_kind === 'bundle');
   assert(bundleArtifact && bundleArtifact.lifecycle === 'stable', 'expected bundle lifecycle to normalize from bundle status');
