@@ -4,6 +4,7 @@ description: >
   Canonical CHANGELOG.md standard: Keep a Changelog 1.1.0 + SemVer, required header,
   version sections, categories, per-component tags, comparison links, bump table. Use
   when creating or editing any CHANGELOG.md in the toolkit.
+lifecycle: stable
 disable-model-invocation: true
 argument-hint: "[path to CHANGELOG.md to edit or create]"
 ---

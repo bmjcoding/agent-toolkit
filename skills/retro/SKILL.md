@@ -3,6 +3,7 @@ name: retro
 description: >
   Run a retrospective on any completed run — single agent, subagent, skill, or orchestration
   pipeline. Use when the user wants to debrief, analyze efficiency, or improve a workflow.
+lifecycle: stable
 argument-hint: "[run-type or orchestrator-dir]"
 ---
 

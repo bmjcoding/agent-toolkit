@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Declared canonical lifecycle metadata so the distribution catalog can publish normalized lifecycle state for this shared skill.
+
 - Updated shared wording to refer to `retro`, `review-skill`, and `improve` as cross-tool workflows rather than Claude-specific slash-command forms.
 - Clarified improve workflow guidance for runtimes where helper scripts are unavailable,
   so missing script surfaces are treated as warnings instead of implicit fallback paths.

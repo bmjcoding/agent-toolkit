@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Declared canonical lifecycle metadata so the distribution catalog can publish normalized lifecycle state for this shared agent.
+
 - Resolved default-branch handling across PR-description, lint, and publish steps and
   clarified that publish-phase-only runs must not perform version bumps.
 - Updated the Claude adapter reference to the flattened `claude-code/agents/<name>.md`

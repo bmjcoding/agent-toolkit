@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Declared canonical lifecycle metadata so the distribution catalog can publish normalized lifecycle state for this shared agent.
+
 - Documented phase-qualified handoff aliases for repeated design-architect passes so
   raw-review and recheck outputs no longer rely on a single collision-prone filename.
 - Updated the Claude adapter reference to the flattened `claude-code/agents/<name>.md`
