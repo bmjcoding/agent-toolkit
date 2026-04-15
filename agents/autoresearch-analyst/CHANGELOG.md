@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [6.0.0] - 2026-04-15
+
 ### Changed
 
 - Declared shared execution metadata in the canonical root definition so model tier, capabilities, subagent routing, and skill dependencies no longer need to be inferred from tool-specific wrappers.
@@ -99,7 +101,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/autoresearch-analyst-v5.1.1...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/autoresearch-analyst-v6.0.0...HEAD
+[6.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/agent/autoresearch-analyst-v6.0.0
 [5.1.1]: https://github.com/bmjcoding/agent-toolkit/compare/agent/autoresearch-analyst-v5.1.0...agent/autoresearch-analyst-v5.1.1
 [5.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/autoresearch-analyst-v5.0.1...agent/autoresearch-analyst-v5.1.0
 [5.0.1]: https://github.com/bmjcoding/agent-toolkit/compare/agent/autoresearch-analyst-v5.0.0...agent/autoresearch-analyst-v5.0.1
