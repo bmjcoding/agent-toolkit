@@ -22,11 +22,16 @@ Replace monolithic tag refs with per-component tags following the exemplar in
 `skills/changelog/CHANGELOG.md`. The oldest-version footer switches from
 `releases/tag/v{version}` to `tree/{slug}-v{version}`.
 
-### 3. Do NOT delete old monolithic tags
+### 3. Remove obsolete flat tags only after the migration is complete
 
-Old `v{version}` tags can coexist with new `{slug}-v{version}` tags indefinitely.
-Removing them rewrites history and breaks anyone referencing them externally (links, CI
-pipelines, package registries).
+Do not delete historical flat tags until both of these are true:
+- every affected `CHANGELOG.md` footer has been rewritten to the canonical namespaced
+  tag format
+- the replacement `{slug}-v{version}` tags already exist locally and on the remote
+
+Once the changelog links and replacement tags are in place, delete only the superseded
+flat component tags that no longer have any live references. Keep repo-wide release tags
+such as `v{version}` when the root `CHANGELOG.md` still uses them.
 
 ### 4. Order of operations
 
@@ -34,7 +39,8 @@ pipelines, package registries).
 2. Commit the footer changes.
 3. Run `scripts/backfill-changelog-tags.sh --slug <slug> --changelog <path>` to generate
    historical per-component tags. Use `--dry-run` first to preview.
-4. Push the new tags: `git push origin --tags`. Existing monolithic tags are untouched.
+4. Push the new tags: `git push origin --tags`.
+5. Delete only the now-unreferenced flat component tags locally and on the remote.
 
 ---
 

@@ -41,6 +41,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/workflow/lint-v4.1.0...HEAD
 [4.1.0]: https://github.com/bmjcoding/agent-toolkit/tree/workflow/lint-v4.1.0
-[3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/lint-v2.0.0...claude-code/lint-v3.0.0
-[2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/lint-v1.0.0...claude-code/lint-v2.0.0
-[1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/lint-v1.0.0
+[3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/workflow/lint-v2.0.0...workflow/lint-v3.0.0
+[2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/workflow/lint-v1.0.0...workflow/lint-v2.0.0
+[1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/workflow/lint-v1.0.0
