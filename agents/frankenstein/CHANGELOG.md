@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.0.0] - 2026-04-15
+
 ### Changed
 
 - Declared shared execution metadata in the canonical root definition so model tier, capabilities, subagent routing, and skill dependencies no longer need to be inferred from tool-specific wrappers.
@@ -243,7 +245,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v4.5.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v5.0.0...HEAD
+[5.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/agent/frankenstein-v5.0.0
 [4.5.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v4.4.0...agent/frankenstein-v4.5.0
 [4.4.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v4.3.1...agent/frankenstein-v4.4.0
 [4.3.1]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v4.3.0...agent/frankenstein-v4.3.1
