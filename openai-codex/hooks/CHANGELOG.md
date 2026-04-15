@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.1.0] - 2026-04-15
+
 ### Changed
 
 - Rebased the Codex hook surface on the canonical root `hooks/` tree and documented the
@@ -20,4 +22,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - BREAKING: `hooks.json` completely rewritten to match the official Codex hooks format. The previous flat structure `{matcher, script, description}` was non-functional; the file now uses a nested `hooks` key with event-keyed arrays of matcher-group objects containing `{type: command, command: ...}` handlers. Parity gap #1 Codex (CRITICAL) resolved.
 
-<!-- No tags pushed yet for this component — compare links omitted until first tag -->
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/openai-codex-hooks-v3.1.0...HEAD
+[3.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/openai-codex-hooks-v3.0.0...openai-codex-hooks-v3.1.0
+[3.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/openai-codex-hooks-v3.0.0
