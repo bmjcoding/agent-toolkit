@@ -41,6 +41,25 @@ agent-toolkit/
   - `skill/<slug>-vX.Y.Z`
   - `rule/<slug>-vX.Y.Z`
 
+## Distribution Catalog
+
+`index.json` is the generated machine-readable distribution catalog for external
+consumers. It is artifact-oriented and tool-aware: each entry resolves a concrete
+checked-in asset with its component id, kind, version, target tool, artifact path,
+install metadata, checksum, and any bundle or capability metadata the installer needs.
+
+Regenerate it with:
+
+```sh
+node scripts/generate-index.js
+```
+
+Smoke-test the full adapter and catalog generation flow with:
+
+```sh
+node scripts/smoke-generated-assets.js
+```
+
 ## Install
 
 ### Claude Code
@@ -122,6 +141,24 @@ shared skills under `skills/<slug>/`, and shared rules under `rules/<slug>/`. Ad
 tool-specific adapters only when a runtime requires a different format or discovery
 surface, then regenerate them with `node scripts/sync-canonical-adapters.js` when
 applicable.
+
+When a canonical agent or workflow changes, CI also re-runs adapter sync and catalog
+generation. For example, editing `agents/frankenstein/AGENT.md` regenerates:
+
+- `claude-code/agents/`
+- `github-copilot/agents/`
+- `openai-codex/agents/`
+- `index.json`
+
+Editing a canonical workflow under `workflows/<slug>/WORKFLOW.md` regenerates:
+
+- `claude-code/commands/`
+- `github-copilot/prompts/`
+- related GitHub Copilot command manifest metadata under `github-copilot/commands/`
+- `index.json`
+
+Pull requests fail if those generated surfaces are stale. Pushes to branches auto-commit
+the regenerated outputs back to the branch when needed.
 
 See [AGENTS.md](AGENTS.md), [CONTRIBUTING.md](CONTRIBUTING.md), and [docs/adr/](docs/adr/)
 for the detailed repo conventions.

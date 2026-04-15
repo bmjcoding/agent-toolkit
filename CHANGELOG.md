@@ -8,6 +8,12 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- Added a GitHub Actions sync gate that reruns canonical adapter generation on matching
+  pushes and pull requests, fails stale PRs, and smoke-tests that generated tool
+  surfaces and `index.json` are present and internally consistent.
+
 ### Changed
 
 - Re-established repo-root `skills/` and new repo-root `rules/` as the canonical shared
