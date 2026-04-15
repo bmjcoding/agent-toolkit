@@ -34,6 +34,24 @@ function listCanonicalSlugs(rootDir, markerFile) {
     .sort();
 }
 
+function listDirectoryBackedSlugs(rootDir, fileNameForSlug) {
+  return fs.readdirSync(path.join(REPO_ROOT, rootDir), { withFileTypes: true })
+    .filter(entry => entry.isDirectory() && exists(path.join(rootDir, entry.name, fileNameForSlug(entry.name))))
+    .map(entry => entry.name)
+    .sort();
+}
+
+function listFileBackedSlugs(rootDir, suffix) {
+  return fs.readdirSync(path.join(REPO_ROOT, rootDir), { withFileTypes: true })
+    .filter(entry => entry.isFile() && entry.name.endsWith(suffix))
+    .map(entry => entry.name.slice(0, -suffix.length))
+    .sort();
+}
+
+function diff(expected, actual) {
+  return expected.filter(item => !actual.includes(item));
+}
+
 function runNodeScript(scriptPath, extraArgs = []) {
   execFileSync(process.execPath, [path.join(REPO_ROOT, scriptPath), ...extraArgs], {
     cwd: REPO_ROOT,
@@ -188,6 +206,17 @@ function parseTomlMultilineBasicString(text, key) {
 function assertGeneratedFilesExist() {
   const agents = listCanonicalSlugs('agents', 'AGENT.md');
   const workflows = listCanonicalSlugs('workflows', 'WORKFLOW.md');
+  const claudeAgents = listDirectoryBackedSlugs(path.join('claude-code', 'agents'), slug => `${slug}.md`);
+  const copilotAgents = listFileBackedSlugs(path.join('github-copilot', 'agents'), '.agent.md');
+  const codexAgents = listFileBackedSlugs(path.join('openai-codex', 'agents'), '.toml');
+  const claudeCommands = listDirectoryBackedSlugs(path.join('claude-code', 'commands'), slug => `${slug}.md`);
+  const copilotPrompts = listFileBackedSlugs(path.join('github-copilot', 'prompts'), '.prompt.md');
+
+  assert(diff(claudeAgents, agents).length === 0, `orphan Claude agent adapters found: ${diff(claudeAgents, agents).join(', ')}`);
+  assert(diff(copilotAgents, agents).length === 0, `orphan GitHub Copilot agent adapters found: ${diff(copilotAgents, agents).join(', ')}`);
+  assert(diff(codexAgents, agents).length === 0, `orphan OpenAI Codex agent adapters found: ${diff(codexAgents, agents).join(', ')}`);
+  assert(diff(claudeCommands, workflows).length === 0, `orphan Claude command adapters found: ${diff(claudeCommands, workflows).join(', ')}`);
+  assert(diff(copilotPrompts, workflows).length === 0, `orphan GitHub Copilot prompt adapters found: ${diff(copilotPrompts, workflows).join(', ')}`);
 
   for (const agent of agents) {
     assert(exists(path.join('claude-code', 'agents', agent, `${agent}.md`)), `missing Claude agent adapter for ${agent}`);
@@ -254,10 +283,8 @@ function assertCatalogEntriesExist(agents, workflows) {
 function assertRetroStorageContract() {
   const scanRoots = ['agents', 'skills', 'workflows', 'docs', 'scripts', 'claude-code', 'github-copilot', 'openai-codex'];
   const excludes = [
-    '--glob', '!claude-code/retros/**',
     '--glob', '!**/CHANGELOG.md',
     '--glob', '!scripts/smoke-generated-assets.js',
-    '--glob', '!scripts/migrate-retros.sh',
   ];
 
   const legacyPathMatches = rgMatches('~/.claude/retros', scanRoots, excludes);
@@ -272,7 +299,7 @@ function assertRetroStorageContract() {
     `STATE_ROOT/retros references remain in active/generated assets: ${legacyStateMatches.join(', ')}`
   );
 
-  const canonicalMatches = rgMatches('~/agent-retros', scanRoots, ['--glob', '!claude-code/retros/**']);
+  const canonicalMatches = rgMatches('~/agent-retros', scanRoots);
   assert(canonicalMatches.length > 0, 'expected active/generated assets to reference ~/agent-retros');
 
   const overrideMatches = rgMatches('AGENT_RETRO_DIR', ['skills', 'docs', 'scripts']);
