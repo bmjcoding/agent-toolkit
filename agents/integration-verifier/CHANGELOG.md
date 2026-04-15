@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added structured `contracts_verified`, `contracts_failed`, `files_missing`,
+  `compilation_errors`, and `recommendations` fields to the structural-verification
+  handoff schema.
+
+### Changed
+
+- Documented phase-qualified alias naming for repeated verifier passes so structural and
+  cross-QA outputs can coexist safely in one session.
+
 ## [2.0.0] - 2026-04-15
 
 ### Changed

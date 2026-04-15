@@ -5,14 +5,14 @@
     {
       "component_id": "autoresearch-analyst",
       "component_kind": "agent",
-      "component_version": "5.1.1",
+      "component_version": "6.0.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/agents/autoresearch-analyst/autoresearch-analyst.md",
       "source_path": "agents/autoresearch-analyst/AGENT.md",
       "install_path": "~/.claude/agents/autoresearch-analyst/autoresearch-analyst.md",
       "install_command": "mkdir -p \"$HOME/.claude/agents/autoresearch-analyst\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/autoresearch-analyst/autoresearch-analyst.md\" -o \"$HOME/.claude/agents/autoresearch-analyst/autoresearch-analyst.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/autoresearch-analyst/autoresearch-analyst.md",
-      "checksum_sha256": "7c0dd93b39bb336a8e17162f13be6e0189fef313bbd3129adb5f1f0e36fe1a3d",
+      "checksum_sha256": "8138ae1c2f28c7a2cee4cb5070767489884468115f55096313997db27f8f783b",
       "bundle_membership": [
         {
           "bundle_id": "frankenstein-orchestration",
@@ -45,14 +45,14 @@
     {
       "component_id": "backend-engineer",
       "component_kind": "agent",
-      "component_version": "1.3.1",
+      "component_version": "2.0.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/agents/backend-engineer/backend-engineer.md",
       "source_path": "agents/backend-engineer/AGENT.md",
       "install_path": "~/.claude/agents/backend-engineer/backend-engineer.md",
       "install_command": "mkdir -p \"$HOME/.claude/agents/backend-engineer\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/backend-engineer/backend-engineer.md\" -o \"$HOME/.claude/agents/backend-engineer/backend-engineer.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/backend-engineer/backend-engineer.md",
-      "checksum_sha256": "aa76463718d96dc948e68be8b64c11cdae516e22c8be5710fb2cbb32bb7a1249",
+      "checksum_sha256": "1397b395bbd6193f0cfbb32eb3dc722096beb6d1034b39793dc1e5158ff2b0e9",
       "bundle_membership": [
         {
           "bundle_id": "backend-development",
@@ -80,14 +80,14 @@
     {
       "component_id": "design-architect",
       "component_kind": "agent",
-      "component_version": "1.2.1",
+      "component_version": "2.0.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/agents/design-architect/design-architect.md",
       "source_path": "agents/design-architect/AGENT.md",
       "install_path": "~/.claude/agents/design-architect/design-architect.md",
       "install_command": "mkdir -p \"$HOME/.claude/agents/design-architect\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/design-architect/design-architect.md\" -o \"$HOME/.claude/agents/design-architect/design-architect.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/design-architect/design-architect.md",
-      "checksum_sha256": "44d89e80a800200506f5a473cd7ffd897165e9830b02acdd7f49f50e4a09014e",
+      "checksum_sha256": "8dd48f2f6d233f710f916bba823d098c284803221766b2ddea0c0cc690debc48",
       "bundle_membership": [
         {
           "bundle_id": "frankenstein-orchestration",
@@ -112,14 +112,14 @@
     {
       "component_id": "doc-writer",
       "component_kind": "agent",
-      "component_version": "1.2.3",
+      "component_version": "2.0.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/agents/doc-writer/doc-writer.md",
       "source_path": "agents/doc-writer/AGENT.md",
       "install_path": "~/.claude/agents/doc-writer/doc-writer.md",
       "install_command": "mkdir -p \"$HOME/.claude/agents/doc-writer\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/doc-writer/doc-writer.md\" -o \"$HOME/.claude/agents/doc-writer/doc-writer.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/doc-writer/doc-writer.md",
-      "checksum_sha256": "770bcb6eab9c63cb1f259a1d79dda0a75c3ca5f57aed3af931525d930e575696",
+      "checksum_sha256": "f65874e1ee2548576523acfa29dea53dc6c8264aeee55aa110baf3f971f63ba8",
       "bundle_membership": [
         {
           "bundle_id": "frankenstein-orchestration",
@@ -143,14 +143,14 @@
     {
       "component_id": "frankenstein",
       "component_kind": "agent",
-      "component_version": "4.5.0",
+      "component_version": "5.0.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/agents/frankenstein/frankenstein.md",
       "source_path": "agents/frankenstein/AGENT.md",
       "install_path": "~/.claude/agents/frankenstein/frankenstein.md",
       "install_command": "mkdir -p \"$HOME/.claude/agents/frankenstein\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/frankenstein/frankenstein.md\" -o \"$HOME/.claude/agents/frankenstein/frankenstein.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/frankenstein/frankenstein.md",
-      "checksum_sha256": "b4a0908f8ddf72be4ed12833f20e355d95152e3d9d4f91f3a567724e5e31e088",
+      "checksum_sha256": "224dca1fe1a9330b3236976267be95afcff764bd93b232c602b9e620c446ece7",
       "bundle_membership": [
         {
           "bundle_id": "frankenstein-orchestration",
@@ -188,14 +188,14 @@
     {
       "component_id": "frontend-engineer",
       "component_kind": "agent",
-      "component_version": "1.3.1",
+      "component_version": "2.0.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/agents/frontend-engineer/frontend-engineer.md",
       "source_path": "agents/frontend-engineer/AGENT.md",
       "install_path": "~/.claude/agents/frontend-engineer/frontend-engineer.md",
       "install_command": "mkdir -p \"$HOME/.claude/agents/frontend-engineer\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/frontend-engineer/frontend-engineer.md\" -o \"$HOME/.claude/agents/frontend-engineer/frontend-engineer.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/frontend-engineer/frontend-engineer.md",
-      "checksum_sha256": "c53a3409d5c8a4412cb0e2b9a56f14fa2ba20d784b42ddc2be3cc88c8fc27b26",
+      "checksum_sha256": "14f2b095a63ffbe2ed662da511c1d74d6c23318239e0895b766b80095fda2d58",
       "bundle_membership": [
         {
           "bundle_id": "frankenstein-orchestration",
@@ -225,14 +225,14 @@
     {
       "component_id": "integration-verifier",
       "component_kind": "agent",
-      "component_version": "1.4.2",
+      "component_version": "2.0.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/agents/integration-verifier/integration-verifier.md",
       "source_path": "agents/integration-verifier/AGENT.md",
       "install_path": "~/.claude/agents/integration-verifier/integration-verifier.md",
       "install_command": "mkdir -p \"$HOME/.claude/agents/integration-verifier\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/integration-verifier/integration-verifier.md\" -o \"$HOME/.claude/agents/integration-verifier/integration-verifier.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/integration-verifier/integration-verifier.md",
-      "checksum_sha256": "ad5efc3146f939bd37fbfb4269f3dbcf3f98dec4427a40aedf2feb9af72508a7",
+      "checksum_sha256": "186907fdebb084d809e860ebf1bdfe4da98f9727c8258e39749dfa5bfdc9fc63",
       "bundle_membership": [
         {
           "bundle_id": "frankenstein-orchestration",
@@ -256,7 +256,7 @@
     {
       "component_id": "plan-reviewer",
       "component_kind": "agent",
-      "component_version": "1.4.2",
+      "component_version": "2.0.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/agents/plan-reviewer/plan-reviewer.md",
       "source_path": "agents/plan-reviewer/AGENT.md",
@@ -285,14 +285,14 @@
     {
       "component_id": "planner",
       "component_kind": "agent",
-      "component_version": "1.10.0",
+      "component_version": "2.0.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/agents/planner/planner.md",
       "source_path": "agents/planner/AGENT.md",
       "install_path": "~/.claude/agents/planner/planner.md",
       "install_command": "mkdir -p \"$HOME/.claude/agents/planner\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/planner/planner.md\" -o \"$HOME/.claude/agents/planner/planner.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/planner/planner.md",
-      "checksum_sha256": "e6262fd2d12a58aed6d172b0f0a8a12d28567e3af1c59fb54acc6d24c2d2cc83",
+      "checksum_sha256": "486265f3cf7ae3cdd75f86300dfb65844fbf461c02774d3b4337dc2ecb570bac",
       "bundle_membership": [
         {
           "bundle_id": "frankenstein-orchestration",
@@ -315,14 +315,14 @@
     {
       "component_id": "quality-engineer",
       "component_kind": "agent",
-      "component_version": "1.4.1",
+      "component_version": "2.0.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/agents/quality-engineer/quality-engineer.md",
       "source_path": "agents/quality-engineer/AGENT.md",
       "install_path": "~/.claude/agents/quality-engineer/quality-engineer.md",
       "install_command": "mkdir -p \"$HOME/.claude/agents/quality-engineer\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/quality-engineer/quality-engineer.md\" -o \"$HOME/.claude/agents/quality-engineer/quality-engineer.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/quality-engineer/quality-engineer.md",
-      "checksum_sha256": "27fd6c4d4963a43a36dc80022f11374f40c39596b6d979a7cdacbb1c2702dfbe",
+      "checksum_sha256": "7dd6de8f990be96ddefd770d779b2cc51832759dbd939cad97e44fe237315c1f",
       "bundle_membership": [
         {
           "bundle_id": "frankenstein-orchestration",
@@ -346,14 +346,14 @@
     {
       "component_id": "release-engineer",
       "component_kind": "agent",
-      "component_version": "4.0.1",
+      "component_version": "5.0.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/agents/release-engineer/release-engineer.md",
       "source_path": "agents/release-engineer/AGENT.md",
       "install_path": "~/.claude/agents/release-engineer/release-engineer.md",
       "install_command": "mkdir -p \"$HOME/.claude/agents/release-engineer\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/release-engineer/release-engineer.md\" -o \"$HOME/.claude/agents/release-engineer/release-engineer.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/release-engineer/release-engineer.md",
-      "checksum_sha256": "14dad8b189eaab7040aabb7f79d7953ae69ea118e32059f425c1b4a5890d41eb",
+      "checksum_sha256": "6aa607f75020bfe39b24ef9e74cfe7c2da6639c97fafe3896865a3fff9d9bcaa",
       "bundle_membership": [
         {
           "bundle_id": "frankenstein-orchestration",
@@ -379,14 +379,14 @@
     {
       "component_id": "release-gate",
       "component_kind": "agent",
-      "component_version": "1.2.1",
+      "component_version": "2.0.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/agents/release-gate/release-gate.md",
       "source_path": "agents/release-gate/AGENT.md",
       "install_path": "~/.claude/agents/release-gate/release-gate.md",
       "install_command": "mkdir -p \"$HOME/.claude/agents/release-gate\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/release-gate/release-gate.md\" -o \"$HOME/.claude/agents/release-gate/release-gate.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/release-gate/release-gate.md",
-      "checksum_sha256": "a48f738d04a628a0f2a9adc488788ab0fc8e5923df46ca6081363dee6ee5ff00",
+      "checksum_sha256": "e012a1b53a80eddc5a5672bf8f0250096ee3c97ffad8b90dfa6fbeff031e817d",
       "bundle_membership": [
         {
           "bundle_id": "frankenstein-orchestration",
@@ -410,7 +410,7 @@
     {
       "component_id": "security-engineer",
       "component_kind": "agent",
-      "component_version": "1.4.1",
+      "component_version": "2.0.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/agents/security-engineer/security-engineer.md",
       "source_path": "agents/security-engineer/AGENT.md",
@@ -445,7 +445,7 @@
     {
       "component_id": "site-reliability-engineer",
       "component_kind": "agent",
-      "component_version": "1.4.2",
+      "component_version": "2.0.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/agents/site-reliability-engineer/site-reliability-engineer.md",
       "source_path": "agents/site-reliability-engineer/AGENT.md",
@@ -482,14 +482,14 @@
     {
       "component_id": "staff-engineer",
       "component_kind": "agent",
-      "component_version": "4.0.0",
+      "component_version": "5.0.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/agents/staff-engineer/staff-engineer.md",
       "source_path": "agents/staff-engineer/AGENT.md",
       "install_path": "~/.claude/agents/staff-engineer/staff-engineer.md",
       "install_command": "mkdir -p \"$HOME/.claude/agents/staff-engineer\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/staff-engineer/staff-engineer.md\" -o \"$HOME/.claude/agents/staff-engineer/staff-engineer.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/staff-engineer/staff-engineer.md",
-      "checksum_sha256": "b3996ba1f20ef324eda6f6d42704c76f2dacccdebc27e347d60b6788653c2f05",
+      "checksum_sha256": "4fe8ef91f8ef5199ee812b4ddd838c3ac5c38d231b95a4aaafb25d0cc93def2f",
       "bundle_membership": [
         {
           "bundle_id": "frankenstein-orchestration",
@@ -1025,7 +1025,7 @@
     {
       "component_id": "audit",
       "component_kind": "command",
-      "component_version": "4.0.0",
+      "component_version": "4.1.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/commands/audit/audit.md",
       "source_path": "workflows/audit/WORKFLOW.md",
@@ -1051,7 +1051,7 @@
     {
       "component_id": "backlog",
       "component_kind": "command",
-      "component_version": "5.0.0",
+      "component_version": "5.1.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/commands/backlog/backlog.md",
       "source_path": "workflows/backlog/WORKFLOW.md",
@@ -1073,7 +1073,7 @@
     {
       "component_id": "git-verify",
       "component_kind": "command",
-      "component_version": "4.0.0",
+      "component_version": "4.1.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/commands/git-verify/git-verify.md",
       "source_path": "workflows/git-verify/WORKFLOW.md",
@@ -1099,7 +1099,7 @@
     {
       "component_id": "lint",
       "component_kind": "command",
-      "component_version": "4.0.0",
+      "component_version": "4.1.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/commands/lint/lint.md",
       "source_path": "workflows/lint/WORKFLOW.md",
@@ -1125,7 +1125,7 @@
     {
       "component_id": "sync-toolkit",
       "component_kind": "command",
-      "component_version": "4.0.0",
+      "component_version": "4.1.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/commands/sync-toolkit/sync-toolkit.md",
       "source_path": "workflows/sync-toolkit/WORKFLOW.md",
@@ -1142,7 +1142,7 @@
     {
       "component_id": "test",
       "component_kind": "command",
-      "component_version": "4.0.0",
+      "component_version": "4.1.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/commands/test/test.md",
       "source_path": "workflows/test/WORKFLOW.md",
@@ -1571,7 +1571,7 @@
       "install_path": "~/.claude/skills/improve/SKILL.md",
       "install_command": "mkdir -p \"$HOME/.claude/skills/improve\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/improve/SKILL.md\" -o \"$HOME/.claude/skills/improve/SKILL.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/improve/SKILL.md",
-      "checksum_sha256": "33626f7bdd42251f592c42cfaa2e73df5b1c205c3a43dac18b6f8aa242257835",
+      "checksum_sha256": "4005119d7b9c8f55810d0c07db3a34c1548d27d4329e762267fa2208cad41baa",
       "bundle_membership": [
         {
           "bundle_id": "frankenstein-orchestration",
@@ -1674,7 +1674,7 @@
       "install_path": "~/.claude/skills/retro/SKILL.md",
       "install_command": "mkdir -p \"$HOME/.claude/skills/retro\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/retro/SKILL.md\" -o \"$HOME/.claude/skills/retro/SKILL.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/retro/SKILL.md",
-      "checksum_sha256": "0573926b73ad516ec201e9c173a5f8b38fbd1f10d99dd2d8dad2a249e73503d0",
+      "checksum_sha256": "b5eb2eea2a274b9bb55db1f69927798ff4d4175e88ad6506a91900ca5571693b",
       "bundle_membership": [
         {
           "bundle_id": "frankenstein-orchestration",
@@ -1717,14 +1717,14 @@
     {
       "component_id": "autoresearch-analyst",
       "component_kind": "agent",
-      "component_version": "5.1.1",
+      "component_version": "6.0.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/agents/autoresearch-analyst.agent.md",
       "source_path": "agents/autoresearch-analyst/AGENT.md",
       "install_path": ".github/agents/autoresearch-analyst.agent.md",
       "install_command": "mkdir -p \".github/agents\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/autoresearch-analyst.agent.md\" -o \".github/agents/autoresearch-analyst.agent.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/autoresearch-analyst.agent.md",
-      "checksum_sha256": "3eb835ec4f091b2903d87333155eff95fa78dff0764ce5f8f2d818cb2be94599",
+      "checksum_sha256": "ef93d88ad16613ae25206a89a852d79308ef9867506ff5d7a7fa638a46cd75c5",
       "bundle_membership": [],
       "metadata": {
         "model_tier": "frontier",
@@ -1748,14 +1748,14 @@
     {
       "component_id": "backend-engineer",
       "component_kind": "agent",
-      "component_version": "1.3.1",
+      "component_version": "2.0.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/agents/backend-engineer.agent.md",
       "source_path": "agents/backend-engineer/AGENT.md",
       "install_path": ".github/agents/backend-engineer.agent.md",
       "install_command": "mkdir -p \".github/agents\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/backend-engineer.agent.md\" -o \".github/agents/backend-engineer.agent.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/backend-engineer.agent.md",
-      "checksum_sha256": "4158cceadac144fe79e391da2ab48ff06ad8773237a97c00ed02f974583672aa",
+      "checksum_sha256": "ab39be53dfa38d2d76f0b5859859f470bbacd9399fedc53ea226a132bc54cc17",
       "bundle_membership": [],
       "metadata": {
         "model_tier": "frontier",
@@ -1774,14 +1774,14 @@
     {
       "component_id": "design-architect",
       "component_kind": "agent",
-      "component_version": "1.2.1",
+      "component_version": "2.0.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/agents/design-architect.agent.md",
       "source_path": "agents/design-architect/AGENT.md",
       "install_path": ".github/agents/design-architect.agent.md",
       "install_command": "mkdir -p \".github/agents\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/design-architect.agent.md\" -o \".github/agents/design-architect.agent.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/design-architect.agent.md",
-      "checksum_sha256": "a273e7995544cd70462ec2707ca6850a49f7c98c6800887ba9add0890eb858e1",
+      "checksum_sha256": "a81fbd41b965226cc8a473eb32e7a6fb6a4626b5bd61691a94df4b7c4067cbfd",
       "bundle_membership": [],
       "metadata": {
         "model_tier": "frontier",
@@ -1801,14 +1801,14 @@
     {
       "component_id": "doc-writer",
       "component_kind": "agent",
-      "component_version": "1.2.3",
+      "component_version": "2.0.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/agents/doc-writer.agent.md",
       "source_path": "agents/doc-writer/AGENT.md",
       "install_path": ".github/agents/doc-writer.agent.md",
       "install_command": "mkdir -p \".github/agents\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/doc-writer.agent.md\" -o \".github/agents/doc-writer.agent.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/doc-writer.agent.md",
-      "checksum_sha256": "d6ee645362dbb385b0e4fb3f21572cb1b9f4b33ec5c4029c54327f5b38d4dd1a",
+      "checksum_sha256": "7ef7ce068fb0bceff6a6847ba82f956107588e9bed1c809fd1cd4e663ae8418c",
       "bundle_membership": [],
       "metadata": {
         "model_tier": "balanced",
@@ -1827,14 +1827,14 @@
     {
       "component_id": "frankenstein",
       "component_kind": "agent",
-      "component_version": "4.5.0",
+      "component_version": "5.0.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/agents/frankenstein.agent.md",
       "source_path": "agents/frankenstein/AGENT.md",
       "install_path": ".github/agents/frankenstein.agent.md",
       "install_command": "mkdir -p \".github/agents\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/frankenstein.agent.md\" -o \".github/agents/frankenstein.agent.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/frankenstein.agent.md",
-      "checksum_sha256": "e85189a6afd4493057eb1bd791f63901b62f36f5d94e0abc14bf2acf9fc86e63",
+      "checksum_sha256": "3232716ac9c5b5fc277ec71cf3b4cb396dd806cf2d928d7eaaab8fe05026229e",
       "bundle_membership": [],
       "metadata": {
         "model_tier": "frontier",
@@ -1867,14 +1867,14 @@
     {
       "component_id": "frontend-engineer",
       "component_kind": "agent",
-      "component_version": "1.3.1",
+      "component_version": "2.0.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/agents/frontend-engineer.agent.md",
       "source_path": "agents/frontend-engineer/AGENT.md",
       "install_path": ".github/agents/frontend-engineer.agent.md",
       "install_command": "mkdir -p \".github/agents\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/frontend-engineer.agent.md\" -o \".github/agents/frontend-engineer.agent.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/frontend-engineer.agent.md",
-      "checksum_sha256": "c9df95195b2d55b4df8ae751ec1fd0004ae4c4ef021c0e9130a7f41f335909ee",
+      "checksum_sha256": "3981319f68c42ea0f43ed834e27928d3a3d0ceee7856ebc6fd274914346b49fa",
       "bundle_membership": [],
       "metadata": {
         "model_tier": "frontier",
@@ -1895,14 +1895,14 @@
     {
       "component_id": "integration-verifier",
       "component_kind": "agent",
-      "component_version": "1.4.2",
+      "component_version": "2.0.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/agents/integration-verifier.agent.md",
       "source_path": "agents/integration-verifier/AGENT.md",
       "install_path": ".github/agents/integration-verifier.agent.md",
       "install_command": "mkdir -p \".github/agents\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/integration-verifier.agent.md\" -o \".github/agents/integration-verifier.agent.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/integration-verifier.agent.md",
-      "checksum_sha256": "66736291028929d200f3bf5e8d40a906b8b90ade51585182063ff2a936de75af",
+      "checksum_sha256": "8e7be7c8f681090a241df384478257fa27e4d679ff75f0bd5e752fecac359dd3",
       "bundle_membership": [],
       "metadata": {
         "model_tier": "frontier",
@@ -1921,14 +1921,14 @@
     {
       "component_id": "plan-reviewer",
       "component_kind": "agent",
-      "component_version": "1.4.2",
+      "component_version": "2.0.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/agents/plan-reviewer.agent.md",
       "source_path": "agents/plan-reviewer/AGENT.md",
       "install_path": ".github/agents/plan-reviewer.agent.md",
       "install_command": "mkdir -p \".github/agents\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/plan-reviewer.agent.md\" -o \".github/agents/plan-reviewer.agent.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/plan-reviewer.agent.md",
-      "checksum_sha256": "aab2e6cd0bc7a38e36a45a9356c367a53f69e9fbe73853cf1668ec49cd640977",
+      "checksum_sha256": "1ad86f9d4b59688be5224f1a18112c019476ccc700bc9b2f735abfe39a845a43",
       "bundle_membership": [],
       "metadata": {
         "model_tier": "balanced",
@@ -1945,14 +1945,14 @@
     {
       "component_id": "planner",
       "component_kind": "agent",
-      "component_version": "1.10.0",
+      "component_version": "2.0.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/agents/planner.agent.md",
       "source_path": "agents/planner/AGENT.md",
       "install_path": ".github/agents/planner.agent.md",
       "install_command": "mkdir -p \".github/agents\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/planner.agent.md\" -o \".github/agents/planner.agent.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/planner.agent.md",
-      "checksum_sha256": "9704db12f670fd5c1d2bc79c0c70dbf4446f9720f8d87241e2f93188046d88a1",
+      "checksum_sha256": "2215af2c8a6a992e3fdbb5a0e62b0c8a57a2e4ad89b8c3da7e17dcc83b9767bf",
       "bundle_membership": [],
       "metadata": {
         "model_tier": "frontier",
@@ -1970,14 +1970,14 @@
     {
       "component_id": "quality-engineer",
       "component_kind": "agent",
-      "component_version": "1.4.1",
+      "component_version": "2.0.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/agents/quality-engineer.agent.md",
       "source_path": "agents/quality-engineer/AGENT.md",
       "install_path": ".github/agents/quality-engineer.agent.md",
       "install_command": "mkdir -p \".github/agents\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/quality-engineer.agent.md\" -o \".github/agents/quality-engineer.agent.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/quality-engineer.agent.md",
-      "checksum_sha256": "cd27148ea65fe136b7cd0d5062e3294a40c15f40c5b87ae97fa2c646807a0102",
+      "checksum_sha256": "a4c15276e63174be03e9960548373c838ccff4bfe165bbcd5df3fe2f4a157c81",
       "bundle_membership": [],
       "metadata": {
         "model_tier": "frontier",
@@ -1996,14 +1996,14 @@
     {
       "component_id": "release-engineer",
       "component_kind": "agent",
-      "component_version": "4.0.1",
+      "component_version": "5.0.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/agents/release-engineer.agent.md",
       "source_path": "agents/release-engineer/AGENT.md",
       "install_path": ".github/agents/release-engineer.agent.md",
       "install_command": "mkdir -p \".github/agents\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/release-engineer.agent.md\" -o \".github/agents/release-engineer.agent.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/release-engineer.agent.md",
-      "checksum_sha256": "c197057f0c8dc6c1c56d1e588b82ff5c3ca55c89b4d9f1e1becf39038a5ae1e5",
+      "checksum_sha256": "5670caf018595c93f99231cc61d3b5ec213b09535d246627e92915015d3e0d05",
       "bundle_membership": [],
       "metadata": {
         "model_tier": "balanced",
@@ -2024,14 +2024,14 @@
     {
       "component_id": "release-gate",
       "component_kind": "agent",
-      "component_version": "1.2.1",
+      "component_version": "2.0.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/agents/release-gate.agent.md",
       "source_path": "agents/release-gate/AGENT.md",
       "install_path": ".github/agents/release-gate.agent.md",
       "install_command": "mkdir -p \".github/agents\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/release-gate.agent.md\" -o \".github/agents/release-gate.agent.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/release-gate.agent.md",
-      "checksum_sha256": "97566145d28b38566705df261f36d69be4e5b7355a90a225ffc305787a3400e1",
+      "checksum_sha256": "8029f24d060e40b9dff8ba71ae166354833feaba292b1f32ab79477845c23be0",
       "bundle_membership": [],
       "metadata": {
         "model_tier": "frontier",
@@ -2050,14 +2050,14 @@
     {
       "component_id": "security-engineer",
       "component_kind": "agent",
-      "component_version": "1.4.1",
+      "component_version": "2.0.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/agents/security-engineer.agent.md",
       "source_path": "agents/security-engineer/AGENT.md",
       "install_path": ".github/agents/security-engineer.agent.md",
       "install_command": "mkdir -p \".github/agents\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/security-engineer.agent.md\" -o \".github/agents/security-engineer.agent.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/security-engineer.agent.md",
-      "checksum_sha256": "3a1f62da4de884ebb8eccc7b5e773d397d9592aad93cf8fa34e18b53bf4fc2be",
+      "checksum_sha256": "10b7d392dbae6ccfea26ac8daab36b5060050b146e77bebe704f45146b22be79",
       "bundle_membership": [],
       "metadata": {
         "model_tier": "frontier",
@@ -2076,14 +2076,14 @@
     {
       "component_id": "site-reliability-engineer",
       "component_kind": "agent",
-      "component_version": "1.4.2",
+      "component_version": "2.0.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/agents/site-reliability-engineer.agent.md",
       "source_path": "agents/site-reliability-engineer/AGENT.md",
       "install_path": ".github/agents/site-reliability-engineer.agent.md",
       "install_command": "mkdir -p \".github/agents\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/site-reliability-engineer.agent.md\" -o \".github/agents/site-reliability-engineer.agent.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/site-reliability-engineer.agent.md",
-      "checksum_sha256": "5110d0210a85246b484a3242a848dcd63b6bcb90e73f7dd712d3b15d44cc7080",
+      "checksum_sha256": "e8fd6e7569a1d9fb68ce55e2bd9393d4af6f427b4787a3eff2d2bfa67adf8fee",
       "bundle_membership": [],
       "metadata": {
         "model_tier": "frontier",
@@ -2104,14 +2104,14 @@
     {
       "component_id": "staff-engineer",
       "component_kind": "agent",
-      "component_version": "4.0.0",
+      "component_version": "5.0.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/agents/staff-engineer.agent.md",
       "source_path": "agents/staff-engineer/AGENT.md",
       "install_path": ".github/agents/staff-engineer.agent.md",
       "install_command": "mkdir -p \".github/agents\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/staff-engineer.agent.md\" -o \".github/agents/staff-engineer.agent.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/staff-engineer.agent.md",
-      "checksum_sha256": "bdf284a6f7e780e632f834e8d8eb4392570d5a302104cf3be17c73b56dd94019",
+      "checksum_sha256": "91e954ad15fbd7b248d02e84372b234482b28781a99cd9d10477b8d5c98f2dca",
       "bundle_membership": [],
       "metadata": {
         "model_tier": "frontier",
@@ -2130,7 +2130,7 @@
     {
       "component_id": "audit",
       "component_kind": "command",
-      "component_version": "4.0.0",
+      "component_version": "4.1.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/prompts/audit.prompt.md",
       "source_path": "workflows/audit/WORKFLOW.md",
@@ -2147,7 +2147,7 @@
     {
       "component_id": "backlog",
       "component_kind": "command",
-      "component_version": "5.0.0",
+      "component_version": "5.1.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/prompts/backlog.prompt.md",
       "source_path": "workflows/backlog/WORKFLOW.md",
@@ -2164,7 +2164,7 @@
     {
       "component_id": "git-verify",
       "component_kind": "command",
-      "component_version": "4.0.0",
+      "component_version": "4.1.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/prompts/git-verify.prompt.md",
       "source_path": "workflows/git-verify/WORKFLOW.md",
@@ -2181,7 +2181,7 @@
     {
       "component_id": "lint",
       "component_kind": "command",
-      "component_version": "4.0.0",
+      "component_version": "4.1.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/prompts/lint.prompt.md",
       "source_path": "workflows/lint/WORKFLOW.md",
@@ -2198,7 +2198,7 @@
     {
       "component_id": "sync-toolkit",
       "component_kind": "command",
-      "component_version": "4.0.0",
+      "component_version": "4.1.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/prompts/sync-toolkit.prompt.md",
       "source_path": "workflows/sync-toolkit/WORKFLOW.md",
@@ -2215,7 +2215,7 @@
     {
       "component_id": "test",
       "component_kind": "command",
-      "component_version": "4.0.0",
+      "component_version": "4.1.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/prompts/test.prompt.md",
       "source_path": "workflows/test/WORKFLOW.md",
@@ -2488,14 +2488,14 @@
     {
       "component_id": "autoresearch-analyst",
       "component_kind": "agent",
-      "component_version": "5.1.1",
+      "component_version": "6.0.0",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/agents/autoresearch-analyst.toml",
       "source_path": "agents/autoresearch-analyst/AGENT.md",
       "install_path": "~/.codex/agents/autoresearch-analyst.toml",
       "install_command": "mkdir -p \"$HOME/.codex/agents\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/autoresearch-analyst.toml\" -o \"$HOME/.codex/agents/autoresearch-analyst.toml\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/autoresearch-analyst.toml",
-      "checksum_sha256": "41ec84e38c9666fd5b2a5b66417f68ceb4530d95c3c7fabf04fd18d4b11f9e79",
+      "checksum_sha256": "bd5a3a4d9cfd3bb156338848c3ec020452b61aa5bf0ecdd72366317d1d2ccd04",
       "bundle_membership": [],
       "metadata": {
         "model_tier": "frontier",
@@ -2519,14 +2519,14 @@
     {
       "component_id": "backend-engineer",
       "component_kind": "agent",
-      "component_version": "1.3.1",
+      "component_version": "2.0.0",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/agents/backend-engineer.toml",
       "source_path": "agents/backend-engineer/AGENT.md",
       "install_path": "~/.codex/agents/backend-engineer.toml",
       "install_command": "mkdir -p \"$HOME/.codex/agents\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/backend-engineer.toml\" -o \"$HOME/.codex/agents/backend-engineer.toml\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/backend-engineer.toml",
-      "checksum_sha256": "24a5bb3f25ddf56e55583547c10a1b8aeebe282adbce413d7dc65bb9481df585",
+      "checksum_sha256": "3d1116a4c566cfc8ffea013ed346d367c27b5c120ac1c91cf152aca6a311194c",
       "bundle_membership": [],
       "metadata": {
         "model_tier": "frontier",
@@ -2545,14 +2545,14 @@
     {
       "component_id": "design-architect",
       "component_kind": "agent",
-      "component_version": "1.2.1",
+      "component_version": "2.0.0",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/agents/design-architect.toml",
       "source_path": "agents/design-architect/AGENT.md",
       "install_path": "~/.codex/agents/design-architect.toml",
       "install_command": "mkdir -p \"$HOME/.codex/agents\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/design-architect.toml\" -o \"$HOME/.codex/agents/design-architect.toml\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/design-architect.toml",
-      "checksum_sha256": "5b15fa355069b7ca8eb8ed1a8cb410349c3989eb3469c4853c3082f4961baeca",
+      "checksum_sha256": "fa4dd17d50da2f9ec944de76e8268f6098b1da25641ee3fd877bd374eb65f7d7",
       "bundle_membership": [],
       "metadata": {
         "model_tier": "frontier",
@@ -2572,14 +2572,14 @@
     {
       "component_id": "doc-writer",
       "component_kind": "agent",
-      "component_version": "1.2.3",
+      "component_version": "2.0.0",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/agents/doc-writer.toml",
       "source_path": "agents/doc-writer/AGENT.md",
       "install_path": "~/.codex/agents/doc-writer.toml",
       "install_command": "mkdir -p \"$HOME/.codex/agents\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/doc-writer.toml\" -o \"$HOME/.codex/agents/doc-writer.toml\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/doc-writer.toml",
-      "checksum_sha256": "551f1b31d6512bc26f3bbac15383c6d923257c0b37e9c5f25d168c965c45cb6e",
+      "checksum_sha256": "1d26b33997ce881ffc321ffb2264da03c9c23030b2383e4aa4260b3f13d05b4d",
       "bundle_membership": [],
       "metadata": {
         "model_tier": "balanced",
@@ -2598,14 +2598,14 @@
     {
       "component_id": "frankenstein",
       "component_kind": "agent",
-      "component_version": "4.5.0",
+      "component_version": "5.0.0",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/agents/frankenstein.toml",
       "source_path": "agents/frankenstein/AGENT.md",
       "install_path": "~/.codex/agents/frankenstein.toml",
       "install_command": "mkdir -p \"$HOME/.codex/agents\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/frankenstein.toml\" -o \"$HOME/.codex/agents/frankenstein.toml\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/frankenstein.toml",
-      "checksum_sha256": "ecafec1e09f25b7992f8ca9383389227e2b31f13862d93874d4d9b5092220dab",
+      "checksum_sha256": "a402ac19a7d7c5ff10917558f12499195630e5e75b0dde0d4846aac78376e6bd",
       "bundle_membership": [],
       "metadata": {
         "model_tier": "frontier",
@@ -2638,14 +2638,14 @@
     {
       "component_id": "frontend-engineer",
       "component_kind": "agent",
-      "component_version": "1.3.1",
+      "component_version": "2.0.0",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/agents/frontend-engineer.toml",
       "source_path": "agents/frontend-engineer/AGENT.md",
       "install_path": "~/.codex/agents/frontend-engineer.toml",
       "install_command": "mkdir -p \"$HOME/.codex/agents\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/frontend-engineer.toml\" -o \"$HOME/.codex/agents/frontend-engineer.toml\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/frontend-engineer.toml",
-      "checksum_sha256": "518183a3c68ea8473fb5a5643e13a2970165c18b8b6e6b0fbc2dfd2ce15c111c",
+      "checksum_sha256": "31e83bd8913d9fd515266660d4c60e4a91eb3c3d317a65dcdbc62edd7e146d25",
       "bundle_membership": [],
       "metadata": {
         "model_tier": "frontier",
@@ -2666,14 +2666,14 @@
     {
       "component_id": "integration-verifier",
       "component_kind": "agent",
-      "component_version": "1.4.2",
+      "component_version": "2.0.0",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/agents/integration-verifier.toml",
       "source_path": "agents/integration-verifier/AGENT.md",
       "install_path": "~/.codex/agents/integration-verifier.toml",
       "install_command": "mkdir -p \"$HOME/.codex/agents\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/integration-verifier.toml\" -o \"$HOME/.codex/agents/integration-verifier.toml\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/integration-verifier.toml",
-      "checksum_sha256": "130fef91561028b11f3db57731930a3b59bbf274404d903d45b7567a9993c0ee",
+      "checksum_sha256": "f610e51c4655a96928d3d2b7eee303507a3a1bb890848d4222a4c08e18b5289a",
       "bundle_membership": [],
       "metadata": {
         "model_tier": "frontier",
@@ -2692,7 +2692,7 @@
     {
       "component_id": "plan-reviewer",
       "component_kind": "agent",
-      "component_version": "1.4.2",
+      "component_version": "2.0.0",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/agents/plan-reviewer.toml",
       "source_path": "agents/plan-reviewer/AGENT.md",
@@ -2716,14 +2716,14 @@
     {
       "component_id": "planner",
       "component_kind": "agent",
-      "component_version": "1.10.0",
+      "component_version": "2.0.0",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/agents/planner.toml",
       "source_path": "agents/planner/AGENT.md",
       "install_path": "~/.codex/agents/planner.toml",
       "install_command": "mkdir -p \"$HOME/.codex/agents\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/planner.toml\" -o \"$HOME/.codex/agents/planner.toml\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/planner.toml",
-      "checksum_sha256": "1ffae8df40ae60b286d53adb53bd0c8535b303cc050684374272be07bb9857b3",
+      "checksum_sha256": "504d021f750fa65c89de361ee9b05205e6da3e99551140661e5c4f473ef5bf6b",
       "bundle_membership": [],
       "metadata": {
         "model_tier": "frontier",
@@ -2741,14 +2741,14 @@
     {
       "component_id": "quality-engineer",
       "component_kind": "agent",
-      "component_version": "1.4.1",
+      "component_version": "2.0.0",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/agents/quality-engineer.toml",
       "source_path": "agents/quality-engineer/AGENT.md",
       "install_path": "~/.codex/agents/quality-engineer.toml",
       "install_command": "mkdir -p \"$HOME/.codex/agents\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/quality-engineer.toml\" -o \"$HOME/.codex/agents/quality-engineer.toml\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/quality-engineer.toml",
-      "checksum_sha256": "49b993a7092b2c9ebe9ac62d63431ae091580364d53059ca64c4c7281b0e8eb5",
+      "checksum_sha256": "f0fbbb5ddee18b85b521b36860b2e5788440d4c869dc603bbccd1bbd42300b08",
       "bundle_membership": [],
       "metadata": {
         "model_tier": "frontier",
@@ -2767,14 +2767,14 @@
     {
       "component_id": "release-engineer",
       "component_kind": "agent",
-      "component_version": "4.0.1",
+      "component_version": "5.0.0",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/agents/release-engineer.toml",
       "source_path": "agents/release-engineer/AGENT.md",
       "install_path": "~/.codex/agents/release-engineer.toml",
       "install_command": "mkdir -p \"$HOME/.codex/agents\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/release-engineer.toml\" -o \"$HOME/.codex/agents/release-engineer.toml\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/release-engineer.toml",
-      "checksum_sha256": "7406ea8788d558f95525f0ae0b423a779bfba1592ea5d3b1e419078d10a12255",
+      "checksum_sha256": "5873e85c2d3e620436b86a672d49626d0b2b4a50c50adb1ed5622c17a57b5863",
       "bundle_membership": [],
       "metadata": {
         "model_tier": "balanced",
@@ -2795,14 +2795,14 @@
     {
       "component_id": "release-gate",
       "component_kind": "agent",
-      "component_version": "1.2.1",
+      "component_version": "2.0.0",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/agents/release-gate.toml",
       "source_path": "agents/release-gate/AGENT.md",
       "install_path": "~/.codex/agents/release-gate.toml",
       "install_command": "mkdir -p \"$HOME/.codex/agents\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/release-gate.toml\" -o \"$HOME/.codex/agents/release-gate.toml\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/release-gate.toml",
-      "checksum_sha256": "be07fdc01409a0de34737e4ad9fb95309c6b6b6334795c60f56d8f931d9f3473",
+      "checksum_sha256": "93ec1c778e59945df62856c28081c305ce13febac958e4c6607c9a7152217135",
       "bundle_membership": [],
       "metadata": {
         "model_tier": "frontier",
@@ -2821,7 +2821,7 @@
     {
       "component_id": "security-engineer",
       "component_kind": "agent",
-      "component_version": "1.4.1",
+      "component_version": "2.0.0",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/agents/security-engineer.toml",
       "source_path": "agents/security-engineer/AGENT.md",
@@ -2847,7 +2847,7 @@
     {
       "component_id": "site-reliability-engineer",
       "component_kind": "agent",
-      "component_version": "1.4.2",
+      "component_version": "2.0.0",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/agents/site-reliability-engineer.toml",
       "source_path": "agents/site-reliability-engineer/AGENT.md",
@@ -2875,14 +2875,14 @@
     {
       "component_id": "staff-engineer",
       "component_kind": "agent",
-      "component_version": "4.0.0",
+      "component_version": "5.0.0",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/agents/staff-engineer.toml",
       "source_path": "agents/staff-engineer/AGENT.md",
       "install_path": "~/.codex/agents/staff-engineer.toml",
       "install_command": "mkdir -p \"$HOME/.codex/agents\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/staff-engineer.toml\" -o \"$HOME/.codex/agents/staff-engineer.toml\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/staff-engineer.toml",
-      "checksum_sha256": "2e1fb88e10096c31bd967680befa3f1c87f8265e9bbd5c67ef46b8be823573c3",
+      "checksum_sha256": "66c812086c7a23922de627614130428c33dbe65ed7f021fadd4eebd073393c8a",
       "bundle_membership": [],
       "metadata": {
         "model_tier": "frontier",
@@ -2992,7 +2992,7 @@
       "install_path": ".agents/skills/improve/SKILL.md",
       "install_command": "mkdir -p \".agents/skills/improve\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/improve/SKILL.md\" -o \".agents/skills/improve/SKILL.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/improve/SKILL.md",
-      "checksum_sha256": "33626f7bdd42251f592c42cfaa2e73df5b1c205c3a43dac18b6f8aa242257835",
+      "checksum_sha256": "4005119d7b9c8f55810d0c07db3a34c1548d27d4329e762267fa2208cad41baa",
       "bundle_membership": [],
       "metadata": {}
     },
@@ -3062,7 +3062,7 @@
       "install_path": ".agents/skills/retro/SKILL.md",
       "install_command": "mkdir -p \".agents/skills/retro\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/retro/SKILL.md\" -o \".agents/skills/retro/SKILL.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/retro/SKILL.md",
-      "checksum_sha256": "0573926b73ad516ec201e9c173a5f8b38fbd1f10d99dd2d8dad2a249e73503d0",
+      "checksum_sha256": "b5eb2eea2a274b9bb55db1f69927798ff4d4175e88ad6506a91900ca5571693b",
       "bundle_membership": [],
       "metadata": {}
     },

@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Documented phase-qualified handoff aliases for repeated design-architect passes so
+  raw-review and recheck outputs no longer rely on a single collision-prone filename.
+
 ## [2.0.0] - 2026-04-15
 
 ### Changed

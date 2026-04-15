@@ -154,9 +154,9 @@ function parseClaudeAgentConfig(frontmatter) {
 }
 
 function getCopilotModelForTier(modelTier) {
-  if (modelTier === 'balanced') return 'Claude Sonnet 4.5 (copilot)';
-  if (modelTier === 'fast') return 'Claude Haiku 4.5 (copilot)';
-  return 'Claude Opus 4.5 (copilot)';
+  if (modelTier === 'balanced') return 'Claude Sonnet 4.5';
+  if (modelTier === 'fast') return 'Claude Haiku 4.5';
+  return 'Claude Opus 4.6';
 }
 
 function getCodexModelForTier(modelTier) {

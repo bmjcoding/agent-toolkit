@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added a dedicated recon mode for pre-planner repository reconnaissance so multi-repo
+  checklist prompts no longer fall through to on-demand target review.
+
+### Changed
+
+- Non-retro dispatch guidance now explicitly covers recon, improve, and full-cycle runs
+  so retro suppression is part of every non-retro orchestration path.
+
 ## [6.0.0] - 2026-04-15
 
 ### Changed
