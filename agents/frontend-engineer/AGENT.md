@@ -1,6 +1,7 @@
 ---
 name: frontend-engineer
 description: "Frontend engineer that builds React/Tailwind UI with design system awareness. Always loads the design-authority skill before writing UI code. Use for subtasks with .tsx, .css, or component/page files."
+lifecycle: stable
 model-tier: frontier
 capabilities:
   - read

@@ -8,8 +8,13 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [4.3.0] - 2026-04-15
+
 ### Added
 
+- `index.json` artifacts now expose normalized `lifecycle` and `availability` metadata,
+  include OpenAI Codex hook entries, validate hook runtime metadata from
+  `tools/catalog-metadata.json`, and fail generation when either field is missing.
 - GitHub Actions now runs the `skills/review-skill/scripts/lint-definition.py`
   deterministic schema checks for canonical `skills/**` and `agents/**` before the
   generated-asset validation/sync jobs, so malformed definitions fail CI before
@@ -17,11 +22,24 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 - Added a component-specific CI changelog gate. Pull requests and pushes that modify a
   monitored component surface now fail unless the associated `CHANGELOG.md` for that
   exact component is updated in the same diff.
+- Pull requests now require touched component changelogs to promote PR-scoped notes out
+  of `## [Unreleased]` into a new dated versioned section, so version bumps happen
+  before review instead of waiting for merge.
 - Fixed the component-changelog CI gate on first pushes to new branches by fetching the
   repository default branch before computing the fallback diff base.
 - Normalized the remaining workflow, rule, Claude command, and Claude hook changelog
   footer links to canonical namespaced tags so historical compare/tree links no longer
   depend on obsolete flat component tags.
+
+### Changed
+
+- Canonical shared agents, workflows, skills, and rules now declare `lifecycle` in
+  their root definitions so generated adapters and the distribution catalog read
+  maturity from one source of truth while tool-local support remains a separate
+  availability concern.
+- Release-engineer and the changelog skill now treat `## [Unreleased]` as branch-local
+  scratch space only: PR-bound work is expected to be promoted into the next versioned
+  section before the PR is opened.
 
 ## [4.2.1] - 2026-04-15
 
@@ -223,7 +241,8 @@ No action required for users who install via symlinks (`./claude-code/scripts/in
 3. Re-run the install script: `./claude-code/scripts/install.sh`.
 4. Verify: `./claude-code/scripts/install.sh --check`.
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/v4.2.1...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/v4.3.0...HEAD
+[4.3.0]: https://github.com/bmjcoding/agent-toolkit/compare/v4.2.1...v4.3.0
 [4.2.1]: https://github.com/bmjcoding/agent-toolkit/compare/v4.2.0...v4.2.1
 [4.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/v4.1.0...v4.2.0
 [4.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/v4.0.0...v4.1.0

@@ -4,6 +4,7 @@ description: >
   Canonical CHANGELOG.md standard: Keep a Changelog 1.1.0 + SemVer, required header,
   version sections, categories, per-component tags, comparison links, bump table. Use
   when creating or editing any CHANGELOG.md in the toolkit.
+lifecycle: stable
 disable-model-invocation: true
 argument-hint: "[path to CHANGELOG.md to edit or create]"
 ---
@@ -124,10 +125,21 @@ by creating `.changelog-platform.yml` at the repo root: `platform: gitlab` (or `
 
 ## [Unreleased] Workflow
 
-Always maintain `## [Unreleased]` at the top of the version list. It accumulates changes
-that are merged but not yet tagged.
+Always maintain `## [Unreleased]` at the top of the version list. It accumulates
+branch-local changes before a PR is opened, and resets to empty after those changes are
+promoted into the next versioned section.
 
-When cutting a release:
+When preparing a PR that changes a component:
+
+1. Promote the touched component's non-empty `## [Unreleased]` section to
+   `## [X.Y.Z] - YYYY-MM-DD`.
+2. Insert a fresh empty `## [Unreleased]` above the new versioned section.
+3. Update the comparison links so `[Unreleased]` points at the new version and the new
+   version points at the previous one.
+4. Continue editing the versioned section for that PR instead of adding new PR-scoped
+   bullets back under `## [Unreleased]`.
+
+When cutting a tagged release:
 
 1. Rename `## [Unreleased]` to `## [X.Y.Z] - YYYY-MM-DD`.
 2. Update the comparison link footer with the new version.
@@ -151,7 +163,8 @@ unrelated component's release.
 
 **Who triggers:** a human developer, the `sync-toolkit` workflow, or the
 release-engineer agent when dispatched by the orchestrator. Automated CI does not cut
-releases without explicit invocation.
+releases, but PR validation may require that touched component changelogs have already
+been promoted out of `## [Unreleased]`.
 
 ## Release Subcommand
 

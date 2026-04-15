@@ -1,6 +1,7 @@
 ---
 name: release-gate
 description: "Release readiness gate that runs prod-readiness checks with context from specialist reviews and prior attempts, emitting a SHIP/NO-SHIP verdict. Use during Phase 4 quality loop."
+lifecycle: stable
 model-tier: frontier
 capabilities:
   - read

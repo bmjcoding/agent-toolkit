@@ -1,0 +1,118 @@
+{
+  "hooks": {
+    "claude-code": {
+      "branch-guard": {
+        "lifecycle": "stable",
+        "availability": "supported"
+      },
+      "changelog-check": {
+        "lifecycle": "stable",
+        "availability": "supported"
+      },
+      "extract-handoff": {
+        "lifecycle": "stable",
+        "availability": "supported"
+      },
+      "inject-context": {
+        "lifecycle": "stable",
+        "availability": "supported"
+      },
+      "integrity-warn": {
+        "lifecycle": "stable",
+        "availability": "supported"
+      },
+      "pre-push-secrets": {
+        "lifecycle": "stable",
+        "availability": "supported"
+      },
+      "protect-config": {
+        "lifecycle": "stable",
+        "availability": "supported"
+      },
+      "toolkit-drift-check": {
+        "lifecycle": "stable",
+        "availability": "supported"
+      },
+      "toolkit-edit-reminder": {
+        "lifecycle": "stable",
+        "availability": "supported"
+      }
+    },
+    "github-copilot": {
+      "branch-guard": {
+        "lifecycle": "stable",
+        "availability": "supported"
+      },
+      "changelog-check": {
+        "lifecycle": "stable",
+        "availability": "supported"
+      },
+      "extract-handoff": {
+        "lifecycle": "stable",
+        "availability": "supported"
+      },
+      "inject-context": {
+        "lifecycle": "stable",
+        "availability": "supported"
+      },
+      "integrity-warn": {
+        "lifecycle": "stable",
+        "availability": "supported"
+      },
+      "pre-push-secrets": {
+        "lifecycle": "stable",
+        "availability": "supported"
+      },
+      "protect-config": {
+        "lifecycle": "stable",
+        "availability": "supported"
+      },
+      "toolkit-drift-check": {
+        "lifecycle": "stable",
+        "availability": "supported"
+      },
+      "toolkit-edit-reminder": {
+        "lifecycle": "stable",
+        "availability": "supported"
+      }
+    },
+    "openai-codex": {
+      "branch-guard": {
+        "lifecycle": "stable",
+        "availability": "unverified"
+      },
+      "changelog-check": {
+        "lifecycle": "stable",
+        "availability": "unverified"
+      },
+      "extract-handoff": {
+        "lifecycle": "stable",
+        "availability": "unverified"
+      },
+      "inject-context": {
+        "lifecycle": "stable",
+        "availability": "unverified"
+      },
+      "integrity-warn": {
+        "lifecycle": "stable",
+        "availability": "unverified"
+      },
+      "pre-push-secrets": {
+        "lifecycle": "stable",
+        "availability": "unverified"
+      },
+      "protect-config": {
+        "lifecycle": "stable",
+        "availability": "unverified"
+      },
+      "toolkit-drift-check": {
+        "lifecycle": "stable",
+        "availability": "unverified"
+      },
+      "toolkit-edit-reminder": {
+        "lifecycle": "stable",
+        "availability": "unverified"
+      }
+    }
+  }
+}

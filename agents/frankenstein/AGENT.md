@@ -1,6 +1,7 @@
 ---
 name: frankenstein
 description: "Master orchestrator that decomposes tasks, spawns parallel subagents, and coordinates multi-phase pipelines."
+lifecycle: stable
 model-tier: frontier
 capabilities:
   - read

@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.0] - 2026-04-15
+
 ### Added
 
 - Added an exploration mode that writes session-scoped frontend summaries and
@@ -14,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Declared canonical `lifecycle` metadata in the shared root definition so the distribution catalog can publish maturity separately from per-tool availability for this agent.
 - Clarified that frontend write boundaries are mode-specific: exploration writes only
   orchestrator context artifacts, while implementation remains constrained to
   `owned_files`.
@@ -91,7 +94,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frontend-engineer-v2.0.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frontend-engineer-v2.1.0...HEAD
+[2.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frontend-engineer-v2.0.0...agent/frontend-engineer-v2.1.0
 [2.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/agent/frontend-engineer-v2.0.0
 [1.3.1]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frontend-engineer-v1.3.0...agent/frontend-engineer-v1.3.1
 [1.3.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frontend-engineer-v1.2.0...agent/frontend-engineer-v1.3.0

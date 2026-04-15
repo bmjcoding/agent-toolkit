@@ -167,9 +167,10 @@ function getCodexModelForTier(modelTier) {
   return 'gpt-5.4';
 }
 
-function renderCanonicalMarkdown({ name, description, adapterPaths, body, kind, modelTier, capabilities, subagents, skills, argumentHint }) {
+function renderCanonicalMarkdown({ name, description, lifecycle, adapterPaths, body, kind, modelTier, capabilities, subagents, skills, argumentHint }) {
   const adapterLines = adapterPaths.map(adapterPath => `  - ${adapterPath}`).join('\n');
   const metadataLines = [];
+  if (lifecycle) metadataLines.push(`lifecycle: ${lifecycle}`);
 
   if (kind === 'agent') {
     if (modelTier) metadataLines.push(`model-tier: ${modelTier}`);
@@ -303,6 +304,7 @@ function extractCanonicalMetadata(markdown) {
     body: body.trim() + '\n',
     name: normalizeFrontmatterValue(extractField(/^name:\s*(.+)$/m, parts.frontmatter, '')),
     description: normalizeFrontmatterValue(extractField(/^description:\s*(.+)$/m, parts.frontmatter, '')),
+    lifecycle: normalizeFrontmatterValue(extractField(/^lifecycle:\s*(.+)$/m, parts.frontmatter, '')),
     modelTier: normalizeFrontmatterValue(extractField(/^model-tier:\s*(.+)$/m, parts.frontmatter, '')),
     capabilities: parseYamlList(parts.frontmatter, 'capabilities'),
     subagents: parseYamlList(parts.frontmatter, 'subagents'),
@@ -373,6 +375,9 @@ function syncAgents() {
           extractField(/^description:\s*(.+)$/m, copilotParts.frontmatter, '') ||
           extractField(/^description:\s*(.+)$/m, claudeParts.frontmatter, '')
         );
+    const lifecycle = existingCanonical && existingCanonical.lifecycle
+      ? existingCanonical.lifecycle
+      : 'stable';
     const modelTier = existingCanonical && existingCanonical.modelTier
       ? existingCanonical.modelTier
       : claudeConfig.modelTier;
@@ -392,6 +397,7 @@ function syncAgents() {
         kind: 'agent',
         name,
         description,
+        lifecycle,
         modelTier,
         capabilities,
         subagents,
@@ -487,6 +493,9 @@ function syncWorkflows() {
           extractField(/^description:\s*(.+)$/m, copilotParts.frontmatter, '') ||
           extractField(/^description:\s*(.+)$/m, claudeParts.frontmatter, '')
         );
+    const lifecycle = existingCanonical && existingCanonical.lifecycle
+      ? existingCanonical.lifecycle
+      : 'stable';
 
     writeIfChanged(
       canonicalPath,
@@ -494,6 +503,7 @@ function syncWorkflows() {
         kind: 'workflow',
         name,
         description,
+        lifecycle,
         argumentHint,
         adapterPaths: [
           `claude-code/commands/${name}/${name}.md`,

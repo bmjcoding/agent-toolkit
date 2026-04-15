@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.2.0] - 2026-04-15
+
+### Changed
+
+- Declared canonical `lifecycle` metadata in the shared root definition so the distribution catalog can publish maturity separately from per-tool availability for this workflow.
+
 ## [4.1.0] - 2026-04-15
 
 ### Changed
@@ -51,7 +57,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Protected-path skip list for `~/.claude/settings.json`, `~/.claude/CLAUDE.md`, and `~/.claude/hooks/` contents
 - Per-component commit strategy: one commit per component, routed through release-engineer per the frankenstein Ship phase rule
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/workflow/sync-toolkit-v4.1.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/workflow/sync-toolkit-v4.2.0...HEAD
+[4.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/workflow/sync-toolkit-v4.1.0...workflow/sync-toolkit-v4.2.0
 [4.1.0]: https://github.com/bmjcoding/agent-toolkit/tree/workflow/sync-toolkit-v4.1.0
 [3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/workflow/sync-toolkit-v2.0.0...workflow/sync-toolkit-v3.0.0
 [2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/workflow/sync-toolkit-v1.0.1...workflow/sync-toolkit-v2.0.0

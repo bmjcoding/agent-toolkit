@@ -1,6 +1,7 @@
 ---
 name: staff-engineer
 description: "General-purpose engineer for subtasks that are not clearly frontend or backend — infrastructure, configuration, shared types, scripts, tooling, CI/CD setup."
+lifecycle: stable
 model-tier: frontier
 capabilities:
   - read
