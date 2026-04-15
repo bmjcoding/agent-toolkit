@@ -1,11 +1,16 @@
 ---
+name: test
 description: "Write tests to cover gaps and achieve >=80% coverage on changed files."
-agent: agent
-tools: [read_file, search_files, run_in_terminal, list_dir]
+agent: 'agent'
+tools:
+  - read
+  - edit
+  - search
+  - execute
 argument-hint: "[paths...] [--dry-run]"
 ---
 
-Write tests to cover gaps in the code in scope. Target: maintain or improve baseline coverage, and achieve >=80% line coverage on new/changed files. Use parallel agents to maximize speed. Scope resolution, autonomy, auto-fix safety, and `--dry-run` rules are defined in CLAUDE.md.
+Write tests to cover gaps in the code in scope. Target: maintain or improve baseline coverage, and achieve >=80% line coverage on new/changed files. Use parallel agents to maximize speed. Scope resolution, autonomy, auto-fix safety, and `--dry-run` rules are defined in AGENTS.md.
 
 ## Phase 0: Baseline
 
@@ -45,4 +50,4 @@ Rules:
 | File | Tests Written | Status | Notes |
 |------|--------------|--------|-------|
 
-Coverage, flaky tests, and untestable files listed below the table. Write any untestable files or deferred coverage gaps to `.claude/backlog.md` (see `/backlog` for format).
+Coverage, flaky tests, and untestable files listed below the table. Write any untestable files or deferred coverage gaps to `STATE_ROOT/backlog.md` (see `backlog` for format).

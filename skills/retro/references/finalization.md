@@ -9,11 +9,17 @@ Read this after completing the analysis sections. Follow these steps in order.
 *Standard/full depth only.* Before finalizing, write the retro draft to a **temp path** and run the verification script:
 
 ```bash
-python3 ${CLAUDE_SKILL_DIR}/scripts/verify-claims.py /tmp/retro-draft-TIMESTAMP.md [--orch-dir DIR]
-# fallback: python3 ~/.claude/skills/retro/scripts/verify-claims.py /tmp/retro-draft-TIMESTAMP.md [--orch-dir DIR]
+VERIFY_SCRIPT=$(find skills/retro/scripts -name "verify-claims.py" 2>/dev/null | head -1)
+[ -z "$VERIFY_SCRIPT" ] && VERIFY_SCRIPT=$(find .agents/skills/retro/scripts -name "verify-claims.py" 2>/dev/null | head -1)
+[ -z "$VERIFY_SCRIPT" ] && VERIFY_SCRIPT=$(find .claude/skills/retro/scripts -name "verify-claims.py" 2>/dev/null | head -1)
+[ -z "$VERIFY_SCRIPT" ] && VERIFY_SCRIPT=$(find .codex/skills/retro/scripts -name "verify-claims.py" 2>/dev/null | head -1)
+[ -z "$VERIFY_SCRIPT" ] && VERIFY_SCRIPT=$(find ~/.agents/skills/retro/scripts -name "verify-claims.py" 2>/dev/null | head -1)
+[ -z "$VERIFY_SCRIPT" ] && VERIFY_SCRIPT=$(find ~/.claude/skills/retro/scripts -name "verify-claims.py" 2>/dev/null | head -1)
+[ -z "$VERIFY_SCRIPT" ] && VERIFY_SCRIPT=$(find ~/.codex/skills/retro/scripts -name "verify-claims.py" 2>/dev/null | head -1)
+python3 "${VERIFY_SCRIPT:-verify-claims.py}" /tmp/retro-draft-TIMESTAMP.md [--orch-dir DIR]
 ```
 
-This checks that cited file paths exist, agent IDs match handoff files, git SHAs resolve, and severity counts match the backlog. Fix any failures before saving to the canonical path. After all checks pass, move the draft to `~/.claude/retros/{subject}/TIMESTAMP.md` in the Save step — do not write to the final path before verification succeeds.
+This checks that cited file paths exist, agent IDs match handoff files, git SHAs resolve, and severity counts match the backlog. Fix any failures before saving to the canonical path. After all checks pass, move the draft to `STATE_ROOT/retros/{subject}/TIMESTAMP.md` in the Save step — do not write to the final path before verification succeeds.
 
 ### Per-Recommendation State Verification
 
@@ -22,7 +28,7 @@ For each recommendation in section 3.7 (the Recommendations table), before final
 Verification procedure per recommendation type:
 
 - **fix** type: read the target file specified in the `Where` column. Run a focused grep for a distinctive token from the proposed fix (e.g., a function name, a field name, a key phrase from the `what` description). If the token is found in the file, the fix is likely already applied — mark as `skipped-already-applied`.
-- **pattern** type: check `~/.claude/skills/memory/` or project CLAUDE.md for the pattern text. If a semantically equivalent pattern exists, mark as `skipped-already-applied`.
+- **pattern** type: check `STATE_ROOT/projects/<project-slug>/memory/` or project AGENTS.md for the pattern text. If a semantically equivalent pattern exists, mark as `skipped-already-applied`.
 
 > **Note:**
 > - If the target file named in the recommendation does not exist (deleted or moved since the recommendation was recorded), mark the recommendation as `open` with note: `(target file not found — cannot pre-verify)`. Do NOT auto-skip or auto-close.
@@ -75,8 +81,14 @@ Use markdown headers matching the analysis sections. Skip sections that don't ap
 After producing the summary, check for historical retro data:
 
 ```bash
-python3 ${CLAUDE_SKILL_DIR}/scripts/retro-history.py trends --history ~/.claude/retros --subject SUBJECT
-# fallback: python3 ~/.claude/skills/retro/scripts/retro-history.py trends --history ~/.claude/retros --subject SUBJECT
+HISTORY_SCRIPT=$(find skills/retro/scripts -name "retro-history.py" 2>/dev/null | head -1)
+[ -z "$HISTORY_SCRIPT" ] && HISTORY_SCRIPT=$(find .agents/skills/retro/scripts -name "retro-history.py" 2>/dev/null | head -1)
+[ -z "$HISTORY_SCRIPT" ] && HISTORY_SCRIPT=$(find .claude/skills/retro/scripts -name "retro-history.py" 2>/dev/null | head -1)
+[ -z "$HISTORY_SCRIPT" ] && HISTORY_SCRIPT=$(find .codex/skills/retro/scripts -name "retro-history.py" 2>/dev/null | head -1)
+[ -z "$HISTORY_SCRIPT" ] && HISTORY_SCRIPT=$(find ~/.agents/skills/retro/scripts -name "retro-history.py" 2>/dev/null | head -1)
+[ -z "$HISTORY_SCRIPT" ] && HISTORY_SCRIPT=$(find ~/.claude/skills/retro/scripts -name "retro-history.py" 2>/dev/null | head -1)
+[ -z "$HISTORY_SCRIPT" ] && HISTORY_SCRIPT=$(find ~/.codex/skills/retro/scripts -name "retro-history.py" 2>/dev/null | head -1)
+python3 "${HISTORY_SCRIPT:-retro-history.py}" trends --history STATE_ROOT/retros --subject SUBJECT
 ```
 
 Pass the subject identifier from the Scoping step. If history exists (2+ prior retros for this subject), include a **Trends** section after the summary table highlighting:
@@ -87,7 +99,7 @@ Pass the subject identifier from the Scoping step. If history exists (2+ prior r
 
 Also check for improvement records (`*-improve.json` entries in history). If the last retro for this subject had recommendations but no corresponding improve record, flag it:
 
-> Prior retro (DATE) produced N recommendations but /improve was not run. The same issues may recur.
+> Prior retro (DATE) produced N recommendations but improve was not run. The same issues may recur.
 
 If improve WAS run, note the acceptance rate and check if the accepted fixes actually reduced the root causes they targeted. This is the feedback loop — did the treatment work?
 
@@ -96,14 +108,14 @@ If improve WAS run, note the acceptance rate and check if the accepted fixes act
 After running the `retro-history.py trends` script, also check for frankenstein size trajectory:
 
 ```bash
-python3 ${CLAUDE_SKILL_DIR}/scripts/retro-history.py trends --history ~/.claude/retros --subject SUBJECT --metric frankenstein_line_count --last 5
+python3 "${HISTORY_SCRIPT:-retro-history.py}" trends --history STATE_ROOT/retros --subject SUBJECT --metric frankenstein_line_count --last 5
 ```
 
 If fewer than 5 prior retros exist for this subject (i.e., `--last 5` returns fewer than 5 non-null `frankenstein_line_count` values), **skip the P1 escalation** and note `"insufficient history"` in the retro output rather than flagging a finding. The trajectory check requires a full window of 5 to be meaningful; sparse history produces false positives.
 
 If the script returns 5 consecutive non-null `frankenstein_line_count` values that are monotonically increasing (each value >= the prior), flag as a **P1 finding** in the retro:
 
-> frankenstein.md has grown monotonically across the last N retros (X → Y lines). Each /improve run is adding lines without removing any. Protocol tax is accumulating.
+> frankenstein.md has grown monotonically across the last N retros (X → Y lines). Each improve run is adding lines without removing any. Protocol tax is accumulating.
 
 Bake `net_line_delta > 0` as a **soft budget flag**: include `"net_growth_flag": true` in the saved JSON when `net_line_delta` is positive. The trajectory check escalates this flag to P1 only if it persists across 5 or more consecutive retros.
 
@@ -113,7 +125,7 @@ If no history exists, skip the section silently.
 
 ## Save
 
-**Always complete this before presenting the /improve prompt.** Save both the full retro and the summary metrics to `~/.claude/retros/` for long-term retention and trend analysis.
+**Always complete this before presenting the improve prompt.** Save both the full retro and the summary metrics to `STATE_ROOT/retros/` for long-term retention and trend analysis.
 
 ### Save path by retro type
 
@@ -121,18 +133,18 @@ Choose the save path based on what is being retro'd:
 
 | Retro type | Save path |
 |---|---|
-| Orchestration (pipeline run) | `~/.claude/retros/sessions/YYYY-MM/<session-id>/` |
-| Skill review | `~/.claude/retros/skill-reviews/<skill>/YYYY-MM/` |
-| Agent review | `~/.claude/retros/agent-reviews/<agent>/YYYY-MM/` |
+| Orchestration (pipeline run) | `STATE_ROOT/retros/sessions/YYYY-MM/<session-id>/` |
+| Skill review | `STATE_ROOT/retros/skill-reviews/<skill>/YYYY-MM/` |
+| Agent review | `STATE_ROOT/retros/agent-reviews/<agent>/YYYY-MM/` |
 
-Use the `session_id` (compact `YYYYMMDDTHHMMSS`) as `<session-id>`. For skill/agent reviews, use the subject identifier as `<skill>` or `<agent>`. Legacy paths under `~/.claude/retros/{subject}/` remain valid for existing retros but new saves must use the type-scoped paths above.
+Use the `session_id` (compact `YYYYMMDDTHHMMSS`) as `<session-id>`. For skill/agent reviews, use the subject identifier as `<skill>` or `<agent>`. Legacy paths under `STATE_ROOT/retros/{subject}/` remain valid for existing retros but new saves must use the type-scoped paths above.
 
 1. Create the target directory: `mkdir -p <path>`
 2. Write the full retro markdown to `<path>/YYYYMMDDTHHMMSS.md`
 3. Write the summary metrics as a v5.0-schema JSON to `<path>/YYYYMMDDTHHMMSS.json`. The JSON must validate against the v5.0 schema:
 
    ```bash
-   python3 /Users/bmj/Developer/git/agent-toolkit/claude-code/tools/retros/validate.py <retro.json>
+   python3 tools/retros/validate.py <retro.json>
    ```
 
    Fix any validation errors before saving to the canonical path.
@@ -183,8 +195,7 @@ Use the `session_id` (compact `YYYYMMDDTHHMMSS`) as `<session-id>`. For skill/ag
 4. Append to global trend history:
 
 ```bash
-python3 ${CLAUDE_SKILL_DIR}/scripts/retro-history.py save <path>/YYYYMMDDTHHMMSS.json --history ~/.claude/retros
-# fallback: python3 ~/.claude/skills/retro/scripts/retro-history.py save <path>/YYYYMMDDTHHMMSS.json --history ~/.claude/retros
+python3 "${HISTORY_SCRIPT:-retro-history.py}" save <path>/YYYYMMDDTHHMMSS.json --history STATE_ROOT/retros
 ```
 
-Use the current timestamp for the filename. The script appends to `~/.claude/retros/history.jsonl` (global, cross-subject). All writes must complete before moving on.
+Use the current timestamp for the filename. The script appends to `STATE_ROOT/retros/history.jsonl` (global, cross-subject). All writes must complete before moving on.

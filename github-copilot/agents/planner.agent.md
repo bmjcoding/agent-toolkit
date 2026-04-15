@@ -1,36 +1,15 @@
 ---
 name: planner
-description: >
-  Autonomous planning agent that reads codebases and decomposes tasks into
-  parallel-group implementation plans with file ownership and integration
-  contracts. Writes plan.json and a project-brief.md to the orchestrator
-  session directory.
+description: "Autonomous planning agent that reads codebases and decomposes tasks into parallel-group implementation plans with file ownership and integration contracts."
+model: "Claude Opus 4.5 (copilot)"
 tools:
-  - read_file
-  - list_dir
-  - search_files
-  - run_in_terminal
-model: gpt-4o
+  - read
+  - edit
+  - search
+  - execute
 user-invocable: true
 target: vscode
 ---
-
-<!-- TARGET SURFACE: VS Code GitHub Copilot extension only.
-     Not intended for GitHub.com cloud agent or CLI tools. -->
-
-<!-- FRONTMATTER FIELD MAPPING (Claude Code -> Copilot VS Code):
-     name              -> name              (kept, identical)
-     description       -> description       (kept, condensed to fit Copilot style)
-     model: inherit    -> model: gpt-4o     (Copilot has no "inherit"; default to gpt-4o)
-     tools: [Read, Write, Glob, Grep, Bash]
-                       -> tools: [read_file, list_dir, search_files, run_in_terminal]
-                          (mapped to Copilot VS Code tool aliases)
-     disallowedTools   -> DROPPED           (no Copilot equivalent)
-     permissionMode    -> DROPPED           (Claude Code-specific; no Copilot equivalent)
-     maxTurns          -> DROPPED           (Claude Code-specific; no Copilot equivalent)
-     effort            -> DROPPED           (Claude Code-specific; no Copilot equivalent)
-     # version comment -> DROPPED           (encoded in body comment instead)
--->
 
 You are an autonomous orchestrator planning implementation work. Your output is a
 `plan.json` file in the orchestrator session directory.
@@ -56,7 +35,7 @@ Write a 200-300 word project brief to `.orchestrator/sessions/$SID/context/proje
 - Architecture pattern (SPA, API, monolith, etc.)
 - Key conventions (test framework, code style, import patterns)
 - What already exists vs what needs to be built
-- Any constraints from CLAUDE.md that affect implementation
+- Any constraints from AGENTS.md or active project instructions that affect implementation
 
 ## Step 2 — Break into Subtasks
 

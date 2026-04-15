@@ -39,7 +39,7 @@ Exit code semantics (same as Claude Code):
 | `branch-guard` | `PreToolUse` | Block git push/commit directly to `main` or `master` |
 | `changelog-check` | `PreToolUse` | Validate CHANGELOG.md was updated in commits being pushed (KaC 1.1.0) |
 | `pre-push-secrets` | `PreToolUse` | Scan for secrets before git push (gitleaks + grep fallback) |
-| `protect-config` | `PreToolUse` | Block writes to control-plane files (settings.json, hooks/, CLAUDE.md, agents/) |
+| `protect-config` | `PreToolUse` | Block writes to control-plane files (settings.json, hooks/, compatibility shims, canonical definitions) |
 | `integrity-warn` | `SubagentStop` | Advisory integrity check via integrity-check.sh; warns on mismatches, never blocks |
 | `toolkit-drift-check` | `SubagentStop` | Warn (once per session) when toolkit components are edited without a CHANGELOG.md update |
 | `toolkit-edit-reminder` | `PostToolUse` | Remind agents editing toolkit components to update CHANGELOG.md per KaC 1.1.0 |

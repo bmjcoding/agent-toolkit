@@ -5,11 +5,11 @@ graph TB
     subgraph PRE["Pre-merge Gate"]
         direction TB
         CI["lint-definition.py --strict<br/>(CI check)"]
-        RS["/review-skill<br/>semantic review"]
+        RS["review-skill<br/>semantic review"]
         CI -->|"0 errors"| RS
         CI -->|"errors"| REJECT["❌ Reject"]
         RS -->|"PASS"| MERGE["✅ Merge"]
-        RS -->|"NEEDS WORK"| IMP_NW["/improve<br/>(from review table)"]
+        RS -->|"NEEDS WORK"| IMP_NW["improve<br/>(from review table)"]
         RS -->|"REWRITE"| REJECT
         IMP_NW -->|"fixes applied"| CI
     end
@@ -21,7 +21,7 @@ graph TB
         OTHER["🔧 Custom pipeline<br/>or subagent"]
     end
 
-    subgraph DIAG["Diagnosis — /retro"]
+    subgraph DIAG["Diagnosis — retro"]
         direction TB
         SCOPE["1. Scoping<br/>run type + subject"]
         DATA["2. Data Collection<br/>git, artifacts, scripts"]
@@ -30,7 +30,7 @@ graph TB
         SCOPE --> DATA --> ANALYSIS --> FINAL
     end
 
-    subgraph TREAT["Treatment — /improve"]
+    subgraph TREAT["Treatment — improve"]
         direction TB
         PARSE["1. Parse<br/>recommendations"]
         LOOP["2. Apply-Verify Loop<br/>accept / revert"]
@@ -40,15 +40,15 @@ graph TB
         PARSE --> LOOP --> VER --> PAT --> SAVE_I
     end
 
-    subgraph STORE["Persistence — ~/.claude/retros/"]
+    subgraph STORE["Persistence — STATE_ROOT/retros/"]
         direction LR
         HIST["history.jsonl<br/>global trend index"]
         SUBDIR["{subject}/<br/>retro .md + .json<br/>improve .json"]
     end
 
     FRANK -->|"Phase 7a: spawn<br/>autoresearch-analyst<br/>(retro mode)"| DIAG
-    SINGLE -->|"user types /retro"| DIAG
-    OTHER -->|"user types /retro"| DIAG
+    SINGLE -->|"user types retro"| DIAG
+    OTHER -->|"user types retro"| DIAG
 
     DIAG -->|"saves"| STORE
     DIAG -->|"prompts user"| TREAT

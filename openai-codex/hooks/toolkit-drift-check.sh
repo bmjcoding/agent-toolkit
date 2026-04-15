@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Ported from claude-code/hooks/toolkit-drift-check/toolkit-drift-check.sh for Codex CLI hooks (experimental)
+# Toolkit drift check hook for the Codex CLI surface (experimental)
 # Requires: features.codex_hooks=true in ~/.codex/config.toml
 # Note: Codex hooks stdin payload schema may differ from Claude Code's; validate in your environment.
 #
@@ -132,7 +132,7 @@ if [[ ${#DRIFTED[@]} -gt 0 ]]; then
       echo "  - $component"
     done
     echo ""
-    echo "Run /sync-toolkit to generate CHANGELOG entries, or update each component's CHANGELOG.md manually per KaC 1.1.0."
+    echo "Run sync-toolkit to generate CHANGELOG entries, or update each component's CHANGELOG.md manually per KaC 1.1.0."
     echo ""
   } >&2
 fi

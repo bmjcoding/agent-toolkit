@@ -6,11 +6,25 @@
 # changelog_slug PATH — derive "{tool}/{component}" slug from a CHANGELOG.md path.
 # Strips the filename and type-directory segment (skills/agents/commands/hooks/rules/bundles).
 # Returns empty string for root CHANGELOG.md (root uses bare vX.Y.Z tags).
-# e.g. claude-code/skills/changelog/CHANGELOG.md -> claude-code/changelog
+# e.g. skills/changelog/CHANGELOG.md -> skill/changelog
 changelog_slug() {
   local dir="${1%/CHANGELOG.md}"
   [ "$dir" = "$1" ] || [ "$dir" = "CHANGELOG.md" ] && echo "" && return
   local tool="${dir%%/*}" component="${dir##*/}" middle="${dir#*/}"
+  case "$tool:$middle" in
+    skills:*)
+      if [[ "$dir" == "skills/"* && "$middle" != */* ]]; then
+        echo "skill/${component}"
+        return
+      fi
+      ;;
+    rules:*)
+      if [[ "$dir" == "rules/"* && "$middle" != */* ]]; then
+        echo "rule/${component}"
+        return
+      fi
+      ;;
+  esac
   case "$middle" in
     skills/*|agents/*|commands/*|hooks/*|rules/*|bundles/*)
       echo "${tool}/${component}" ;;

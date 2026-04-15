@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- BREAKING: v3.0 layout — hooks remain under `claude-code/hooks/pre-push-secrets/`; skill/rule path patterns in some scripts updated to new `claude-code/skills/` and `claude-code/rules/` locations.
+- BREAKING: v3.0 layout — hooks remain under `claude-code/hooks/pre-push-secrets/`; historical skill/rule path patterns in some scripts were updated for the then-current layout.
 
 ## [2.0.0] - 2026-04-12
 

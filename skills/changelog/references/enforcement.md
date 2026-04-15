@@ -3,7 +3,7 @@
 Two topics: the drift-prevention layers that enforce CHANGELOG hygiene across the
 toolkit (informational — these run automatically), and how to map raw commits to
 changelog categories when generating entries programmatically. Load this file when
-building or debugging automated CHANGELOG pipelines (e.g., `/sync-toolkit`).
+building or debugging automated CHANGELOG pipelines (e.g., `sync-toolkit`).
 
 ## Drift-Prevention Enforcement
 
@@ -22,12 +22,12 @@ When an agent begins writing or editing a toolkit component file,
 `toolkit-edit-reminder.sh` injects a reminder into the agent context reinforcing the
 user-facing summary requirement and the SemVer bump table.
 
-### Layer 3 — `/sync-toolkit` command
+### Layer 3 — `sync-toolkit` workflow
 
-The `/sync-toolkit` slash command orchestrates full synchronization: detects changes,
-spawns per-component agents to generate user-facing CHANGELOG entries, bumps versions,
-copies to `~/.claude`, and commits per-component. The command body explicitly prohibits
-commit-log dumps in every spawned agent prompt.
+The `sync-toolkit` workflow orchestrates full synchronization: detects changes, spawns
+per-component agents to generate user-facing CHANGELOG entries, bumps versions,
+regenerates tool adapters from canonical sources, and commits per-component. The
+workflow body explicitly prohibits commit-log dumps in every spawned agent prompt.
 
 Additional layers (semantic CHANGELOG validation, CI-side enforcement) are potential
 future enhancements.
@@ -37,7 +37,7 @@ future enhancements.
 ## Commit Classification Rules
 
 Map commits and change descriptions to changelog categories when automating entry
-generation. This is how `/sync-toolkit` and similar pipelines pick the right
+generation. This is how `sync-toolkit` and similar pipelines pick the right
 `### Category` for each entry.
 
 | Commit prefix / keyword | Category |

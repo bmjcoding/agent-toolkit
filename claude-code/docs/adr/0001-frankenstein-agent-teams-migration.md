@@ -36,7 +36,7 @@ Claude Code agent teams (experimental) offer a native coordination layer with sh
 | 3a | site-reliability-engineer | inherit | Health checks, observability, inline fixes |
 | 3b | design-architect | inherit | Architecture + UI review, structural lint |
 | 4 | quality-engineer | inherit | Remediation, integration-repair, post-validation |
-| 4 | release-gate | inherit | SHIP/NO-SHIP verdict via /prod-readiness |
+| 4 | release-gate | inherit | SHIP/NO-SHIP verdict via the prod-readiness workflow |
 | 5 | doc-writer | sonnet | README, CHANGELOG, API docs, ADRs |
 | 6 | release-engineer | sonnet | Commits, PR, push, optional versioning |
 | 7 | autoresearch-analyst | sonnet | Retrospective + self-improvement |

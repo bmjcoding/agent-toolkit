@@ -9,7 +9,7 @@ metadata:
   version: 1.0.1
 ---
 
-Verify git hygiene and commit safety before pushing. Use parallel agents to maximize speed. Scope resolution, autonomy, and `--dry-run` rules are defined in CLAUDE.md.
+Verify git hygiene and commit safety before pushing. Use parallel agents to maximize speed. Scope resolution, autonomy, and `--dry-run` rules are defined in AGENTS.md.
 
 ## Check 0: Deterministic scan
 

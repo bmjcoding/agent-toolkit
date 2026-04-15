@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # integrity-check.sh — SHA-256 integrity monitor for OpenAI Codex CLI toolkit files
-# Ported from claude-code/scripts/integrity-check.sh; adapted for the openai-codex
+# Shared integrity check adapted for the OpenAI Codex surface
 # tool surface (agents, hooks, skills, rules, bundles).
 #
 # Usage: ./integrity-check.sh [baseline|verify|auto|warn]

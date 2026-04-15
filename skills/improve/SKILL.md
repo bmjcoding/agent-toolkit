@@ -1,7 +1,7 @@
 ---
 name: improve
 description: >
-  Apply retro recommendations with automated verification. Use after /retro
+  Apply retro recommendations with automated verification. Use after `retro`
   or anytime you want to improve a skill/agent. Supports --validate for
   autonomous improve-then-review validation cycles.
 disable-model-invocation: true
@@ -13,6 +13,11 @@ argument-hint: "remove <rec-id> | [retro-output or recommendation] [--validate] 
 
 Apply changes to skill/agent definitions, verify each one, accept or revert. Each change gets fixed-budget verification (max 3 checks, eval capped at 2 min) and a binary accept/reject gate — no partial acceptance, no retrying failed changes.
 
+Resolve `STATE_ROOT` once at the start of the run. Prefer, in order: `.agents/`,
+`.claude/`, `.codex/`, `~/.agents/`, `~/.claude/`, `~/.codex/`. Use the first existing
+directory. If none exist and the workflow needs persistent local state, create `.agents/`
+in the current project and use that as `STATE_ROOT`.
+
 ## Workflow
 
 ### 1. Parse Recommendations
@@ -20,8 +25,8 @@ Apply changes to skill/agent definitions, verify each one, accept or revert. Eac
 Locate the retro's recommendations table from one of these sources (in priority order):
 1. **`$ARGUMENTS`** — if a file path is passed, read it
 2. **Current conversation** — search backward for section "3.7 Recommendations" or a table with columns What/Where/Why/Priority/Type. Extract the table rows.
-3. **Most recent retro on disk** — list `~/.claude/retros/*/` directories, find the newest `.md` file by timestamp in the filename, read its section 3.7. This handles context compaction and fresh-session invocation.
-4. If none of the above produce recommendations, ask the user to provide the retro output or run `/retro` first.
+3. **Most recent retro on disk** — list `STATE_ROOT/retros/*/` directories, find the newest `.md` file by timestamp in the filename, read its section 3.7. This handles context compaction and fresh-session invocation.
+4. If none of the above produce recommendations, ask the user to provide the retro output or run `retro` first.
 
 Each recommendation has:
 - **What**: the change
@@ -34,8 +39,8 @@ Sort by priority. Process P0 first.
 
 **Short-circuit**: If there are 0 `fix` recommendations (only `pattern` types), skip the apply-verify loop — go directly to step 3 (Save Patterns to Memory) and step 5 (Model Change Recommendations). If `--validate` is present, inform the user: "`--validate` has no effect — all recommendations are patterns. No definition files will be modified, so there is nothing to validate." Then proceed without the validation loop.
 
-**Rewrite threshold**: If 5+ findings target the same skill or agent definition, run an inline review-skill check first (linter + semantic review). If the verdict is **REWRITE**, stop and recommend the user run `/review-skill` on it. Do not attempt to patch a fundamentally broken definition. If the verdict is **NEEDS WORK** or **PASS**, apply the findings normally.
-  - *P0 carve-out*: If a REWRITE verdict is returned but any of the findings is P0, apply that P0 finding only, then surface the recommendation to run `/review-skill` for the remaining findings. A P0 blocker must not be left unresolved. After applying the P0 fix, still run step 5 (final quality gate) on the modified file before reporting.
+**Rewrite threshold**: If 5+ findings target the same skill or agent definition, run an inline review-skill check first (linter + semantic review). If the verdict is **REWRITE**, stop and recommend the user run `review-skill` on it. Do not attempt to patch a fundamentally broken definition. If the verdict is **NEEDS WORK** or **PASS**, apply the findings normally.
+  - *P0 carve-out*: If a REWRITE verdict is returned but any of the findings is P0, apply that P0 finding only, then surface the recommendation to run `review-skill` for the remaining findings. A P0 blocker must not be left unresolved. After applying the P0 fix, still run step 5 (final quality gate) on the modified file before reporting.
 
 ### 2. Apply-Verify Loop
 
@@ -47,7 +52,7 @@ For each `fix` recommendation, in priority order:
 Understand the current content. Identify the exact location for the change.
 
 #### b. Apply the change
-Before editing, record the file's current line count by counting the lines in the Read output from step (a), or by running `wc -l < FILE` — either is acceptable for line counting (CLAUDE.md's preference for dedicated tools applies to reading file content, not counting lines). Make the edit. Keep changes minimal and targeted — don't refactor surrounding code. After editing, record the new line count and compute the delta (lines added/removed).
+Before editing, record the file's current line count by counting the lines in the Read output from step (a), or by running `wc -l < FILE` — either is acceptable for line counting (the active project instructions' preference for dedicated tools applies to reading file content, not counting lines). Make the edit. Keep changes minimal and targeted — don't refactor surrounding code. After editing, record the new line count and compute the delta (lines added/removed).
 
 #### c. Verify (fixed budget — max 3 checks)
 
@@ -55,9 +60,14 @@ Before editing, record the file's current line count by counting the lines in th
 
 **Structural validation** (always run):
 ```bash
-# Try personal skills, then project skills, then skip with warning
-LINTER=$(find ~/.claude/skills/review-skill/scripts -name "lint-definition.py" 2>/dev/null | head -1)
+# Try repo skills, then project-local installs, then user-global installs
+LINTER=$(find skills/review-skill/scripts -name "lint-definition.py" 2>/dev/null | head -1)
+[ -z "$LINTER" ] && LINTER=$(find .agents/skills/review-skill/scripts -name "lint-definition.py" 2>/dev/null | head -1)
 [ -z "$LINTER" ] && LINTER=$(find .claude/skills/review-skill/scripts -name "lint-definition.py" 2>/dev/null | head -1)
+[ -z "$LINTER" ] && LINTER=$(find .codex/skills/review-skill/scripts -name "lint-definition.py" 2>/dev/null | head -1)
+[ -z "$LINTER" ] && LINTER=$(find ~/.agents/skills/review-skill/scripts -name "lint-definition.py" 2>/dev/null | head -1)
+[ -z "$LINTER" ] && LINTER=$(find ~/.claude/skills/review-skill/scripts -name "lint-definition.py" 2>/dev/null | head -1)
+[ -z "$LINTER" ] && LINTER=$(find ~/.codex/skills/review-skill/scripts -name "lint-definition.py" 2>/dev/null | head -1)
 python3 "${LINTER:-lint-definition.py}" TARGET_FILE --format json
 ```
 If the linter is not found, warn "lint-definition.py not found — skipping structural validation" and proceed without it. Do not fail the change because the linter is missing. Any S-code error = structural failure. Q-code warnings are informational — in particular, Q14 (version not bumped) will fire during improve because the lint runs before the version bump step. This is expected; ignore Q14 during improve.
@@ -93,19 +103,19 @@ After all fixes for a given file are accepted, apply a SemVer bump to `metadata.
 
 #### f. Changelog entry (accepted changes only)
 
-After bumping the version, append a single bullet to the component's own `CHANGELOG.md` under `## [Unreleased]`. Do NOT write a versioned `## [X.Y.Z] - YYYY-MM-DD` header here — version promotion happens at release time via the `/changelog` skill.
+After bumping the version, append a single bullet to the component's own `CHANGELOG.md` under `## [Unreleased]`. Do NOT write a versioned `## [X.Y.Z] - YYYY-MM-DD` header here — version promotion happens at release time via the `changelog` skill.
 
 Determine the target CHANGELOG.md path using the routing rules table:
 
 - **Skills**: `skills/{name}/CHANGELOG.md`
 - **Agents**: `agents/{name}/CHANGELOG.md`
-- **Commands**: `commands/{name}/CHANGELOG.md`
+- **Workflows**: `workflows/{name}/CHANGELOG.md`
 - **Hooks**: `hooks/{name}/CHANGELOG.md`
 - **Rules**: `rules/{name}/CHANGELOG.md`
 - **Reference files and scripts inside a component directory** (e.g., `skills/{name}/references/`, `agents/{name}/evals/`): append to that component's `CHANGELOG.md`, not a global one
-- **All other files** (e.g., `CLAUDE.md`, memory files, global scripts, docs): append to `~/.claude/CHANGELOG.md`. Create it with a `# Changelog — ~/.claude` header if it doesn't exist.
+- **All other files** (e.g., `AGENTS.md`, compatibility shims, memory files, global scripts, docs): append to `STATE_ROOT/CHANGELOG.md`. Create it with a `# Changelog` header if it doesn't exist.
 
-Every component has its own `CHANGELOG.md` in its subdirectory. There are NO aggregated changelogs — do not write to `agents/CHANGELOG.md` or `commands/CHANGELOG.md` at the category root level.
+Every component has its own `CHANGELOG.md` in its subdirectory. There are NO aggregated changelogs — do not write to `agents/CHANGELOG.md` or `workflows/CHANGELOG.md` at the category root level.
 
 Write the entry as follows:
 1. Find or create the `## [Unreleased]` section (it must appear before any versioned section).
@@ -118,9 +128,9 @@ If the changelog file doesn't exist, create it with the required header block fr
 
 #### g. Record rule in expiry metadata (accepted `fix` recommendations only)
 
-After the changelog entry, record the applied rule in `~/.claude/metadata/rule-expiry.json` so future `/improve` runs can surface expired rules.
+After the changelog entry, record the applied rule in `STATE_ROOT/metadata/rule-expiry.json` so future `improve` runs can surface expired rules.
 
-1. Read `~/.claude/metadata/rule-expiry.json` (create with `{"version":"1.0.0","rules":{}}` if it doesn't exist).
+1. Read `STATE_ROOT/metadata/rule-expiry.json` (create with `{"version":"1.0.0","rules":{}}` if it doesn't exist).
 2. Derive `rec-id` from the recommendation row: if the retro table provides one, use it; otherwise synthesize `<SLUG>-<YYYYMMDD-HHMMSS>` from the recommendation slug + current timestamp.
 3. Append an entry under `rules`:
    - `rec_id`: `<rec-id>`
@@ -134,19 +144,19 @@ After the changelog entry, record the applied rule in `~/.claude/metadata/rule-e
    - `notes`: short free-text context (under 200 chars)
 4. Write the updated JSON atomically (write to `.tmp`, then `mv`).
 
-Skip this step if the target file is a memory/pattern file (under `~/.claude/projects/*/memory/` or `references/`) — rule-expiry tracking applies to executable rules in skills/agents, not to reference material.
+Skip this step if the target file is a memory/pattern file (under `STATE_ROOT/projects/*/memory/` or `references/`) — rule-expiry tracking applies to executable rules in skills/agents, not to reference material.
 
 ### 3. Save Patterns to Memory
 
 For each `pattern` recommendation:
 1. Check if a similar memory already exists (search memory files)
 2. If updating: edit the existing memory file
-3. If new: write a memory file to `~/.claude/projects/<project-slug>/memory/` using this naming convention:
+3. If new: write a memory file to `STATE_ROOT/projects/<project-slug>/memory/` using this naming convention:
    - `feedback_<topic>.md` — lessons learned, anti-patterns, gotchas
    - `reference_<topic>.md` — reference material, lookup tables, conventions
    - `project_<topic>.md` — project state, active constraints, decisions
    Include proper frontmatter (type: feedback/reference/project, Why: one line, How: one-line application rule)
-4. Update `~/.claude/projects/<project-slug>/memory/MEMORY.md` index
+4. Update `STATE_ROOT/projects/<project-slug>/memory/MEMORY.md` index
 
 ### 4. Report
 
@@ -155,9 +165,9 @@ Present a summary table:
 ```
 | # | Recommendation | File | Action | Diff | Version | Verification |
 |---|---|---|---|---|---|---|
-| 1 | Add zod validation convention to CLAUDE.md | CLAUDE.md | accepted | +3 lines | — | structural: pass |
-| 2 | Require exact types in contracts | agents/planner.md | accepted | +5 -1 lines | 1.2.0→1.2.1 | structural: pass, semantic: pass |
-| 3 | Add auth-check context to quality-engineer | agents/quality-engineer.md | reverted | +8 lines (reverted) | — | eval: fail (broke existing test) |
+| 1 | Add zod validation convention to AGENTS.md | AGENTS.md | accepted | +3 lines | — | structural: pass |
+| 2 | Require exact types in contracts | agents/planner/AGENT.md | accepted | +5 -1 lines | 1.2.0→1.2.1 | structural: pass, semantic: pass |
+| 3 | Add auth-check context to quality-engineer | agents/quality-engineer/AGENT.md | reverted | +8 lines (reverted) | — | eval: fail (broke existing test) |
 | 4 | Save routing heuristic | memory/feedback_dispatch.md | saved | — | — | — |
 ```
 
@@ -172,8 +182,13 @@ End with:
 After all changes are applied, versioned, and changelogged, run a final lint pass on every modified file:
 
 ```bash
-LINTER=$(find ~/.claude/skills/review-skill/scripts -name "lint-definition.py" 2>/dev/null | head -1)
+LINTER=$(find skills/review-skill/scripts -name "lint-definition.py" 2>/dev/null | head -1)
+[ -z "$LINTER" ] && LINTER=$(find .agents/skills/review-skill/scripts -name "lint-definition.py" 2>/dev/null | head -1)
 [ -z "$LINTER" ] && LINTER=$(find .claude/skills/review-skill/scripts -name "lint-definition.py" 2>/dev/null | head -1)
+[ -z "$LINTER" ] && LINTER=$(find .codex/skills/review-skill/scripts -name "lint-definition.py" 2>/dev/null | head -1)
+[ -z "$LINTER" ] && LINTER=$(find ~/.agents/skills/review-skill/scripts -name "lint-definition.py" 2>/dev/null | head -1)
+[ -z "$LINTER" ] && LINTER=$(find ~/.claude/skills/review-skill/scripts -name "lint-definition.py" 2>/dev/null | head -1)
+[ -z "$LINTER" ] && LINTER=$(find ~/.codex/skills/review-skill/scripts -name "lint-definition.py" 2>/dev/null | head -1)
 for FILE in <list of modified files>; do
   python3 "${LINTER}" "$FILE" --format json
 done
@@ -181,7 +196,7 @@ done
 
 This is a post-improvement sweep — not a per-change check. It catches regressions that individual changes didn't trigger (e.g., cumulative line count exceeding 500, or a new cross-reference that broke from a different change).
 
-- **S-code errors**: Stop. A change introduced structural damage. Revert the last change that touched the failing file and note it as `reverted: post-gate structural failure`. Also open `~/.claude/metadata/rule-expiry.json` and update the matching rule entry: set `status = "reverted"` and `last_reviewed = <today>`. If no matching entry exists (because step 2g was skipped for a pattern/memory file), skip this rollback silently.
+- **S-code errors**: Stop. A change introduced structural damage. Revert the last change that touched the failing file and note it as `reverted: post-gate structural failure`. Also open `STATE_ROOT/metadata/rule-expiry.json` and update the matching rule entry: set `status = "reverted"` and `last_reviewed = <today>`. If no matching entry exists (because step 2g was skipped for a pattern/memory file), skip this rollback silently.
 - **Q-code warnings (new ones only)**: Note in the report but do not revert. The user decides on warnings.
 - **No new issues**: Proceed to save.
 
@@ -189,13 +204,13 @@ If the linter is not found, skip with warning (same as per-change check).
 
 **Rule-expiry pruning pass**:
 
-Read `~/.claude/metadata/rule-expiry.json`. Surface entries where `status == "active"` AND `review_by < today` as:
+Read `STATE_ROOT/metadata/rule-expiry.json`. Surface entries where `status == "active"` AND `review_by < today` as:
 
-> N rules past review_by date — run `/improve remove <rec-id>` to evaluate each.
+> N rules past review_by date — run `improve remove <rec-id>` to evaluate each.
 
 Emit a one-row-per-entry table with `rec-id`, `target_file`, and `anchor`. Do NOT auto-remove; this is a surfacer.
 
-If `~/.claude/metadata/rule-expiry.json` does not exist, or `rules` is empty, skip silently.
+If `STATE_ROOT/metadata/rule-expiry.json` does not exist, or `rules` is empty, skip silently.
 
 ### 6. Model Change Recommendations
 
@@ -223,7 +238,7 @@ Derive the subject value using this rule:
 - From conversation (parsing source 2): search backward for the retro header `# Retro: {subject} — {date}` and extract `{subject}`
 - If no header is found in conversation: default to `claude`
 
-Write a JSON file to `~/.claude/retros/{subject}/YYYY-MM-DDTHHMMSS-improve.json` with:
+Write a JSON file to `STATE_ROOT/retros/{subject}/YYYY-MM-DDTHHMMSS-improve.json` with:
 
 Include `model_recommendations` as an array of objects `{"agent": "name", "current": "model", "suggested": "model", "rationale": "why"}` for any agents where a model downgrade or upgrade is recommended based on observed performance. Use an empty array `[]` if no model changes are recommended — do not omit the field.
 
@@ -247,15 +262,15 @@ Include `model_recommendations` as an array of objects `{"agent": "name", "curre
   "total_lines_added": 16,
   "total_lines_removed": 3,
   "changes": [
-    {"file": "agents/planner.md", "action": "accepted", "lines_added": 5, "lines_removed": 1, "version_before": "1.2.0", "version_after": "1.2.1"},
-    {"file": "CLAUDE.md", "action": "accepted", "lines_added": 3, "lines_removed": 0},
-    {"file": "agents/quality-engineer.md", "action": "reverted", "reason": "eval fail"}
+    {"file": "agents/planner/AGENT.md", "action": "accepted", "lines_added": 5, "lines_removed": 1, "version_before": "1.2.0", "version_after": "1.2.1"},
+    {"file": "AGENTS.md", "action": "accepted", "lines_added": 3, "lines_removed": 0},
+    {"file": "agents/quality-engineer/AGENT.md", "action": "reverted", "reason": "eval fail"}
   ],
   "recommendations_applied": ["#1 description", "#2 description"],
   "recommendations_reverted": ["#3 description — reason"],
   "file_diffs": [
     {
-      "file": "agents/planner.md",
+      "file": "agents/planner/AGENT.md",
       "unified_diff_truncated": "@@ -14,6 +14,7 @@\n context\n+## New rule\n",
       "truncated": false
     }
@@ -266,9 +281,14 @@ Include `model_recommendations` as an array of objects `{"agent": "name", "curre
 Append to trend history:
 ```bash
 # Try personal skills, then project skills
-HISTORY_SCRIPT=$(find ~/.claude/skills/retro/scripts -name "retro-history.py" 2>/dev/null | head -1)
+HISTORY_SCRIPT=$(find skills/retro/scripts -name "retro-history.py" 2>/dev/null | head -1)
+[ -z "$HISTORY_SCRIPT" ] && HISTORY_SCRIPT=$(find .agents/skills/retro/scripts -name "retro-history.py" 2>/dev/null | head -1)
 [ -z "$HISTORY_SCRIPT" ] && HISTORY_SCRIPT=$(find .claude/skills/retro/scripts -name "retro-history.py" 2>/dev/null | head -1)
-python3 "${HISTORY_SCRIPT:-retro-history.py}" save ~/.claude/retros/{subject}/YYYY-MM-DDTHHMMSS-improve.json --history ~/.claude/retros
+[ -z "$HISTORY_SCRIPT" ] && HISTORY_SCRIPT=$(find .codex/skills/retro/scripts -name "retro-history.py" 2>/dev/null | head -1)
+[ -z "$HISTORY_SCRIPT" ] && HISTORY_SCRIPT=$(find ~/.agents/skills/retro/scripts -name "retro-history.py" 2>/dev/null | head -1)
+[ -z "$HISTORY_SCRIPT" ] && HISTORY_SCRIPT=$(find ~/.claude/skills/retro/scripts -name "retro-history.py" 2>/dev/null | head -1)
+[ -z "$HISTORY_SCRIPT" ] && HISTORY_SCRIPT=$(find ~/.codex/skills/retro/scripts -name "retro-history.py" 2>/dev/null | head -1)
+python3 "${HISTORY_SCRIPT:-retro-history.py}" save STATE_ROOT/retros/{subject}/YYYY-MM-DDTHHMMSS-improve.json --history STATE_ROOT/retros
 ```
 If the script is not found, warn "retro-history.py not found — outcome not saved to trend history" but do not fail the improve run.
 
@@ -284,28 +304,28 @@ This lets future retros answer: "Were the last retro's recommendations applied? 
 - **No double version bumps**: Validation iterations append sub-entries, don't create new versions
 - **Convergence**: Exit when all files PASS or no progress after an iteration
 
-### 9. Remove Subcommand (`/improve remove <rec-id>`)
+### 9. Remove Subcommand (`improve remove <rec-id>`)
 
-When `/improve` is invoked with `remove <rec-id>` instead of a retro source:
+When `improve` is invoked with `remove <rec-id>` instead of a retro source:
 
 1. **Confirmation gate** — print:
-   > Remove rule `<rec-id>`? This deletes the rule text from its host file AND marks it `removed` in `~/.claude/metadata/rule-expiry.json`. Type `yes` to proceed. Anything else aborts.
+   > Remove rule `<rec-id>`? This deletes the rule text from its host file AND marks it `removed` in `STATE_ROOT/metadata/rule-expiry.json`. Type `yes` to proceed. Anything else aborts.
    Wait for a one-word response. Only proceed on exact `yes` (case-insensitive). Any other response → `Aborted. No changes made.`
-2. **Read** `~/.claude/metadata/rule-expiry.json`. Locate the entry for `<rec-id>`. If missing → abort: `No entry for <rec-id> in rule-expiry.json.`
+2. **Read** `STATE_ROOT/metadata/rule-expiry.json`. Locate the entry for `<rec-id>`. If missing → abort: `No entry for <rec-id> in rule-expiry.json.`
 3. **Delete the rule text** from `target_file` using `anchor` as the locator. If the anchor doesn't match → abort: `Anchor not found in <target_file> — rule may already have been deleted or the file has diverged. Manual review required.`
 4. **Bump the host file's frontmatter `# version:`** per SemVer. Rule removal defaults to MINOR (backward-compatible feature removal); upgrade to MAJOR if the rule governed contract/public behavior. Document the choice in the changelog entry below.
 5. **Update** the entry in `rule-expiry.json`: set `status = "removed"`, set `last_reviewed = <today>`. Write atomically.
 6. **Append changelog entry** to the host file's `CHANGELOG.md` under `### Removed`:
-   - `- Removed rule "<anchor>" (<rec-id>) per /improve remove.`
+   - `- Removed rule "<anchor>" (<rec-id>) per improve remove.`
 7. **Report** the action: host file path, old→new version, removed rule's anchor, link to changelog entry.
 
-This subcommand is disjoint from `/improve`'s main retro-application flow. It does not parse recommendations and does not run the apply-verify loop.
+This subcommand is disjoint from `improve`'s main retro-application flow. It does not parse recommendations and does not run the apply-verify loop.
 
 ## Gotchas
 
 - **Don't chain dependent changes.** If recommendation B depends on A's change, and A is reverted, skip B and flag the dependency.
 - **Don't rewrite, patch.** The smallest edit that addresses the finding is the right edit. Rewriting a section to "improve clarity" while fixing a bug conflates two changes and makes revert harder.
-- **Respect protected files.** Do not modify lockfiles, CI configs, migration files, or auth modules (per CLAUDE.md auto-fix safety rules). Report these as `skipped: protected file` in the summary.
+- **Respect protected files.** Do not modify lockfiles, CI configs, migration files, or auth modules (per `AGENTS.md` auto-fix safety rules). Report these as `skipped: protected file` in the summary.
 - **Memory deduplication matters.** Before writing a new memory file, grep existing memories for the key concept. Duplicate memories cause contradictory guidance in future sessions.
 - **Validation loop is post-improve only.** The `--validate` loop runs AFTER the main improve workflow finishes — it does not replace the per-change verification in step 2c. The per-change checks catch individual regressions; the validation loop catches definition-level quality gaps.
 - **No double version bumps.** Validation iterations must NOT call step 2e (version bump). The initial pass owns versioning. If you're in iteration N>0 of the validation loop, skip version bump. For changelog: append a sub-entry under the existing version header, not a new header.

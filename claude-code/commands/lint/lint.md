@@ -9,7 +9,7 @@ metadata:
   version: 1.0.0
 ---
 
-Run linting and standards compliance checks on the code in scope. Auto-fix everything possible. Use parallel agents to maximize speed. Scope resolution, autonomy, and `--dry-run` rules are defined in CLAUDE.md.
+Run linting and standards compliance checks on the code in scope. Auto-fix everything possible. Use parallel agents to maximize speed. Scope resolution, autonomy, and `--dry-run` rules are defined in AGENTS.md.
 
 ## Phase 1: Detect and bootstrap tooling
 

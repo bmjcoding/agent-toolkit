@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-# Ported from claude-code/hooks/protect-config/protect-config.sh for Codex CLI hooks (experimental)
-# Requires: features.codex_hooks=true in ~/.codex/config.toml
-# Note: Codex hooks stdin payload schema may differ from Claude Code's; validate in your environment.
+# Control-plane protection hook for the VS Code Copilot surface
+# Requires: VS Code Copilot hooks enabled in your VS Code environment
+# Note: VS Code Copilot hook stdin payload schema may differ from Claude Code's; validate in your environment.
 #
 # Claude Code env vars used: none directly — reads stdin JSON for tool_name and tool_input.
-# Codex mapping: PreToolUse / matcher: Bash|Edit|Write
+# VS Code Copilot mapping: PreToolUse / matcher: Bash|Edit|Write
 # Note: The stdin JSON field names (.tool_name, .tool_input.command, .tool_input.file_path)
-# are Claude Code conventions. Codex may use different field names — check Codex docs and
-# update the jq expressions below if field names differ in your Codex version.
+# are Claude Code conventions. VS Code Copilot may use different field names — check VS Code Copilot docs and
+# update the jq expressions below if field names differ in your VS Code Copilot version.
 #
 # Original purpose: PreToolUse hook — block Bash/Edit/Write calls that write to control-plane
 # files (~/.claude settings.json, hooks/, CLAUDE.md, agents/, etc.).

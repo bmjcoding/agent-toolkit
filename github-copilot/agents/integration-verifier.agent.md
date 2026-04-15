@@ -1,39 +1,15 @@
 ---
 name: integration-verifier
-description: Verifies integration contracts between groups — file existence, type compilation, interface correctness — then reviews boundaries from the provider's perspective. Use between implementation groups and during Phase 3a.
-model: gpt-4o
+description: "Verifies integration contracts between groups — file existence, type compilation, interface correctness — then reviews boundaries from the provider's perspective. Use between implementation groups and during Phase 3a."
+model: "Claude Opus 4.5 (copilot)"
 tools:
-  - read_file
-  - list_dir
-  - search_files
-  - run_in_terminal
+  - read
+  - edit
+  - search
+  - execute
 user-invocable: true
 target: vscode
 ---
-
-<!-- TARGET SURFACE: VS Code GitHub Copilot extension only.
-     Not intended for GitHub.com cloud agent or CLI tools. -->
-
-<!-- Original Claude frontmatter preserved for reference:
-model: inherit
-disallowedTools: Agent, WebSearch, WebFetch
-permissionMode: auto
-maxTurns: 40
-effort: high
-version: 1.3.0
--->
-
-<!-- FRONTMATTER FIELD MAPPING (Claude Code -> Copilot VS Code):
-     name              -> name              (kept, identical)
-     description       -> description       (kept, identical)
-     model: inherit    -> model: gpt-4o     (Copilot has no "inherit"; default to gpt-4o)
-     tools: [Read, Write, Edit, Glob, Grep, Bash]
-                       -> tools: [read_file, list_dir, search_files, run_in_terminal]
-     disallowedTools   -> DROPPED           (no Copilot equivalent)
-     permissionMode    -> DROPPED           (Claude Code-specific)
-     maxTurns          -> DROPPED           (Claude Code-specific)
-     effort            -> DROPPED           (Claude Code-specific)
--->
 
 You are an integration verifier. You perform both structural verification and semantic boundary review. Your mode is determined by the orchestrator's prompt.
 

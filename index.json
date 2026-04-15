@@ -190,26 +190,6 @@
     "path": "claude-code/hooks/toolkit-edit-reminder"
   },
   {
-    "slug": "docker",
-    "category": "rule",
-    "path": "claude-code/rules/docker/docker.md"
-  },
-  {
-    "slug": "logging",
-    "category": "rule",
-    "path": "claude-code/rules/logging/logging.md"
-  },
-  {
-    "slug": "node",
-    "category": "rule",
-    "path": "claude-code/rules/node/node.md"
-  },
-  {
-    "slug": "python",
-    "category": "rule",
-    "path": "claude-code/rules/python/python.md"
-  },
-  {
     "slug": "autoresearch-analyst",
     "category": "agent",
     "path": "github-copilot/agents/autoresearch-analyst.agent.md"
@@ -360,91 +340,6 @@
     "path": "github-copilot/hooks/toolkit-edit-reminder"
   },
   {
-    "slug": "docker",
-    "category": "rule",
-    "path": "github-copilot/rules/docker"
-  },
-  {
-    "slug": "logging",
-    "category": "rule",
-    "path": "github-copilot/rules/logging"
-  },
-  {
-    "slug": "node",
-    "category": "rule",
-    "path": "github-copilot/rules/node"
-  },
-  {
-    "slug": "python",
-    "category": "rule",
-    "path": "github-copilot/rules/python"
-  },
-  {
-    "slug": "backend",
-    "category": "skill",
-    "path": "github-copilot/skills/backend/SKILL.md"
-  },
-  {
-    "slug": "changelog",
-    "category": "skill",
-    "path": "github-copilot/skills/changelog/SKILL.md"
-  },
-  {
-    "slug": "design-authority",
-    "category": "skill",
-    "path": "github-copilot/skills/design-authority/SKILL.md"
-  },
-  {
-    "slug": "design-lint",
-    "category": "skill",
-    "path": "github-copilot/skills/design-lint/SKILL.md"
-  },
-  {
-    "slug": "frontend",
-    "category": "skill",
-    "path": "github-copilot/skills/frontend/SKILL.md"
-  },
-  {
-    "slug": "git-ship",
-    "category": "skill",
-    "path": "github-copilot/skills/git-ship/SKILL.md"
-  },
-  {
-    "slug": "improve",
-    "category": "skill",
-    "path": "github-copilot/skills/improve/SKILL.md"
-  },
-  {
-    "slug": "infra",
-    "category": "skill",
-    "path": "github-copilot/skills/infra/SKILL.md"
-  },
-  {
-    "slug": "observability-patterns",
-    "category": "skill",
-    "path": "github-copilot/skills/observability-patterns/SKILL.md"
-  },
-  {
-    "slug": "owasp-reference",
-    "category": "skill",
-    "path": "github-copilot/skills/owasp-reference/SKILL.md"
-  },
-  {
-    "slug": "prod-readiness",
-    "category": "skill",
-    "path": "github-copilot/skills/prod-readiness/SKILL.md"
-  },
-  {
-    "slug": "retro",
-    "category": "skill",
-    "path": "github-copilot/skills/retro/SKILL.md"
-  },
-  {
-    "slug": "review-skill",
-    "category": "skill",
-    "path": "github-copilot/skills/review-skill/SKILL.md"
-  },
-  {
     "slug": "autoresearch-analyst",
     "category": "agent",
     "path": "openai-codex/agents/autoresearch-analyst"
@@ -560,36 +455,6 @@
     "path": "openai-codex/bundles/self-improvement"
   },
   {
-    "slug": "audit",
-    "category": "command",
-    "path": "openai-codex/commands-unsupported/audit"
-  },
-  {
-    "slug": "backlog",
-    "category": "command",
-    "path": "openai-codex/commands-unsupported/backlog"
-  },
-  {
-    "slug": "git-verify",
-    "category": "command",
-    "path": "openai-codex/commands-unsupported/git-verify"
-  },
-  {
-    "slug": "lint",
-    "category": "command",
-    "path": "openai-codex/commands-unsupported/lint"
-  },
-  {
-    "slug": "sync-toolkit",
-    "category": "command",
-    "path": "openai-codex/commands-unsupported/sync-toolkit"
-  },
-  {
-    "slug": "test",
-    "category": "command",
-    "path": "openai-codex/commands-unsupported/test"
-  },
-  {
     "slug": "branch-guard",
     "category": "hook",
     "path": "openai-codex/hooks/branch-guard"
@@ -637,87 +502,22 @@
   {
     "slug": "docker",
     "category": "rule",
-    "path": "openai-codex/rules/docker"
+    "path": "rules/docker/docker.md"
   },
   {
     "slug": "logging",
     "category": "rule",
-    "path": "openai-codex/rules/logging"
+    "path": "rules/logging/logging.md"
   },
   {
     "slug": "node",
     "category": "rule",
-    "path": "openai-codex/rules/node"
+    "path": "rules/node/node.md"
   },
   {
     "slug": "python",
     "category": "rule",
-    "path": "openai-codex/rules/python"
-  },
-  {
-    "slug": "backend",
-    "category": "skill",
-    "path": "openai-codex/skills/backend"
-  },
-  {
-    "slug": "changelog",
-    "category": "skill",
-    "path": "openai-codex/skills/changelog"
-  },
-  {
-    "slug": "design-authority",
-    "category": "skill",
-    "path": "openai-codex/skills/design-authority"
-  },
-  {
-    "slug": "design-lint",
-    "category": "skill",
-    "path": "openai-codex/skills/design-lint"
-  },
-  {
-    "slug": "frontend",
-    "category": "skill",
-    "path": "openai-codex/skills/frontend"
-  },
-  {
-    "slug": "git-ship",
-    "category": "skill",
-    "path": "openai-codex/skills/git-ship"
-  },
-  {
-    "slug": "improve",
-    "category": "skill",
-    "path": "openai-codex/skills/improve"
-  },
-  {
-    "slug": "infra",
-    "category": "skill",
-    "path": "openai-codex/skills/infra"
-  },
-  {
-    "slug": "observability-patterns",
-    "category": "skill",
-    "path": "openai-codex/skills/observability-patterns"
-  },
-  {
-    "slug": "owasp-reference",
-    "category": "skill",
-    "path": "openai-codex/skills/owasp-reference"
-  },
-  {
-    "slug": "prod-readiness",
-    "category": "skill",
-    "path": "openai-codex/skills/prod-readiness"
-  },
-  {
-    "slug": "retro",
-    "category": "skill",
-    "path": "openai-codex/skills/retro"
-  },
-  {
-    "slug": "review-skill",
-    "category": "skill",
-    "path": "openai-codex/skills/review-skill"
+    "path": "rules/python/python.md"
   },
   {
     "slug": "backend",

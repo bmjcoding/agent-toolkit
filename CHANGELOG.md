@@ -8,6 +8,12 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Changed
+
+- Re-established repo-root `skills/` and new repo-root `rules/` as the canonical shared
+  content surfaces, with `AGENTS.md` as the primary shared instruction source and
+  `CLAUDE.md` as a compatibility shim.
+
 ## [4.1.0] - 2026-04-14
 
 ### Added
@@ -17,7 +23,7 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ### Changed
 
-- `claude-code/skills/retro` bumped to v5.0.0: finalization Save step updated for canonical v5.0 schema; directory save paths updated for reshaped layout.
+- `skills/retro` bumped to v5.0.0: finalization Save step updated for canonical v5.0 schema; directory save paths updated for reshaped layout.
 
 ## [4.0.0] - 2026-04-13
 
@@ -68,27 +74,23 @@ No action required for users who install via symlinks (`./claude-code/scripts/in
 
 ### Changed — Breaking
 
-- **Root `skills/` and `rules/` directories deleted.** All three tool directories are
-  now fully self-contained: `claude-code/skills/` (13 skills), `claude-code/rules/`
-  (4 rules), `github-copilot/skills/` (13 skills), `github-copilot/rules/` (4 rules),
-  `openai-codex/skills/` (13 skills), `openai-codex/rules/` (4 rules).
-- **Symlink targets updated** in `claude-code/scripts/install.sh`: `~/.claude/skills`
-  now points to `claude-code/skills/`; `~/.claude/rules` now points to
-  `claude-code/rules/`.
-- **Tag namespace updated**: per-tool skill and rule tags now use the tool's flat
-  namespace (e.g., `claude-code/changelog-v3.0.0`, `openai-codex/changelog-v3.0.0`)
-  instead of the universal `skill/<slug>-v<ver>` and `rule/<slug>-v<ver>` prefixes.
+- Historical note: this release temporarily moved shared skills and rules into tool-local
+  copies before the canonical root `skills/` and `rules/` ownership model was restored.
+- Historical note: Claude installer wiring briefly targeted tool-local rule and skill
+  directories before returning to repo-root shared content.
+- Historical note: tag ownership guidance briefly shifted toward tool-local shared-content
+  namespaces before returning to `skill/<slug>` and `rule/<slug>`.
 
 ### Added
 
 - **`/docs` root directory** created with repo-wide ADR files:
   `docs/adr/0004-per-component-changelog-tag-format.md` and
-  `docs/adr/0005-multi-tool-restructure.md`. Non-Claude UX doc moved to `docs/ux/`.
+  `docs/adr/0005-multi-tool-restructure.md`.
 - **`dependencies.json` per tool** — each tool directory now contains a
   `dependencies.json` (schema v1.0) declaring its external tool dependencies.
 - **10 parity gaps resolved across GitHub Copilot and OpenAI Codex CLI:**
   - Copilot: fixed `mode:` → `agent:` field in 6 prompt files.
-  - Copilot: added 12 skill wrapper instruction files under `github-copilot/skills/`.
+  - Copilot: added skill-wrapper surfaces during the intermediate per-tool-copy phase.
   - Copilot: added 9 hook equivalent instruction files under `github-copilot/hooks/`.
   - Codex: rewrote `hooks.json` to the nested `{"hooks": [...]}` format required by
     Codex CLI v0.120.0+.
@@ -143,14 +145,13 @@ No action required for users who install via symlinks (`./claude-code/scripts/in
   - `claude-code/` — Claude Code agents, commands, hooks, bundles, docs, scripts
   - `github-copilot/` — GitHub Copilot (VS Code / cloud) agents, prompts, instructions
   - `openai-codex/` — OpenAI Codex CLI agents, config templates
-  - `shared/` — tool-agnostic skills and rules (single source of truth for all tools)
-- **Skills path changed**: `skills/` (old monolithic root) is now `shared/skills/`.
-  Users with existing `~/.claude/skills` symlinks must re-run
-  `claude-code/scripts/install.sh` to retarget.
-- **Rules path changed**: `rules/` (old monolithic root) is now `shared/rules/`.
-  Existing `~/.claude/rules` symlinks must also be retargeted.
+  - `shared/` — temporary staging area used during the intermediate migration phase
+- **Skills path changed**: `skills/` briefly moved through `shared/skills/` during the
+  migration path and was later restored as the root canonical location.
+- **Rules path changed**: `rules/` briefly moved through `shared/rules/` during the
+  migration path and was later restored as the root canonical location.
 - **Tag format changed**: component tags now use `<tool>/<slug>-v<version>` (e.g.
-  `claude-code/frankenstein-v3.0.0`, `shared/changelog-v3.0.0`) instead of the
+  `claude-code/frankenstein-v3.0.0`, `skill/changelog-v3.0.0`) instead of the
   previous flat `<slug>-v<version>` format.
 - **All 48 components bumped to next major version** to signal the breaking layout
   change. Each component's own `CHANGELOG.md` records the specific version bump.
@@ -167,8 +168,7 @@ No action required for users who install via symlinks (`./claude-code/scripts/in
   targeting the VS Code Copilot extension and GitHub.com cloud agent model.
 - `openai-codex/` directory with TOML agent definitions and config templates for
   the Codex CLI (v0.120.0+).
-- `shared/rules/` housing Docker, Node, Python, and logging rule sets previously
-  under the monolithic `rules/` root.
+- Temporary migration staging for shared rule content during the v2 restructure.
 
 ### Migration guide
 

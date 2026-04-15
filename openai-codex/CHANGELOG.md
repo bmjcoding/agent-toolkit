@@ -31,8 +31,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- 13 skills in `openai-codex/skills/`, mirroring the universal skills set.
-- 4 rules in `openai-codex/rules/` (docker, logging, node, python).
+- 13 shared skills wired into the Codex surface from the canonical repo-root `skills/` source.
+- 4 rule composition inputs in `openai-codex/rules/` (docker, logging, node, python).
 - 8 bundles in `openai-codex/bundles/` for Codex surface (no command category — Codex has no custom slash commands).
 - `dependencies.json` declaring skill and rule dependencies for the Codex surface.
 - `build-agents-md.sh` script that composes a `## Rules` block for `AGENTS.md` by concatenating rule bodies.

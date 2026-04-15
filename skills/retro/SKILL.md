@@ -11,12 +11,17 @@ argument-hint: "[run-type or orchestrator-dir]"
 
 Run a structured retrospective grounded in actual artifacts. Read everything before analyzing.
 
+Resolve `STATE_ROOT` once at the start of the run. Prefer, in order: `.agents/`,
+`.claude/`, `.codex/`, `~/.agents/`, `~/.claude/`, `~/.codex/`. Use the first existing
+directory. If none exist and the workflow needs persistent local state, create `.agents/`
+in the current project and use that as `STATE_ROOT`.
+
 **Depth calibration**: Scale the retro to the run. Use this default:
 - **Lightweight** (single agent, <5 files changed, no errors): sections 3.1, 3.2, 3.7, summary table. Skip verify-claims and parse-metrics scripts. Still save and check trends. Recommendations in 3.7 must derive only from findings in 3.1 and 3.2 — do not invent root causes from sections that were skipped.
 - **Standard** (single agent/subagent with errors or rework, or any skill-based workflow): all applicable sections (3.5 only if multi-agent), run verify-claims.
 - **Full** (orchestration/pipeline, or any run with >3 findings): all sections, all scripts, trends.
 
-Always save to `~/.claude/retros/` regardless of depth — even lightweight retros contribute to trend analysis.
+Always save to `STATE_ROOT/retros/` regardless of depth — even lightweight retros contribute to trend analysis.
 
 Before writing, read the example matching your run type from `references/example-output.md` — Example A for single-agent, Example B for orchestration. For subagent runs, use Example A as the closest match — substitute subagent dispatch quality analysis for skill effectiveness.
 
@@ -56,12 +61,23 @@ Read everything that exists. Skip what doesn't.
 
 **Orchestration / pipeline** (standard/full depth only):
 4. Locate and run `parse-metrics.py` to generate structured metrics. Resolve path in this order:
-   - `~/.claude/skills/retro/scripts/parse-metrics.py` (canonical install path)
-   - `.claude/skills/retro/scripts/parse-metrics.py` (project-local install)
+   - `skills/retro/scripts/parse-metrics.py` (repo checkout)
+   - `.agents/skills/retro/scripts/parse-metrics.py` (project-local install)
+   - `.claude/skills/retro/scripts/parse-metrics.py` (project-local compatibility install)
+   - `.codex/skills/retro/scripts/parse-metrics.py` (project-local Codex install)
+   - `active retro skill install scripts/parse-metrics.py` (user-global install)
+   - `~/.agents/skills/retro/scripts/parse-metrics.py` (user-global shared install)
+   - `~/.claude/skills/retro/scripts/parse-metrics.py` (user-global Claude compatibility install)
+   - `~/.codex/skills/retro/scripts/parse-metrics.py` (user-global Codex install)
    - Skip with warning if neither path exists
    ```bash
-   METRICS_SCRIPT=$(find ~/.claude/skills/retro/scripts -name "parse-metrics.py" 2>/dev/null | head -1)
+   METRICS_SCRIPT=$(find skills/retro/scripts -name "parse-metrics.py" 2>/dev/null | head -1)
+   [ -z "$METRICS_SCRIPT" ] && METRICS_SCRIPT=$(find .agents/skills/retro/scripts -name "parse-metrics.py" 2>/dev/null | head -1)
    [ -z "$METRICS_SCRIPT" ] && METRICS_SCRIPT=$(find .claude/skills/retro/scripts -name "parse-metrics.py" 2>/dev/null | head -1)
+   [ -z "$METRICS_SCRIPT" ] && METRICS_SCRIPT=$(find .codex/skills/retro/scripts -name "parse-metrics.py" 2>/dev/null | head -1)
+   [ -z "$METRICS_SCRIPT" ] && METRICS_SCRIPT=$(find ~/.agents/skills/retro/scripts -name "parse-metrics.py" 2>/dev/null | head -1)
+   [ -z "$METRICS_SCRIPT" ] && METRICS_SCRIPT=$(find ~/.claude/skills/retro/scripts -name "parse-metrics.py" 2>/dev/null | head -1)
+   [ -z "$METRICS_SCRIPT" ] && METRICS_SCRIPT=$(find ~/.codex/skills/retro/scripts -name "parse-metrics.py" 2>/dev/null | head -1)
    [ -n "$METRICS_SCRIPT" ] && python3 "$METRICS_SCRIPT" [ORCHESTRATOR_DIR]
    ```
    Use the JSON output to ground analysis in data rather than re-parsing artifacts manually.
@@ -93,9 +109,9 @@ For each problem, classify the root cause:
 | **Dispatch error** | Wrong agent type, wrong timing, or orchestrator did work it should have delegated | Orchestration / subagent |
 | **Contract drift** | Planned interfaces didn't match implementation (types, shapes, paths) | Orchestration with contracts |
 | **Context overflow** | Agent hit context limits, ran out of turns, or produced truncated output | All run types |
-| **Misconfig** | Agent frontmatter, skill, hook, or settings.json issue | All run types |
+| **Misconfig** | Agent adapter/frontmatter, skill, hook, or runtime config issue | All run types |
 | **Tool failure** | A tool call failed, returned unexpected results, or was unavailable | All run types |
-| **External** | Network, dependency, or environment issue outside Claude Code | All run types |
+| **External** | Network, dependency, or environment issue outside the toolkit definition itself | All run types |
 
 ---
 
@@ -185,7 +201,7 @@ Compare intent to outcome:
 **D2.3 — Periodic analyst reminder (runs for every retro invocation):**
 
 ```bash
-RETRO_DIR=~/.claude/retros/agent-reviews/autoresearch-analyst
+RETRO_DIR=STATE_ROOT/retros/agent-reviews/autoresearch-analyst
 if [ -d "$RETRO_DIR" ]; then
   LAST_FILE=$(ls "$RETRO_DIR"/*.json "$RETRO_DIR"/*.md 2>/dev/null \
     | grep -v '/improve' | sort | tail -1)
@@ -195,17 +211,17 @@ if [ -d "$RETRO_DIR" ]; then
     DAYS=$(( ($(date -d "$TODAY" +%s 2>/dev/null || date -j -f "%Y-%m-%d" "$TODAY" +%s) \
             - $(date -d "$LAST_DATE" +%s 2>/dev/null || date -j -f "%Y-%m-%d" "$LAST_DATE" +%s)) / 86400 ))
     if [ "$DAYS" -gt 30 ]; then
-      echo "META-001: Last standalone autoresearch-analyst retro was $LAST_DATE, $DAYS days ago. Consider running /retro autoresearch-analyst for a focused review."
+      echo "META-001: Last standalone autoresearch-analyst retro was $LAST_DATE, $DAYS days ago. Consider running retro autoresearch-analyst for a focused review."
     fi
   fi
 fi
 ```
 
-If the script emits a META-001 line (threshold: more than 30 days since last standalone retro), prepend it as the first bullet in the 3.7 output. If `~/.claude/retros/agent-reviews/autoresearch-analyst/` does not exist or contains no matching files, skip silently — this check costs one Bash call and never blocks the retro.
+If the script emits a META-001 line (threshold: more than 30 days since last standalone retro), prepend it as the first bullet in the 3.7 output. If `STATE_ROOT/retros/agent-reviews/autoresearch-analyst/` does not exist or contains no matching files, skip silently — this check costs one Bash call and never blocks the retro.
 
 For each recommendation:
 - **What**: The specific change
-- **Where**: Exact file path to modify (agent .md, skill SKILL.md, hook, settings.json, CLAUDE.md, etc.)
+- **Where**: Exact file path to modify (canonical agent/workflow file, skill SKILL.md, hook, runtime config, compatibility shim, etc.)
 - **Why**: The problem it prevents, linked to a specific finding above
 - **Priority**: P0 (blocks next run) / P1 (measurably improves quality) / P2 (nice to have)
 - **Type**: One of:
@@ -227,13 +243,13 @@ Common retro mistakes — read before analyzing:
 
 ## Finalization
 
-After completing the analysis, read `references/finalization.md` and follow all steps in order: validation, output formatting with summary table, trend analysis, and saving to `~/.claude/retros/`. All steps must complete before presenting the /improve prompt.
+After completing the analysis, read `references/finalization.md` and follow all steps in order: validation, output formatting with summary table, trend analysis, and saving to `STATE_ROOT/retros/`. All steps must complete before presenting the improve prompt.
 
-Steps in order: (1) write draft to temp path (e.g., `/tmp/retro-draft-TIMESTAMP.md`) → (2) run verify-claims → (3) fix failures → (4) format output with summary table → (5) check trends → (6) save final to `~/.claude/retros/{subject}/`.
+Steps in order: (1) write draft to temp path (e.g., `/tmp/retro-draft-TIMESTAMP.md`) → (2) run verify-claims → (3) fix failures → (4) format output with summary table → (5) check trends → (6) save final to `STATE_ROOT/retros/{subject}/`.
 
-**Rule-expiry surfacer (runs after step 1):** Check whether `~/.claude/metadata/rule-expiry.json` exists. If it does, find all entries where `status == "active"` and `review_by < today`. If any exist, append a single P2 recommendation to the 3.7 Recommendations section:
+**Rule-expiry surfacer (runs after step 1):** Check whether `STATE_ROOT/metadata/rule-expiry.json` exists. If it does, find all entries where `status == "active"` and `review_by < today`. If any exist, append a single P2 recommendation to the 3.7 Recommendations section:
 
-> `Review expired rules: N entries in rule-expiry.json have passed their review_by date. Run /improve remove <rec-id> for each.`
+> `Review expired rules: N entries in rule-expiry.json have passed their review_by date. Run improve remove <rec-id> for each.`
 
 List the expired rec-ids inline (e.g., `REC-12, REC-18`). This is purely informational surfacing — the retro does not modify `rule-expiry.json`. If the file does not exist or has no expired active entries, skip silently.
 
@@ -242,15 +258,15 @@ List the expired rec-ids inline (e.g., `REC-12, REC-18`). This is purely informa
 If there are any `fix` type recommendations, prompt the user:
 
 > This retro produced N recommendations (N P0, N P1, N P2).
-> - `/improve` — apply recommendations with verification
-> - `/improve --validate` — apply and validate with review-skill (you'll be asked for max iterations, default 3)
+> - `improve` — apply recommendations with verification
+> - `improve --validate` — apply and validate with review-skill (you'll be asked for max iterations, default 3)
 > - "no" to skip
 
 If there are 0 `fix` recommendations and only `pattern` recommendations, note:
-> No file changes needed — run `/improve` to save patterns to memory, or skip.
+> No file changes needed — run `improve` to save patterns to memory, or skip.
 
-If there are 0 recommendations of any type, skip the /improve prompt entirely.
+If there are 0 recommendations of any type, skip the improve prompt entirely.
 
-**Important**: The user must invoke `/improve` directly — do not attempt to apply recommendations yourself or delegate to an agent. The `/improve` skill has its own accept/revert verification loop and saves the outcome to `~/.claude/retros/` for trend tracking. Applying fixes through any other mechanism (agent dispatch, manual edits) bypasses verification and outcome tracking.
+**Important**: The user must invoke `improve` directly — do not attempt to apply recommendations yourself or delegate to an agent. The `improve` skill has its own accept/revert verification loop and saves the outcome to `STATE_ROOT/retros/` for trend tracking. Applying fixes through any other mechanism (agent dispatch, manual edits) bypasses verification and outcome tracking.
 
 $ARGUMENTS

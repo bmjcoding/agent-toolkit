@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Updated follow-up workflow wording to refer to `improve` generically so the shared skill text does not assume Claude slash-command syntax.
+
 ## [5.0.0] - 2026-04-14
 
 ### Added
@@ -86,14 +90,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- BREAKING: copied from root `skills/` to `claude-code/skills/` in v3.0 per-tool restructure. Root `skills/` deleted.
+- Historical note: v3.0 temporarily moved this skill into tool-local copies before root `skills/` was restored as canonical.
 
 ## [2.0.0] - 2026-04-12
 
 ### Changed
 
 - BREAKING: moved to the agent-toolkit multi-tool layout. Files relocated:
-  - `skills/retro/` → `shared/skills/retro/`
+  - Canonical shared-skill path normalized under root `skills/`
 - CHANGELOG comparison URLs updated for repo rename `bmjcoding/claude-toolkit` → `bmjcoding/agent-toolkit`.
 
 ## [1.1.0] - 2026-04-11
@@ -118,17 +122,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/retro-v5.0.0...HEAD
-[5.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/retro-v4.2.4...claude-code/retro-v5.0.0
-[4.2.4]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/retro-v4.2.3...claude-code/retro-v4.2.4
-[4.2.3]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/retro-v4.2.2...claude-code/retro-v4.2.3
-[4.2.2]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/retro-v4.2.1...claude-code/retro-v4.2.2
-[4.2.1]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/retro-v4.2.0...claude-code/retro-v4.2.1
-[4.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/retro-v4.1.0...claude-code/retro-v4.2.0
-[4.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/retro-v4.0.1...claude-code/retro-v4.1.0
-[4.0.1]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/retro-v4.0.0...claude-code/retro-v4.0.1
-[4.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/retro-v3.0.0...claude-code/retro-v4.0.0
-[3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/shared/retro-v2.0.0...claude-code/retro-v3.0.0
-[2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/shared/retro-v1.1.0...shared/retro-v2.0.0
-[1.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/shared/retro-v1.0.0...shared/retro-v1.1.0
-[1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/retro-v1.0.0
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/skill/retro-v5.0.0...HEAD
+[5.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/retro-v4.2.4...skill/retro-v5.0.0
+[4.2.4]: https://github.com/bmjcoding/agent-toolkit/compare/skill/retro-v4.2.3...skill/retro-v4.2.4
+[4.2.3]: https://github.com/bmjcoding/agent-toolkit/compare/skill/retro-v4.2.2...skill/retro-v4.2.3
+[4.2.2]: https://github.com/bmjcoding/agent-toolkit/compare/skill/retro-v4.2.1...skill/retro-v4.2.2
+[4.2.1]: https://github.com/bmjcoding/agent-toolkit/compare/skill/retro-v4.2.0...skill/retro-v4.2.1
+[4.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/retro-v4.1.0...skill/retro-v4.2.0
+[4.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/retro-v4.0.1...skill/retro-v4.1.0
+[4.0.1]: https://github.com/bmjcoding/agent-toolkit/compare/skill/retro-v4.0.0...skill/retro-v4.0.1
+[4.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/retro-v3.0.0...skill/retro-v4.0.0
+[3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/retro-v2.0.0...skill/retro-v3.0.0
+[2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/retro-v1.1.0...skill/retro-v2.0.0
+[1.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/retro-v1.0.0...skill/retro-v1.1.0
+[1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/skill/retro-v1.0.0

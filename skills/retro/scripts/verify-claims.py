@@ -68,7 +68,7 @@ def read_retro(path):
 def extract_file_paths(content):
     """Extract file paths cited in the retro.
 
-    Looks for patterns like `src/foo/bar.ts`, `agents/planner.md`,
+    Looks for patterns like `src/foo/bar.ts`, `agents/planner/AGENT.md`,
     paths in backticks, and paths in table cells.
     """
     paths = set()

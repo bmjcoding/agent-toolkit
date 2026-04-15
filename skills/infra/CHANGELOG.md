@@ -17,14 +17,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- BREAKING: copied from root `skills/` to `claude-code/skills/` in v3.0 per-tool restructure. Root `skills/` deleted.
+- Historical note: v3.0 temporarily moved this skill into tool-local copies before root `skills/` was restored as canonical.
 
 ## [2.0.0] - 2026-04-12
 
 ### Changed
 
 - BREAKING: moved to the agent-toolkit multi-tool layout. Files relocated:
-  - `skills/infra/` → `shared/skills/infra/`
+  - Canonical shared-skill path normalized under root `skills/`
 - CHANGELOG comparison URLs updated for repo rename `bmjcoding/claude-toolkit` → `bmjcoding/agent-toolkit`.
 
 ## [1.1.0] - 2026-04-11
@@ -39,8 +39,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/infra-v3.0.0...HEAD
-[3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/shared/infra-v2.0.0...claude-code/infra-v3.0.0
-[2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/shared/infra-v1.1.0...shared/infra-v2.0.0
-[1.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/shared/infra-v1.0.0...shared/infra-v1.1.0
-[1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/infra-v1.0.0
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/skill/infra-v3.0.0...HEAD
+[3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/infra-v2.0.0...skill/infra-v3.0.0
+[2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/infra-v1.1.0...skill/infra-v2.0.0
+[1.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/infra-v1.0.0...skill/infra-v1.1.0
+[1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/skill/infra-v1.0.0

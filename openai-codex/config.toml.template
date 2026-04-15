@@ -11,7 +11,7 @@
 # ---------------------------------------------------------------------------
 
 # Default model for all sessions (override per-agent in ~/.codex/agents/<n>.toml)
-model = "codex-mini-latest"
+model = "gpt-5.4"
 
 # Sandbox mode controls filesystem and network access.
 # Values: "workspace-write" | "read-only" | "danger-full-access"
@@ -40,55 +40,55 @@ approval_policy = "on-request"
 # ---------------------------------------------------------------------------
 
 [[skills.config]]
-path = "${AGENT_TOOLKIT_DIR}/openai-codex/skills/backend/SKILL.md"
+path = "${AGENT_TOOLKIT_DIR}/skills/backend/SKILL.md"
 enabled = true
 
 [[skills.config]]
-path = "${AGENT_TOOLKIT_DIR}/openai-codex/skills/changelog/SKILL.md"
+path = "${AGENT_TOOLKIT_DIR}/skills/changelog/SKILL.md"
 enabled = true
 
 [[skills.config]]
-path = "${AGENT_TOOLKIT_DIR}/openai-codex/skills/design-authority/SKILL.md"
+path = "${AGENT_TOOLKIT_DIR}/skills/design-authority/SKILL.md"
 enabled = true
 
 [[skills.config]]
-path = "${AGENT_TOOLKIT_DIR}/openai-codex/skills/design-lint/SKILL.md"
+path = "${AGENT_TOOLKIT_DIR}/skills/design-lint/SKILL.md"
 enabled = true
 
 [[skills.config]]
-path = "${AGENT_TOOLKIT_DIR}/openai-codex/skills/frontend/SKILL.md"
+path = "${AGENT_TOOLKIT_DIR}/skills/frontend/SKILL.md"
 enabled = true
 
 [[skills.config]]
-path = "${AGENT_TOOLKIT_DIR}/openai-codex/skills/git-ship/SKILL.md"
+path = "${AGENT_TOOLKIT_DIR}/skills/git-ship/SKILL.md"
 enabled = true
 
 [[skills.config]]
-path = "${AGENT_TOOLKIT_DIR}/openai-codex/skills/improve/SKILL.md"
+path = "${AGENT_TOOLKIT_DIR}/skills/improve/SKILL.md"
 enabled = true
 
 [[skills.config]]
-path = "${AGENT_TOOLKIT_DIR}/openai-codex/skills/infra/SKILL.md"
+path = "${AGENT_TOOLKIT_DIR}/skills/infra/SKILL.md"
 enabled = true
 
 [[skills.config]]
-path = "${AGENT_TOOLKIT_DIR}/openai-codex/skills/observability-patterns/SKILL.md"
+path = "${AGENT_TOOLKIT_DIR}/skills/observability-patterns/SKILL.md"
 enabled = true
 
 [[skills.config]]
-path = "${AGENT_TOOLKIT_DIR}/openai-codex/skills/owasp-reference/SKILL.md"
+path = "${AGENT_TOOLKIT_DIR}/skills/owasp-reference/SKILL.md"
 enabled = true
 
 [[skills.config]]
-path = "${AGENT_TOOLKIT_DIR}/openai-codex/skills/prod-readiness/SKILL.md"
+path = "${AGENT_TOOLKIT_DIR}/skills/prod-readiness/SKILL.md"
 enabled = true
 
 [[skills.config]]
-path = "${AGENT_TOOLKIT_DIR}/openai-codex/skills/retro/SKILL.md"
+path = "${AGENT_TOOLKIT_DIR}/skills/retro/SKILL.md"
 enabled = true
 
 [[skills.config]]
-path = "${AGENT_TOOLKIT_DIR}/openai-codex/skills/review-skill/SKILL.md"
+path = "${AGENT_TOOLKIT_DIR}/skills/review-skill/SKILL.md"
 enabled = true
 
 # ---------------------------------------------------------------------------

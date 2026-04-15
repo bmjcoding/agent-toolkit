@@ -1,6 +1,6 @@
 # github-copilot/agents/
 
-Custom agent definitions for the GitHub Copilot extension (VS Code).
+VS Code GitHub Copilot agent adapters for the canonical root `agents/` definitions.
 
 ## Target Surface
 
@@ -20,10 +20,10 @@ them into `.github/agents/`.
 |-------|-----------------|-------|
 | `name` | Yes | Display name in Copilot Chat |
 | `description` | Yes | Shown in agent picker; first 4000 chars used in code review |
-| `tools` | Yes | Copilot tool aliases (see below) |
-| `model` | Yes | `gpt-4o`, `gpt-4o-mini`, `o1`, etc. |
+| `tools` | Yes | Use the official aliases `read`, `edit`, `search`, `execute`, `web`, `todo`, or `["*"]` |
+| `model` | Yes | Use a qualified model name such as `Claude Opus 4.5 (copilot)` |
 | `mcp-servers` | Yes | Per-agent MCP server declarations |
-| `handoffs` | Yes | Agent-to-agent handoff declarations |
+| `agents` | Yes | VS Code custom-agent handoff declarations |
 | `hooks` | Yes | Event hooks (VS Code only) |
 | `user-invocable` | Yes | Whether user can invoke directly |
 | `target` | Yes | Documentation field: `vscode` |
@@ -37,18 +37,31 @@ them into `.github/agents/`.
 
 | Claude Code Tool | Copilot VS Code Alias |
 |------------------|-----------------------|
-| `Read` | `read_file` |
-| `Write` | `create_file` / `insert_edit_into_file` |
-| `Edit` | `insert_edit_into_file` |
-| `Glob` | `list_dir` |
-| `Grep` | `search_files` (also covers Glob for text search) |
-| `Bash` | `run_in_terminal` |
-| `Agent` | (no direct equivalent; use `handoffs` frontmatter) |
-| `WebSearch` | `search_web` (if enabled) |
-| `WebFetch` | (no direct equivalent) |
+| `Read` | `read` |
+| `Write` / `Edit` | `edit` |
+| `Glob` / `Grep` | `search` |
+| `Bash` | `execute` |
+| `Agent(...)` | `agents:` frontmatter list |
+| `WebSearch` / `WebFetch` | `web` |
+| `TodoWrite` | `todo` |
+
+## Model Mapping
+
+Shared agent adapters use a cross-tool tier map:
+
+| Claude tier | Copilot model |
+|-------------|---------------|
+| `inherit` / `opus` | `Claude Opus 4.5 (copilot)` |
+| `sonnet` | `Claude Sonnet 4.5 (copilot)` |
+| `haiku` | `Claude Haiku 4.5 (copilot)` |
+
+## Canonical Source
+
+Edit the shared instruction body at `agents/<name>/AGENT.md`, then regenerate adapters
+with `node scripts/sync-canonical-adapters.js`.
 
 ## Contents
 
 | Agent | Ported from | Notes |
 |-------|-------------|-------|
-| `planner.agent.md` | `claude-code/agents/planner/planner.md` | Core planning agent |
+| `planner.agent.md` | `agents/planner/AGENT.md` | Core planning agent |

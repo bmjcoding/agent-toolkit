@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
-# Ported from claude-code/hooks/toolkit-drift-check/toolkit-drift-check.sh for Codex CLI hooks (experimental)
-# Requires: features.codex_hooks=true in ~/.codex/config.toml
-# Note: Codex hooks stdin payload schema may differ from Claude Code's; validate in your environment.
+# Toolkit drift check hook for the VS Code Copilot surface
+# Requires: VS Code Copilot hooks enabled in your VS Code environment
+# Note: VS Code Copilot hook stdin payload schema may differ from Claude Code's; validate in your environment.
 #
 # Claude Code env vars used: $CLAUDE_SESSION_ID (for per-session dedup flag in /tmp).
-# Codex equivalent: check whether Codex sets a similar session env var and substitute below.
-# If no session ID env var is available in Codex, the PID-based fallback will activate.
+# VS Code Copilot equivalent: check whether it exposes a similar session env var and substitute below.
+# If no session ID env var is available in VS Code Copilot, the PID-based fallback will activate.
 # Also uses $TOOLKIT_PATH (optional override) to locate the agent-toolkit root.
 #
-# Codex mapping: Stop (agent stop / session end event)
-# Uncertainty: Codex may not expose a SubagentStop equivalent; the closest is Stop.
-# If Codex fires PostToolUse for all tool completions, wire there with Bash|Edit|Write matcher.
+# VS Code Copilot mapping: Stop (agent stop / session end event)
+# Uncertainty: VS Code Copilot may not expose a SubagentStop equivalent; the closest is Stop.
+# If VS Code Copilot fires PostToolUse for all tool completions, wire there with Bash|Edit|Write matcher.
 #
 # Original purpose: SubagentStop hook — warn when agent-toolkit component files were edited
 # without a paired CHANGELOG.md update. Advisory only, always exits 0.
@@ -18,12 +18,12 @@
 set -uo pipefail
 
 # ---------------------------------------------------------------------------
-# Per-session dedup: warn at most once per Codex session to avoid
+# Per-session dedup: warn at most once per VS Code Copilot session to avoid
 # flooding output when multiple subagents stop in sequence.
 # ---------------------------------------------------------------------------
 # Sanitize SESSION_KEY: strip non-alphanumeric characters to prevent path
 # traversal or injection via a malformed CLAUDE_SESSION_ID value.
-# Note: substitute the appropriate Codex session env var if available.
+# Note: substitute the appropriate VS Code Copilot session env var if available.
 SESSION_KEY=$(printf '%s' "${CLAUDE_SESSION_ID:-}" | tr -dc 'a-zA-Z0-9' | head -c 64)
 # Fall back to a PID-based key if SESSION_KEY is empty after sanitization.
 if [[ -z "$SESSION_KEY" ]]; then
@@ -132,7 +132,7 @@ if [[ ${#DRIFTED[@]} -gt 0 ]]; then
       echo "  - $component"
     done
     echo ""
-    echo "Run /sync-toolkit to generate CHANGELOG entries, or update each component's CHANGELOG.md manually per KaC 1.1.0."
+    echo "Run sync-toolkit to generate CHANGELOG entries, or update each component's CHANGELOG.md manually per KaC 1.1.0."
     echo ""
   } >&2
 fi

@@ -65,23 +65,23 @@ This toolkit is a monorepo. Each component has its own version and VCS tag. **Do
 repo-wide (`vX.Y.Z`) tags** — they imply a single release that covers all components,
 which is incorrect.
 
-Canonical tag format: `{component-slug}-v{version}`
+Canonical tag format: `<namespace>/<slug>-v{version}`
 
 | Component path                         | Tag slug         | Example tag                        |
 |----------------------------------------|------------------|------------------------------------|
-| `shared/skills/changelog/`             | `changelog`      | `shared/changelog-v3.0.0`          |
-| `claude-code/agents/frankenstein/`     | `frankenstein`   | `claude-code/frankenstein-v1.5.0`  |
-| `claude-code/commands/sync-toolkit/`  | `sync-toolkit`   | `claude-code/sync-toolkit-v1.0.0`  |
+| `agents/frankenstein/`                 | `agent/frankenstein` | `agent/frankenstein-v1.5.0`     |
+| `skills/changelog/`                    | `skill/changelog` | `skill/changelog-v3.0.0`           |
+| `workflows/sync-toolkit/`              | `workflow/sync-toolkit` | `workflow/sync-toolkit-v1.0.0` |
 | `claude-code/hooks/branch-guard/`     | `branch-guard`   | `claude-code/branch-guard-v1.0.0`  |
-| `claude-code/rules/docker/`           | `docker`         | `claude-code/docker-v1.0.0`        |
+| `rules/docker/`                        | `rule/docker`    | `rule/docker-v1.0.0`               |
 
 Rules:
 - The slug is the component's directory name (the `{name}` segment in `skills/{name}/`).
 - Hyphens are allowed in slugs. Do not use slashes, `@`, or spaces — they require URL
   encoding and cause routing issues on Bitbucket Cloud and Datacenter.
-- If two components would produce the same slug (e.g., a skill and a hook both named
-  `guard`), prefix the slug with the component type: `skill-guard` / `hook-guard`.
-- All tags are lowercase: `changelog-v3.0.0`, not `Changelog-V3.0.0`.
+- Shared skills and shared rules always use the `skill/` and `rule/` namespaces.
+- Tool-specific assets use their tool namespace (`claude-code/`, `github-copilot/`, `openai-codex/`).
+- All tags are lowercase.
 
 ## Comparison Links
 
@@ -137,13 +137,13 @@ atomic.
 and its version bumped. Other components' `[Unreleased]` sections are unaffected by an
 unrelated component's release.
 
-**Who triggers:** a human developer, the `/sync-toolkit` command, or the
+**Who triggers:** a human developer, the `sync-toolkit` workflow, or the
 release-engineer agent when dispatched by the orchestrator. Automated CI does not cut
 releases without explicit invocation.
 
 ## Release Subcommand
 
-### `/changelog release [<component-slug>]`
+### `changelog release [<component-slug>]`
 
 Performs the full promote-and-tag cycle. Without an argument, operates on every
 component whose `## [Unreleased]` section is non-empty. With a slug, operates on that
@@ -173,10 +173,11 @@ git push origin HEAD {slug}-v{X.Y.Z}
 
 | CHANGELOG.md path                                   | Slug                           | Example tag                           |
 |-----------------------------------------------------|--------------------------------|---------------------------------------|
-| `claude-code/skills/changelog/CHANGELOG.md`        | `claude-code/changelog`        | `claude-code/changelog-v7.0.0`        |
-| `claude-code/agents/release-engineer/CHANGELOG.md` | `claude-code/release-engineer` | `claude-code/release-engineer-v2.0.0` |
+| `agents/release-engineer/CHANGELOG.md`             | `agent/release-engineer`       | `agent/release-engineer-v2.0.0`       |
+| `skills/changelog/CHANGELOG.md`                    | `skill/changelog`              | `skill/changelog-v7.0.0`              |
+| `workflows/sync-toolkit/CHANGELOG.md`              | `workflow/sync-toolkit`        | `workflow/sync-toolkit-v1.0.0`        |
 | `claude-code/hooks/changelog-check/CHANGELOG.md`   | `claude-code/changelog-check`  | `claude-code/changelog-check-v3.0.0`  |
-| `claude-code/rules/docker/CHANGELOG.md`            | `claude-code/docker`           | `claude-code/docker-v4.0.0`           |
+| `rules/docker/CHANGELOG.md`                        | `rule/docker`                  | `rule/docker-v4.0.0`                  |
 
 **Multi-component:** each component gets its own commit, tag, and push triple processed
 in alphabetical path order. A failure on component B does not roll back component A's
@@ -186,7 +187,7 @@ already-pushed tag.
 exists), the comparison footer link uses the `tree/` form per the Comparison Links section
 (see the sentinel comment in that section for the no-tags-yet case).
 
-**Single-component example:** `/changelog release changelog-check` processes only
+**Single-component example:** `changelog release changelog-check` processes only
 `claude-code/hooks/changelog-check/CHANGELOG.md`.
 
 ### Failure Recovery
@@ -195,7 +196,7 @@ exists), the comparison footer link uses the `tree/` form per the Comparison Lin
 
 | State | Recovery |
 |-------|----------|
-| Promoted file but no commit | `git checkout -- <path>/CHANGELOG.md` to revert, then re-run `/changelog release <slug>` |
+| Promoted file but no commit | `git checkout -- <path>/CHANGELOG.md` to revert, then re-run `changelog release <slug>` |
 | Commit created but tag missing | `git tag {slug}-v{X.Y.Z} HEAD && git push origin HEAD {slug}-v{X.Y.Z}` |
 | Commit + tag created but push failed | `git push origin HEAD {slug}-v{X.Y.Z}` (the tag already exists locally) |
 
@@ -204,17 +205,17 @@ exists), the comparison footer link uses the `tree/` form per the Comparison Lin
 1. Check which components shipped: `git tag -l '{tool}/*-v*'` and `git log --oneline -5`.
 2. **Components that shipped:** do nothing — they are live.
 3. **Components with a commit but no tag:** create and push the tag (see table above).
-4. **Components with a promoted CHANGELOG but no commit:** revert via `git checkout -- <path>/CHANGELOG.md` and re-run `/changelog release <slug>`.
-5. **Components not yet touched:** re-run `/changelog release` with just the unprocessed slugs.
+4. **Components with a promoted CHANGELOG but no commit:** revert via `git checkout -- <path>/CHANGELOG.md` and re-run `changelog release <slug>`.
+5. **Components not yet touched:** re-run `changelog release` with just the unprocessed slugs.
 
-### `/changelog append <category> <message>`
+### `changelog append <category> <message>`
 
 Appends `- <message>` under `## [Unreleased]` → `### <category>` in the component's
 `CHANGELOG.md`. Creates the category heading if absent, in canonical order
 (`Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security`). Does not commit.
 
 ```
-/changelog append Added "Slug derivation helper now handles bundles/ directory"
+changelog append Added "Slug derivation helper now handles bundles/ directory"
 ```
 
 ## SemVer Bump Table
@@ -229,22 +230,20 @@ When a single update triggers multiple levels, use the highest applicable bump.
 
 ## Routing Rules
 
-Each toolkit component has its own `CHANGELOG.md` in its subdirectory. Paths use the
-new per-tool layout (ADR 0005):
+Each toolkit component has its own `CHANGELOG.md` in its subdirectory. Canonical paths:
 
-- `claude-code/agents/{name}/CHANGELOG.md`
-- `claude-code/commands/{name}/CHANGELOG.md`
+- `agents/{name}/CHANGELOG.md`
 - `claude-code/hooks/{name}/CHANGELOG.md`
-- `claude-code/rules/{name}/CHANGELOG.md`
-- `shared/skills/{name}/CHANGELOG.md`
-- `github-copilot/skills/{name}/CHANGELOG.md`
+- `rules/{name}/CHANGELOG.md`
+- `skills/{name}/CHANGELOG.md`
+- `workflows/{name}/CHANGELOG.md`
 
 Reference files and scripts inside a component directory (e.g.,
-`shared/skills/{name}/references/`) use that component's `CHANGELOG.md` — no separate
+`skills/{name}/references/`) use that component's `CHANGELOG.md` — no separate
 changelog per subdirectory.
 
 **Aggregated changelogs at the category root are forbidden.** Do not create or write to
-`claude-code/agents/CHANGELOG.md`, `shared/skills/CHANGELOG.md`, etc. Each component is
+`agents/CHANGELOG.md`, `skills/CHANGELOG.md`, etc. Each component is
 versioned independently using the per-component tag format.
 
 ## Gotchas

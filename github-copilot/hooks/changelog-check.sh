@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-# Ported from claude-code/hooks/changelog-check/changelog-check.sh for Codex CLI hooks (experimental)
-# Requires: features.codex_hooks=true in ~/.codex/config.toml
-# Note: Codex hooks stdin payload schema may differ from Claude Code's; validate in your environment.
+# CHANGELOG enforcement hook for the VS Code Copilot surface
+# Requires: VS Code Copilot hooks enabled in your VS Code environment
+# Note: VS Code Copilot hook stdin payload schema may differ from Claude Code's; validate in your environment.
 #
 # Claude Code env vars used: none — operates on git refs via stdin.
-# Codex mapping: PreToolUse / matcher: Bash (git push commands)
+# VS Code Copilot mapping: PreToolUse / matcher: Bash (git push commands)
 # IMPORTANT: This script was originally a git pre-push hook invoked with $1=remote $2=url and
-# refs on stdin. In Codex PreToolUse context the script must parse the hook stdin payload to
-# extract the git push command arguments. Adaptation note: under Codex, wire as PreToolUse on
+# refs on stdin. In VS Code Copilot PreToolUse context the script must parse the hook stdin payload to
+# extract the git push command arguments. Adaptation note: under VS Code Copilot, wire as PreToolUse on
 # Bash matcher; inspect stdin JSON for push-like commands before delegating to git ref checks.
 # The core CHANGELOG validation logic below is preserved unchanged.
 #

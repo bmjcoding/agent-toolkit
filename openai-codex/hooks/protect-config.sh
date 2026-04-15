@@ -1,16 +1,14 @@
 #!/usr/bin/env bash
-# Ported from claude-code/hooks/protect-config/protect-config.sh for Codex CLI hooks (experimental)
+# Protect Codex and canonical toolkit control-plane files in Codex CLI hooks (experimental)
 # Requires: features.codex_hooks=true in ~/.codex/config.toml
 # Note: Codex hooks stdin payload schema may differ from Claude Code's; validate in your environment.
 #
-# Claude Code env vars used: none directly — reads stdin JSON for tool_name and tool_input.
+# Reads stdin JSON for tool_name and tool_input.command.
 # Codex mapping: PreToolUse / matcher: Bash|Edit|Write
-# Note: The stdin JSON field names (.tool_name, .tool_input.command, .tool_input.file_path)
-# are Claude Code conventions. Codex may use different field names — check Codex docs and
-# update the jq expressions below if field names differ in your Codex version.
+# Validate the stdin field names against your Codex version if this hook stops firing.
 #
-# Original purpose: PreToolUse hook — block Bash/Edit/Write calls that write to control-plane
-# files (~/.claude settings.json, hooks/, CLAUDE.md, agents/, etc.).
+# Purpose: block Bash/Edit/Write calls that write to control-plane files in the
+# Codex runtime, compatibility shims, or canonical shared toolkit surfaces.
 # version: 2.0.0
 #
 # Closed findings: HB-001..HB-013, HB-016, HB-017, HB-020..HB-031,
@@ -27,8 +25,8 @@ CMD=$(echo "$INPUT" | jq -r '.tool_input.command // empty' 2>/dev/null)
 # HB-012: Normalize to single line so multi-line commands match correctly
 CMD=$(echo "$CMD" | tr '\n' ' ')
 
-# Fast path: skip if no .claude, agent-toolkit, claude-toolkit, or relative protected-path reference
-# Covers CWD-bypass: agent with cwd=~/.claude/ can issue `cp /tmp/evil agents/X`
+# Fast path: skip if no compatibility-state, toolkit, or relative protected-path reference
+# Covers CWD-bypass: an agent with cwd inside a state root can issue `cp /tmp/evil agents/X`
 # with no .claude literal — catch relative forms too.
 echo "$CMD" | grep -qE '\.claude|agent-toolkit|claude-toolkit|claude-code/hooks/|claude-code/agents/|claude-code/commands/|(^|/)(skills|rules)/|(^| )agents/|(^| )hooks/|(^| )CLAUDE\.md|(^| )settings\.json' || exit 0
 

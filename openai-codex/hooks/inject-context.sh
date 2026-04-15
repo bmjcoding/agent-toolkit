@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Ported from claude-code/hooks/inject-context/inject-context.sh for Codex CLI hooks (experimental)
+# Context injection hook for the Codex CLI surface (experimental)
 # Requires: features.codex_hooks=true in ~/.codex/config.toml
 # Note: Codex hooks stdin payload schema may differ from Claude Code's; validate in your environment.
 #

@@ -1,174 +1,127 @@
 # agent-toolkit — Multi-tool agent scaffolding
 
-A configuration library for AI coding assistants. Provides agents, skills, rules, hooks,
-and commands tested across three tools: **Claude Code**, **GitHub Copilot (VS Code)**,
-and **OpenAI Codex CLI**.
+A configuration library for AI coding assistants. It provides shared skills, shared rules,
+and tool-specific agents, commands, hooks, prompts, bundles, and install assets for
+**Claude Code**, **GitHub Copilot for VS Code**, and **OpenAI Codex**.
 
-Each tool directory is fully self-contained: it includes its own copy of skills, rules,
-and bundles. Tool-specific constructs (slash commands, hooks, VS Code prompts) also live
-within each tool dir. Repo-wide ADRs and UX docs are in `/docs/`.
+`AGENTS.md` is the primary shared instruction source across tools. `CLAUDE.md` is a thin
+compatibility shim for Claude-native consumers that import or read it directly.
 
 ## Repository layout
 
-```
+```text
 agent-toolkit/
-  docs/                 # Repo-wide documentation
-    adr/                # Architecture Decision Records (repo-wide scope)
-    ux/                 # UX design specs (multi-tool scope)
-  claude-code/          # Claude Code — fully self-contained
-    agents/             # 15 agent definitions (.md + YAML frontmatter)
-    commands/           # 6 slash commands
-    hooks/              # 9 shell hooks (PreToolUse / PostToolUse)
-    bundles/            # 8 curated install bundles
-    skills/             # 13 skill definitions
-    rules/              # 4 rule sets (docker, logging, node, python)
-    docs/               # Claude Code-specific ADRs and operational docs
-    scripts/
-      install.sh        # symlink manager for ~/.claude/
-  github-copilot/       # GitHub Copilot (VS Code / cloud) — fully self-contained
-    agents/             # 15 .agent.md definitions
-    instructions/       # 4 path-scoped instruction files
-    prompts/            # 6 reusable prompt files
-    hooks/              # 9 hook JSON files
-    bundles/            # 8 curated install bundles
-    skills/             # 13 skill wrappers
-    rules/              # 4 rule sets
-    scripts/
-  openai-codex/         # OpenAI Codex CLI — fully self-contained
-    agents/             # 15 <name>.toml agent definitions
-    hooks/              # 9 .sh scripts + hooks.json
-    bundles/            # 8 curated install bundles
-    skills/             # 13 skill definitions
-    rules/              # 4 rule sets
-    config.toml.template # 13 [[skills.config]] entries
-    scripts/
-  AGENTS.md             # repo-wide instructions (read natively by all 3 tools)
+  docs/
+    adr/                  # Repo-wide architecture decisions
+    todo/                 # Working notes and follow-up docs
+  agents/                 # Canonical shared agent instruction bodies
+  skills/                 # Canonical shared skills
+  rules/                  # Canonical shared rules
+  workflows/              # Canonical shared workflow definitions
+  claude-code/            # Claude-native agents, commands, hooks, bundles, docs, scripts
+  github-copilot/         # VS Code Copilot-native agents, prompts, instructions, hooks, bundles
+  openai-codex/           # Codex-native agents, hooks, bundles, config templates, rule build assets
+  AGENTS.md               # Primary shared instructions
+  CLAUDE.md               # Compatibility shim that imports AGENTS.md
 ```
 
-## Components summary
+## Ownership model
 
-| Type         | Tool            | Count |
-|--------------|-----------------|-------|
-| Agents       | Claude Code     | 15    |
-| Commands     | Claude Code     | 6     |
-| Hooks        | Claude Code     | 9     |
-| Agents       | GitHub Copilot  | 15    |
-| Instructions | GitHub Copilot  | 4     |
-| Prompts      | GitHub Copilot  | 6     |
-| Agents       | OpenAI Codex    | 15    |
-| Hooks        | OpenAI Codex    | 9     |
-| Skills       | All tools       | 13 (per tool) |
-| Rules        | All tools       | 4 (per tool)  |
-
-All components are versioned independently with SemVer.
+- Root `skills/` is the single source of truth for shared skill content.
+- Root `rules/` is the single source of truth for shared rule content.
+- Root `agents/` is the single source of truth for shared agent instruction bodies.
+- Root `workflows/` is the single source of truth for shared workflow bodies.
+- `AGENTS.md` is the canonical shared instruction file.
+- `CLAUDE.md` is a compatibility shim, not the canonical shared instruction source.
+- Tool directories contain only tool-native assets or adapters:
+  - `claude-code/`: Claude frontmatter wrappers, slash-command adapters, hooks, bundles, docs, install scripts.
+  - `github-copilot/`: VS Code Copilot agent adapters, prompt adapters, instruction adapters, hooks, bundles.
+  - `openai-codex/`: Codex TOML agent adapters, hooks, bundles, config templates, rule composition assets.
+- Shared skills and shared rules are versioned once only at the root:
+  - `skill/<slug>-vX.Y.Z`
+  - `rule/<slug>-vX.Y.Z`
 
 ## Install
 
 ### Claude Code
 
-Claude Code reads configuration, hooks, and components from `~/.claude/`. Wire this toolkit
-in by creating symlinks from `~/.claude/` into the `claude-code/` subtree:
-
-| Symlink | Target | What Claude Code loads from it |
-|---|---|---|
-| `~/.claude/agents` | `claude-code/agents` | 15 agent definitions (YAML frontmatter + Markdown) |
-| `~/.claude/commands` | `claude-code/commands` | 6 slash commands (`/lint`, `/audit`, `/test`, etc.) |
-| `~/.claude/hooks` | `claude-code/hooks` | 9 shell hooks (PreToolUse / PostToolUse) |
-| `~/.claude/rules` | `claude-code/rules` | 4 rule sets (docker, logging, node, python) |
-| `~/.claude/skills` | `skills` | 13 skill definitions |
-
-**Setup — one-time from the toolkit root:**
+Claude Code loads tool-native surfaces from `~/.claude/`, while shared content comes from
+the repo-root canonical directories.
 
 ```bash
-TOOLKIT=$(pwd)  # or: export AGENT_TOOLKIT_DIR=$HOME/Developer/git/agent-toolkit
+TOOLKIT=$(pwd)
 ln -sfn "$TOOLKIT/claude-code/agents"   ~/.claude/agents
 ln -sfn "$TOOLKIT/claude-code/commands" ~/.claude/commands
+ln -sfn "$TOOLKIT/claude-code/docs"     ~/.claude/docs
 ln -sfn "$TOOLKIT/claude-code/hooks"    ~/.claude/hooks
-ln -sfn "$TOOLKIT/claude-code/rules"    ~/.claude/rules
+ln -sfn "$TOOLKIT/rules"                ~/.claude/rules
 ln -sfn "$TOOLKIT/skills"               ~/.claude/skills
 ```
 
-Or use the bundled installer (also handles `docs` and supports `--dry-run` / `--check`):
+Or use:
 
 ```sh
 ./claude-code/scripts/install.sh
-
-# Dry-run (preview changes, no writes)
 ./claude-code/scripts/install.sh --dry-run
-
-# Verify existing symlinks
 ./claude-code/scripts/install.sh --check
 ```
 
-Override repo root: `AGENT_TOOLKIT_DIR=/path/to/repo ./claude-code/scripts/install.sh`
+### GitHub Copilot for VS Code
 
-After setup, Claude Code auto-discovers all agents, commands, rules, and skills on next
-session start. Hooks must additionally be registered in `~/.claude/settings.json`
-(see `claude-code/hooks/README.md`).
-
-> **Breaking change (v3.0.0)**: rules were moved to `claude-code/rules/`. Re-run `install.sh` to retarget symlinks if upgrading from v2.
->
-> **Breaking change (v4.0.0)**: skills were relocated back to `skills/` at the repo root (tool-agnostic). Re-run `install.sh` to retarget `~/.claude/skills` if upgrading from v3.
-
-### GitHub Copilot (VS Code)
-
-VS Code resolves agents from `.github/agents/`. Use the Copilot install script or wire
-manually:
+VS Code Copilot uses `.github/` for its runtime surfaces. Canonical shared content stays
+at the repo root and is adapted into the Copilot-native files under `github-copilot/`.
 
 ```sh
-# Symlink agents dir
-ln -s "$(pwd)/github-copilot/agents" .github/agents
-
-# Symlink instructions dir
-ln -s "$(pwd)/github-copilot/instructions" .github/instructions
-
-# Symlink prompts dir
-ln -s "$(pwd)/github-copilot/prompts" .github/prompts
-
-# Symlink skills (Copilot-specific wrappers)
-ln -s "$(pwd)/github-copilot/skills" .github/skills
+TOOLKIT=$(pwd)
+ln -sfn "$TOOLKIT/github-copilot/agents"       .github/agents
+ln -sfn "$TOOLKIT/github-copilot/bundles"      .github/bundles
+ln -sfn "$TOOLKIT/github-copilot/hooks"        .github/hooks
+ln -sfn "$TOOLKIT/github-copilot/instructions" .github/instructions
+ln -sfn "$TOOLKIT/github-copilot/prompts"      .github/prompts
 ```
 
-Repository-wide instructions are already in `AGENTS.md` (repo root) and
-`.github/copilot-instructions.md`. No additional setup is required for those.
-
-### OpenAI Codex CLI
-
-Codex CLI reads agents from `~/.codex/agents/` (global) or `.codex/agents/`
-(project-scoped, trusted repos only). Copy TOML definitions:
+Or use:
 
 ```sh
-# Global install
+./github-copilot/scripts/install.sh --target /path/to/project
+./github-copilot/scripts/install.sh --target /path/to/project --dry-run
+./github-copilot/scripts/install.sh --target /path/to/project --check
+```
+
+### OpenAI Codex
+
+Codex reads `AGENTS.md` natively and should load shared skills from the repo-root
+canonical `skills/` tree.
+
+```sh
 cp openai-codex/agents/*.toml ~/.codex/agents/
-
-# Hooks — copy hooks.json to your project .codex dir
-cp openai-codex/hooks/hooks.json .codex/hooks.json
-
-# Skills — Codex reads from .agents/skills/ (or inline via AGENTS.md)
-ln -s "$(pwd)/openai-codex/skills" .agents/skills
-
-# Config — copy the template and fill in your values
-cp openai-codex/config.toml.template .codex/config.toml
+cp openai-codex/hooks/hooks.json ~/.codex/hooks.json
+cp openai-codex/config.toml.template ~/.codex/config.toml
+ln -sfn "$(pwd)/skills" .agents/skills
 ```
 
-Codex reads `AGENTS.md` natively — no import bridge needed.
+The config template points directly at `${AGENT_TOOLKIT_DIR}/skills/<slug>/SKILL.md`.
 
 ## Versioning
 
-Each component uses SemVer, versioned independently. Tag format:
+All components use SemVer and Keep a Changelog 1.1.0.
 
-```
-claude-code/<slug>-v<version>      # Claude Code agents, commands, hooks, skills, rules
-github-copilot/<slug>-v<version>   # Copilot agents, instructions, prompts, hooks, skills, rules
-openai-codex/<slug>-v<version>     # Codex agents, hooks, skills, rules, config
-```
+- Shared agents: `agent/<slug>-v<version>`
+- Shared skills: `skill/<slug>-v<version>`
+- Shared rules: `rule/<slug>-v<version>`
+- Shared workflows: `workflow/<slug>-v<version>`
+- Tool-specific assets:
+  - `claude-code/<slug>-v<version>`
+  - `github-copilot/<slug>-v<version>`
+  - `openai-codex/<slug>-v<version>`
 
 ## Contributing
 
-When adding a new skill, follow the template in `skills/changelog/SKILL.md`.
-Place the skill in `<tool>/skills/<slug>/` for each tool you want to support, with a
-`SKILL.md` and `CHANGELOG.md` in each copy. If the skill needs Claude Code-specific
-wiring (a command or hook), add those separately under `claude-code/`.
+Add shared agents under `agents/<slug>/`, shared workflows under `workflows/<slug>/`,
+shared skills under `skills/<slug>/`, and shared rules under `rules/<slug>/`. Add
+tool-specific adapters only when a runtime requires a different format or discovery
+surface, then regenerate them with `node scripts/sync-canonical-adapters.js` when
+applicable.
 
-See [AGENTS.md](AGENTS.md) for the full agent instruction set and orchestrator
-protocol. Repo-wide ADRs are in [docs/adr/](docs/adr/).
+See [AGENTS.md](AGENTS.md), [CONTRIBUTING.md](CONTRIBUTING.md), and [docs/adr/](docs/adr/)
+for the detailed repo conventions.

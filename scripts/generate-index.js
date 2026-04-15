@@ -16,21 +16,29 @@
  *              own filename convention (hooks have no .md; skills use SKILL.md; rules use
  *              <name>.md; bundles use bundle.yaml; github-copilot agents use <name>.agent.md).
  *
- * Content sources per primitive type (claude-code):
+ * Canonical shared sources live at the repo root:
+ *   agents    → agents/<name>/AGENT.md
+ *   workflows → workflows/<name>/WORKFLOW.md
+ *   skills    → skills/<name>/SKILL.md
+ *   rules     → rules/<name>/<name>.md
+ *
+ * This index is intentionally adapter/install-surface oriented, so the concrete
+ * indexed paths below still point at tool-native runtime assets where applicable.
+ *
+ * claude-code adapters:
  *   agents   → claude-code/agents/<name>/<name>.md          (frontmatter name field)
- *   skills   → skills/<name>/SKILL.md                       (frontmatter name field; root-level, tool-agnostic)
- *   commands → claude-code/commands/<name>/<name>.md        (frontmatter name field)
- *   rules    → claude-code/rules/<name>/<name>.md           (frontmatter paths field → slug from dir)
+ *   commands → claude-code/commands/<name>/<name>.md        (frontmatter name field; adapter for root workflows/)
  *   hooks    → no .md — stub from directory name
  *   bundles  → claude-code/bundles/<name>/bundle.yaml       (id field parsed with minimal YAML)
+ *   skills/rules remain rooted at shared canonical paths
  *
- * github-copilot:
+ * github-copilot adapters:
  *   agents   → github-copilot/agents/<name>.agent.md        (flat, not in subdirs)
- *   other    → stub from directory name (no content .md for commands/hooks/rules)
- *   skills   → github-copilot/skills/<name>/SKILL.md
+ *   prompts  → github-copilot/prompts/<name>.prompt.md      (adapter for root workflows/)
+ *   other    → stub from directory name (no content .md for commands/hooks)
  *   bundles  → bundle.yaml (same as claude-code, handle missing gracefully)
  *
- * openai-codex:
+ * openai-codex adapters:
  *   all      → stubs from directory name
  *
  * Usage (run from repo root or any directory):
@@ -57,23 +65,19 @@ const TOOL_DIRS = ['claude-code', 'github-copilot', 'openai-codex'];
 // Known primitive-type directories per tool.
 // 'commands-unsupported' is the openai-codex category for command stubs.
 const PRIMITIVE_DIRS = [
-  'skills',
   'agents',
   'hooks',
   'commands',
   'commands-unsupported',
-  'rules',
   'bundles',
 ];
 
 // Maps plural directory name → singular category label used in index entries.
 const CATEGORY_MAP = {
   'agents':              'agent',
-  'skills':              'skill',
   'commands':            'command',
   'commands-unsupported': 'command',
   'hooks':               'hook',
-  'rules':               'rule',
   'bundles':             'bundle',
 };
 
@@ -385,27 +389,11 @@ function collectEntries() {
 
         // --------------------------------------------------------------
         // github-copilot non-agent primitives:
-        //   - skills:   SKILL.md inside the subdir (same as claude-code)
         //   - commands: no content .md in subdir — stub from dir name
-        //   - rules:    no content .md in subdir — stub from dir name
         // --------------------------------------------------------------
         if (tool === 'github-copilot') {
-          if (primitive === 'skills') {
-            const skillMd  = path.join(nameDir, 'SKILL.md');
-            const content  = readFileSafe(skillMd);
-            const fm       = content
-              ? parseFrontmatter(extractFrontmatterBlock(content))
-              : {};
-            const slug    = slugFrom(fm, name);
-            const relPath = content
-              ? path.relative(REPO_ROOT, skillMd)
-              : path.relative(REPO_ROOT, nameDir);
-            entries.push(makeEntry(slug, category, relPath));
-          } else {
-            // commands, commands-unsupported, rules — stub from dir name.
-            const relPath = path.relative(REPO_ROOT, nameDir);
-            entries.push(makeEntry(name, category, relPath));
-          }
+          const relPath = path.relative(REPO_ROOT, nameDir);
+          entries.push(makeEntry(name, category, relPath));
           continue;
         }
 
@@ -413,17 +401,9 @@ function collectEntries() {
         // claude-code: read the primary .md file for each primitive.
         //
         //   agents   → <name>/<name>.md
-        //   skills   → <name>/SKILL.md
         //   commands → <name>/<name>.md
-        //   rules    → <name>/<name>.md  (slug from dir name; rules use `paths` not `name`)
         // --------------------------------------------------------------
-        let contentFile;
-        if (primitive === 'skills') {
-          contentFile = path.join(nameDir, 'SKILL.md');
-        } else {
-          // agents, commands, rules all follow <name>.md convention.
-          contentFile = path.join(nameDir, `${name}.md`);
-        }
+        const contentFile = path.join(nameDir, `${name}.md`);
 
         const content = readFileSafe(contentFile);
         if (!content) {
@@ -443,8 +423,7 @@ function collectEntries() {
           );
         }
         const fm      = parseFrontmatter(fmBlock);
-        // Rules use `paths` frontmatter (not `name`); derive slug from directory name.
-        const slug    = primitive === 'rules' ? name : slugFrom(fm, name);
+        const slug    = slugFrom(fm, name);
         const relPath = path.relative(REPO_ROOT, contentFile);
 
         entries.push(makeEntry(slug, category, relPath));
@@ -454,7 +433,6 @@ function collectEntries() {
 
   // -------------------------------------------------------------------------
   // Root-level skills/ directory (universal, not under any tool dir).
-  // These skills are tool-agnostic; path prefix will be 'skills'.
   // -------------------------------------------------------------------------
   const rootSkillsDir = path.join(REPO_ROOT, 'skills');
   if (fs.existsSync(rootSkillsDir)) {
@@ -490,6 +468,37 @@ function collectEntries() {
       const relPath = path.relative(REPO_ROOT, skillMd);
 
       entries.push(makeEntry(slug, 'skill', relPath));
+    }
+  }
+
+  // -------------------------------------------------------------------------
+  // Root-level rules/ directory (universal, not under any tool dir).
+  // -------------------------------------------------------------------------
+  const rootRulesDir = path.join(REPO_ROOT, 'rules');
+  if (fs.existsSync(rootRulesDir)) {
+    let ruleSubdirs;
+    try {
+      ruleSubdirs = fs.readdirSync(rootRulesDir, { withFileTypes: true });
+    } catch {
+      ruleSubdirs = [];
+    }
+
+    for (const dirent of ruleSubdirs) {
+      if (!dirent.isDirectory()) continue;
+
+      const name      = dirent.name;
+      const nameDir   = path.join(rootRulesDir, name);
+      const ruleMd    = path.join(nameDir, `${name}.md`);
+      const content   = readFileSafe(ruleMd);
+
+      if (!content) {
+        const relPath = path.relative(REPO_ROOT, nameDir);
+        entries.push(makeEntry(name, 'rule', relPath));
+        continue;
+      }
+
+      const relPath = path.relative(REPO_ROOT, ruleMd);
+      entries.push(makeEntry(name, 'rule', relPath));
     }
   }
 
