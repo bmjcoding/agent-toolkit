@@ -103,6 +103,18 @@ function readLatestReleasedVersion(changelogPath) {
   return match ? match[1] : null;
 }
 
+function listCanonicalNames(rootDir, markerFile) {
+  return fs.readdirSync(path.join(REPO_ROOT, rootDir), { withFileTypes: true })
+    .filter(entry => entry.isDirectory() && fs.existsSync(path.join(REPO_ROOT, rootDir, entry.name, markerFile)))
+    .map(entry => entry.name)
+    .sort();
+}
+
+function removePathIfExists(targetPath) {
+  if (!fs.existsSync(targetPath)) return;
+  fs.rmSync(targetPath, { recursive: true, force: true });
+}
+
 function parseClaudeAgentConfig(frontmatter) {
   const model = normalizeFrontmatterValue(extractField(/^model:\s*(.+)$/m, frontmatter, 'inherit'));
   const toolsRaw = extractField(/^tools:\s*(.+)$/m, frontmatter, '');
@@ -129,14 +141,6 @@ function parseClaudeAgentConfig(frontmatter) {
   if (tools.some(tool => tool === 'TodoWrite')) capabilities.push('todo');
   if (childAgents.length > 0) capabilities.push('delegate');
 
-  const copilotTools = [];
-  if (capabilities.includes('read')) copilotTools.push('read');
-  if (capabilities.includes('write') || capabilities.includes('edit')) copilotTools.push('edit');
-  if (capabilities.includes('search')) copilotTools.push('search');
-  if (capabilities.includes('execute')) copilotTools.push('execute');
-  if (capabilities.includes('web')) copilotTools.push('web');
-  if (capabilities.includes('todo')) copilotTools.push('todo');
-
   const modelTier = model === 'sonnet'
     ? 'balanced'
     : model === 'haiku'
@@ -144,12 +148,10 @@ function parseClaudeAgentConfig(frontmatter) {
       : 'frontier';
 
   return {
-    model,
     modelTier,
     capabilities,
     skills,
     childAgents,
-    copilotTools,
   };
 }
 
@@ -315,9 +317,31 @@ function syncAgents() {
   const codexAgentsDir = path.join(REPO_ROOT, 'openai-codex', 'agents');
   const canonicalAgentsDir = path.join(REPO_ROOT, 'agents');
 
-  const names = fs.readdirSync(claudeAgentsDir)
-    .filter(name => fs.existsSync(path.join(claudeAgentsDir, name, `${name}.md`)))
-    .sort();
+  const names = listCanonicalNames('agents', 'AGENT.md');
+
+  for (const entry of fs.readdirSync(claudeAgentsDir, { withFileTypes: true })) {
+    if (entry.isDirectory() && !names.includes(entry.name)) {
+      removePathIfExists(path.join(claudeAgentsDir, entry.name));
+    }
+  }
+
+  for (const entry of fs.readdirSync(copilotAgentsDir, { withFileTypes: true })) {
+    if (entry.isDirectory() && !names.includes(entry.name)) {
+      removePathIfExists(path.join(copilotAgentsDir, entry.name));
+      continue;
+    }
+
+    if (entry.isFile() && entry.name.endsWith('.agent.md')) {
+      const slug = entry.name.replace(/\.agent\.md$/, '');
+      if (!names.includes(slug)) removePathIfExists(path.join(copilotAgentsDir, entry.name));
+    }
+  }
+
+  for (const entry of fs.readdirSync(codexAgentsDir, { withFileTypes: true })) {
+    if (!entry.isFile() || !entry.name.endsWith('.toml')) continue;
+    const slug = entry.name.replace(/\.toml$/, '');
+    if (!names.includes(slug)) removePathIfExists(path.join(codexAgentsDir, entry.name));
+  }
 
   for (const name of names) {
     const claudePath = path.join(claudeAgentsDir, name, `${name}.md`);
@@ -400,17 +424,6 @@ function syncAgents() {
         modelTier,
       })
     );
-
-    const manifestDir = path.join(copilotAgentsDir, name);
-    const manifestPath = path.join(manifestDir, 'manifest.json');
-    if (fs.existsSync(manifestPath)) {
-      const manifest = JSON.parse(read(manifestPath));
-      manifest.download_url = `https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/${name}.agent.md`;
-      manifest.install_path = '.github/agents/';
-      manifest.install_command = `mkdir -p .github/agents && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/${name}.agent.md -o .github/agents/${name}.agent.md`;
-      manifest.notes = 'Workspace-scoped VS Code Copilot agent adapter.';
-      writeIfChanged(`${manifestPath}`, JSON.stringify(manifest, null, 2) + '\n');
-    }
   }
 }
 
@@ -419,9 +432,26 @@ function syncWorkflows() {
   const copilotPromptsDir = path.join(REPO_ROOT, 'github-copilot', 'prompts');
   const canonicalWorkflowsDir = path.join(REPO_ROOT, 'workflows');
 
-  const names = fs.readdirSync(claudeCommandsDir)
-    .filter(name => fs.existsSync(path.join(claudeCommandsDir, name, `${name}.md`)))
-    .sort();
+  const names = listCanonicalNames('workflows', 'WORKFLOW.md');
+
+  for (const entry of fs.readdirSync(claudeCommandsDir, { withFileTypes: true })) {
+    if (entry.isDirectory() && !names.includes(entry.name)) {
+      removePathIfExists(path.join(claudeCommandsDir, entry.name));
+    }
+  }
+
+  for (const entry of fs.readdirSync(copilotPromptsDir, { withFileTypes: true })) {
+    if (!entry.isFile() || !entry.name.endsWith('.prompt.md')) continue;
+    const slug = entry.name.replace(/\.prompt\.md$/, '');
+    if (!names.includes(slug)) removePathIfExists(path.join(copilotPromptsDir, entry.name));
+  }
+
+  const copilotCommandsDir = path.join(REPO_ROOT, 'github-copilot', 'commands');
+  for (const entry of fs.readdirSync(copilotCommandsDir, { withFileTypes: true })) {
+    if (entry.isDirectory() && !names.includes(entry.name)) {
+      removePathIfExists(path.join(copilotCommandsDir, entry.name));
+    }
+  }
 
   for (const name of names) {
     const claudePath = path.join(claudeCommandsDir, name, `${name}.md`);

@@ -149,7 +149,7 @@ Use the `session_id` (compact `YYYYMMDDTHHMMSS`) as `<session-id>`. For skill/ag
 3. Write the summary metrics as a v5.0-schema JSON to `<path>/YYYYMMDDTHHMMSS.json`. The JSON must validate against the v5.0 schema:
 
    ```bash
-   python3 tools/retros/validate.py <retro.json>
+   python3 ~/agent-retros/tools/retros/validate.py <retro.json>
    ```
 
    Fix any validation errors before saving to the canonical path.
