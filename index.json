@@ -1441,7 +1441,7 @@
       "install_path": "~/.claude/skills/backend/SKILL.md",
       "install_command": "mkdir -p \"$HOME/.claude/skills/backend\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/backend/SKILL.md\" -o \"$HOME/.claude/skills/backend/SKILL.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/backend/SKILL.md",
-      "checksum_sha256": "afd63134247a0bec865c664f89c1079fb74dea7367014f8a74858e88f685ccbb",
+      "checksum_sha256": "90befe6777ee71c78ff9341ffcc4d3168a3785346074d5520ae463b1348678cf",
       "bundle_membership": [
         {
           "bundle_id": "backend-development",
@@ -1460,7 +1460,7 @@
       "install_path": "~/.claude/skills/changelog/SKILL.md",
       "install_command": "mkdir -p \"$HOME/.claude/skills/changelog\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/changelog/SKILL.md\" -o \"$HOME/.claude/skills/changelog/SKILL.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/changelog/SKILL.md",
-      "checksum_sha256": "7e5b0451265a8e1c0c507731d865b68eae67bf3df3c6a3873c822c8d514dfbcd",
+      "checksum_sha256": "9db29779052a5f6f27b77d6fac63c8aad96b2694b9f97335db7acfa79c72e4e5",
       "bundle_membership": [
         {
           "bundle_id": "frankenstein-orchestration",
@@ -1487,7 +1487,7 @@
       "install_path": "~/.claude/skills/design-authority/SKILL.md",
       "install_command": "mkdir -p \"$HOME/.claude/skills/design-authority\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/design-authority/SKILL.md\" -o \"$HOME/.claude/skills/design-authority/SKILL.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/design-authority/SKILL.md",
-      "checksum_sha256": "aec7674f49359d3e1c13ab5e539e8369a002bcb3781cfe2400a8465766737b83",
+      "checksum_sha256": "a93a1a2d8072628bc9bf76ebe8ecd6572ce97096935f01e56085bf0cb2c2926e",
       "bundle_membership": [
         {
           "bundle_id": "frontend-development",
@@ -1529,7 +1529,7 @@
       "install_path": "~/.claude/skills/frontend/SKILL.md",
       "install_command": "mkdir -p \"$HOME/.claude/skills/frontend\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/frontend/SKILL.md\" -o \"$HOME/.claude/skills/frontend/SKILL.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/frontend/SKILL.md",
-      "checksum_sha256": "62b8e601837f6ac503eb64fa17a4cf7257fac870a4794a8da7e9c763feeface2",
+      "checksum_sha256": "499c835209bba40d3ae3fd48e233602d08b98cf42d36a36c4fef6573f267070f",
       "bundle_membership": [
         {
           "bundle_id": "frontend-development",
@@ -1564,14 +1564,14 @@
     {
       "component_id": "improve",
       "component_kind": "skill",
-      "component_version": "4.3.0",
+      "component_version": "4.3.1",
       "target_tool": "claude-code",
       "artifact_path": "skills/improve/SKILL.md",
       "source_path": "skills/improve/SKILL.md",
       "install_path": "~/.claude/skills/improve/SKILL.md",
       "install_command": "mkdir -p \"$HOME/.claude/skills/improve\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/improve/SKILL.md\" -o \"$HOME/.claude/skills/improve/SKILL.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/improve/SKILL.md",
-      "checksum_sha256": "4005119d7b9c8f55810d0c07db3a34c1548d27d4329e762267fa2208cad41baa",
+      "checksum_sha256": "783015c4c273844d6fe9eef39ef55594243e8178eb76322ba90cc4d82a79344d",
       "bundle_membership": [
         {
           "bundle_id": "frankenstein-orchestration",
@@ -1594,7 +1594,7 @@
       "install_path": "~/.claude/skills/infra/SKILL.md",
       "install_command": "mkdir -p \"$HOME/.claude/skills/infra\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/infra/SKILL.md\" -o \"$HOME/.claude/skills/infra/SKILL.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/infra/SKILL.md",
-      "checksum_sha256": "9b6bc50e12b8aab1f4a919195065faf73405f03abbf413c5a96ed9126961eefa",
+      "checksum_sha256": "452d7cd4443672dbade1de9d9280ba4eaf5c84cca87e7e4151cb316137a7ccd9",
       "bundle_membership": [
         {
           "bundle_id": "infrastructure",
@@ -1613,7 +1613,7 @@
       "install_path": "~/.claude/skills/observability-patterns/SKILL.md",
       "install_command": "mkdir -p \"$HOME/.claude/skills/observability-patterns\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/observability-patterns/SKILL.md\" -o \"$HOME/.claude/skills/observability-patterns/SKILL.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/observability-patterns/SKILL.md",
-      "checksum_sha256": "669ed0aa2cb46557e0ea5310f3aeaee0a8e6f9da163343f8082f7d3a6c853575",
+      "checksum_sha256": "af614532e18b75d477d6eef1aba7d5ac93c981c80809b3ce98fc07a8c7aa51c8",
       "bundle_membership": [
         {
           "bundle_id": "infrastructure",
@@ -1674,7 +1674,7 @@
       "install_path": "~/.claude/skills/retro/SKILL.md",
       "install_command": "mkdir -p \"$HOME/.claude/skills/retro\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/retro/SKILL.md\" -o \"$HOME/.claude/skills/retro/SKILL.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/retro/SKILL.md",
-      "checksum_sha256": "b5eb2eea2a274b9bb55db1f69927798ff4d4175e88ad6506a91900ca5571693b",
+      "checksum_sha256": "05507c26245017e27ac2213b355857d3e9b5fc49a497c285ca7cfaf58df3198c",
       "bundle_membership": [
         {
           "bundle_id": "frankenstein-orchestration",
@@ -2908,7 +2908,7 @@
       "install_path": ".agents/skills/backend/SKILL.md",
       "install_command": "mkdir -p \".agents/skills/backend\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/backend/SKILL.md\" -o \".agents/skills/backend/SKILL.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/backend/SKILL.md",
-      "checksum_sha256": "afd63134247a0bec865c664f89c1079fb74dea7367014f8a74858e88f685ccbb",
+      "checksum_sha256": "90befe6777ee71c78ff9341ffcc4d3168a3785346074d5520ae463b1348678cf",
       "bundle_membership": [],
       "metadata": {}
     },
@@ -2922,7 +2922,7 @@
       "install_path": ".agents/skills/changelog/SKILL.md",
       "install_command": "mkdir -p \".agents/skills/changelog\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/changelog/SKILL.md\" -o \".agents/skills/changelog/SKILL.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/changelog/SKILL.md",
-      "checksum_sha256": "7e5b0451265a8e1c0c507731d865b68eae67bf3df3c6a3873c822c8d514dfbcd",
+      "checksum_sha256": "9db29779052a5f6f27b77d6fac63c8aad96b2694b9f97335db7acfa79c72e4e5",
       "bundle_membership": [],
       "metadata": {}
     },
@@ -2936,7 +2936,7 @@
       "install_path": ".agents/skills/design-authority/SKILL.md",
       "install_command": "mkdir -p \".agents/skills/design-authority\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/design-authority/SKILL.md\" -o \".agents/skills/design-authority/SKILL.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/design-authority/SKILL.md",
-      "checksum_sha256": "aec7674f49359d3e1c13ab5e539e8369a002bcb3781cfe2400a8465766737b83",
+      "checksum_sha256": "a93a1a2d8072628bc9bf76ebe8ecd6572ce97096935f01e56085bf0cb2c2926e",
       "bundle_membership": [],
       "metadata": {}
     },
@@ -2964,7 +2964,7 @@
       "install_path": ".agents/skills/frontend/SKILL.md",
       "install_command": "mkdir -p \".agents/skills/frontend\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/frontend/SKILL.md\" -o \".agents/skills/frontend/SKILL.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/frontend/SKILL.md",
-      "checksum_sha256": "62b8e601837f6ac503eb64fa17a4cf7257fac870a4794a8da7e9c763feeface2",
+      "checksum_sha256": "499c835209bba40d3ae3fd48e233602d08b98cf42d36a36c4fef6573f267070f",
       "bundle_membership": [],
       "metadata": {}
     },
@@ -2985,14 +2985,14 @@
     {
       "component_id": "improve",
       "component_kind": "skill",
-      "component_version": "4.3.0",
+      "component_version": "4.3.1",
       "target_tool": "openai-codex",
       "artifact_path": "skills/improve/SKILL.md",
       "source_path": "skills/improve/SKILL.md",
       "install_path": ".agents/skills/improve/SKILL.md",
       "install_command": "mkdir -p \".agents/skills/improve\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/improve/SKILL.md\" -o \".agents/skills/improve/SKILL.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/improve/SKILL.md",
-      "checksum_sha256": "4005119d7b9c8f55810d0c07db3a34c1548d27d4329e762267fa2208cad41baa",
+      "checksum_sha256": "783015c4c273844d6fe9eef39ef55594243e8178eb76322ba90cc4d82a79344d",
       "bundle_membership": [],
       "metadata": {}
     },
@@ -3006,7 +3006,7 @@
       "install_path": ".agents/skills/infra/SKILL.md",
       "install_command": "mkdir -p \".agents/skills/infra\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/infra/SKILL.md\" -o \".agents/skills/infra/SKILL.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/infra/SKILL.md",
-      "checksum_sha256": "9b6bc50e12b8aab1f4a919195065faf73405f03abbf413c5a96ed9126961eefa",
+      "checksum_sha256": "452d7cd4443672dbade1de9d9280ba4eaf5c84cca87e7e4151cb316137a7ccd9",
       "bundle_membership": [],
       "metadata": {}
     },
@@ -3020,7 +3020,7 @@
       "install_path": ".agents/skills/observability-patterns/SKILL.md",
       "install_command": "mkdir -p \".agents/skills/observability-patterns\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/observability-patterns/SKILL.md\" -o \".agents/skills/observability-patterns/SKILL.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/observability-patterns/SKILL.md",
-      "checksum_sha256": "669ed0aa2cb46557e0ea5310f3aeaee0a8e6f9da163343f8082f7d3a6c853575",
+      "checksum_sha256": "af614532e18b75d477d6eef1aba7d5ac93c981c80809b3ce98fc07a8c7aa51c8",
       "bundle_membership": [],
       "metadata": {}
     },
@@ -3062,7 +3062,7 @@
       "install_path": ".agents/skills/retro/SKILL.md",
       "install_command": "mkdir -p \".agents/skills/retro\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/retro/SKILL.md\" -o \".agents/skills/retro/SKILL.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/retro/SKILL.md",
-      "checksum_sha256": "b5eb2eea2a274b9bb55db1f69927798ff4d4175e88ad6506a91900ca5571693b",
+      "checksum_sha256": "05507c26245017e27ac2213b355857d3e9b5fc49a497c285ca7cfaf58df3198c",
       "bundle_membership": [],
       "metadata": {}
     },
