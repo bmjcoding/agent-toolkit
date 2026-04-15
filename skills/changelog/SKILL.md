@@ -12,7 +12,19 @@ argument-hint: "[path to CHANGELOG.md to edit or create]"
 
 Canonical definition of `CHANGELOG.md` format for every component in the agent-toolkit
 ecosystem (agents, skills, commands, hooks, rules). Read this before creating or editing
-any `CHANGELOG.md`.
+any `CHANGELOG.md`. Use progressive disclosure: load only the sections needed for the
+task at hand.
+
+## Quick Routing
+
+| If you are... | Read |
+|---|---|
+| Fixing format or writing a new entry | Required Header Block, Version Section Format, Change Categories, Gotchas |
+| Appending under `[Unreleased]` | Change Categories, `changelog append <category> <message>`, Gotchas |
+| Cutting a release | Comparison Links, `[Unreleased]` Workflow, Release Subcommand, Failure Recovery |
+| Adapting footer URLs for a non-GitHub host | Comparison Links, `references/platform-urls.md` |
+
+Do not load the release sections for a simple entry edit.
 
 ## Standards
 

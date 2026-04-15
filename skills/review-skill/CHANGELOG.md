@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Updated shared review guidance to refer to `retro`, `review-skill`, and `improve` as generic workflows rather than Claude-only slash-command forms.
+- Removed inline definition-version enforcement from `lint-definition.py`; released version tracking now lives in component changelogs only.
 
 ## [5.0.0] - 2026-04-14
 

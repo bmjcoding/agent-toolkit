@@ -52,18 +52,18 @@ Rewrite the `## [X.Y.Z]` headers in `CHANGELOG.md` using the new numbering.
 
 Update the comparison links at the bottom of `CHANGELOG.md` to match the new versions.
 
-### 3. Update definition file version comments (REQUIRED)
+### 3. Remove legacy inline version markers
 
-Search the component directory for definition files (`*.md`) and update any
-`# version:` comment to match the new highest released version. The version comment is
-the single source of truth visible to agents loading the definition — a mismatch causes
-confusion about which feature set is loaded.
+If the component directory still contains any inline version markers in definition files,
+delete them during the migration. Released versions are tracked only in `CHANGELOG.md`.
 
 ```bash
-grep -l "# version:" agents/{name}/*.md skills/{name}/*.md 2>/dev/null
+rg -n "# version:" agents/{name} skills/{name} 2>/dev/null
 ```
 
 ### 4. Verify
 
-Confirm `grep "# version:" <definition-file>` matches the highest `## [X.Y.Z]` header
-in the CHANGELOG.
+Confirm the renumbered `CHANGELOG.md` is internally consistent:
+- the highest released `## [X.Y.Z]` header is correct
+- comparison links match the new numbering
+- no legacy inline `# version:` markers remain in the component definition files
