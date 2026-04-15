@@ -8,7 +8,7 @@ event wiring, and install surfaces that differ from other tools.
 
 ```
 claude-code/
-  agents/     # Claude frontmatter wrappers for canonical root agents/
+  agents/     # Flat Claude frontmatter wrappers for canonical root agents/
   commands/   # Claude slash-command wrappers for canonical root workflows/
   hooks/      # 9 shell scripts wired to Claude Code hook events (PreToolUse, PostToolUse, SubagentStart, SubagentStop)
   bundles/    # YAML bundle manifests used by the distribution catalog
@@ -50,8 +50,8 @@ Hooks must also be registered in `~/.claude/settings.json` under the `hooks` key
 
 ## Component Format Reference
 
-- **Agent** (`<name>.md`): Claude-native frontmatter wrapper around the canonical root
-  `agents/<name>/AGENT.md` body.
+- **Agent** (`claude-code/agents/<name>.md`): Claude-native frontmatter wrapper around the
+  canonical root `agents/<name>/AGENT.md` body.
 - **Command** (`<name>.md`): Claude-native slash-command wrapper around the canonical root
   `workflows/<name>/WORKFLOW.md` body.
 - **Hook** (`<name>.sh`): Plain Bash, registered by event type in `settings.json`; exit 2 blocks, exit 1 warns, exit 0 continues.

@@ -11,7 +11,7 @@ capabilities:
 skills:
   - design-authority
 adapters:
-  - claude-code/agents/frontend-engineer/frontend-engineer.md
+  - claude-code/agents/frontend-engineer.md
   - github-copilot/agents/frontend-engineer.agent.md
   - openai-codex/agents/frontend-engineer.toml
 ---

@@ -9,7 +9,7 @@ capabilities:
 skills:
   - owasp-reference
 adapters:
-  - claude-code/agents/security-engineer/security-engineer.md
+  - claude-code/agents/security-engineer.md
   - github-copilot/agents/security-engineer.agent.md
   - openai-codex/agents/security-engineer.toml
 ---

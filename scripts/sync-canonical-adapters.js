@@ -320,8 +320,14 @@ function syncAgents() {
   const names = listCanonicalNames('agents', 'AGENT.md');
 
   for (const entry of fs.readdirSync(claudeAgentsDir, { withFileTypes: true })) {
-    if (entry.isDirectory() && !names.includes(entry.name)) {
+    if (entry.isDirectory()) {
       removePathIfExists(path.join(claudeAgentsDir, entry.name));
+      continue;
+    }
+
+    if (entry.isFile() && entry.name.endsWith('.md')) {
+      const slug = entry.name.replace(/\.md$/, '');
+      if (!names.includes(slug)) removePathIfExists(path.join(claudeAgentsDir, entry.name));
     }
   }
 
@@ -344,14 +350,15 @@ function syncAgents() {
   }
 
   for (const name of names) {
-    const claudePath = path.join(claudeAgentsDir, name, `${name}.md`);
+    const claudePath = path.join(claudeAgentsDir, `${name}.md`);
+    const legacyClaudePath = path.join(claudeAgentsDir, name, `${name}.md`);
     const copilotPath = path.join(copilotAgentsDir, `${name}.agent.md`);
     const codexPath = path.join(codexAgentsDir, `${name}.toml`);
     const canonicalPath = path.join(canonicalAgentsDir, name, 'AGENT.md');
     const canonicalChangelogPath = path.join(canonicalAgentsDir, name, 'CHANGELOG.md');
-    const claudeChangelogPath = path.join(claudeAgentsDir, name, 'CHANGELOG.md');
+    const legacyClaudeChangelogPath = path.join(claudeAgentsDir, name, 'CHANGELOG.md');
 
-    const claudeMarkdown = read(claudePath);
+    const claudeMarkdown = read(fs.existsSync(claudePath) ? claudePath : legacyClaudePath);
     const copilotMarkdown = read(copilotPath);
     const claudeParts = splitFrontmatter(claudeMarkdown);
     const copilotParts = splitFrontmatter(copilotMarkdown);
@@ -390,7 +397,7 @@ function syncAgents() {
         subagents,
         skills,
         adapterPaths: [
-          `claude-code/agents/${name}/${name}.md`,
+          `claude-code/agents/${name}.md`,
           `github-copilot/agents/${name}.agent.md`,
           `openai-codex/agents/${name}.toml`,
         ],
@@ -398,11 +405,12 @@ function syncAgents() {
       })
     );
 
-    if (!fs.existsSync(canonicalChangelogPath) && fs.existsSync(claudeChangelogPath)) {
-      writeIfChanged(canonicalChangelogPath, read(claudeChangelogPath));
+    if (!fs.existsSync(canonicalChangelogPath) && fs.existsSync(legacyClaudeChangelogPath)) {
+      writeIfChanged(canonicalChangelogPath, read(legacyClaudeChangelogPath));
     }
 
     writeIfChanged(claudePath, `${claudeParts.frontmatter}\n\n${canonicalBody}`);
+    removePathIfExists(path.join(claudeAgentsDir, name));
     writeIfChanged(
       copilotPath,
       renderCopilotMarkdown({

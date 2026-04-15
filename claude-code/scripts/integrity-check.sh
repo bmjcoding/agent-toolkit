@@ -44,11 +44,11 @@ collect_files() {
     done < <(find -L "${CLAUDE_HOME}/hooks" -maxdepth 2 -name "*.sh" -type f -print0 2>/dev/null | sort -z)
   fi
 
-  # Agent definitions — follow agents symlink -> toolkit/agents/<name>/<name>.md
+  # Agent definitions — follow agents symlink -> toolkit/claude-code/agents/<name>.md
   if [ -d "${CLAUDE_HOME}/agents" ]; then
     while IFS= read -r -d '' f; do
       files+=("$f")
-    done < <(find -L "${CLAUDE_HOME}/agents" -maxdepth 2 -name "*.md" ! -name "CHANGELOG.md" -type f -print0 2>/dev/null | sort -z)
+    done < <(find -L "${CLAUDE_HOME}/agents" -maxdepth 1 -name "*.md" ! -name "CHANGELOG.md" -type f -print0 2>/dev/null | sort -z)
   fi
 
   # Skill definitions — follow skills symlink -> skills/<name>/SKILL.md

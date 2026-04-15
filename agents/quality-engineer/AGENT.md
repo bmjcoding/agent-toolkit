@@ -9,7 +9,7 @@ capabilities:
   - search
   - execute
 adapters:
-  - claude-code/agents/quality-engineer/quality-engineer.md
+  - claude-code/agents/quality-engineer.md
   - github-copilot/agents/quality-engineer.agent.md
   - openai-codex/agents/quality-engineer.toml
 ---

@@ -11,7 +11,7 @@ capabilities:
 skills:
   - observability-patterns
 adapters:
-  - claude-code/agents/site-reliability-engineer/site-reliability-engineer.md
+  - claude-code/agents/site-reliability-engineer.md
   - github-copilot/agents/site-reliability-engineer.agent.md
   - openai-codex/agents/site-reliability-engineer.toml
 ---
