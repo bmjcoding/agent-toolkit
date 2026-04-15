@@ -26,11 +26,11 @@ components:
 
 | type | resolved path |
 |----------|---------------|
-| `agent`  | `claude-code/agents/<id>.md` |
-| `skill`  | `skills/<id>/SKILL.md` |
-| `command`| `claude-code/commands/<id>/<id>.md` |
-| `hook`   | `claude-code/hooks/<id>/<id>.sh` |
-| `rule`   | `rules/<id>/<id>.md` |
+| `agent`  | `claude-code/agents/<itemId>.md` |
+| `skill`  | `skills/<itemId>/SKILL.md` |
+| `command`| `claude-code/commands/<itemId>/<itemId>.md` |
+| `hook`   | `hooks/<itemId>/<itemId>.sh` |
+| `rule`   | `rules/<itemId>/<itemId>.md` |
 
 ## Bundles
 

@@ -62,6 +62,33 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ### Added
 
+- Added generated hook adapter support to `scripts/sync-canonical-adapters.js` and
+  `scripts/smoke-generated-assets.js`, so the canonical root `hooks/` tree now populates
+  the GitHub Copilot and OpenAI Codex hook surfaces the same way canonical agents and
+  workflows populate their tool-native adapters.
+
+### Changed
+
+- Completed the root-hooks ownership migration: repo-root `hooks/` is now the canonical
+  shared hook layer, Claude installs from that root tree, and Copilot/Codex keep
+  generated tool-local adapters plus runtime registries where documented payload
+  differences still require them.
+- Updated ADR-0009 and the active hook READMEs to describe the landed end state instead
+  of an in-flight migration, including removal of the `toolkit-drift-check` and
+  `toolkit-edit-reminder` maintenance hooks.
+- Updated generated-asset validation and catalog tests to match the current workflow
+  release versions and the removal of obsolete GitHub Copilot command manifests.
+
+### Removed
+
+- Removed retired hook-local shell copies from `claude-code/hooks/` and the dropped
+  `toolkit-drift-check` / `toolkit-edit-reminder` hook surfaces across Claude, Copilot,
+  and Codex.
+- Removed obsolete GitHub Copilot command manifests and retired `tools/retros/`
+  assets that are no longer part of the active toolkit layout.
+
+### Added
+
 - Added a GitHub Actions sync gate that reruns canonical adapter generation on matching
   pushes and pull requests, fails stale PRs, and smoke-tests that generated tool
   surfaces and `index.json` are present and internally consistent.

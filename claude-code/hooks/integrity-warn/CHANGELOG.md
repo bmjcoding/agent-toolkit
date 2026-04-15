@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.1.0] - 2026-04-15
+
+### Changed
+
+- Canonical changelog ownership moved to root `hooks/integrity-warn/CHANGELOG.md`. This Claude-local file now remains only as a historical redirect.
+
 ## [4.0.0] - 2026-04-13
 
 ### Removed
@@ -33,7 +39,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/integrity-warn-v3.0.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/integrity-warn-v4.1.0...HEAD
+[4.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/integrity-warn-v4.0.0...claude-code/integrity-warn-v4.1.0
+[4.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/integrity-warn-v3.0.0...claude-code/integrity-warn-v4.0.0
 [3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/integrity-warn-v2.0.0...claude-code/integrity-warn-v3.0.0
 [2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/integrity-warn-v1.0.0...claude-code/integrity-warn-v2.0.0
 [1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/claude-code/integrity-warn-v1.0.0

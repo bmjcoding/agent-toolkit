@@ -860,10 +860,10 @@ function buildCatalog() {
     }));
   }
 
-  const claudeHooksDir = path.join(REPO_ROOT, 'claude-code', 'hooks');
-  for (const entry of fs.readdirSync(claudeHooksDir, { withFileTypes: true }).filter(dirent => dirent.isDirectory()).sort((a, b) => a.name.localeCompare(b.name))) {
+  const canonicalHooksDir = path.join(REPO_ROOT, 'hooks');
+  for (const entry of fs.readdirSync(canonicalHooksDir, { withFileTypes: true }).filter(dirent => dirent.isDirectory()).sort((a, b) => a.name.localeCompare(b.name))) {
     const id = entry.name;
-    const artifactPath = `claude-code/hooks/${id}/${id}.sh`;
+    const artifactPath = `hooks/${id}/${id}.sh`;
     if (!exists(path.join(REPO_ROOT, artifactPath))) continue;
 
     const hookMetadata = readHookRuntimeMetadata(runtimeMetadata, 'claude-code', id);
@@ -871,7 +871,7 @@ function buildCatalog() {
     catalog.artifacts.push(createArtifactRecord({
       componentId: id,
       componentKind: 'hook',
-      componentVersion: readLatestReleasedVersion(path.join(claudeHooksDir, id, 'CHANGELOG.md')),
+      componentVersion: readLatestReleasedVersion(path.join(canonicalHooksDir, id, 'CHANGELOG.md')),
       lifecycle: hookMetadata.lifecycle,
       lifecycleNotes: hookMetadata.lifecycleNotes,
       targetTool: 'claude-code',
@@ -891,10 +891,10 @@ function buildCatalog() {
   }
 
   const copilotHooksDir = path.join(REPO_ROOT, 'github-copilot', 'hooks');
-  for (const fileName of fs.readdirSync(copilotHooksDir).filter(name => name.endsWith('.json')).sort()) {
-    const id = fileName.replace(/\.json$/, '');
-    const artifactPath = `github-copilot/hooks/${fileName}`;
-    const shellPath = `github-copilot/hooks/${id}.sh`;
+  for (const entry of fs.readdirSync(copilotHooksDir, { withFileTypes: true }).filter(dirent => dirent.isDirectory()).sort((a, b) => a.name.localeCompare(b.name))) {
+    const id = entry.name;
+    const artifactPath = `github-copilot/hooks/${id}/${id}.json`;
+    const shellPath = `github-copilot/hooks/${id}/${id}.sh`;
     if (!exists(path.join(REPO_ROOT, shellPath))) continue;
 
     const hookMetadata = readHookRuntimeMetadata(runtimeMetadata, 'github-copilot', id);
@@ -902,7 +902,7 @@ function buildCatalog() {
     catalog.artifacts.push(createArtifactRecord({
       componentId: id,
       componentKind: 'hook',
-      componentVersion: readLatestReleasedVersion(path.join(copilotHooksDir, 'CHANGELOG.md')),
+      componentVersion: readLatestReleasedVersion(path.join(canonicalHooksDir, id, 'CHANGELOG.md')),
       lifecycle: hookMetadata.lifecycle,
       lifecycleNotes: hookMetadata.lifecycleNotes,
       targetTool: 'github-copilot',
@@ -931,17 +931,17 @@ function buildCatalog() {
 
   const codexHooksDir = path.join(REPO_ROOT, 'openai-codex', 'hooks');
   const codexHooksRegistry = 'openai-codex/hooks/hooks.json';
-  for (const fileName of fs.readdirSync(codexHooksDir).filter(name => name.endsWith('.sh')).sort()) {
-    const id = fileName.replace(/\.sh$/, '');
-    const artifactPath = `openai-codex/hooks/${fileName}`;
+  for (const entry of fs.readdirSync(codexHooksDir, { withFileTypes: true }).filter(dirent => dirent.isDirectory()).sort((a, b) => a.name.localeCompare(b.name))) {
+    const id = entry.name;
+    const artifactPath = `openai-codex/hooks/${id}/${id}.sh`;
     if (!exists(path.join(REPO_ROOT, artifactPath))) continue;
 
     const hookMetadata = readHookRuntimeMetadata(runtimeMetadata, 'openai-codex', id);
-    const installPath = `~/.codex/hooks/${fileName}`;
+    const installPath = `~/.codex/hooks/${id}.sh`;
     catalog.artifacts.push(createArtifactRecord({
       componentId: id,
       componentKind: 'hook',
-      componentVersion: readLatestReleasedVersion(path.join(codexHooksDir, 'CHANGELOG.md')),
+      componentVersion: readLatestReleasedVersion(path.join(canonicalHooksDir, id, 'CHANGELOG.md')),
       lifecycle: hookMetadata.lifecycle,
       lifecycleNotes: hookMetadata.lifecycleNotes,
       targetTool: 'openai-codex',

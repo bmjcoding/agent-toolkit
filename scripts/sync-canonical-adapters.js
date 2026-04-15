@@ -5,6 +5,68 @@ const fs = require('fs');
 const path = require('path');
 
 const REPO_ROOT = path.resolve(__dirname, '..');
+const HOOK_SPECS = {
+  'branch-guard': {
+    adapterKind: 'command-filter',
+    commandPredicate: 'is_git_commit_or_push_command',
+    copilotEvent: 'PreToolUse',
+    codexEvent: 'PreToolUse',
+    codexMatcher: 'Bash',
+    codexStatusMessage: 'Checking branch guard...',
+  },
+  'changelog-check': {
+    adapterKind: 'changelog-check',
+    copilotEvent: 'PreToolUse',
+    codexEvent: 'PreToolUse',
+    codexMatcher: 'Bash',
+    codexStatusMessage: 'Validating changelog entry...',
+  },
+  'extract-handoff': {
+    adapterKind: 'handoff',
+    copilotEvent: 'SubagentStop',
+    codexEvent: 'Stop',
+    codexMatcher: '.*',
+    codexStatusMessage: 'Extracting handoff JSON...',
+  },
+  'inject-context': {
+    adapterKind: 'direct',
+    copilotEvent: 'SubagentStart',
+    codexEvent: 'UserPromptSubmit',
+    codexMatcher: '.*',
+    codexStatusMessage: 'Injecting session context...',
+  },
+  'integrity-warn': {
+    adapterKind: 'integrity-warn',
+    copilotEvent: 'SubagentStop',
+    codexEvent: 'PostToolUse',
+    codexMatcher: 'Bash',
+    codexStatusMessage: 'Running integrity check...',
+  },
+  'pre-push-secrets': {
+    adapterKind: 'command-filter',
+    commandPredicate: 'is_git_commit_or_push_command',
+    copilotEvent: 'PreToolUse',
+    codexEvent: 'PreToolUse',
+    codexMatcher: 'Bash',
+    codexStatusMessage: 'Scanning for secrets before push...',
+  },
+  'protect-config': {
+    adapterKind: 'protect-config',
+    copilotEvent: 'PreToolUse',
+    codexEvent: 'PreToolUse',
+    codexMatcher: 'Bash',
+    codexStatusMessage: 'Checking config protection...',
+  },
+};
+const HOOK_ORDER = [
+  'branch-guard',
+  'changelog-check',
+  'extract-handoff',
+  'inject-context',
+  'integrity-warn',
+  'pre-push-secrets',
+  'protect-config',
+];
 
 function read(filePath) {
   return fs.readFileSync(filePath, 'utf8');
@@ -313,6 +375,206 @@ function extractCanonicalMetadata(markdown) {
   };
 }
 
+function listCanonicalHookSlugs() {
+  const hooksDir = path.join(REPO_ROOT, 'hooks');
+  return fs.readdirSync(hooksDir, { withFileTypes: true })
+    .filter(entry => entry.isDirectory())
+    .map(entry => entry.name)
+    .filter(name => fs.existsSync(path.join(hooksDir, name, `${name}.sh`)))
+    .sort((a, b) => HOOK_ORDER.indexOf(a) - HOOK_ORDER.indexOf(b));
+}
+
+function renderCopilotHookManifest({ slug, event }) {
+  return JSON.stringify({
+    hooks: {
+      [event]: [
+        {
+          type: 'command',
+          command: `bash "$AGENT_TOOLKIT_DIR/github-copilot/hooks/${slug}/${slug}.sh"`,
+        },
+      ],
+    },
+  }, null, 2) + '\n';
+}
+
+function renderHookAdapter({ tool, slug, spec }) {
+  const label = tool === 'github-copilot' ? 'VS Code Copilot' : 'Codex';
+
+  if (spec.adapterKind === 'integrity-warn') {
+    return [
+      '#!/usr/bin/env bash',
+      `# ${label} adapter: point the canonical integrity-warn hook at the ${tool === 'github-copilot' ? 'Copilot' : 'Codex'} integrity script.`,
+      'set -euo pipefail',
+      '',
+      'SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd -P)"',
+      'REPO_DIR="$(cd "${SCRIPT_DIR}/../../.." && pwd -P)"',
+      '',
+      `export AGENT_TOOLKIT_HOOK_TOOL="${tool}"`,
+      `export AGENT_TOOLKIT_INTEGRITY_SCRIPT="\${REPO_DIR}/${tool}/scripts/integrity-check.sh"`,
+      '',
+      'exec "${REPO_DIR}/hooks/integrity-warn/integrity-warn.sh"',
+      '',
+    ].join('\n');
+  }
+
+  const lines = [
+    '#!/usr/bin/env bash',
+  ];
+
+  if (spec.adapterKind === 'direct') {
+    lines.push(`# ${label} adapter: delegate directly to the canonical root ${slug} hook.`);
+  } else if (spec.adapterKind === 'handoff') {
+    lines.push(`# ${label} adapter: normalize stop-event fields, then delegate to root hooks/${slug}.`);
+  } else if (spec.adapterKind === 'protect-config') {
+    lines.push(`# ${label} adapter: normalize Bash payloads for root protect-config and block protected file edits directly${tool === 'openai-codex' ? ' when present' : ''}.`);
+  } else if (spec.adapterKind === 'changelog-check') {
+    lines.push(`# ${label} adapter: derive a pre-push-style ref payload from git push, then delegate to root hooks/changelog-check.`);
+  } else {
+    lines.push(`# ${label} adapter: self-filter ${tool === 'github-copilot' ? 'PreToolUse' : 'Bash'} payloads, then delegate to root hooks/${slug}.`);
+  }
+
+  lines.push('set -euo pipefail', '', 'SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd -P)"');
+  lines.push('# shellcheck source=../../../hooks/_adapter_lib.sh');
+  lines.push('source "${SCRIPT_DIR}/../../../hooks/_adapter_lib.sh"');
+  lines.push('');
+
+  if (spec.adapterKind === 'direct') {
+    lines.push(`run_root_hook "${slug}"`, '');
+    return lines.join('\n');
+  }
+
+  lines.push('read_adapter_input');
+
+  if (spec.adapterKind === 'handoff') {
+    lines.push('NORMALIZED=$(normalize_handoff_payload)');
+    lines.push('[[ -n "${NORMALIZED}" ]] || exit 0', '');
+    lines.push(`run_root_hook_with_input "${slug}" "\${NORMALIZED}"`, '');
+    return lines.join('\n');
+  }
+
+  if (spec.adapterKind === 'command-filter') {
+    lines.push('COMMAND=$(extract_command)');
+    lines.push('[[ -n "${COMMAND}" ]] || exit 0');
+    lines.push(`${spec.commandPredicate} "\${COMMAND}" || exit 0`, '');
+    lines.push(`run_root_hook_with_input "${slug}" "$(normalize_command_payload "\${COMMAND}")"`, '');
+    return lines.join('\n');
+  }
+
+  if (spec.adapterKind === 'changelog-check') {
+    lines.push('COMMAND=$(extract_command)');
+    lines.push('[[ -n "${COMMAND}" ]] || exit 0');
+    lines.push('is_git_push_command "${COMMAND}" || exit 0', '');
+    lines.push('PUSH_CONTEXT=$(derive_push_context "${COMMAND}") || exit 0');
+    lines.push('IFS=$\'\\t\' read -r REMOTE REMOTE_URL LOCAL_REF LOCAL_SHA REMOTE_REF REMOTE_SHA <<< "${PUSH_CONTEXT}"', '');
+    lines.push('CHANGELOG_OUTPUT="$(printf \'%s %s %s %s\\n\' "${LOCAL_REF}" "${LOCAL_SHA}" "${REMOTE_REF}" "${REMOTE_SHA}" | run_root_hook "changelog-check" "${REMOTE}" "${REMOTE_URL}" 2>&1)" || CHANGELOG_STATUS=$?');
+    lines.push('CHANGELOG_STATUS="${CHANGELOG_STATUS:-0}"', '');
+    lines.push('if [[ "${CHANGELOG_STATUS}" -eq 0 ]]; then');
+    lines.push('  exit 0');
+    lines.push('fi', '');
+    lines.push('REASON="$(printf \'%s\\n\' "${CHANGELOG_OUTPUT}" | awk \'NF { gsub(/[[:space:]]+/, " "); print; exit }\')"');
+    lines.push('[[ -n "${REASON}" ]] || REASON="CHANGELOG.md checks failed for the pending git push. Update the relevant changelog entry before retrying."');
+    lines.push('emit_deny "${REASON}"', '');
+    return lines.join('\n');
+  }
+
+  if (spec.adapterKind === 'protect-config') {
+    lines.push('COMMAND=$(extract_command)');
+    lines.push('if [[ -n "${COMMAND}" ]]; then');
+    lines.push('  run_root_hook_with_input "protect-config" "$(normalize_command_payload "${COMMAND}")"');
+    lines.push('  exit 0');
+    lines.push('fi', '');
+    lines.push('RAW_TOOL=$(extract_tool_name)');
+    lines.push('TOOL=$(normalize_edit_tool_name "${RAW_TOOL}")');
+    lines.push('FILE=$(extract_file_path)');
+    lines.push('[[ -n "${TOOL}" && -n "${FILE}" ]] || exit 0', '');
+    lines.push('if is_protected_file_path "${FILE}"; then');
+    lines.push('  emit_deny "Write to control-plane files is blocked. Protected paths (settings.json, hooks/, CLAUDE.md, agents/, statusline-command.sh, orchestrator logs, orchestrator session.id, hookify rules) require direct user action to modify."');
+    lines.push('fi', '', 'exit 0', '');
+    return lines.join('\n');
+  }
+
+  throw new Error(`Unknown hook adapter kind: ${spec.adapterKind}`);
+}
+
+function renderCodexHooksJson(slugs) {
+  const grouped = {
+    PreToolUse: [],
+    PostToolUse: [],
+    UserPromptSubmit: [],
+    Stop: [],
+  };
+
+  for (const slug of slugs) {
+    const spec = HOOK_SPECS[slug];
+    grouped[spec.codexEvent].push({
+      matcher: spec.codexMatcher,
+      hooks: [
+        {
+          type: 'command',
+          command: `\${AGENT_TOOLKIT_DIR:-$HOME/.codex}/openai-codex/hooks/${slug}/${slug}.sh`,
+          statusMessage: spec.codexStatusMessage,
+        },
+      ],
+    });
+  }
+
+  return JSON.stringify({ hooks: grouped }, null, 2) + '\n';
+}
+
+function pruneUnknownHookDirs(toolDir, allowedSlugs) {
+  for (const entry of fs.readdirSync(toolDir, { withFileTypes: true })) {
+    if (!entry.isDirectory()) continue;
+    if (allowedSlugs.has(entry.name)) continue;
+    fs.rmSync(path.join(toolDir, entry.name), { recursive: true, force: true });
+  }
+}
+
+function syncHooks() {
+  const canonicalSlugs = listCanonicalHookSlugs();
+  const knownSlugs = new Set(Object.keys(HOOK_SPECS));
+
+  for (const slug of canonicalSlugs) {
+    if (!knownSlugs.has(slug)) {
+      throw new Error(`Missing hook spec for canonical hook: ${slug}`);
+    }
+  }
+
+  for (const slug of knownSlugs) {
+    if (!canonicalSlugs.includes(slug)) {
+      throw new Error(`Hook spec has no matching canonical hook directory: ${slug}`);
+    }
+  }
+
+  const copilotHooksDir = path.join(REPO_ROOT, 'github-copilot', 'hooks');
+  const codexHooksDir = path.join(REPO_ROOT, 'openai-codex', 'hooks');
+  const allowedSlugs = new Set(canonicalSlugs);
+
+  pruneUnknownHookDirs(copilotHooksDir, allowedSlugs);
+  pruneUnknownHookDirs(codexHooksDir, allowedSlugs);
+
+  for (const slug of canonicalSlugs) {
+    const spec = HOOK_SPECS[slug];
+
+    writeIfChanged(
+      path.join(copilotHooksDir, slug, `${slug}.json`),
+      renderCopilotHookManifest({ slug, event: spec.copilotEvent })
+    );
+    writeIfChanged(
+      path.join(copilotHooksDir, slug, `${slug}.sh`),
+      renderHookAdapter({ tool: 'github-copilot', slug, spec })
+    );
+    writeIfChanged(
+      path.join(codexHooksDir, slug, `${slug}.sh`),
+      renderHookAdapter({ tool: 'openai-codex', slug, spec })
+    );
+  }
+
+  writeIfChanged(
+    path.join(codexHooksDir, 'hooks.json'),
+    renderCodexHooksJson(canonicalSlugs)
+  );
+}
+
 function syncAgents() {
   const claudeAgentsDir = path.join(REPO_ROOT, 'claude-code', 'agents');
   const copilotAgentsDir = path.join(REPO_ROOT, 'github-copilot', 'agents');
@@ -460,13 +722,6 @@ function syncWorkflows() {
     if (!names.includes(slug)) removePathIfExists(path.join(copilotPromptsDir, entry.name));
   }
 
-  const copilotCommandsDir = path.join(REPO_ROOT, 'github-copilot', 'commands');
-  for (const entry of fs.readdirSync(copilotCommandsDir, { withFileTypes: true })) {
-    if (entry.isDirectory() && !names.includes(entry.name)) {
-      removePathIfExists(path.join(copilotCommandsDir, entry.name));
-    }
-  }
-
   for (const name of names) {
     const claudePath = path.join(claudeCommandsDir, name, `${name}.md`);
     const copilotPath = path.join(copilotPromptsDir, `${name}.prompt.md`);
@@ -531,8 +786,12 @@ function syncWorkflows() {
 }
 
 function main() {
-  syncAgents();
-  syncWorkflows();
+  const modes = new Set(process.argv.slice(2));
+  const runAll = modes.size === 0 || modes.has('--all');
+
+  if (runAll || modes.has('--agents')) syncAgents();
+  if (runAll || modes.has('--workflows')) syncWorkflows();
+  if (runAll || modes.has('--hooks')) syncHooks();
 }
 
 main();

@@ -9,8 +9,9 @@ Code all consume `AGENTS.md` directly.
 ## Project Overview
 
 **agent-toolkit** is a multi-tool AI agent instruction repository containing shared
-skills and rules plus tool-specific agents, commands, hooks, prompts, bundle manifests,
-and install assets for the Frankenstein orchestration pipeline and related workflows.
+agents, skills, rules, workflows, and hooks plus tool-specific adapters, prompts,
+bundles, manifests, and install assets for the Frankenstein orchestration pipeline and
+related workflows.
 
 Directory layout:
 
@@ -20,6 +21,7 @@ agent-toolkit/
     adr/           # Repo-wide architecture decisions
     todo/          # Working notes and follow-up docs
   agents/          # Canonical shared agent instruction bodies
+  hooks/           # Canonical shared hook logic (target ownership model; see ADR-0009)
   skills/          # Canonical shared skills
   rules/           # Canonical shared rules
   workflows/       # Canonical shared workflow definitions
@@ -27,6 +29,7 @@ agent-toolkit/
   github-copilot/  # VS Code Copilot-native agents, prompts, instructions, hooks, scripts
   openai-codex/    # Codex-native agents, hooks, config templates, rule build assets
   AGENTS.md        # Primary shared instructions
+  CLAUDE.md        # Claude compatibility shim that imports AGENTS.md
 ```
 
 ## Ownership Model
@@ -35,10 +38,13 @@ agent-toolkit/
 - Root `rules/` is the single source of truth for shared rule content.
 - Root `agents/` is the single source of truth for shared agent instruction bodies.
 - Root `workflows/` is the single source of truth for shared workflow bodies.
+- Root `hooks/` is the canonical shared owner of hook logic and hook changelogs.
 - `AGENTS.md` is the canonical shared instruction file.
+- `CLAUDE.md` is a compatibility shim for Claude-native consumers.
 - Tool directories should contain tool-native runtime assets or adapters only.
 - Shared skills are tagged as `skill/<slug>-v<major>.<minor>.<patch>`.
 - Shared rules are tagged as `rule/<slug>-v<major>.<minor>.<patch>`.
+- Shared hooks are tagged as `hook/<slug>-v<major>.<minor>.<patch>`.
 
 ---
 

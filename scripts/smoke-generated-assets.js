@@ -51,7 +51,6 @@ function listFileBackedSlugs(rootDir, suffix) {
 function diff(expected, actual) {
   return expected.filter(item => !actual.includes(item));
 }
-
 function runNodeScript(scriptPath, extraArgs = []) {
   execFileSync(process.execPath, [path.join(REPO_ROOT, scriptPath), ...extraArgs], {
     cwd: REPO_ROOT,
@@ -206,17 +205,22 @@ function parseTomlMultilineBasicString(text, key) {
 function assertGeneratedFilesExist() {
   const agents = listCanonicalSlugs('agents', 'AGENT.md');
   const workflows = listCanonicalSlugs('workflows', 'WORKFLOW.md');
+  const hooks = listDirectoryBackedSlugs('hooks', slug => `${slug}.sh`);
   const claudeAgents = listDirectoryBackedSlugs(path.join('claude-code', 'agents'), slug => `${slug}.md`);
   const copilotAgents = listFileBackedSlugs(path.join('github-copilot', 'agents'), '.agent.md');
   const codexAgents = listFileBackedSlugs(path.join('openai-codex', 'agents'), '.toml');
   const claudeCommands = listDirectoryBackedSlugs(path.join('claude-code', 'commands'), slug => `${slug}.md`);
   const copilotPrompts = listFileBackedSlugs(path.join('github-copilot', 'prompts'), '.prompt.md');
+  const copilotHooks = listDirectoryBackedSlugs(path.join('github-copilot', 'hooks'), slug => `${slug}.json`);
+  const codexHooks = listDirectoryBackedSlugs(path.join('openai-codex', 'hooks'), slug => `${slug}.sh`);
 
   assert(diff(claudeAgents, agents).length === 0, `orphan Claude agent adapters found: ${diff(claudeAgents, agents).join(', ')}`);
   assert(diff(copilotAgents, agents).length === 0, `orphan GitHub Copilot agent adapters found: ${diff(copilotAgents, agents).join(', ')}`);
   assert(diff(codexAgents, agents).length === 0, `orphan OpenAI Codex agent adapters found: ${diff(codexAgents, agents).join(', ')}`);
   assert(diff(claudeCommands, workflows).length === 0, `orphan Claude command adapters found: ${diff(claudeCommands, workflows).join(', ')}`);
   assert(diff(copilotPrompts, workflows).length === 0, `orphan GitHub Copilot prompt adapters found: ${diff(copilotPrompts, workflows).join(', ')}`);
+  assert(diff(copilotHooks, hooks).length === 0, `orphan GitHub Copilot hook adapters found: ${diff(copilotHooks, hooks).join(', ')}`);
+  assert(diff(codexHooks, hooks).length === 0, `orphan OpenAI Codex hook adapters found: ${diff(codexHooks, hooks).join(', ')}`);
 
   for (const agent of agents) {
     assert(exists(path.join('claude-code', 'agents', `${agent}.md`)), `missing Claude agent adapter for ${agent}`);
@@ -229,7 +233,15 @@ function assertGeneratedFilesExist() {
     assert(exists(path.join('github-copilot', 'prompts', `${workflow}.prompt.md`)), `missing GitHub Copilot prompt adapter for ${workflow}`);
   }
 
-  return { agents, workflows };
+  for (const hook of hooks) {
+    assert(exists(path.join('github-copilot', 'hooks', hook, `${hook}.json`)), `missing GitHub Copilot hook manifest for ${hook}`);
+    assert(exists(path.join('github-copilot', 'hooks', hook, `${hook}.sh`)), `missing GitHub Copilot hook adapter for ${hook}`);
+    assert(exists(path.join('openai-codex', 'hooks', hook, `${hook}.sh`)), `missing OpenAI Codex hook adapter for ${hook}`);
+  }
+
+  assert(exists(path.join('openai-codex', 'hooks', 'hooks.json')), 'missing OpenAI Codex hooks registry');
+
+  return { agents, workflows, hooks };
 }
 
 function assertCodexAgentBodiesMatch(agents) {
@@ -246,7 +258,7 @@ function assertCodexAgentBodiesMatch(agents) {
   }
 }
 
-function assertCatalogEntriesExist(agents, workflows) {
+function assertCatalogEntriesExist(agents, workflows, hooks) {
   const index = readJson('index.json');
   const artifactKeys = new Set(
     (index.artifacts || []).map(artifact => `${artifact.target_tool}|${artifact.artifact_path}`)
@@ -283,10 +295,20 @@ function assertCatalogEntriesExist(agents, workflows) {
     );
   }
 
-  assert(
-    artifactKeys.has('openai-codex|openai-codex/hooks/branch-guard.sh'),
-    'missing index.json entry for OpenAI Codex branch-guard hook'
-  );
+  for (const hook of hooks) {
+    assert(
+      artifactKeys.has(`claude-code|hooks/${hook}/${hook}.sh`),
+      `missing index.json entry for Claude hook ${hook}`
+    );
+    assert(
+      artifactKeys.has(`github-copilot|github-copilot/hooks/${hook}/${hook}.json`),
+      `missing index.json entry for GitHub Copilot hook ${hook}`
+    );
+    assert(
+      artifactKeys.has(`openai-codex|openai-codex/hooks/${hook}/${hook}.sh`),
+      `missing index.json entry for OpenAI Codex hook ${hook}`
+    );
+  }
 }
 
 function assertRetroStorageContract() {
@@ -321,14 +343,14 @@ function main() {
   runNodeScript('scripts/generate-index.js', ['--test']);
   runNodeScript('scripts/generate-index.js', ['--check']);
 
-  const { agents, workflows } = assertGeneratedFilesExist();
+  const { agents, workflows, hooks } = assertGeneratedFilesExist();
   assert(exists(path.relative(REPO_ROOT, INDEX_PATH)), 'missing generated index.json');
   assertCodexAgentBodiesMatch(agents);
-  assertCatalogEntriesExist(agents, workflows);
+  assertCatalogEntriesExist(agents, workflows, hooks);
   assertRetroStorageContract();
 
   process.stdout.write(
-    `Smoke test passed: ${agents.length} canonical agents, ${workflows.length} canonical workflows, and index.json are all generated.\n`
+    `Smoke test passed: ${agents.length} canonical agents, ${workflows.length} canonical workflows, ${hooks.length} canonical hooks, and index.json are all generated.\n`
   );
 }
 

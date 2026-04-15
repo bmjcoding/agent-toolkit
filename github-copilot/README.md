@@ -10,7 +10,7 @@ VS Code Copilot adapters and wiring those canonical files require.
 ```text
 github-copilot/
   agents/       # VS Code Copilot agent adapters for root agents/
-  hooks/        # VS Code Copilot hooks
+  hooks/        # VS Code Copilot hook manifests plus any tool-local adapters
   instructions/ # Rule adapters for root rules/
   prompts/      # Workflow adapters for root workflows/
   scripts/
@@ -30,10 +30,13 @@ Manual wiring:
 ```sh
 TOOLKIT=/path/to/agent-toolkit
 ln -sfn "${TOOLKIT}/github-copilot/agents"       .github/agents
-ln -sfn "${TOOLKIT}/github-copilot/hooks"        .github/hooks
 ln -sfn "${TOOLKIT}/github-copilot/instructions" .github/instructions
 ln -sfn "${TOOLKIT}/github-copilot/prompts"      .github/prompts
 ```
+
+For hooks, prefer `github-copilot/scripts/install.sh`. Copilot expects a flat
+`.github/hooks/*.json` discovery surface, while the repo now stores each hook under
+`github-copilot/hooks/<slug>/`.
 
 ## Shared instructions
 
@@ -48,8 +51,10 @@ Code Copilot-native adapters for the canonical root rules in `rules/`.
 
 ## Hooks
 
-`github-copilot/hooks/` contains VS Code Copilot hook assets. These are VS Code Copilot
-hooks, not Codex hooks.
+Root `hooks/` is now the canonical shared owner for hook logic. `github-copilot/hooks/`
+keeps the VS Code Copilot manifests and generated tool-local adapters required by
+Copilot's runtime semantics. The installer still flattens the manifests into
+`.github/hooks/*.json`, which is the discovery shape Copilot expects.
 
 ## Tag format
 
