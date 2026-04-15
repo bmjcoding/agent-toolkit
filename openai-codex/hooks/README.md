@@ -1,7 +1,6 @@
 # OpenAI Codex Hooks
 
-Experimental hooks ported from the Claude Code hook sources in
-[`claude-code/hooks/`](../../claude-code/hooks/).
+Experimental hooks adapted for the OpenAI Codex CLI hook surface.
 
 ## Status
 
@@ -74,18 +73,18 @@ validate in your environment.
 - **Windows not supported**: Hook script execution relies on a POSIX shell
   (`/usr/bin/env bash`). Codex hooks do not run on Windows.
 
-- **Stdin payload schema**: These scripts were written for the Claude Code hook
-  stdin payload format (e.g., `.tool_name`, `.tool_input.command`,
-  `.tool_input.file_path`, `.agent_id`, `.last_assistant_message`). Codex may
-  use different field names. Each script contains a comment noting which fields
-  it reads — check and update the `jq` expressions if Codex differs.
+- **Stdin payload schema**: These scripts read JSON from stdin and currently
+  expect fields such as `.tool_name`, `.tool_input.command`,
+  `.tool_input.file_path`, `.agent_id`, and `.last_assistant_message`. Verify
+  those field names against your Codex version and update the `jq` expressions
+  if the payload shape differs.
 
-- **Claude-specific env vars**: `toolkit-drift-check.sh` reads
-  `$CLAUDE_SESSION_ID` for per-session dedup. Substitute the equivalent Codex
-  session ID env var if one exists, or accept the PID-based fallback.
-  `protect-config.sh` guards `~/.claude/` paths — if your Codex install uses a
-  different config dir (e.g., `~/.codex/`), extend the `PROTECTED` regex
-  accordingly.
+- **Session/config paths**: `toolkit-drift-check.sh` reads
+  `$CLAUDE_SESSION_ID` as a compatibility fallback for per-session dedup.
+  Replace it with the equivalent Codex session env var if one exists, or use
+  the PID fallback. `protect-config.sh` guards compatibility shims and
+  canonical toolkit paths by default; extend the `PROTECTED` regex if your
+  Codex install uses additional config directories.
 
 - **`changelog-check.sh`** was originally a `git pre-push` hook invoked with
   positional args and refs on stdin. In Codex `PreToolUse` context, the script
@@ -100,16 +99,6 @@ validate in your environment.
 
 ## Behavioral reference
 
-For authoritative behavior documentation, read the Claude Code hook sources:
-
-```
-claude-code/hooks/branch-guard/branch-guard.sh
-claude-code/hooks/changelog-check/changelog-check.sh
-claude-code/hooks/extract-handoff/extract-handoff.sh
-claude-code/hooks/inject-context/inject-context.sh
-claude-code/hooks/integrity-warn/integrity-warn.sh
-claude-code/hooks/pre-push-secrets/pre-push-secrets.sh
-claude-code/hooks/protect-config/protect-config.sh
-claude-code/hooks/toolkit-drift-check/toolkit-drift-check.sh
-claude-code/hooks/toolkit-edit-reminder/toolkit-edit-reminder.sh
-```
+For implementation details, inspect the corresponding shell scripts in this
+directory and the shared integrity helper at
+[`openai-codex/scripts/integrity-check.sh`](../scripts/integrity-check.sh).

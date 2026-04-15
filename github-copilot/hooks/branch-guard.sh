@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# Ported from claude-code/hooks/branch-guard/branch-guard.sh for Codex CLI hooks (experimental)
-# Requires: features.codex_hooks=true in ~/.codex/config.toml
-# Note: Codex hooks stdin payload schema may differ from Claude Code's; validate in your environment.
+# Branch guard hook for the VS Code Copilot surface
+# Requires: VS Code Copilot hooks enabled in your VS Code environment
+# Note: VS Code Copilot hook stdin payload schema may differ from Claude Code's; validate in your environment.
 #
 # Claude Code env vars used: none directly — reads git HEAD.
-# Codex mapping: PreToolUse / matcher: Bash (git push/commit commands)
+# VS Code Copilot mapping: PreToolUse / matcher: Bash (git push/commit commands)
 #
 # Original purpose: PreToolUse hook — block git push to main/master.
 set -uo pipefail

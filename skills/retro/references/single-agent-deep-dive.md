@@ -25,12 +25,12 @@ The prompt is the plan. Analyze it as a first-class artifact.
 
 1. **Instruction coverage**: Did the skill's instructions cover the scenario that actually occurred? Were there branches or edge cases the skill didn't address?
 2. **Instruction adherence**: Did the agent follow the skill's instructions, or deviate? If it deviated, was the deviation an improvement or a mistake?
-3. **Instruction conflicts**: Did the skill's instructions conflict with CLAUDE.md, other active skills, or the user's prompt? Conflicts cause unpredictable behavior — the agent picks one and ignores the other.
+3. **Instruction conflicts**: Did the skill's instructions conflict with AGENTS.md, other active skills, or the user's prompt? Conflicts cause unpredictable behavior — the agent picks one and ignores the other.
 4. **Missing instructions**: What instructions, if added to the skill, would have prevented the problems observed? Be specific — "handle edge cases" is not actionable.
 5. **Unnecessary instructions**: Did any skill instructions waste agent effort on steps that didn't apply? Instructions the agent follows but that produce no value burn tokens and attention.
 6. **Reference file usage**: If the skill has `references/`, did the agent load them at the right time? Did it load references it didn't need, or skip ones it should have read?
 
-**Rewrite signal**: If 3+ findings in the retro trace back to the same skill's instructions (vague steps, missing coverage, conflicting guidance), the skill may need a structural rewrite rather than individual patches. Recommend running `/review-skill` on it to get a full quality assessment.
+**Rewrite signal**: If 3+ findings in the retro trace back to the same skill's instructions (vague steps, missing coverage, conflicting guidance), the skill may need a structural rewrite rather than individual patches. Recommend running `review-skill` on it to get a full quality assessment.
 
 ---
 

@@ -1,6 +1,7 @@
 # GitHub Copilot Prompts
 
-These prompt files are ported from the Claude Code slash commands in `claude-code/commands/`. They run as full agent flows in GitHub Copilot Chat.
+These prompt files are adapters generated from the canonical workflow definitions in
+`workflows/`. They run as full agent flows in GitHub Copilot Chat.
 
 ## Available prompts
 
@@ -59,10 +60,10 @@ Each prompt declares a `tools` list in its frontmatter. The tools used are a sub
 
 | Tool | Purpose |
 |------|---------|
-| `read_file` | Read source files |
-| `search_files` | Search by filename pattern or content |
-| `run_in_terminal` | Execute shell commands (linters, test runners, git) |
-| `list_dir` | List directory contents |
+| `read` | Read source files |
+| `edit` | Create or modify files |
+| `search` | Search by filename pattern or content |
+| `execute` | Execute shell commands (linters, test runners, git) |
 
 Tool availability depends on your GitHub Copilot plan and VS Code extension version. If a tool is unavailable, Copilot will skip it and proceed with available tools.
 
@@ -72,4 +73,5 @@ The source commands use `$ARGUMENTS` as a placeholder for user-supplied argument
 
 ## Source
 
-Ported from `claude-code/commands/` in this repository. Do not edit these files to patch behavior — edit the canonical source in `claude-code/commands/` and re-run the port.
+Generated from `workflows/` in this repository. Do not edit these files to patch behavior
+— edit the canonical source in `workflows/` and re-run `node scripts/sync-canonical-adapters.js`.

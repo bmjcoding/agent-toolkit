@@ -1,13 +1,15 @@
 # claude-code/
 
-This directory contains all **Claude Code-specific content** — components that use Claude Code's native YAML frontmatter, hook events, and permission model. These files are not portable to other AI tools without adaptation.
+This directory contains **Claude Code-specific adapters and runtime assets** — components
+that exist because Claude Code requires native YAML frontmatter, slash-command files, hook
+event wiring, and install surfaces that differ from other tools.
 
 ## Subdirectory Layout
 
 ```
 claude-code/
-  agents/     # 15 subagent definitions (.md with YAML frontmatter: name, description, tools, disallowedTools, permissionMode, maxTurns, ...)
-  commands/   # 6 slash command definitions (.md loaded as /commandname in Claude Code sessions)
+  agents/     # Claude frontmatter wrappers for canonical root agents/
+  commands/   # Claude slash-command wrappers for canonical root workflows/
   hooks/      # 9 shell scripts wired to Claude Code hook events (PreToolUse, PostToolUse, SubagentStart, SubagentStop)
   bundles/    # YAML bundle files grouping related components for bulk install
   docs/       # Architecture decision records, migration guides, UX design docs
@@ -15,8 +17,8 @@ claude-code/
     install.sh  # Symlink manager for ~/.claude/
 ```
 
-Rules (4) for Claude Code live in **this directory** under `claude-code/rules/`.
-Skills (13) live in `skills/` at the repo root — tool-agnostic and shared across Claude Code, Copilot, and Codex.
+Canonical agents live at repo-root `agents/`. Canonical workflows live at repo-root
+`workflows/`. Shared skills and rules live at repo-root `skills/` and `rules/`.
 
 ## Install (Symlinks)
 
@@ -48,8 +50,10 @@ Hooks must also be registered in `~/.claude/settings.json` under the `hooks` key
 
 ## Component Format Reference
 
-- **Agent** (`<name>.md`): YAML frontmatter with `name`, `description`, `tools`, `disallowedTools`, `permissionMode`, `maxTurns`, `effort`; body is Markdown instructions.
-- **Command** (`<name>.md`): YAML frontmatter with `name`, `description`, `argument-hint`, `disable-model-invocation`; body is the command implementation prompt.
+- **Agent** (`<name>.md`): Claude-native frontmatter wrapper around the canonical root
+  `agents/<name>/AGENT.md` body.
+- **Command** (`<name>.md`): Claude-native slash-command wrapper around the canonical root
+  `workflows/<name>/WORKFLOW.md` body.
 - **Hook** (`<name>.sh`): Plain Bash, registered by event type in `settings.json`; exit 2 blocks, exit 1 warns, exit 0 continues.
 - **Bundle** (`bundle.yaml`): YAML file with `id`, `name`, `description`, `status`, `tags[]`, `components[]` (each entry has `type`, `id`, `role`). Dependency metadata for agents and skills is declared in the component's own `.md` frontmatter (`tools:` for agents, `skills:` for skills/commands), not in the bundle file. Valid `role` values: `core` (required for the bundle to function), `optional` (nice-to-have, installable separately), `deprecated` (scheduled for removal). All current entries use `core`. The `path` field in `index.json` bundle entries is the canonical resolution key — always resolve bundle files via `index.json` rather than reconstructing paths from slug alone, since filename conventions differ across primitive types.
 

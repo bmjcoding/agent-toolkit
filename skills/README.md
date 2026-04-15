@@ -1,6 +1,8 @@
-# claude-code/skills/
+# skills/
 
-Claude Code skill definitions — the single source of truth for all skills loaded by Claude Code agents and slash commands. Skills are symlinked to `~/.claude/skills/` by `install.sh`.
+Shared skill definitions — the single source of truth for universal skill content used
+across the toolkit's AI surfaces. Tool-specific directories may wrap or reference these
+skills, but the canonical content lives here.
 
 ## Skill Format
 
@@ -58,7 +60,9 @@ Example: `skill/retro-v1.1.0`
 
 ## Adding a Skill
 
-1. Create `claude-code/skills/<slug>/SKILL.md` following the schema above.
-2. Create `claude-code/skills/<slug>/CHANGELOG.md` with the initial version entry.
+1. Create `skills/<slug>/SKILL.md` following the schema above.
+2. Create `skills/<slug>/CHANGELOG.md` with the initial version entry.
 3. Add an entry to the table in this README.
-4. Re-run `install.sh` to create the `~/.claude/skills/<slug>` symlink.
+4. Refresh any tool-specific wrappers or install assets that reference the shared skill.
+5. If the skill is referenced from canonical agents or workflows, regenerate adapters with
+   `node scripts/sync-canonical-adapters.js`.

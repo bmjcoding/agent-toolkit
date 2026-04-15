@@ -8,21 +8,21 @@ Diagram: `references/system-overview.svg` (or render `references/system-overview
 
 | Skill | Purpose | Inputs | Outputs |
 |---|---|---|---|
-| `/retro` | Post-run diagnosis | Git history, conversation, orchestrator artifacts | Retro markdown + JSON summary + trend data → `~/.claude/retros/` |
-| `/improve` | Apply retro recommendations | Retro output (from conversation or file) | File edits + improve outcome JSON → `~/.claude/retros/` |
-| `/review-skill` | Pre-merge quality gate | Skill/agent definition path | PASS / NEEDS WORK / REWRITE verdict |
-| `/git-ship` | Git shipping (commit, PR, merge, cleanup) | Git state + $ARGUMENTS | Commits, PR, branch cleanup |
-| `/prod-readiness` | Production readiness pipeline | Changed files | Build/lint/audit/test/verify + ship verdict |
+| `retro` | Post-run diagnosis | Git history, conversation, orchestrator artifacts | Retro markdown + JSON summary + trend data → `STATE_ROOT/retros/` |
+| `improve` | Apply retro recommendations | Retro output (from conversation or file) | File edits + improve outcome JSON → `STATE_ROOT/retros/` |
+| `review-skill` | Pre-merge quality gate | Skill/agent definition path | PASS / NEEDS WORK / REWRITE verdict |
+| `git-ship` | Git shipping (commit, PR, merge, cleanup) | Git state + $ARGUMENTS | Commits, PR, branch cleanup |
+| `prod-readiness` | Production readiness pipeline | Changed files | Build/lint/audit/test/verify + ship verdict |
 
-### Commands (lightweight, stateless)
+### Workflows (lightweight, stateless)
 
-| Command | Purpose |
+| Workflow | Purpose |
 |---|---|
-| `/lint` | Auto-fix linting and standards compliance |
-| `/audit` | 14-dimension code quality audit |
-| `/test` | Write tests to cover gaps, >=80% coverage |
-| `/git-verify` | Secrets scan, sensitive files, commit quality |
-| `/backlog` | View/manage deferred findings |
+| `lint` | Auto-fix linting and standards compliance |
+| `audit` | 14-dimension code quality audit |
+| `test` | Write tests to cover gaps, >=80% coverage |
+| `git-verify` | Secrets scan, sensitive files, commit quality |
+| `backlog` | View/manage deferred findings |
 
 ### Agents (dispatched by orchestrators)
 
@@ -53,10 +53,10 @@ Diagram: `references/system-overview.svg` (or render `references/system-overview
 
 ### Persistence
 
-All retro data lives at `~/.claude/retros/` (global, cross-project):
+All retro data lives at `STATE_ROOT/retros/` (global, cross-project):
 
 ```
-~/.claude/retros/
+STATE_ROOT/retros/
 ├── history.jsonl                              # append-only: all retro + improve entries
 ├── UI-TODO.md                                 # dashboard data spec
 ├── orchestrator/
@@ -71,13 +71,13 @@ All retro data lives at `~/.claude/retros/` (global, cross-project):
 
 ### Changelogs
 
-Maintained by `/improve` on version bumps:
+Maintained by `improve` on version bumps:
 
 | Type | Location |
 |---|---|
 | Skills | `skills/{name}/CHANGELOG.md` (per-skill) |
 | Agents | `agents/{name}/CHANGELOG.md` (per-component) |
-| Commands | `commands/{name}/CHANGELOG.md` (per-component) |
+| Workflows | `workflows/{name}/CHANGELOG.md` (per-component) |
 | Hooks | `hooks/{name}/CHANGELOG.md` (per-component) |
 | Rules | `rules/{name}/CHANGELOG.md` (per-component) |
 
@@ -86,40 +86,40 @@ Maintained by `/improve` on version bumps:
 ### The feedback loop
 
 ```
-Run task → /retro (diagnosis) → /improve (treatment) → next run
+Run task → retro (diagnosis) → improve (treatment) → next run
                                                           ↓
-                                              /retro (did treatment work?)
+                                              retro (did treatment work?)
 ```
 
 1. **Any workflow completes** (The orchestrator auto-prompts for retro; other workflows: user invokes)
-2. **`/retro`** analyzes artifacts, identifies root causes, produces recommendations with file paths
-3. **`/retro` saves** full markdown + summary JSON + appends to history.jsonl (with subject, project, run_type)
-4. **`/retro` checks trends** — filters history by subject, flags regressions, notes if prior retro's /improve was run
-5. **`/retro` prompts** "Want me to run /improve?"
-6. **`/improve`** applies fixes with accept/revert verification, saves patterns to memory, records diffs
-7. **`/improve` saves** outcome JSON + appends to history.jsonl
+2. **`retro`** analyzes artifacts, identifies root causes, produces recommendations with file paths
+3. **`retro` saves** full markdown + summary JSON + appends to history.jsonl (with subject, project, run_type)
+4. **`retro` checks trends** — filters history by subject, flags regressions, notes if prior retro's improve was run
+5. **`retro` prompts** "Want me to run improve?"
+6. **`improve`** applies fixes with accept/revert verification, saves patterns to memory, records diffs
+7. **`improve` saves** outcome JSON + appends to history.jsonl
 8. **Next run** — retro compares: did the same root causes recur? Were accepted changes effective?
 
 ### Pre-merge gate (for LOB contribution repos)
 
 ```
-PR submitted → lint-definition.py --strict (CI) → /review-skill (semantic) → merge or reject
+PR submitted → lint-definition.py --strict (CI) → review-skill (semantic) → merge or reject
 ```
 
 - `lint-definition.py --strict` runs in CI — fails on any error or warning
-- `/review-skill` runs semantic review → PASS / NEEDS WORK / REWRITE
-- NEEDS WORK output feeds directly into `/improve` (same table format)
+- `review-skill` runs semantic review → PASS / NEEDS WORK / REWRITE
+- NEEDS WORK output feeds directly into `improve` (same table format)
 
 ### Cross-references
 
 | From | To | Mechanism |
 |---|---|---|
-| /retro → /improve | Recommendations table in conversation | /improve parses section 3.7 from conversation context |
-| /improve → lint-definition.py | Script invocation | Resilient path: tries ~/.claude then .claude then skips |
-| /retro → retro-history.py | Script invocation | ${CLAUDE_SKILL_DIR}/scripts/ |
-| /improve → retro-history.py | Script invocation | ~/.claude/skills/retro/scripts/ |
-| /review-skill → /improve | NEEDS WORK output table | Same format as retro recommendations |
-| /improve → /review-skill | Rewrite threshold | 5+ findings on same file → recommend /review-skill |
+| retro → improve | Recommendations table in conversation | improve parses section 3.7 from conversation context |
+| improve → lint-definition.py | Script invocation | Resilient path: tries repo checkout, `.agents/`, `.claude/`, `.codex/`, then user-global installs |
+| retro → retro-history.py | Script invocation | Resilient path: tries repo checkout, `.agents/`, `.claude/`, `.codex/`, then user-global installs |
+| improve → retro-history.py | Script invocation | Resilient path: tries repo checkout, `.agents/`, `.claude/`, `.codex/`, then user-global installs |
+| review-skill → improve | NEEDS WORK output table | Same format as retro recommendations |
+| improve → review-skill | Rewrite threshold | 5+ findings on same file → recommend review-skill |
 | orchestrator → autoresearch-analyst (retro mode) | Agent dispatch | Phase 7a, isolated context, preloaded retro + improve skills |
 | orchestrator → autoresearch-analyst (improve mode) | Agent dispatch | Phase 7c, after user approves, isolated context |
-| retro (single-agent) → /review-skill | Recommendation | "Rewrite signal" in single-agent-deep-dive.md |
+| retro (single-agent) → review-skill | Recommendation | "Rewrite signal" in single-agent-deep-dive.md |

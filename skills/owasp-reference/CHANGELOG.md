@@ -17,14 +17,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- BREAKING: copied from root `skills/` to `claude-code/skills/` in v3.0 per-tool restructure. Root `skills/` deleted.
+- Historical note: v3.0 temporarily moved this skill into tool-local copies before root `skills/` was restored as canonical.
 
 ## [2.0.0] - 2026-04-12
 
 ### Changed
 
 - BREAKING: moved to the agent-toolkit multi-tool layout. Files relocated:
-  - `skills/owasp-reference/` → `shared/skills/owasp-reference/`
+  - Canonical shared-skill path normalized under root `skills/`
 - CHANGELOG comparison URLs updated for repo rename `bmjcoding/claude-toolkit` → `bmjcoding/agent-toolkit`.
 
 ## [1.1.0] - 2026-04-11
@@ -40,8 +40,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/owasp-reference-v3.0.0...HEAD
-[3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/shared/owasp-reference-v2.0.0...claude-code/owasp-reference-v3.0.0
-[2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/shared/owasp-reference-v1.1.0...shared/owasp-reference-v2.0.0
-[1.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/shared/owasp-reference-v1.0.0...shared/owasp-reference-v1.1.0
-[1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/owasp-reference-v1.0.0
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/skill/owasp-reference-v3.0.0...HEAD
+[3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/owasp-reference-v2.0.0...skill/owasp-reference-v3.0.0
+[2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/owasp-reference-v1.1.0...skill/owasp-reference-v2.0.0
+[1.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/owasp-reference-v1.0.0...skill/owasp-reference-v1.1.0
+[1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/skill/owasp-reference-v1.0.0

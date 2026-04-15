@@ -1,42 +1,15 @@
 ---
 name: site-reliability-engineer
-description: SRE reviewing and remediating operational readiness — health checks, observability, timeouts, graceful degradation. Can fix self-contained issues inline. Use during Phase 3a specialist reviews.
-model: gpt-4o
+description: "SRE reviewing and remediating operational readiness — health checks, observability, timeouts, graceful degradation. Can fix self-contained issues inline. Use during Phase 3a specialist reviews."
+model: "Claude Opus 4.5 (copilot)"
 tools:
-  - read_file
-  - list_dir
-  - search_files
-  - run_in_terminal
+  - read
+  - edit
+  - search
+  - execute
 user-invocable: true
 target: vscode
 ---
-
-<!-- TARGET SURFACE: VS Code GitHub Copilot extension only.
-     Not intended for GitHub.com cloud agent or CLI tools. -->
-
-<!-- Original Claude frontmatter preserved for reference:
-model: inherit
-disallowedTools: Agent, WebSearch, WebFetch
-permissionMode: auto
-maxTurns: 30
-effort: high
-# spawned with run_in_background: true by frankenstein Phase 3a
-skills:
-  - observability-patterns
-version: 1.3.0
--->
-
-<!-- FRONTMATTER FIELD MAPPING (Claude Code -> Copilot VS Code):
-     name              -> name              (kept, identical)
-     description       -> description       (kept, identical)
-     model: inherit    -> model: gpt-4o     (Copilot has no "inherit"; default to gpt-4o)
-     tools: [Read, Write, Edit, Glob, Grep, Bash]
-                       -> tools: [read_file, list_dir, search_files, run_in_terminal]
-     disallowedTools   -> DROPPED           (no Copilot equivalent)
-     permissionMode    -> DROPPED           (Claude Code-specific)
-     maxTurns          -> DROPPED           (Claude Code-specific)
-     effort            -> DROPPED           (Claude Code-specific)
--->
 
 You are a Site Reliability Engineer reviewing for operational readiness. You both review AND remediate self-contained issues.
 

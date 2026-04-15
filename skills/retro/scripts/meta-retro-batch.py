@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Generate a meta-retro markdown from the orchestrator retro JSON corpus.
 
-Reads retro JSON files from ~/.claude/retros/orchestrator/*.json (or --retro-dir)
+Reads retro JSON files from the resolved STATE_ROOT retro corpus
+(`STATE_ROOT/retros/orchestrator/*.json`) or --retro-dir
 and produces a timestamped meta-retro markdown file every N pipelines (default 10).
 
 Both primary retros (YYYYMMDDTHHMMSS.json) and improve-cycle retros
@@ -14,9 +15,9 @@ Usage:
 
 Options:
     --retro-dir DIR   Directory containing retro JSON files
-                      (default: ~/.claude/retros/orchestrator)
+                      (default: resolved STATE_ROOT/retros/orchestrator)
     --out-dir DIR     Directory for meta-retro output files
-                      (default: ~/.claude/retros/meta)
+                      (default: resolved STATE_ROOT/retros/meta)
     --interval N      Produce meta-retro every N primary pipelines (default: 10)
     --dry-run         Print output to stdout instead of writing a file
     --force           Generate meta-retro regardless of interval check
@@ -37,6 +38,21 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 
+def resolve_state_root() -> Path:
+    candidates = [
+        Path(".agents"),
+        Path(".claude"),
+        Path(".codex"),
+        Path.home() / ".agents",
+        Path.home() / ".claude",
+        Path.home() / ".codex",
+    ]
+    for candidate in candidates:
+        if candidate.is_dir():
+            return candidate
+    return Path(".agents")
+
+
 # ---------------------------------------------------------------------------
 # Argument parsing
 # ---------------------------------------------------------------------------
@@ -53,12 +69,12 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--retro-dir",
         default=None,
-        help="Directory containing retro JSON files (default: ~/.claude/retros/orchestrator)",
+        help="Directory containing retro JSON files (default: resolved STATE_ROOT/retros/orchestrator)",
     )
     parser.add_argument(
         "--out-dir",
         default=None,
-        help="Directory for meta-retro output files (default: ~/.claude/retros/meta)",
+        help="Directory for meta-retro output files (default: resolved STATE_ROOT/retros/meta)",
     )
     parser.add_argument(
         "--interval",
@@ -722,12 +738,12 @@ def main() -> None:
     retro_dir = Path(
         args.retro_dir
         if args.retro_dir
-        else Path.home() / ".claude" / "retros" / "orchestrator"
+        else resolve_state_root() / "retros" / "orchestrator"
     )
     out_dir = Path(
         args.out_dir
         if args.out_dir
-        else Path.home() / ".claude" / "retros" / "meta"
+        else resolve_state_root() / "retros" / "meta"
     )
     interval: int = args.interval
     dry_run: bool = args.dry_run

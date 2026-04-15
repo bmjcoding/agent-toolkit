@@ -19,7 +19,7 @@ Arguments:
     SUMMARY_JSON   JSON string or file path containing the retro summary
 
 Options:
-    --history DIR    Directory for history file (default: ~/.claude/retros)
+    --history DIR    Directory for history file (default: resolved STATE_ROOT/retros)
     --subject NAME   Filter by retro subject (e.g., orchestrator, git-ship, frontend-engineer)
     --last N         For trends, compare against last N retros (default: 10)
     --output FILE    Write output to FILE instead of stdout
@@ -36,6 +36,21 @@ import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
+
+
+def resolve_state_root():
+    candidates = [
+        Path(".agents"),
+        Path(".claude"),
+        Path(".codex"),
+        Path.home() / ".agents",
+        Path.home() / ".claude",
+        Path.home() / ".codex",
+    ]
+    for candidate in candidates:
+        if candidate.is_dir():
+            return candidate
+    return Path(".agents")
 
 
 def parse_args(argv):
@@ -78,9 +93,9 @@ def parse_args(argv):
         print("Error: Command required (save, trends, list).", file=sys.stderr)
         sys.exit(1)
 
-    # Default to global retros directory
+    # Default to the first available shared/tool compatibility state root.
     if not args["history_dir"]:
-        args["history_dir"] = os.path.join(os.path.expanduser("~"), ".claude", "retros")
+        args["history_dir"] = os.path.join(resolve_state_root(), "retros")
 
     return args
 

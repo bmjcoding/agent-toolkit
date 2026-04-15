@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# Ported from claude-code/hooks/extract-handoff/extract-handoff.sh for Codex CLI hooks (experimental)
-# Requires: features.codex_hooks=true in ~/.codex/config.toml
-# Note: Codex hooks stdin payload schema may differ from Claude Code's; validate in your environment.
+# Handoff extraction hook for the VS Code Copilot surface
+# Requires: VS Code Copilot hooks enabled in your VS Code environment
+# Note: VS Code Copilot hook stdin payload schema may differ from Claude Code's; validate in your environment.
 #
 # Claude Code env vars used: none directly — session/agent data arrives via stdin JSON.
-# Codex mapping: Stop (agent/session stop event)
-# Uncertainty: Codex's Stop event payload field names may differ from Claude Code's
-# (.agent_id, .last_assistant_message, etc.). Check Codex docs for exact field names at runtime.
+# VS Code Copilot mapping: Stop (agent/session stop event)
+# Uncertainty: VS Code Copilot's Stop event payload field names may differ from Claude Code's
+# (.agent_id, .last_assistant_message, etc.). Check VS Code Copilot docs for exact field names at runtime.
 #
 # Original purpose: SubagentStop hook — extract handoff JSON from agent's final message,
 # validate against canonical schema, and write to .orchestrator/handoffs/<agent_id>.json.

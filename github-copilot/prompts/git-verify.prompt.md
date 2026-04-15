@@ -1,11 +1,16 @@
 ---
+name: git-verify
 description: "Verify git hygiene and commit safety — secrets, sensitive files, large files, commit quality."
-agent: agent
-tools: [read_file, search_files, run_in_terminal, list_dir]
+agent: 'agent'
+tools:
+  - read
+  - edit
+  - search
+  - execute
 argument-hint: "[paths...] [--dry-run]"
 ---
 
-Verify git hygiene and commit safety before pushing. Use parallel agents to maximize speed. Scope resolution, autonomy, and `--dry-run` rules are defined in CLAUDE.md.
+Verify git hygiene and commit safety before pushing. Use parallel agents to maximize speed. Scope resolution, autonomy, and `--dry-run` rules are defined in AGENTS.md.
 
 ## Check 0: Deterministic scan
 

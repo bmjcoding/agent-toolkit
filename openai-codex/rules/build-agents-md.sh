@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# build-agents-md.sh — Concatenate openai-codex rule bodies into an AGENTS.md block.
+# build-agents-md.sh — Concatenate canonical root rule bodies into an AGENTS.md block.
 #
 # Usage:
-#   bash openai-codex/rules/build-agents-md.sh             # write to stdout
-#   bash openai-codex/rules/build-agents-md.sh >> AGENTS.md # append to project AGENTS.md
+#   bash openai-codex/rules/build-agents-md.sh               # write to stdout
+#   bash openai-codex/rules/build-agents-md.sh >> AGENTS.md  # append to project AGENTS.md
 #
 # Exit codes:
 #   0  success — block written to stdout
@@ -16,13 +16,14 @@
 # (inclusive). If a file has no frontmatter the entire file is emitted.
 #
 # This script must be run from any directory; it resolves paths relative to its
-# own location.
+# own location and reads rule files from repo-root rules/.
 
 set -euo pipefail
 
 # Resolve the directory containing this script (POSIX-portable).
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-if [[ -z "${SCRIPT_DIR}" ]]; then
+REPO_DIR="$(cd "${SCRIPT_DIR}/../.." && pwd)"
+if [[ -z "${SCRIPT_DIR}" || -z "${REPO_DIR}" ]]; then
   echo "build-agents-md.sh: error: cannot determine script directory" >&2
   exit 2
 fi
@@ -80,7 +81,7 @@ echo ""
 for entry in "${RULES[@]}"; do
   slug="${entry%%:*}"
   display="${entry##*:}"
-  rule_file="${SCRIPT_DIR}/${slug}/${slug}.md"
+  rule_file="${REPO_DIR}/rules/${slug}/${slug}.md"
 
   if [[ ! -f "${rule_file}" ]]; then
     echo "build-agents-md.sh: warning: rule file not found: ${rule_file}" >&2

@@ -1,41 +1,15 @@
 ---
 name: release-engineer
-description: Structures commits, writes PR descriptions, pushes code, creates pull requests, and optionally bumps versions and creates releases. Use during Phase 5-6.
-model: gpt-4o
+description: "Structures commits, writes PR descriptions, pushes code, creates pull requests, and optionally bumps versions and creates releases. Use during Phase 5-6."
+model: "Claude Sonnet 4.5 (copilot)"
 tools:
-  - read_file
-  - list_dir
-  - search_files
-  - run_in_terminal
+  - read
+  - edit
+  - search
+  - execute
 user-invocable: true
 target: vscode
 ---
-
-<!-- TARGET SURFACE: VS Code GitHub Copilot extension only.
-     Not intended for GitHub.com cloud agent or CLI tools. -->
-
-<!-- Original Claude frontmatter preserved for reference:
-model: sonnet
-disallowedTools: Agent, WebSearch, WebFetch
-permissionMode: auto
-maxTurns: 30
-effort: medium
-skills:
-  - changelog
-version: 1.3.0
--->
-
-<!-- FRONTMATTER FIELD MAPPING (Claude Code -> Copilot VS Code):
-     name              -> name              (kept, identical)
-     description       -> description       (kept, identical)
-     model: sonnet     -> model: gpt-4o     (pinned to gpt-4o for Copilot)
-     tools: [Read, Write, Edit, Glob, Grep, Bash]
-                       -> tools: [read_file, list_dir, search_files, run_in_terminal]
-     disallowedTools   -> DROPPED           (no Copilot equivalent)
-     permissionMode    -> DROPPED           (Claude Code-specific)
-     maxTurns          -> DROPPED           (Claude Code-specific)
-     effort            -> DROPPED           (Claude Code-specific)
--->
 
 You are a release engineer. You handle the full release workflow: structuring commits, writing PR descriptions, pushing code, creating PRs, and optionally bumping versions.
 
@@ -63,7 +37,7 @@ Write a handoff at the end of each mode with the fields below, setting `status: 
 Before staging files for commit, run the changelog skill:
 
 1. Identify changes since the last version tag (`git describe --tags --abbrev=0` or `git log`)
-2. Load the `/changelog` skill
+2. Load the `changelog` skill
 3. Let the skill classify commits and determine the SemVer bump
 4. The skill writes the new CHANGELOG.md entry
 5. Stage CHANGELOG.md alongside all other changes

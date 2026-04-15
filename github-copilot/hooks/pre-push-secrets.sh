@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# Ported from claude-code/hooks/pre-push-secrets/pre-push-secrets.sh for Codex CLI hooks (experimental)
-# Requires: features.codex_hooks=true in ~/.codex/config.toml
-# Note: Codex hooks stdin payload schema may differ from Claude Code's; validate in your environment.
+# Pre-push secrets hook for the VS Code Copilot surface
+# Requires: VS Code Copilot hooks enabled in your VS Code environment
+# Note: VS Code Copilot hook stdin payload schema may differ from Claude Code's; validate in your environment.
 #
 # Claude Code env vars used: none directly — reads git history and working tree.
-# Codex mapping: PreToolUse / matcher: Bash (git push commands)
+# VS Code Copilot mapping: PreToolUse / matcher: Bash (git push commands)
 #
 # Original purpose: PreToolUse hook — scan for secrets before git push.
 # Runs gitleaks if available, falls back to grep for common patterns.

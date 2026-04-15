@@ -20,7 +20,7 @@ Pattern-match against these examples for tone, specificity, and structure. Adapt
 |---|---|---|---|
 | 1 | Settings page had no sections for notification preferences or API keys — user expected both | **Spec gap** | The prompt "build a settings page" didn't enumerate required sections. The agent built profile/password only, which is the obvious default but not what was needed. |
 | 2 | Agent read all 14 component files in `src/components/ui/` before starting — only used 3 | **Prompt gap** | No instruction to check the design system reference first. Agent explored by brute-force file reading instead of targeted lookup. |
-| 3 | Form validation used inline regex instead of the project's existing `zod` schemas in `src/lib/validators.ts` | **Prompt gap** | Agent wasn't aware of the validation pattern. CLAUDE.md doesn't mention it, and the agent didn't search for existing validation before writing its own. |
+| 3 | Form validation used inline regex instead of the project's existing `zod` schemas in `src/lib/validators.ts` | **Prompt gap** | Agent wasn't aware of the validation pattern. AGENTS.md doesn't mention it, and the agent didn't search for existing validation before writing its own. |
 
 ### 3.3 Specification & Planning
 
@@ -52,8 +52,8 @@ No structured logs available. Estimated from conversation:
 
 | # | What | Where | Why | Priority | Type |
 |---|---|---|---|---|---|
-| 1 | Add to CLAUDE.md: "For new pages or features, ask the user to enumerate required sections/fields before implementing, or enter plan mode." | `CLAUDE.md` | Prevents spec gap (finding #1) — the most common failure mode for vague prompts | P1 | fix |
-| 2 | Add to CLAUDE.md: "Validation uses zod schemas in `src/lib/validators.ts`. Check there before writing inline validation." | `CLAUDE.md` | Prevents reinventing validation (finding #3) | P1 | fix |
+| 1 | Add to AGENTS.md: "For new pages or features, ask the user to enumerate required sections/fields before implementing, or enter plan mode." | `AGENTS.md` | Prevents spec gap (finding #1) — the most common failure mode for vague prompts | P1 | fix |
+| 2 | Add to AGENTS.md: "Validation uses zod schemas in `src/lib/validators.ts`. Check there before writing inline validation." | `AGENTS.md` | Prevents reinventing validation (finding #3) | P1 | fix |
 | 3 | When building new pages, search for existing similar pages in the project before starting implementation | memory | Agent found the layout pattern but missed the admin settings prior art — a targeted search would have caught it | P2 | pattern |
 
 ---
@@ -119,10 +119,10 @@ No structured logs available. Estimated from conversation:
 
 | # | What | Where | Why | Priority | Type |
 |---|---|---|---|---|---|
-| 1 | Require exact TypeScript interfaces in integration contracts, not prose descriptions like "unique identifier" | `agents/planner.md` — add to contract reconciliation rules | Prevents contract drift (finding #1). Prose descriptions are ambiguous; type literals are not. | P0 | fix |
-| 2 | Add to quality-engineer prompt: "Before applying auth fixes, check for intentionally public endpoints by reading the route's existing middleware chain." | `agents/quality-engineer.md` | Prevents auth fix breaking public endpoints (finding #2) | P1 | fix |
-| 3 | Add `paths: "*.tsx, *.css"` to design-architect frontmatter so it skips full design reference loading for backend-heavy features | `agents/design-architect.md` | Prevents context overflow on non-UI features (finding #3). Saves ~70K tokens on backend features. | P1 | fix |
-| 4 | Add dispatch rule to the orchestrator: findings mentioning design-lint check names (z-index, hex-colors, etc.) route to frontend-engineer, not quality-engineer | `agents/orchestrator.md` — quality loop domain routing | Prevents misrouted design findings (finding #4) | P2 | fix |
+| 1 | Require exact TypeScript interfaces in integration contracts, not prose descriptions like "unique identifier" | `agents/planner/AGENT.md` — add to contract reconciliation rules | Prevents contract drift (finding #1). Prose descriptions are ambiguous; type literals are not. | P0 | fix |
+| 2 | Add to quality-engineer prompt: "Before applying auth fixes, check for intentionally public endpoints by reading the route's existing middleware chain." | `agents/quality-engineer/AGENT.md` | Prevents auth fix breaking public endpoints (finding #2) | P1 | fix |
+| 3 | Add `paths: "*.tsx, *.css"` to design-architect frontmatter so it skips full design reference loading for backend-heavy features | `agents/design-architect/AGENT.md` | Prevents context overflow on non-UI features (finding #3). Saves ~70K tokens on backend features. | P1 | fix |
+| 4 | Add dispatch rule to the orchestrator: findings mentioning design-lint check names (z-index, hex-colors, etc.) route to frontend-engineer, not quality-engineer | `agents/frankenstein/AGENT.md` — quality loop domain routing | Prevents misrouted design findings (finding #4) | P2 | fix |
 
 ### Summary
 

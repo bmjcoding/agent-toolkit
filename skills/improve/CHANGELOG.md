@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Updated shared wording to refer to `retro`, `review-skill`, and `improve` as cross-tool workflows rather than Claude-specific slash-command forms.
+
+### Changed
+
 - Step 2f now delegates CHANGELOG writes to the `/changelog` skill rather than writing entries inline; this ensures format consistency and keeps the SemVer bump logic in one place.
 
 ## [4.3.0] - 2026-04-14
@@ -57,14 +61,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- BREAKING: copied from root `skills/` to `claude-code/skills/` in v3.0 per-tool restructure. Root `skills/` deleted.
+- Historical note: v3.0 temporarily moved this skill into tool-local copies before root `skills/` was restored as canonical.
 
 ## [2.0.0] - 2026-04-12
 
 ### Changed
 
 - BREAKING: moved to the agent-toolkit multi-tool layout. Files relocated:
-  - `skills/improve/` → `shared/skills/improve/`
+  - Canonical shared-skill path normalized under root `skills/`
 - CHANGELOG comparison URLs updated for repo rename `bmjcoding/claude-toolkit` → `bmjcoding/agent-toolkit`.
 
 ## [1.2.0] - 2026-04-12
@@ -104,13 +108,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/improve-v4.3.0...HEAD
-[4.3.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/improve-v4.2.1...claude-code/improve-v4.3.0
-[4.2.1]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/improve-v4.2.0...claude-code/improve-v4.2.1
-[4.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/improve-v4.1.0...claude-code/improve-v4.2.0
-[4.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/improve-v4.0.0...claude-code/improve-v4.1.0
-[3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/shared/improve-v2.0.0...claude-code/improve-v3.0.0
-[2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/shared/improve-v1.2.0...shared/improve-v2.0.0
-[1.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/shared/improve-v1.1.0...shared/improve-v1.2.0
-[1.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/shared/improve-v1.0.0...shared/improve-v1.1.0
-[1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/improve-v1.0.0
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/skill/improve-v4.3.0...HEAD
+[4.3.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/improve-v4.2.1...skill/improve-v4.3.0
+[4.2.1]: https://github.com/bmjcoding/agent-toolkit/compare/skill/improve-v4.2.0...skill/improve-v4.2.1
+[4.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/improve-v4.1.0...skill/improve-v4.2.0
+[4.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/improve-v4.0.0...skill/improve-v4.1.0
+[3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/improve-v2.0.0...skill/improve-v3.0.0
+[2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/improve-v1.2.0...skill/improve-v2.0.0
+[1.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/improve-v1.1.0...skill/improve-v1.2.0
+[1.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/improve-v1.0.0...skill/improve-v1.1.0
+[1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/skill/improve-v1.0.0

@@ -2,7 +2,7 @@
 
 ## Phase 0: Backlog Check
 
-Read `.claude/backlog.md` if it exists. Check whether any previously-deferred items have been resolved by changes in the current scope (file modified, dep removed, endpoint added). Mark resolved items and report them. Flag any unresolved Critical/High items as carry-forward findings in the final report.
+Read `STATE_ROOT/backlog.md` if it exists. Check whether any previously-deferred items have been resolved by changes in the current scope (file modified, dep removed, endpoint added). Mark resolved items and report them. Flag any unresolved Critical/High items as carry-forward findings in the final report.
 
 ## Phase 1: Build Verification
 

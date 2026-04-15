@@ -2,52 +2,75 @@
 
 ## Repository structure
 
-```
+```text
 agent-toolkit/
-├── skills/          # Universal skills (13) — single source of truth for all tools
-├── rules/           # Universal rules (4: docker, logging, node, python)
-├── claude-code/     # Claude Code agents, commands, hooks, bundles, docs, scripts
-├── github-copilot/  # GitHub Copilot agents, prompts, instructions
-├── openai-codex/    # OpenAI Codex CLI agents and config templates
-├── AGENTS.md        # Root agent instruction file (all tools)
-└── CLAUDE.md        # Claude Code bridge to AGENTS.md
+  agents/          # Canonical shared agent instruction bodies
+  skills/          # Canonical shared skills
+  rules/           # Canonical shared rules
+  workflows/       # Canonical shared workflow definitions
+  claude-code/     # Claude-native assets
+  github-copilot/  # VS Code Copilot-native assets
+  openai-codex/    # Codex-native assets
+  AGENTS.md        # Primary shared instructions
+  CLAUDE.md        # Claude compatibility shim
 ```
+
+## Ownership rules
+
+- Put shared, editable agent content in `agents/`.
+- Put shared, editable skill content in `skills/`.
+- Put shared, editable rule content in `rules/`.
+- Put shared, editable workflow content in `workflows/`.
+- Put tool-native runtime assets in the matching tool directory.
+- Treat adapters and generated copies as replaceable surfaces; do not make them the
+  canonical editing location.
 
 ## Branching
 
-- Work off `main`. Use short-lived feature branches (`feat/<slug>`).
-- Keep per-tool content inside its own subdirectory.
-- Keep shareable content (rules, skills) under the repo root `skills/` and `rules/` dirs.
+- Work from `main` on short-lived branches.
+- Keep shareable content at the repo root.
+- Keep tool-specific behavior inside its own tool directory.
+- Regenerate agent/workflow adapters with `node scripts/sync-canonical-adapters.js`
+  after editing root canonical definitions.
 
 ## Commit style
 
-Follow [Conventional Commits](https://www.conventionalcommits.org/):
+Use [Conventional Commits](https://www.conventionalcommits.org/):
 `type(scope): short description`
 
-Common scopes: `claude-code`, `github-copilot`, `openai-codex`, `skills`, `rules`, `docs`, `chore`.
+Common scopes: `skills`, `rules`, `claude-code`, `github-copilot`, `openai-codex`,
+`docs`, `chore`.
 
 ## Component versioning
 
-Each component has its own `CHANGELOG.md` and version.
-Tag format:
-- `claude-code/<slug>-v<version>` (e.g. `claude-code/frankenstein-v3.1.0`)
-- `skill/<slug>-v<version>` (e.g. `skill/changelog-v4.1.0`)
-- `rule/<slug>-v<version>` (e.g. `rule/docker-v1.1.0`)
-- `github-copilot/<slug>-v<version>` — Copilot-specific content
-- `openai-codex/<slug>-v<version>` — Codex-specific content
+Each component owns its own `CHANGELOG.md`.
 
-Run the frankenstein agent (`claude-code/agents/frankenstein/frankenstein.md`) when bumping a component.
+- Shared skills: `skill/<slug>-v<version>`
+- Shared rules: `rule/<slug>-v<version>`
+- Shared agents: `agent/<slug>-v<version>`
+- Shared workflows: `workflow/<slug>-v<version>`
+- Tool-specific assets:
+  - `claude-code/<slug>-v<version>`
+  - `github-copilot/<slug>-v<version>`
+  - `openai-codex/<slug>-v<version>`
+
+Root skill and root rule changelogs are canonical. Tool-specific changelogs should describe
+adapter/runtime changes only.
 
 ## Install scripts
 
-Test any `scripts/install.sh` change with `--dry-run` before merging:
+Test installer changes with `--dry-run` and `--check` before merging:
 
 ```bash
 ./claude-code/scripts/install.sh --dry-run
 ./claude-code/scripts/install.sh --check
+./github-copilot/scripts/install.sh --target /tmp/example --dry-run
+./openai-codex/scripts/install.sh --dry-run
 ```
 
 ## Pull requests
 
-- Link the relevant ADR if your change affects architecture.
-- Add a `CHANGELOG.md` entry in the affected component and/or the top-level file.
+- Link the relevant ADR if architecture changed.
+- Update the affected canonical `CHANGELOG.md`.
+- If you change ownership or discovery behavior, update the README and install docs in the
+  same pull request.

@@ -1,11 +1,16 @@
 ---
+name: audit
 description: "Comprehensive code audit covering correctness, security, accessibility, type safety, and operational resilience."
-agent: agent
-tools: [read_file, search_files, run_in_terminal, list_dir]
+agent: 'agent'
+tools:
+  - read
+  - edit
+  - search
+  - execute
 argument-hint: "[paths...] [--dry-run]"
 ---
 
-Perform a comprehensive audit of the code in scope. Use parallel agents to maximize speed. Cover every dimension below and report findings in a single table grouped by severity (Critical > High > Medium > Low). Scope resolution, autonomy, and `--dry-run` rules are defined in CLAUDE.md.
+Perform a comprehensive audit of the code in scope. Use parallel agents to maximize speed. Cover every dimension below and report findings in a single table grouped by severity (Critical > High > Medium > Low). Scope resolution, autonomy, and `--dry-run` rules are defined in AGENTS.md.
 
 ## Audit dimensions
 
@@ -30,4 +35,4 @@ Single markdown table: #, Severity, File, Issue, Suggested Fix. Grouped by sever
 
 ## After reporting
 
-Fix everything possible in parallel using agents grouped by file ownership. Do not ask for confirmation. Write any unfixed or deferred items to `.claude/backlog.md` (see `/backlog` for format), classified as "Needs Human Decision" or "Agent Actionable".
+Fix everything possible in parallel using agents grouped by file ownership. Do not ask for confirmation. Write any unfixed or deferred items to `STATE_ROOT/backlog.md` (see `backlog` for format), classified as "Needs Human Decision" or "Agent Actionable".

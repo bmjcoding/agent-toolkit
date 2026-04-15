@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # integrity-check.sh — SHA-256 integrity monitor for GitHub Copilot toolkit files
-# Ported from claude-code/scripts/integrity-check.sh; adapted for the github-copilot
+# Shared integrity check adapted for the GitHub Copilot surface
 # tool surface (agents, hooks, instructions, prompts, skills, rules, bundles).
 #
 # Usage: ./integrity-check.sh [baseline|verify|auto|warn]

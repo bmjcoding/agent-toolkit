@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# Ported from claude-code/hooks/inject-context/inject-context.sh for Codex CLI hooks (experimental)
-# Requires: features.codex_hooks=true in ~/.codex/config.toml
-# Note: Codex hooks stdin payload schema may differ from Claude Code's; validate in your environment.
+# Context injection hook for the VS Code Copilot surface
+# Requires: VS Code Copilot hooks enabled in your VS Code environment
+# Note: VS Code Copilot hook stdin payload schema may differ from Claude Code's; validate in your environment.
 #
 # Claude Code env vars used: none directly — reads .orchestrator/ filesystem state.
-# Codex mapping: UserPromptSubmit (closest equivalent to SubagentStart / context injection)
-# Uncertainty: Codex may not have a SubagentStart event; UserPromptSubmit is the nearest
-# equivalent for injecting context at the start of each interaction. If Codex adds a
+# VS Code Copilot mapping: UserPromptSubmit (closest equivalent to SubagentStart / context injection)
+# Uncertainty: VS Code Copilot may not have a SubagentStart event; UserPromptSubmit is the nearest
+# equivalent for injecting context at the start of each interaction. If VS Code Copilot adds a
 # SessionStart event, re-wire this hook there for once-per-session semantics.
 #
 # Original purpose: SubagentStart hook — inject orchestrator project-brief and constraints

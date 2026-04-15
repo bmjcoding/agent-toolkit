@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Ported from claude-code/hooks/pre-push-secrets/pre-push-secrets.sh for Codex CLI hooks (experimental)
+# Pre-push secrets hook for the Codex CLI surface (experimental)
 # Requires: features.codex_hooks=true in ~/.codex/config.toml
 # Note: Codex hooks stdin payload schema may differ from Claude Code's; validate in your environment.
 #

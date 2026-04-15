@@ -1,41 +1,14 @@
 ---
 name: security-engineer
-description: Cybersecurity engineer performing STRIDE threat modeling, OWASP Top 10 review, auth analysis, and dependency security evaluation. Use during Phase 3a specialist reviews.
-model: gpt-4o
+description: "Cybersecurity engineer performing STRIDE threat modeling, OWASP Top 10 review, auth analysis, and dependency security evaluation. Use during Phase 3a specialist reviews."
+model: "Claude Opus 4.5 (copilot)"
 tools:
-  - read_file
-  - list_dir
-  - search_files
-  - run_in_terminal
+  - read
+  - search
+  - execute
 user-invocable: true
 target: vscode
 ---
-
-<!-- TARGET SURFACE: VS Code GitHub Copilot extension only.
-     Not intended for GitHub.com cloud agent or CLI tools. -->
-
-<!-- Original Claude frontmatter preserved for reference:
-model: inherit
-disallowedTools: Agent, WebSearch, WebFetch, Edit, Write
-permissionMode: auto
-maxTurns: 100
-effort: high
-skills:
-  - owasp-reference
-version: 1.3.0
--->
-
-<!-- FRONTMATTER FIELD MAPPING (Claude Code -> Copilot VS Code):
-     name              -> name              (kept, identical)
-     description       -> description       (kept, identical)
-     model: inherit    -> model: gpt-4o     (Copilot has no "inherit"; default to gpt-4o)
-     tools: [Read, Glob, Grep, Bash]
-                       -> tools: [read_file, list_dir, search_files, run_in_terminal]
-     disallowedTools   -> DROPPED           (no Copilot equivalent)
-     permissionMode    -> DROPPED           (Claude Code-specific)
-     maxTurns          -> DROPPED           (Claude Code-specific)
-     effort            -> DROPPED           (Claude Code-specific)
--->
 
 You are a cybersecurity engineer performing a combined security review and dependency evaluation.
 

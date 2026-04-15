@@ -10,7 +10,13 @@ argument-hint: "[--dry-run] [--ship [--draft] [--auto-merge]]"
 
 # Production Readiness
 
-Execute all phases below. Scope resolution, autonomy, and `--dry-run` rules are defined in CLAUDE.md.
+Execute all phases below. Scope resolution, autonomy, and `--dry-run` rules are defined in
+`AGENTS.md` and the active tool's project instructions.
+
+Resolve `STATE_ROOT` once at the start of the run. Prefer, in order: `.agents/`,
+`.claude/`, `.codex/`, `~/.agents/`, `~/.claude/`, `~/.codex/`. Use the first existing
+directory. If none exist and the workflow needs persistent local state, create `.agents/`
+in the current project and use that as `STATE_ROOT`.
 
 Lock the file list at the start. All phases operate on the same set (plus test files created in Phase 3).
 
@@ -68,15 +74,15 @@ VERDICT: NO-SHIP | SHIP WITH CAUTION | CLEAR TO SHIP
 
 If `$ARGUMENTS` contains `--ship`:
 
-- **CLEAR TO SHIP**: run `/git-ship` with any flags after `--ship` (e.g., `--ship --draft`)
-- **SHIP WITH CAUTION**: print warnings, then ask "Ship with these warnings? (yes/no)". Wait for the user's response. If yes, run `/git-ship`. If no, stop.
+- **CLEAR TO SHIP**: run `git-ship` with any flags after `--ship` (e.g., `--ship --draft`)
+- **SHIP WITH CAUTION**: print warnings, then ask "Ship with these warnings? (yes/no)". Wait for the user's response. If yes, run `git-ship`. If no, stop.
 - **NO-SHIP**: stop. Print blocking reasons.
 
 If `--ship` not present, print verdict and stop.
 
 ## Backlog Update
 
-As the final step, write all deferred and unresolved items to `.claude/backlog.md`:
+As the final step, write all deferred and unresolved items to `STATE_ROOT/backlog.md`:
 - **Needs Human Decision**: external context required
 - **Agent Actionable**: pure code work
 
@@ -89,6 +95,6 @@ Each entry: severity, file, one-line description, phase that flagged it, date. M
 - **Bundle size delta requires base branch**: if the base branch build isn't cached, this adds significant time. Skip delta if base build fails and note "no baseline available."
 - **Flaky tests contaminate the verdict**: always separate flaky from real failures. A flaky test is not a NO-SHIP condition.
 - **Secrets scan is absolute**: even a revoked key in a test fixture is a NO-SHIP. The key may be in git history forever.
-- **`--dry-run` scope**: in `--dry-run` mode, auto-fix phases (lint, audit, simplify) report findings only — no writes to source files. Build and final validation still execute normally. `/git-ship` is not run even if `--ship` is present.
+- **`--dry-run` scope**: in `--dry-run` mode, auto-fix phases (lint, audit, simplify) report findings only — no writes to source files. Build and final validation still execute normally. `git-ship` is not run even if `--ship` is present.
 
 $ARGUMENTS

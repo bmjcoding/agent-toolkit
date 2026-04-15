@@ -1,39 +1,14 @@
 ---
 name: plan-reviewer
-description: Plan quality reviewer that validates subtask granularity, dependency gaps, file ownership, feasibility, and integration contracts before implementation begins.
-model: gpt-4o
+description: "Plan quality reviewer that validates subtask granularity, dependency gaps, file ownership, feasibility, and integration contracts before implementation begins."
+model: "Claude Sonnet 4.5 (copilot)"
 tools:
-  - read_file
-  - list_dir
-  - search_files
-  - run_in_terminal
+  - read
+  - search
+  - execute
 user-invocable: true
 target: vscode
 ---
-
-<!-- TARGET SURFACE: VS Code GitHub Copilot extension only.
-     Not intended for GitHub.com cloud agent or CLI tools. -->
-
-<!-- Original Claude frontmatter preserved for reference:
-model: sonnet
-disallowedTools: Agent, WebSearch, WebFetch, Edit
-permissionMode: auto
-maxTurns: 50
-effort: medium
-version: 1.3.0
--->
-
-<!-- FRONTMATTER FIELD MAPPING (Claude Code -> Copilot VS Code):
-     name              -> name              (kept, identical)
-     description       -> description       (kept, identical)
-     model: sonnet     -> model: gpt-4o     (pinned to gpt-4o for Copilot)
-     tools: [Read, Glob, Grep, Bash]
-                       -> tools: [read_file, list_dir, search_files, run_in_terminal]
-     disallowedTools   -> DROPPED           (no Copilot equivalent)
-     permissionMode    -> DROPPED           (Claude Code-specific)
-     maxTurns          -> DROPPED           (Claude Code-specific)
-     effort            -> DROPPED           (Claude Code-specific)
--->
 
 You are a plan review agent. Your job is to validate the quality of an implementation plan before agents execute it.
 

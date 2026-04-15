@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Lint a skill SKILL.md or agent .md definition against quality standards.
+"""Lint a skill `SKILL.md` or agent `AGENT.md` definition against quality standards.
 
 Runs deterministic checks that can gate a PR merge. Covers both structural
 validity (frontmatter, naming, limits) and quality heuristics (description
@@ -11,7 +11,7 @@ Usage:
 
 Arguments:
     FILE          Single .md file to lint
-    DIRECTORY     Directory to recursively lint (finds SKILL.md and agents/*.md)
+    DIRECTORY     Directory to recursively lint (finds SKILL.md and AGENT.md)
 
 Options:
     --type TYPE   Force type: "skill" or "agent" (default: auto-detect)
@@ -212,7 +212,7 @@ def lint_file(filepath, file_type=None, base=None):
     elif not re.match(r"^[a-z0-9][a-z0-9-]*$", name):
         error("S03", f"Name '{name}' must be kebab-case (lowercase letters, numbers, hyphens)")
 
-    # S10: Name matches directory name (skills only — agents live in flat agents/ dir)
+    # S10: Name matches directory name (skills only — agents already use per-directory layout)
     if file_type == "skill":
         dir_name = os.path.basename(os.path.dirname(filepath))
         if name and dir_name and name != dir_name and dir_name not in (".", ""):
@@ -363,7 +363,9 @@ def lint_file(filepath, file_type=None, base=None):
                 ["git", "diff", "--name-only", base, "--", filepath],
                 capture_output=True, text=True, timeout=5,
             )
-            is_modified = diff_result.returncode == 0 and os.path.basename(filepath) in diff_result.stdout
+            is_modified = diff_result.returncode == 0 and any(
+                filepath.endswith(line) for line in diff_result.stdout.strip().splitlines() if line
+            )
             diff_cmd = ["git", "diff", base, "--", filepath]
         else:
             # Local mode: check unstaged + staged
@@ -436,7 +438,7 @@ def find_files(target):
         for fname in fnames:
             if fname == "SKILL.md":
                 files.append(os.path.join(root, fname))
-            elif fname.endswith(".md") and "/agents/" in os.path.join(root, fname) and fname != "CHANGELOG.md":
+            elif fname == "AGENT.md":
                 files.append(os.path.join(root, fname))
     return sorted(files)
 
@@ -486,7 +488,7 @@ def main():
     if os.path.isdir(target):
         files = find_files(target)
         if not files:
-            print(f"No SKILL.md or agent .md files found in {target}", file=sys.stderr)
+            print(f"No SKILL.md or AGENT.md files found in {target}", file=sys.stderr)
             sys.exit(2)
     else:
         files = [target]
