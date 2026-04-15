@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-04-15
+
 ### Changed
 
 - Declared shared execution metadata in the canonical root definition so model tier, capabilities, subagent routing, and skill dependencies no longer need to be inferred from tool-specific wrappers.
@@ -118,7 +120,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/planner-v1.10.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/planner-v2.0.0...HEAD
+[2.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/agent/planner-v2.0.0
 [1.10.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/planner-v1.9.1...agent/planner-v1.10.0
 [1.9.1]: https://github.com/bmjcoding/agent-toolkit/compare/agent/planner-v1.9.0...agent/planner-v1.9.1
 [1.9.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/planner-v1.8.0...agent/planner-v1.9.0
@@ -127,7 +130,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [1.6.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/planner-v4.0.0...agent/planner-v1.6.0
 [4.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/planner-v3.0.0...agent/planner-v4.0.0
 [3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/planner-v2.0.0...agent/planner-v3.0.0
-[2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/planner-v1.4.0...agent/planner-v2.0.0
 [1.4.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/planner-v1.3.0...agent/planner-v1.4.0
 [1.3.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/planner-v1.2.0...agent/planner-v1.3.0
 [1.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/planner-v1.1.0...agent/planner-v1.2.0
