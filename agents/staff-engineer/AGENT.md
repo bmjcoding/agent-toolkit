@@ -9,7 +9,7 @@ capabilities:
   - search
   - execute
 adapters:
-  - claude-code/agents/staff-engineer/staff-engineer.md
+  - claude-code/agents/staff-engineer.md
   - github-copilot/agents/staff-engineer.agent.md
   - openai-codex/agents/staff-engineer.toml
 ---

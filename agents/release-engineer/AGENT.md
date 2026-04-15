@@ -11,7 +11,7 @@ capabilities:
 skills:
   - changelog
 adapters:
-  - claude-code/agents/release-engineer/release-engineer.md
+  - claude-code/agents/release-engineer.md
   - github-copilot/agents/release-engineer.agent.md
   - openai-codex/agents/release-engineer.toml
 ---

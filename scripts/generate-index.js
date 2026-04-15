@@ -193,8 +193,9 @@ function readLatestReleasedVersion(changelogPath) {
 }
 
 function parseClaudeAgentFallback(agentId) {
-  const claudePath = path.join(REPO_ROOT, 'claude-code', 'agents', agentId, `${agentId}.md`);
-  const content = readFileSafe(claudePath);
+  const claudePath = path.join(REPO_ROOT, 'claude-code', 'agents', `${agentId}.md`);
+  const legacyClaudePath = path.join(REPO_ROOT, 'claude-code', 'agents', agentId, `${agentId}.md`);
+  const content = readFileSafe(claudePath) || readFileSafe(legacyClaudePath);
   if (!content) {
     return {
       modelTier: null,
@@ -515,7 +516,7 @@ function buildBundleMembershipMap(bundles) {
 
 function installPathForArtifact(targetTool, componentKind, componentId) {
   if (targetTool === 'claude-code') {
-    if (componentKind === 'agent') return `~/.claude/agents/${componentId}/${componentId}.md`;
+    if (componentKind === 'agent') return `~/.claude/agents/${componentId}.md`;
     if (componentKind === 'command') return `~/.claude/commands/${componentId}/${componentId}.md`;
     if (componentKind === 'bundle') return `~/.claude/bundles/${componentId}/bundle.yaml`;
     if (componentKind === 'hook') return `~/.claude/hooks/${componentId}/${componentId}.sh`;

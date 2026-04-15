@@ -10,7 +10,7 @@ skills:
   - design-lint
   - design-authority
 adapters:
-  - claude-code/agents/design-architect/design-architect.md
+  - claude-code/agents/design-architect.md
   - github-copilot/agents/design-architect.agent.md
   - openai-codex/agents/design-architect.toml
 ---

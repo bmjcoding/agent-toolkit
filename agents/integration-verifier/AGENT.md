@@ -9,7 +9,7 @@ capabilities:
   - search
   - execute
 adapters:
-  - claude-code/agents/integration-verifier/integration-verifier.md
+  - claude-code/agents/integration-verifier.md
   - github-copilot/agents/integration-verifier.agent.md
   - openai-codex/agents/integration-verifier.toml
 ---
