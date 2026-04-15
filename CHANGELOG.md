@@ -8,6 +8,58 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [4.4.0] - 2026-04-15
+
+### Changed
+
+- Retired overlapping `claude-code/*` tag references for mirrored shared agents and
+  workflows. Shared component docs and changelog footers now point only at canonical
+  `agent/*`, `workflow/*`, `skill/*`, and `rule/*` tags, leaving `claude-code/*`
+  reserved for tool-native Claude hooks and bundles.
+
+## [4.3.0] - 2026-04-15
+
+### Added
+
+- `index.json` artifacts now expose normalized `lifecycle` and `availability` metadata,
+  include OpenAI Codex hook entries, validate hook runtime metadata from
+  `tools/catalog-metadata.json`, and fail generation when either field is missing.
+- GitHub Actions now runs the `skills/review-skill/scripts/lint-definition.py`
+  deterministic schema checks for canonical `skills/**` and `agents/**` before the
+  generated-asset validation/sync jobs, so malformed definitions fail CI before
+  adapter sync proceeds.
+- Added a component-specific CI changelog gate. Pull requests and pushes that modify a
+  monitored component surface now fail unless the associated `CHANGELOG.md` for that
+  exact component is updated in the same diff.
+- Pull requests now require touched component changelogs to promote PR-scoped notes out
+  of `## [Unreleased]` into a new dated versioned section, so version bumps happen
+  before review instead of waiting for merge.
+- Fixed the component-changelog CI gate on first pushes to new branches by fetching the
+  repository default branch before computing the fallback diff base.
+- Normalized the remaining workflow, rule, Claude command, and Claude hook changelog
+  footer links to canonical namespaced tags so historical compare/tree links no longer
+  depend on obsolete flat component tags.
+
+### Changed
+
+- Canonical shared agents, workflows, skills, and rules now declare `lifecycle` in
+  their root definitions so generated adapters and the distribution catalog read
+  maturity from one source of truth while tool-local support remains a separate
+  availability concern.
+- Release-engineer and the changelog skill now treat `## [Unreleased]` as branch-local
+  scratch space only: PR-bound work is expected to be promoted into the next versioned
+  section before the PR is opened.
+
+## [4.2.1] - 2026-04-15
+
+### Fixed
+
+- Updated the generated-asset smoke test to fall back to a built-in filesystem scan
+  when `rg` is unavailable, so `validate-generated-assets` passes on GitHub runners
+  without ripgrep installed.
+
+## [4.2.0] - 2026-04-15
+
 ### Added
 
 - Added a GitHub Actions sync gate that reruns canonical adapter generation on matching
@@ -25,6 +77,9 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 - Began ADR-0008 implementation: `index.json` is now generated as a tool-aware
   distribution catalog with component versions, install metadata, bundle membership, and
   checksums instead of a path-only array.
+- Aligned the shared orchestration contracts across Frankenstein, planner, verifier,
+  remediation, and release flows so session-scoped context, repeated reviewer passes,
+  and repair ownership use the same canonical schema.
 - Updated the adapter sync generator to support canonical shared execution metadata in
   root agent/workflow definitions when present, while transparently falling back to
   existing adapter metadata during the migration.
@@ -36,6 +91,9 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 - Replaced the hardcoded lint workflow version assertion in `scripts/generate-index.js`
   with a dynamic SemVer/parity check so generator smoke tests follow the current release
   state instead of a frozen version constant.
+- Normalized retro/improve storage guidance around `~/agent-retros`, added explicit
+  pre-planner recon mode for `autoresearch-analyst`, and expanded the generated-asset
+  smoke coverage to verify the new release metadata path.
 
 ### Removed
 
@@ -162,7 +220,7 @@ No action required for users who install via symlinks (`./claude-code/scripts/in
   `openai-codex/README.md`, and `skills/changelog/SKILL.md`
   based on design-architect and SRE review findings (phase 4-b).
 - Minor inline corrections to `CHANGELOG.md` and
-  `claude-code/agents/frankenstein/frankenstein.md`
+  `claude-code/agents/frankenstein.md`
   from integration-verifier review (phase 3a).
 
 ## [2.0.0] - 2026-04-12
@@ -180,7 +238,7 @@ No action required for users who install via symlinks (`./claude-code/scripts/in
 - **Rules path changed**: `rules/` briefly moved through `shared/rules/` during the
   migration path and was later restored as the root canonical location.
 - **Tag format changed**: component tags now use `<tool>/<slug>-v<version>` (e.g.
-  `claude-code/frankenstein-v3.0.0`, `skill/changelog-v3.0.0`) instead of the
+  `agent/frankenstein-v3.0.0`, `skill/changelog-v3.0.0`, `claude-code/branch-guard-v3.0.0`) instead of the
   previous flat `<slug>-v<version>` format.
 - **All 48 components bumped to next major version** to signal the breaking layout
   change. Each component's own `CHANGELOG.md` records the specific version bump.
@@ -206,7 +264,11 @@ No action required for users who install via symlinks (`./claude-code/scripts/in
 3. Re-run the install script: `./claude-code/scripts/install.sh`.
 4. Verify: `./claude-code/scripts/install.sh --check`.
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/v4.1.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/v4.4.0...HEAD
+[4.4.0]: https://github.com/bmjcoding/agent-toolkit/compare/v4.3.0...v4.4.0
+[4.3.0]: https://github.com/bmjcoding/agent-toolkit/compare/v4.2.1...v4.3.0
+[4.2.1]: https://github.com/bmjcoding/agent-toolkit/compare/v4.2.0...v4.2.1
+[4.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/v4.1.0...v4.2.0
 [4.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/v4.0.0...v4.1.0
 [4.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/v3.2.0...v4.0.0
 [3.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/v3.1.0...v3.2.0

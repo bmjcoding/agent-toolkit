@@ -8,10 +8,10 @@ event wiring, and install surfaces that differ from other tools.
 
 ```
 claude-code/
-  agents/     # Claude frontmatter wrappers for canonical root agents/
+  agents/     # Flat Claude frontmatter wrappers for canonical root agents/
   commands/   # Claude slash-command wrappers for canonical root workflows/
   hooks/      # 9 shell scripts wired to Claude Code hook events (PreToolUse, PostToolUse, SubagentStart, SubagentStop)
-  bundles/    # YAML bundle files grouping related components for bulk install
+  bundles/    # YAML bundle manifests used by the distribution catalog
   docs/       # Architecture decision records, migration guides, UX design docs
   scripts/
     install.sh  # Symlink manager for ~/.claude/
@@ -50,8 +50,8 @@ Hooks must also be registered in `~/.claude/settings.json` under the `hooks` key
 
 ## Component Format Reference
 
-- **Agent** (`<name>.md`): Claude-native frontmatter wrapper around the canonical root
-  `agents/<name>/AGENT.md` body.
+- **Agent** (`claude-code/agents/<name>.md`): Claude-native frontmatter wrapper around the
+  canonical root `agents/<name>/AGENT.md` body.
 - **Command** (`<name>.md`): Claude-native slash-command wrapper around the canonical root
   `workflows/<name>/WORKFLOW.md` body.
 - **Hook** (`<name>.sh`): Plain Bash, registered by event type in `settings.json`; exit 2 blocks, exit 1 warns, exit 0 continues.
@@ -59,8 +59,21 @@ Hooks must also be registered in `~/.claude/settings.json` under the `hooks` key
 
 ## Tag Format
 
+Shared Claude adapters use the canonical tag lineage of the root component they mirror:
+
+```text
+agent/<slug>-v<major>.<minor>.<patch>
+workflow/<slug>-v<major>.<minor>.<patch>
 ```
+
+Examples: `agent/frankenstein-v3.1.0`, `workflow/backlog-v5.0.0`
+
+Claude-only runtime assets keep the `claude-code/` namespace:
+
+```text
 claude-code/<slug>-v<major>.<minor>.<patch>
 ```
 
-Example: `claude-code/frankenstein-v3.1.0`
+Example: `claude-code/branch-guard-v3.0.0`
+
+Use `claude-code/*` only for tool-native surfaces such as hooks and bundles.

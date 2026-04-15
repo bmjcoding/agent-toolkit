@@ -37,9 +37,8 @@ ln -sfn "${TOOLKIT}/github-copilot/prompts"      .github/prompts
 
 ## Shared instructions
 
-`AGENTS.md` is the primary shared instruction surface. `CLAUDE.md` is kept only as a
-compatibility shim for Claude-native consumers and should not be treated as Copilot's
-canonical shared instruction file.
+`AGENTS.md` is the primary shared instruction surface across the toolkit and should be
+treated as the shared instruction source of truth.
 
 ## Rule adapters
 

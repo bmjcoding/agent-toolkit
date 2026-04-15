@@ -9,7 +9,7 @@ capabilities:
   - search
   - execute
 adapters:
-  - claude-code/agents/planner/planner.md
+  - claude-code/agents/planner.md
   - github-copilot/agents/planner.agent.md
   - openai-codex/agents/planner.toml
 ---
@@ -28,9 +28,17 @@ Read these context files first, then read the project's README and key source fi
 - Current changes: `.orchestrator/sessions/$SID/context/current-diff.txt`
 - Project README: `README.md`
 
+If any of the three session-scoped context files above are missing, generate them once in
+`.orchestrator/sessions/$SID/context/` before planning. Prefer bounded, session-local
+snapshots over re-scanning the whole repo repeatedly.
+
 If exploration summaries exist in `.orchestrator/sessions/$SID/context/`, use them as
 your primary source of truth. Do NOT re-read files the summaries already cover unless
 you need specific implementation details.
+
+If only the legacy flat context directory `.orchestrator/context/` exists, treat it as a
+compatibility fallback: copy the needed files into the session-scoped context directory
+and continue from there. Session-scoped context is authoritative for this run.
 
 ## Step 1 — Write Project Brief
 
@@ -48,8 +56,17 @@ Write `.orchestrator/sessions/$SID/plan.json`:
 
 ```json
 {
+  "session_id": "$SID",
   "task": "the original task",
   "context_summary": "one-paragraph summary",
+  "notes": ["planning assumptions, scope exclusions, or targeted-edit budgets"],
+  "parallel_groups": [
+    {
+      "group": 1,
+      "subtasks": ["1"],
+      "summary": "foundation work that must land first"
+    }
+  ],
   "subtasks": [
     {
       "id": "1",
@@ -58,6 +75,8 @@ Write `.orchestrator/sessions/$SID/plan.json`:
       "owned_files": ["src/path/to/file"],
       "parallel_group": 1,
       "blockedBy": [],
+      "notes": [],
+      "scope_override_note": null,
       "integration_points": ["how this connects to other subtasks"],
       "completion_criteria": "what done looks like"
     }
@@ -74,9 +93,14 @@ Write `.orchestrator/sessions/$SID/plan.json`:
 
 ## Scheduling Rules
 
+- `session_id` must equal the active `$SID`.
+- Populate BOTH the top-level `parallel_groups` summary and each subtask's
+  `parallel_group` field.
 - Subtasks in the same `parallel_group` run concurrently. Higher groups wait for lower.
 - `blockedBy` is the authoritative dependency list — always populate it. Do not rely on
   `parallel_group` alone.
+- Every subtask must include `notes` (use `[]` when empty) and `scope_override_note`
+  (use `null` unless the orchestrator later grants an explicit exception).
 - No two subtasks in the same group may own the same file.
 - Each subtask should own at most 25 files. Split larger subtasks.
 - One implementation approach per subtask — no "OR / Alternatively" options.

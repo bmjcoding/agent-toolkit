@@ -4,6 +4,7 @@ description: >
   Review a skill or agent definition for quality and correctness. Use when evaluating
   a contribution before merging, after writing a new skill, or when a skill underperforms.
   Supports batch review of directories with parallel dispatch.
+lifecycle: stable
 disable-model-invocation: true
 argument-hint: "[path to SKILL.md, AGENT.md, or directory] [--format json]"
 lifecycle: stable

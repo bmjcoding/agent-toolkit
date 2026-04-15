@@ -6,7 +6,7 @@ deduplicates by finding_id against existing backlog rows, renumbers, and
 atomic-writes the updated backlog.
 
 Usage:
-    python3 scripts/backlog-seed.py
+    python3 claude-code/scripts/backlog-seed.py
 
 Expects these temp files to exist (written by the Phase 4 bash loop):
     /tmp/backlog_new_agent_rows.txt

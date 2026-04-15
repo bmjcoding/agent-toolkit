@@ -1,40 +1,133 @@
-name: Sync Generated Assets
+name: Validate Definitions and Sync Generated Assets
 
 on:
   push:
     paths:
       - "agents/**"
       - "skills/**"
-      - "rules/**"
       - "workflows/**"
+      - "rules/**"
+      - "claude-code/agents/**"
+      - "claude-code/bundles/**"
+      - "claude-code/commands/**"
       - "claude-code/hooks/**"
+      - "github-copilot/agents/**"
+      - "github-copilot/commands/**"
+      - "github-copilot/prompts/**"
       - "github-copilot/hooks/**"
+      - "openai-codex/agents/**"
       - "openai-codex/hooks/**"
       - "scripts/sync-canonical-adapters.js"
       - "scripts/generate-index.js"
+      - "scripts/validate-component-changelogs.js"
       - "scripts/validate-lifecycle-metadata.js"
+      - "skills/review-skill/scripts/lint-definition.py"
       - "tools/catalog-metadata.json"
+      - ".github/workflows/sync-generated-assets.yml"
   pull_request:
     paths:
       - "agents/**"
       - "skills/**"
-      - "rules/**"
       - "workflows/**"
+      - "rules/**"
+      - "claude-code/agents/**"
+      - "claude-code/bundles/**"
+      - "claude-code/commands/**"
       - "claude-code/hooks/**"
+      - "github-copilot/agents/**"
+      - "github-copilot/commands/**"
+      - "github-copilot/prompts/**"
       - "github-copilot/hooks/**"
+      - "openai-codex/agents/**"
       - "openai-codex/hooks/**"
       - "scripts/sync-canonical-adapters.js"
       - "scripts/generate-index.js"
+      - "scripts/validate-component-changelogs.js"
       - "scripts/validate-lifecycle-metadata.js"
+      - "skills/review-skill/scripts/lint-definition.py"
       - "tools/catalog-metadata.json"
+      - ".github/workflows/sync-generated-assets.yml"
 
 concurrency:
-  group: sync-generated-assets-${{ github.ref }}
+  group: validate-definitions-and-sync-generated-assets-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
+  validate-component-changelogs:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Check Out Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set Up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Determine Diff Base
+        id: diff_base
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "base=${{ github.event.pull_request.base.sha }}" >> "$GITHUB_OUTPUT"
+          elif [ "${{ github.event.before }}" != "0000000000000000000000000000000000000000" ]; then
+            echo "base=${{ github.event.before }}" >> "$GITHUB_OUTPUT"
+          else
+            default_branch="${{ github.event.repository.default_branch }}"
+            [ -z "$default_branch" ] && default_branch=main
+            git fetch --no-tags --depth=1 origin "$default_branch"
+            base_ref="$(git merge-base HEAD FETCH_HEAD 2>/dev/null || true)"
+            if [ -z "$base_ref" ]; then
+              base_ref="$(git rev-list --max-parents=0 HEAD | tail -1)"
+            fi
+            echo "base=${base_ref}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Validate Component CHANGELOG Updates
+        run: |
+          if [ "${{ github.event_name }}" = "push" ] && [ "${{ github.actor }}" = "github-actions[bot]" ]; then
+            echo "Skipping component changelog validation for github-actions[bot] sync commit."
+            exit 0
+          fi
+
+          extra_args=()
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            extra_args+=(--require-release-version)
+          fi
+
+          node scripts/validate-component-changelogs.js \
+            --base "${{ steps.diff_base.outputs.base }}" \
+            --head HEAD \
+            "${extra_args[@]}"
+
+  validate-definitions:
+    needs: validate-component-changelogs
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Check Out Repository
+        uses: actions/checkout@v4
+
+      - name: Set Up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Lint Canonical Skill Definitions
+        run: python3 skills/review-skill/scripts/lint-definition.py skills
+
+      - name: Lint Canonical Agent Definitions
+        run: python3 skills/review-skill/scripts/lint-definition.py agents
+
   validate-generated-assets:
     if: github.event_name == 'pull_request'
+    needs: [validate-component-changelogs, validate-definitions]
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -74,6 +167,7 @@ jobs:
 
   sync-generated-assets:
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/heads/')
+    needs: [validate-component-changelogs, validate-definitions]
     runs-on: ubuntu-latest
     permissions:
       contents: write
