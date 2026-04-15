@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Added a scope-check entry gate so the skill preserves mature product design systems, routes small patches to only the needed references, and reserves the full pattern sweep for net-new screens or broad redesigns.
+
 ## [4.0.0] - 2026-04-13
 
 ### Removed

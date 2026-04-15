@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Normalized retro storage guidance around `~/agent-retros`, clarified compatibility
   handling for legacy roots, and tightened script-availability expectations for the new
   runtime layout.
+- Updated finalization guidance so retro summaries read released version information from component changelogs instead of inline definition markers.
 
 ## [5.0.0] - 2026-04-14
 

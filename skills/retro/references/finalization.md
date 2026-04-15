@@ -56,7 +56,7 @@ Use markdown headers matching the analysis sections. Skip sections that don't ap
 |---|---|
 | Run type | single / subagent / orchestration |
 | Subject | identifier from Scoping |
-| Version | current metadata.version of the primary skill/agent (if versioned) |
+| Version | latest released version from the primary component's `CHANGELOG.md` (if present) |
 | Phases completed | N/N |
 | Agents spawned | N |
 | Total tokens consumed | N |
@@ -180,7 +180,7 @@ Use the `session_id` (compact `YYYYMMDDTHHMMSS`) as `<session-id>`. For skill/ag
 
    | Key | Type | Description |
    |---|---|---|
-   | `version` | string | Current `metadata.version` of the primary skill/agent (if versioned) |
+   | `version` | string | Latest released version from the primary component's `CHANGELOG.md` (if present) |
    | `project` | string | Git remote URL or project directory name |
    | `total_tokens` | integer | Total tokens consumed across all agents |
    | `total_cost_usd` | number | Total metered cost in USD |
