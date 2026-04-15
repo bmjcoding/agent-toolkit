@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Declared canonical lifecycle metadata so the distribution catalog can publish normalized lifecycle state for this shared skill.
+
 - Added explicit reference routing and a compact findings template so observability reviews load less context and report results in a consistent format.
 
 ## [4.0.0] - 2026-04-13

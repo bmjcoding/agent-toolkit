@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Declared canonical lifecycle metadata so the distribution catalog can publish normalized lifecycle state for this shared skill.
+
 - Updated shared review guidance to refer to `retro`, `review-skill`, and `improve` as generic workflows rather than Claude-only slash-command forms.
 - Removed inline definition-version enforcement from `lint-definition.py`; released version tracking now lives in component changelogs only.
 

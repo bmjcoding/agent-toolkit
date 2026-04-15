@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Declared canonical lifecycle metadata so the distribution catalog can publish normalized lifecycle state for this shared skill.
+
 - Updated follow-up workflow wording to refer to `improve` generically so the shared skill text does not assume Claude slash-command syntax.
 - Normalized retro storage guidance around `~/agent-retros`, clarified compatibility
   handling for legacy roots, and tightened script-availability expectations for the new

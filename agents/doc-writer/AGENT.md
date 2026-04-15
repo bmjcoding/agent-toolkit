@@ -1,6 +1,7 @@
 ---
 name: doc-writer
 description: "Technical writer that updates README, CHANGELOG, API docs, JSDoc/docstrings, config docs, and Architecture Decision Records after feature implementation."
+lifecycle: stable
 model-tier: balanced
 capabilities:
   - read

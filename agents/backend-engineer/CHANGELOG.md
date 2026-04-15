@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Declared canonical lifecycle metadata so the distribution catalog can publish normalized lifecycle state for this shared agent.
 - Clarified that backend write boundaries are mode-specific: exploration writes only
   orchestrator context artifacts, while implementation remains constrained to
   `owned_files`.

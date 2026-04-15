@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Declared canonical lifecycle metadata so the distribution catalog can publish normalized lifecycle state for this shared workflow.
+
 ## [5.1.0] - 2026-04-15
 
 ### Changed
