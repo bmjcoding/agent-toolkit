@@ -1,6 +1,7 @@
 ---
 name: quality-engineer
 description: "Autonomous quality agent that remediates findings from specialist reviews, repairs broken integration contracts, and validates post-finalize changes. Replaces fixer, integration-repairer, and post-validator."
+lifecycle: stable
 model-tier: frontier
 capabilities:
   - read

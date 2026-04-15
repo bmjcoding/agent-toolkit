@@ -4,15 +4,29 @@ on:
   push:
     paths:
       - "agents/**"
+      - "skills/**"
+      - "rules/**"
       - "workflows/**"
+      - "claude-code/hooks/**"
+      - "github-copilot/hooks/**"
+      - "openai-codex/hooks/**"
       - "scripts/sync-canonical-adapters.js"
       - "scripts/generate-index.js"
+      - "scripts/validate-lifecycle-metadata.js"
+      - "tools/catalog-metadata.json"
   pull_request:
     paths:
       - "agents/**"
+      - "skills/**"
+      - "rules/**"
       - "workflows/**"
+      - "claude-code/hooks/**"
+      - "github-copilot/hooks/**"
+      - "openai-codex/hooks/**"
       - "scripts/sync-canonical-adapters.js"
       - "scripts/generate-index.js"
+      - "scripts/validate-lifecycle-metadata.js"
+      - "tools/catalog-metadata.json"
 
 concurrency:
   group: sync-generated-assets-${{ github.ref }}
@@ -34,6 +48,9 @@ jobs:
         with:
           node-version: 22
 
+      - name: Validate Lifecycle Metadata
+        run: node scripts/validate-lifecycle-metadata.js
+
       - name: Run Generator Smoke Test
         run: node scripts/smoke-generated-assets.js
 
@@ -43,7 +60,6 @@ jobs:
             claude-code/agents
             claude-code/commands
             github-copilot/agents
-            github-copilot/commands
             github-copilot/prompts
             openai-codex/agents
             index.json
@@ -73,6 +89,9 @@ jobs:
         with:
           node-version: 22
 
+      - name: Validate Lifecycle Metadata
+        run: node scripts/validate-lifecycle-metadata.js
+
       - name: Run Generator Smoke Test
         run: node scripts/smoke-generated-assets.js
 
@@ -83,7 +102,6 @@ jobs:
             claude-code/agents
             claude-code/commands
             github-copilot/agents
-            github-copilot/commands
             github-copilot/prompts
             openai-codex/agents
             index.json
@@ -103,7 +121,6 @@ jobs:
             claude-code/agents
             claude-code/commands
             github-copilot/agents
-            github-copilot/commands
             github-copilot/prompts
             openai-codex/agents
             index.json

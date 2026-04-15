@@ -2,6 +2,7 @@
 name: backend
 description: Lightweight backend workflow — implement with convention awareness, security review, and lint. Use when making backend-only changes without needing the full orchestrator pipeline.
 disable-model-invocation: true
+lifecycle: stable
 ---
 
 # Backend Workflow

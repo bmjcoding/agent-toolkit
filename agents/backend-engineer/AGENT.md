@@ -1,6 +1,7 @@
 ---
 name: backend-engineer
 description: "Backend engineer that builds API routes, services, and data layer code with contract awareness. Use for subtasks with API endpoints, services, middleware, or server-side files."
+lifecycle: stable
 model-tier: frontier
 capabilities:
   - read

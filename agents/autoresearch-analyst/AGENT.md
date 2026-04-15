@@ -1,6 +1,7 @@
 ---
 name: autoresearch-analyst
 description: "Self-improvement agent that runs retrospectives, applies improvements, reviews definitions, and runs full improve-validate cycles. Spawned by orchestrators or dispatched for batch operations."
+lifecycle: stable
 model-tier: frontier
 capabilities:
   - read

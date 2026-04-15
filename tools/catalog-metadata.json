@@ -1,0 +1,37 @@
+{
+  "hooks": {
+    "claude-code": {
+      "branch-guard": { "lifecycle": "stable" },
+      "changelog-check": { "lifecycle": "stable" },
+      "extract-handoff": { "lifecycle": "stable" },
+      "inject-context": { "lifecycle": "stable" },
+      "integrity-warn": { "lifecycle": "stable" },
+      "pre-push-secrets": { "lifecycle": "stable" },
+      "protect-config": { "lifecycle": "stable" },
+      "toolkit-drift-check": { "lifecycle": "stable" },
+      "toolkit-edit-reminder": { "lifecycle": "stable" }
+    },
+    "github-copilot": {
+      "branch-guard": { "lifecycle": "stable" },
+      "changelog-check": { "lifecycle": "stable" },
+      "extract-handoff": { "lifecycle": "stable" },
+      "inject-context": { "lifecycle": "stable" },
+      "integrity-warn": { "lifecycle": "stable" },
+      "pre-push-secrets": { "lifecycle": "stable" },
+      "protect-config": { "lifecycle": "stable" },
+      "toolkit-drift-check": { "lifecycle": "stable" },
+      "toolkit-edit-reminder": { "lifecycle": "stable" }
+    },
+    "openai-codex": {
+      "branch-guard": { "lifecycle": "experimental" },
+      "changelog-check": { "lifecycle": "experimental" },
+      "extract-handoff": { "lifecycle": "experimental" },
+      "inject-context": { "lifecycle": "experimental" },
+      "integrity-warn": { "lifecycle": "experimental" },
+      "pre-push-secrets": { "lifecycle": "experimental" },
+      "protect-config": { "lifecycle": "experimental" },
+      "toolkit-drift-check": { "lifecycle": "experimental" },
+      "toolkit-edit-reminder": { "lifecycle": "experimental" }
+    }
+  }
+}
