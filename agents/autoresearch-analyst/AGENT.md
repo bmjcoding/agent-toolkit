@@ -14,7 +14,7 @@ skills:
   - review-skill
   - changelog
 adapters:
-  - claude-code/agents/autoresearch-analyst/autoresearch-analyst.md
+  - claude-code/agents/autoresearch-analyst.md
   - github-copilot/agents/autoresearch-analyst.agent.md
   - openai-codex/agents/autoresearch-analyst.toml
 ---

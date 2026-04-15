@@ -19,7 +19,7 @@ USAGE:
   backfill-changelog-tags.sh --help
 
 OPTIONS:
-  --slug SLUG         Component slug (e.g., changelog, frankenstein). Required.
+  --slug SLUG         Component slug (e.g., skill/changelog, agent/frankenstein). Required.
   --changelog PATH    Path to the CHANGELOG.md file. Required.
   --dry-run           Print tags that would be created without creating them.
   --help, -h          Show this help.
@@ -33,7 +33,8 @@ BEHAVIOR:
 
 AFTER SUCCESS:
   Run: git push origin --tags
-  Existing monolithic (vX.Y.Z) tags are not modified.
+  After all CHANGELOG footers reference canonical namespaced tags, you may delete
+  superseded flat component tags that no longer have live references.
 
 EXIT CODES:
   0  success (or dry-run completed cleanly)

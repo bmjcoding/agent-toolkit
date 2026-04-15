@@ -23,7 +23,7 @@ subagents:
   - release-engineer
   - autoresearch-analyst
 adapters:
-  - claude-code/agents/frankenstein/frankenstein.md
+  - claude-code/agents/frankenstein.md
   - github-copilot/agents/frankenstein.agent.md
   - openai-codex/agents/frankenstein.toml
 ---

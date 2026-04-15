@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Planner bootstrap guidance now generates missing session context snapshots and treats
   legacy flat orchestrator context as a compatibility fallback instead of a hard
   dependency.
+- Updated the Claude adapter reference to the flattened `claude-code/agents/<name>.md`
+  layout used by the tool-specific generated surfaces.
 
 ## [2.0.0] - 2026-04-15
 

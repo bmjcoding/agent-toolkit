@@ -84,7 +84,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Phase 4 Quality Loop backlog-seed logic extracted from inline Python heredoc (~92 lines) into `scripts/backlog-seed.py`; frankenstein.md calls the script via a 3-line bash invocation. Same runtime behavior; reduces frankenstein.md by ~92 lines (778 → 692).
+- Phase 4 Quality Loop backlog-seed logic extracted from inline Python heredoc (~92 lines) into `claude-code/scripts/backlog-seed.py`; frankenstein.md calls the script via a 3-line bash invocation. Same runtime behavior; reduces frankenstein.md by ~92 lines (778 → 692).
 - Retrospective Notes table appended with 2026-04-12 entry recording default-branch guard addition.
 - LEAN dispatch prompt enforcement tightened: hard 200-token ceiling on inline prompt text per subtask, enforced as a formatting rule in Phase 2 dispatch template.
 

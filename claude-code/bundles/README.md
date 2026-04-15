@@ -26,7 +26,7 @@ components:
 
 | type | resolved path |
 |----------|---------------|
-| `agent`  | `claude-code/agents/<id>/<id>.md` |
+| `agent`  | `claude-code/agents/<id>.md` |
 | `skill`  | `skills/<id>/SKILL.md` |
 | `command`| `claude-code/commands/<id>/<id>.md` |
 | `hook`   | `claude-code/hooks/<id>/<id>.sh` |

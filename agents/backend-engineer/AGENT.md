@@ -9,7 +9,7 @@ capabilities:
   - search
   - execute
 adapters:
-  - claude-code/agents/backend-engineer/backend-engineer.md
+  - claude-code/agents/backend-engineer.md
   - github-copilot/agents/backend-engineer.agent.md
   - openai-codex/agents/backend-engineer.toml
 ---

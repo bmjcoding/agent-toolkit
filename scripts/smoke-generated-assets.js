@@ -219,7 +219,7 @@ function assertGeneratedFilesExist() {
   assert(diff(copilotPrompts, workflows).length === 0, `orphan GitHub Copilot prompt adapters found: ${diff(copilotPrompts, workflows).join(', ')}`);
 
   for (const agent of agents) {
-    assert(exists(path.join('claude-code', 'agents', agent, `${agent}.md`)), `missing Claude agent adapter for ${agent}`);
+    assert(exists(path.join('claude-code', 'agents', `${agent}.md`)), `missing Claude agent adapter for ${agent}`);
     assert(exists(path.join('github-copilot', 'agents', `${agent}.agent.md`)), `missing GitHub Copilot agent adapter for ${agent}`);
     assert(exists(path.join('openai-codex', 'agents', `${agent}.toml`)), `missing OpenAI Codex agent adapter for ${agent}`);
   }
@@ -255,7 +255,7 @@ function assertCatalogEntriesExist(agents, workflows) {
 
   for (const agent of agents) {
     assert(
-      artifactKeys.has(`claude-code|claude-code/agents/${agent}/${agent}.md`),
+      artifactKeys.has(`claude-code|claude-code/agents/${agent}.md`),
       `missing index.json entry for Claude agent ${agent}`
     );
     assert(

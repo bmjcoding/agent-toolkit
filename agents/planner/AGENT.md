@@ -8,7 +8,7 @@ capabilities:
   - search
   - execute
 adapters:
-  - claude-code/agents/planner/planner.md
+  - claude-code/agents/planner.md
   - github-copilot/agents/planner.agent.md
   - openai-codex/agents/planner.toml
 ---

@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Documented phase-qualified handoff aliases for repeated design-architect passes so
   raw-review and recheck outputs no longer rely on a single collision-prone filename.
+- Updated the Claude adapter reference to the flattened `claude-code/agents/<name>.md`
+  layout used by the tool-specific generated surfaces.
 
 ## [2.0.0] - 2026-04-15
 
