@@ -1,7 +1,7 @@
 # github-copilot/
 
 This directory contains **GitHub Copilot for VS Code-specific content** — agents,
-instructions, prompts, hooks, bundles, and install assets. Canonical agent bodies,
+instructions, prompts, hooks, and install assets. Canonical agent bodies,
 workflow bodies, skills, and rules live at the repo root; this directory keeps only the
 VS Code Copilot adapters and wiring those canonical files require.
 
@@ -10,7 +10,6 @@ VS Code Copilot adapters and wiring those canonical files require.
 ```text
 github-copilot/
   agents/       # VS Code Copilot agent adapters for root agents/
-  bundles/      # Bundle manifests
   hooks/        # VS Code Copilot hooks
   instructions/ # Rule adapters for root rules/
   prompts/      # Workflow adapters for root workflows/
@@ -31,7 +30,6 @@ Manual wiring:
 ```sh
 TOOLKIT=/path/to/agent-toolkit
 ln -sfn "${TOOLKIT}/github-copilot/agents"       .github/agents
-ln -sfn "${TOOLKIT}/github-copilot/bundles"      .github/bundles
 ln -sfn "${TOOLKIT}/github-copilot/hooks"        .github/hooks
 ln -sfn "${TOOLKIT}/github-copilot/instructions" .github/instructions
 ln -sfn "${TOOLKIT}/github-copilot/prompts"      .github/prompts

@@ -6,6 +6,7 @@ description: >
   when creating or editing any CHANGELOG.md in the toolkit.
 disable-model-invocation: true
 argument-hint: "[path to CHANGELOG.md to edit or create]"
+lifecycle: stable
 ---
 
 # Changelog Standard

@@ -8,7 +8,6 @@
 #
 # SYMLINK MAP:
 #   .github/agents       -> <REPO>/github-copilot/agents
-#   .github/bundles      -> <REPO>/github-copilot/bundles
 #   .github/hooks        -> <REPO>/github-copilot/hooks
 #   .github/instructions -> <REPO>/github-copilot/instructions
 #   .github/prompts      -> <REPO>/github-copilot/prompts
@@ -77,7 +76,6 @@ GITHUB_DIR="${TARGET_DIR}/.github"
 
 declare -a GITHUB_SYMLINKS=(
   "agents|${REPO_DIR}/github-copilot/agents"
-  "bundles|${REPO_DIR}/github-copilot/bundles"
   "hooks|${REPO_DIR}/github-copilot/hooks"
   "instructions|${REPO_DIR}/github-copilot/instructions"
   "prompts|${REPO_DIR}/github-copilot/prompts"

@@ -823,7 +823,8 @@ function assert(condition, message) {
 }
 
 function runTests() {
-  assert(readLatestReleasedVersion(path.join(REPO_ROOT, 'workflows', 'lint', 'CHANGELOG.md')) === '4.0.0', 'expected latest lint workflow version to parse');
+  const lintWorkflowVersion = readLatestReleasedVersion(path.join(REPO_ROOT, 'workflows', 'lint', 'CHANGELOG.md'));
+  assert(/^\d+\.\d+\.\d+$/.test(lintWorkflowVersion || ''), 'expected latest lint workflow version to parse as semver');
 
   const plannerFallback = parseClaudeAgentFallback('planner');
   assert(plannerFallback.modelTier === 'frontier', 'expected planner model tier fallback to map from inherit');
@@ -842,6 +843,14 @@ function runTests() {
   assert(Array.isArray(catalog.artifacts) && catalog.artifacts.length > 0, 'expected catalog to contain artifacts');
   assert(catalog.artifacts.some(entry => entry.component_id === 'planner' && entry.target_tool === 'openai-codex'), 'expected planner codex artifact in catalog');
   assert(catalog.artifacts.some(entry => entry.component_id === 'logging' && entry.target_tool === 'github-copilot'), 'expected github-copilot logging rule artifact in catalog');
+  assert(
+    catalog.artifacts.some(
+      entry => entry.component_id === 'lint'
+        && entry.component_kind === 'command'
+        && entry.component_version === lintWorkflowVersion
+    ),
+    'expected lint command artifacts to use the latest canonical workflow version'
+  );
 
   process.stdout.write('All tests passed.\n');
 }

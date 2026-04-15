@@ -6,6 +6,7 @@ description: >
   production or before shipping.
 disable-model-invocation: true
 argument-hint: "[--dry-run] [--ship [--draft] [--auto-merge]]"
+lifecycle: stable
 ---
 
 # Production Readiness

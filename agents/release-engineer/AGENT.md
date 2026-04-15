@@ -1,6 +1,7 @@
 ---
 name: release-engineer
 description: "Structures commits, writes PR descriptions, pushes code, creates pull requests, and optionally bumps versions and creates releases. Use during Phase 5-6."
+lifecycle: stable
 model-tier: balanced
 capabilities:
   - read
