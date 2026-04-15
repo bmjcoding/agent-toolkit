@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Declared canonical lifecycle metadata so the distribution catalog can publish normalized lifecycle state for this shared skill.
+- Declared canonical `lifecycle` metadata in the shared root definition so the distribution catalog can publish maturity separately from per-tool availability for this skill.
 
 - Clarified that the lightweight backend workflow is only for single-domain backend work and should escalate to the full orchestrator for cross-domain, planning-heavy, or shipping tasks.
 - Tightened the implementation handoff so `backend-engineer` receives concrete file and constraint context instead of a generic task prompt.

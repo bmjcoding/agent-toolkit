@@ -11,8 +11,8 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 ### Added
 
 - `index.json` artifacts now expose normalized `lifecycle` and `availability` metadata,
-  include OpenAI Codex hook entries, and validate hook runtime metadata from
-  `tools/catalog-metadata.json`.
+  include OpenAI Codex hook entries, validate hook runtime metadata from
+  `tools/catalog-metadata.json`, and fail generation when either field is missing.
 - GitHub Actions now runs the `skills/review-skill/scripts/lint-definition.py`
   deterministic schema checks for canonical `skills/**` and `agents/**` before the
   generated-asset validation/sync jobs, so malformed definitions fail CI before
@@ -30,7 +30,8 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 - Canonical shared agents, workflows, skills, and rules now declare `lifecycle` in
   their root definitions so generated adapters and the distribution catalog read
-  runtime maturity from one source of truth.
+  maturity from one source of truth while tool-local support remains a separate
+  availability concern.
 
 ## [4.2.1] - 2026-04-15
 

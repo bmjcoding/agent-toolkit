@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Declared canonical lifecycle metadata so the distribution catalog can publish normalized lifecycle state for this shared skill.
+- Declared canonical `lifecycle` metadata in the shared root definition so the distribution catalog can publish maturity separately from per-tool availability for this skill.
 
 - Updated ship guidance to refer to the `git-ship` workflow in a tool-agnostic way instead of a Claude-only slash-command form.
 
