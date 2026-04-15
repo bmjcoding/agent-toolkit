@@ -92,11 +92,7 @@ jobs:
 
           extra_args=()
           if [ "${{ github.event_name }}" = "pull_request" ]; then
-            case "${{ github.event.action }}" in
-              opened|reopened|ready_for_review)
-                extra_args+=(--require-release-version)
-                ;;
-            esac
+            extra_args+=(--require-release-version)
           fi
 
           node scripts/validate-component-changelogs.js \
