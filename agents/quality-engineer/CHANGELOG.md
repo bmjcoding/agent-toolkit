@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.0] - 2026-04-15
+
+### Changed
+
+- Declared canonical `lifecycle` metadata in the shared root definition so the distribution catalog can publish maturity separately from per-tool availability for this agent.
+
+- Remediation guidance now treats canonical `findings` as the primary upstream contract,
+  requires plan-backed repair scopes before editing, and explicitly allows only the
+  standard post-validation handoff emission in read-only mode.
+- Updated the Claude adapter reference to the flattened `claude-code/agents/<name>.md`
+  layout used by the tool-specific generated surfaces.
+
 ## [2.0.0] - 2026-04-15
 
 ### Changed
@@ -65,7 +77,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/quality-engineer-v2.0.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/quality-engineer-v2.1.0...HEAD
+[2.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/quality-engineer-v2.0.0...agent/quality-engineer-v2.1.0
 [2.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/agent/quality-engineer-v2.0.0
 [1.4.1]: https://github.com/bmjcoding/agent-toolkit/compare/agent/quality-engineer-v1.4.0...agent/quality-engineer-v1.4.1
 [1.4.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/quality-engineer-v1.3.0...agent/quality-engineer-v1.4.0

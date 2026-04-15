@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # integrity-check.sh — SHA-256 integrity monitor for OpenAI Codex CLI toolkit files
 # Shared integrity check adapted for the OpenAI Codex surface
-# tool surface (agents, hooks, skills, rules, bundles).
+# tool surface (agents, hooks, skills, rules).
 #
 # Usage: ./integrity-check.sh [baseline|verify|auto|warn]
 set -uo pipefail
@@ -73,13 +73,6 @@ collect_files() {
     while IFS= read -r -d '' f; do
       files+=("$f")
     done < <(find "${TOOL_DIR}/rules" -maxdepth 2 -name "*.md" ! -name "CHANGELOG.md" -type f -print0 2>/dev/null | sort -z)
-  fi
-
-  # Bundle files
-  if [ -d "${TOOL_DIR}/bundles" ]; then
-    while IFS= read -r -d '' f; do
-      files+=("$f")
-    done < <(find "${TOOL_DIR}/bundles" -maxdepth 2 -type f -print0 2>/dev/null | sort -z)
   fi
 
   # Config template

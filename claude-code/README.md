@@ -8,7 +8,7 @@ event wiring, and install surfaces that differ from other tools.
 
 ```
 claude-code/
-  agents/     # Claude frontmatter wrappers for canonical root agents/
+  agents/     # Flat Claude frontmatter wrappers for canonical root agents/
   commands/   # Claude slash-command wrappers for canonical root workflows/
   hooks/      # Hook docs plus historical redirect changelogs
   bundles/    # YAML bundle files grouping related components for bulk install
@@ -55,17 +55,31 @@ redirects for the old Claude-owned hook path.
 
 ## Component Format Reference
 
-- **Agent** (`<name>.md`): Claude-native frontmatter wrapper around the canonical root
-  `agents/<name>/AGENT.md` body.
+- **Agent** (`claude-code/agents/<name>.md`): Claude-native frontmatter wrapper around the
+  canonical root `agents/<name>/AGENT.md` body.
 - **Command** (`<name>.md`): Claude-native slash-command wrapper around the canonical root
   `workflows/<name>/WORKFLOW.md` body.
-- **Hook** (`<name>/<name>.sh`): Plain Bash, registered by event type in `settings.json`; exit 2 blocks, exit 1 warns, exit 0 continues.
+- **Hook** (`hooks/<name>/<name>.sh` at runtime): Plain Bash, registered by event type in
+  `settings.json`; exit 2 blocks, exit 1 warns, exit 0 continues.
 - **Bundle** (`bundle.yaml`): YAML file with `id`, `name`, `description`, `status`, `tags[]`, `components[]` (each entry has `type`, `id`, `role`). Dependency metadata for agents and skills is declared in the component's own `.md` frontmatter (`tools:` for agents, `skills:` for skills/commands), not in the bundle file. Valid `role` values: `core` (required for the bundle to function), `optional` (nice-to-have, installable separately), `deprecated` (scheduled for removal). All current entries use `core`. The generated `index.json` distribution catalog is the stable lookup surface for bundle artifacts; use each entry's `artifact_path`, `component_version`, checksum, and install metadata instead of reconstructing paths from slugs.
 
 ## Tag Format
 
+Shared Claude adapters use the canonical tag lineage of the root component they mirror:
+
+```text
+agent/<slug>-v<major>.<minor>.<patch>
+workflow/<slug>-v<major>.<minor>.<patch>
 ```
+
+Examples: `agent/frankenstein-v3.1.0`, `workflow/backlog-v5.0.0`
+
+Claude-only runtime assets keep the `claude-code/` namespace:
+
+```text
 claude-code/<slug>-v<major>.<minor>.<patch>
 ```
 
-Example: `claude-code/frankenstein-v3.1.0`
+Example: `claude-code/branch-guard-v3.0.0`
+
+Use `claude-code/*` only for tool-native surfaces such as hooks and bundles.

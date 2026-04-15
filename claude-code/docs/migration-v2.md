@@ -246,9 +246,11 @@ Verify the result with `bash claude-code/scripts/install.sh --check` against the
 ## Version Notes
 
 All 48 components received a `v2.0.0` major version bump to mark this breaking layout change. Component changelogs and tag lineage continue under the updated tag format:
-- `claude-code/<slug>-v<version>` (e.g., `claude-code/frankenstein-v2.0.0`)
+- `agent/<slug>-v<version>` (e.g., `agent/frankenstein-v2.0.0`)
+- `workflow/<slug>-v<version>` (e.g., `workflow/backlog-v2.0.0`)
 - `skill/<slug>-v<version>` (e.g., `skill/changelog-v2.0.0`)
 - `rule/<slug>-v<version>` (e.g., `rule/docker-v2.0.0`)
+- `claude-code/<slug>-v<version>` only for tool-native Claude assets such as hooks and bundles (e.g., `claude-code/branch-guard-v2.0.0`)
 
 The prior `shared/<slug>-v<version>` namespace is retired. See [ADR 0004](../../docs/adr/0004-per-component-changelog-tag-format.md) for the tag format rationale and [ADR 0005](../../docs/adr/0005-multi-tool-restructure.md) for the full restructure decision record.
 

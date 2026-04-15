@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.1.0] - 2026-04-15
+
+### Changed
+
+- Declared canonical `lifecycle` metadata in the shared root definition so the distribution catalog can publish maturity separately from per-tool availability for this skill.
+
+- Clarified that the lightweight backend workflow is only for single-domain backend work and should escalate to the full orchestrator for cross-domain, planning-heavy, or shipping tasks.
+- Tightened the implementation handoff so `backend-engineer` receives concrete file and constraint context instead of a generic task prompt.
+
 ## [4.0.0] - 2026-04-13
 
 ### Removed
@@ -39,7 +48,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/skill/backend-v3.0.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/skill/backend-v4.1.0...HEAD
+[4.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/backend-v4.0.0...skill/backend-v4.1.0
 [3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/backend-v2.0.0...skill/backend-v3.0.0
 [2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/backend-v1.1.0...skill/backend-v2.0.0
 [1.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/backend-v1.0.0...skill/backend-v1.1.0
