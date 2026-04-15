@@ -1,6 +1,7 @@
 ---
 name: sync-toolkit
 description: "Detect changed toolkit components, regenerate adapters, update CHANGELOG entries and versions, then commit per-component and open a PR."
+argument-hint: "[--dry-run] [--no-pr] [--component TYPE/NAME]"
 adapters:
   - claude-code/commands/sync-toolkit/sync-toolkit.md
   - github-copilot/prompts/sync-toolkit.prompt.md

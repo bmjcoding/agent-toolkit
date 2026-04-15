@@ -7,15 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
-
-- Standalone Use section documenting how to invoke release-engineer directly (outside a frankenstein pipeline) with a minimal dispatch prompt.
-
 ### Changed
+
+- Declared shared execution metadata in the canonical root definition so model tier, capabilities, subagent routing, and skill dependencies no longer need to be inferred from tool-specific wrappers.
 
 - Moved the canonical agent definition and changelog to `agents/release-engineer/`; Claude, Copilot, and Codex files are now tool-specific adapters generated from the shared source.
 - Updated comparison links to use the shared `agent/release-engineer` tag namespace for this root canonical component.
 - Step 2.4 now calls `/changelog release` to atomically promote `[Unreleased]` entries, create the versioned commit, apply the per-component tag, and push — replacing the previous multi-step inline sequence.
+
+### Added
+
+- Standalone Use section documenting how to invoke release-engineer directly (outside a frankenstein pipeline) with a minimal dispatch prompt.
 
 ### Removed
 

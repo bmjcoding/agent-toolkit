@@ -1,6 +1,13 @@
 ---
 name: release-gate
 description: "Release readiness gate that runs prod-readiness checks with context from specialist reviews and prior attempts, emitting a SHIP/NO-SHIP verdict. Use during Phase 4 quality loop."
+model-tier: frontier
+capabilities:
+  - read
+  - search
+  - execute
+skills:
+  - prod-readiness
 adapters:
   - claude-code/agents/release-gate/release-gate.md
   - github-copilot/agents/release-gate.agent.md

@@ -1,6 +1,15 @@
 ---
 name: site-reliability-engineer
 description: "SRE reviewing and remediating operational readiness — health checks, observability, timeouts, graceful degradation. Can fix self-contained issues inline. Use during Phase 3a specialist reviews."
+model-tier: frontier
+capabilities:
+  - read
+  - write
+  - edit
+  - search
+  - execute
+skills:
+  - observability-patterns
 adapters:
   - claude-code/agents/site-reliability-engineer/site-reliability-engineer.md
   - github-copilot/agents/site-reliability-engineer.agent.md

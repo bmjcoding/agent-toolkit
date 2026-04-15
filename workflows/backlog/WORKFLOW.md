@@ -1,6 +1,7 @@
 ---
 name: backlog
 description: "View, resolve, retriage, or clear items in the pipeline backlog."
+argument-hint: "[--resolve N] [--resolve N --wont-fix \\\"reason\\\"] [--defer N --env ENV \\\"reason\\\"] [--defer N --session \\\"reason\\\"] [--retriage] [--clear-resolved] [--agent] [--human] [--env ENV] [--open] [--sync] [--cleanup] [--dry-run]"
 adapters:
   - claude-code/commands/backlog/backlog.md
   - github-copilot/prompts/backlog.prompt.md

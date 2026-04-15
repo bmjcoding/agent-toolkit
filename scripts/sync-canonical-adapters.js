@@ -83,17 +83,32 @@ function parseYamlList(frontmatter, fieldName) {
 
 function normalizeFrontmatterValue(value) {
   const trimmed = value.trim();
-  return trimmed.replace(/^["']|["']$/g, '');
+  if (trimmed.startsWith('"') && trimmed.endsWith('"')) {
+    try {
+      return JSON.parse(trimmed);
+    } catch {
+      return trimmed.slice(1, -1);
+    }
+  }
+  if (trimmed.startsWith("'") && trimmed.endsWith("'")) {
+    return trimmed.slice(1, -1);
+  }
+  return trimmed;
+}
+
+function readLatestReleasedVersion(changelogPath) {
+  if (!fs.existsSync(changelogPath)) return null;
+  const changelog = read(changelogPath);
+  const match = changelog.match(/^## \[(?!Unreleased\])([^\]]+)\]/m);
+  return match ? match[1] : null;
 }
 
 function parseClaudeAgentConfig(frontmatter) {
   const model = normalizeFrontmatterValue(extractField(/^model:\s*(.+)$/m, frontmatter, 'inherit'));
   const toolsRaw = extractField(/^tools:\s*(.+)$/m, frontmatter, '');
-  const disallowedRaw = extractField(/^disallowedTools:\s*(.+)$/m, frontmatter, '');
   const skills = parseYamlList(frontmatter, 'skills');
 
   const tools = splitTopLevelCommaList(toolsRaw);
-  const disallowedTools = new Set(splitTopLevelCommaList(disallowedRaw));
   const agentTool = tools.find(tool => /^Agent\(/.test(tool));
   const childAgents = agentTool
     ? agentTool
@@ -104,18 +119,23 @@ function parseClaudeAgentConfig(frontmatter) {
         .filter(Boolean)
     : [];
 
-  const enabledTools = tools.filter(tool => {
-    const baseName = tool.replace(/\(.+$/, '');
-    return !disallowedTools.has(baseName);
-  });
+  const capabilities = [];
+  if (tools.some(tool => tool === 'Read')) capabilities.push('read');
+  if (tools.some(tool => tool === 'Write')) capabilities.push('write');
+  if (tools.some(tool => tool === 'Edit')) capabilities.push('edit');
+  if (tools.some(tool => tool === 'Glob' || tool === 'Grep')) capabilities.push('search');
+  if (tools.some(tool => tool === 'Bash')) capabilities.push('execute');
+  if (tools.some(tool => tool === 'WebSearch' || tool === 'WebFetch')) capabilities.push('web');
+  if (tools.some(tool => tool === 'TodoWrite')) capabilities.push('todo');
+  if (childAgents.length > 0) capabilities.push('delegate');
 
   const copilotTools = [];
-  if (enabledTools.some(tool => tool === 'Read')) copilotTools.push('read');
-  if (enabledTools.some(tool => tool === 'Write' || tool === 'Edit')) copilotTools.push('edit');
-  if (enabledTools.some(tool => tool === 'Glob' || tool === 'Grep')) copilotTools.push('search');
-  if (enabledTools.some(tool => tool === 'Bash')) copilotTools.push('execute');
-  if (enabledTools.some(tool => tool === 'WebSearch' || tool === 'WebFetch')) copilotTools.push('web');
-  if (enabledTools.some(tool => tool === 'TodoWrite')) copilotTools.push('todo');
+  if (capabilities.includes('read')) copilotTools.push('read');
+  if (capabilities.includes('write') || capabilities.includes('edit')) copilotTools.push('edit');
+  if (capabilities.includes('search')) copilotTools.push('search');
+  if (capabilities.includes('execute')) copilotTools.push('execute');
+  if (capabilities.includes('web')) copilotTools.push('web');
+  if (capabilities.includes('todo')) copilotTools.push('todo');
 
   const modelTier = model === 'sonnet'
     ? 'balanced'
@@ -126,6 +146,7 @@ function parseClaudeAgentConfig(frontmatter) {
   return {
     model,
     modelTier,
+    capabilities,
     skills,
     childAgents,
     copilotTools,
@@ -144,14 +165,35 @@ function getCodexModelForTier(modelTier) {
   return 'gpt-5.4';
 }
 
-function renderCanonicalMarkdown({ name, description, adapterPaths, body, kind }) {
+function renderCanonicalMarkdown({ name, description, adapterPaths, body, kind, modelTier, capabilities, subagents, skills, argumentHint }) {
   const adapterLines = adapterPaths.map(adapterPath => `  - ${adapterPath}`).join('\n');
-  const fileKey = kind === 'agent' ? 'AGENT.md' : 'WORKFLOW.md';
+  const metadataLines = [];
+
+  if (kind === 'agent') {
+    if (modelTier) metadataLines.push(`model-tier: ${modelTier}`);
+    if (capabilities && capabilities.length > 0) {
+      metadataLines.push('capabilities:');
+      for (const capability of capabilities) metadataLines.push(`  - ${capability}`);
+    }
+    if (subagents && subagents.length > 0) {
+      metadataLines.push('subagents:');
+      for (const subagent of subagents) metadataLines.push(`  - ${subagent}`);
+    }
+    if (skills && skills.length > 0) {
+      metadataLines.push('skills:');
+      for (const skill of skills) metadataLines.push(`  - ${skill}`);
+    }
+  }
+
+  if (kind === 'workflow' && argumentHint) {
+    metadataLines.push(`argument-hint: ${JSON.stringify(argumentHint)}`);
+  }
 
   return [
     '---',
     `name: ${name}`,
     `description: ${JSON.stringify(description)}`,
+    ...metadataLines,
     'adapters:',
     adapterLines,
     '---',
@@ -163,7 +205,15 @@ function renderCanonicalMarkdown({ name, description, adapterPaths, body, kind }
   ].join('\n');
 }
 
-function renderCopilotMarkdown({ name, description, body, modelTier, tools, childAgents }) {
+function renderCopilotMarkdown({ name, description, body, modelTier, capabilities, childAgents }) {
+  const tools = [];
+  if (capabilities.includes('read')) tools.push('read');
+  if (capabilities.includes('write') || capabilities.includes('edit')) tools.push('edit');
+  if (capabilities.includes('search')) tools.push('search');
+  if (capabilities.includes('execute')) tools.push('execute');
+  if (capabilities.includes('web')) tools.push('web');
+  if (capabilities.includes('todo')) tools.push('todo');
+
   const renderedTools = [...tools];
   if (childAgents.length > 0 && !renderedTools.includes('agent')) {
     renderedTools.push('agent');
@@ -197,6 +247,10 @@ function renderCopilotMarkdown({ name, description, body, modelTier, tools, chil
 }
 
 function renderCodexToml({ name, description, body, sourcePath, modelTier }) {
+  const escapedBody = body.trim()
+    .replace(/\\/g, '\\\\')
+    .replace(/"""/g, '\\"""');
+
   return [
     `# Generated from ${sourcePath}`,
     '',
@@ -204,7 +258,9 @@ function renderCodexToml({ name, description, body, sourcePath, modelTier }) {
     `description = ${JSON.stringify(description)}`,
     `model       = ${JSON.stringify(getCodexModelForTier(modelTier))}`,
     '',
-    `developer_instructions = ${JSON.stringify(body.trim())}`,
+    'developer_instructions = """',
+    escapedBody,
+    '"""',
     '',
   ].join('\n');
 }
@@ -245,6 +301,11 @@ function extractCanonicalMetadata(markdown) {
     body: body.trim() + '\n',
     name: normalizeFrontmatterValue(extractField(/^name:\s*(.+)$/m, parts.frontmatter, '')),
     description: normalizeFrontmatterValue(extractField(/^description:\s*(.+)$/m, parts.frontmatter, '')),
+    modelTier: normalizeFrontmatterValue(extractField(/^model-tier:\s*(.+)$/m, parts.frontmatter, '')),
+    capabilities: parseYamlList(parts.frontmatter, 'capabilities'),
+    subagents: parseYamlList(parts.frontmatter, 'subagents'),
+    skills: parseYamlList(parts.frontmatter, 'skills'),
+    argumentHint: normalizeFrontmatterValue(extractField(/^argument-hint:\s*(.+)$/m, parts.frontmatter, '')),
   };
 }
 
@@ -281,6 +342,18 @@ function syncAgents() {
           extractField(/^description:\s*(.+)$/m, copilotParts.frontmatter, '') ||
           extractField(/^description:\s*(.+)$/m, claudeParts.frontmatter, '')
         );
+    const modelTier = existingCanonical && existingCanonical.modelTier
+      ? existingCanonical.modelTier
+      : claudeConfig.modelTier;
+    const capabilities = existingCanonical && existingCanonical.capabilities.length > 0
+      ? existingCanonical.capabilities
+      : claudeConfig.capabilities;
+    const subagents = existingCanonical && existingCanonical.subagents.length > 0
+      ? existingCanonical.subagents
+      : claudeConfig.childAgents;
+    const skills = existingCanonical && existingCanonical.skills.length > 0
+      ? existingCanonical.skills
+      : claudeConfig.skills;
 
     writeIfChanged(
       canonicalPath,
@@ -288,6 +361,10 @@ function syncAgents() {
         kind: 'agent',
         name,
         description,
+        modelTier,
+        capabilities,
+        subagents,
+        skills,
         adapterPaths: [
           `claude-code/agents/${name}/${name}.md`,
           `github-copilot/agents/${name}.agent.md`,
@@ -308,9 +385,9 @@ function syncAgents() {
         name,
         description,
         body: canonicalBody,
-        modelTier: claudeConfig.modelTier,
-        tools: claudeConfig.copilotTools,
-        childAgents: claudeConfig.childAgents,
+        modelTier,
+        capabilities,
+        childAgents: subagents,
       })
     );
     writeIfChanged(
@@ -320,7 +397,7 @@ function syncAgents() {
         description,
         body: canonicalBody,
         sourcePath: `agents/${name}/AGENT.md`,
-        modelTier: claudeConfig.modelTier,
+        modelTier,
       })
     );
 
@@ -359,6 +436,7 @@ function syncWorkflows() {
     const copilotParts = splitFrontmatter(copilotMarkdown);
     const existingCanonical = fs.existsSync(canonicalPath) ? extractCanonicalMetadata(read(canonicalPath)) : null;
     const argumentHint = normalizeFrontmatterValue(
+      (existingCanonical && existingCanonical.argumentHint) ||
       extractField(/^argument-hint:\s*(.+)$/m, claudeParts.frontmatter, '') ||
       extractField(/^argument-hint:\s*(.+)$/m, copilotParts.frontmatter, '')
     );
@@ -378,6 +456,7 @@ function syncWorkflows() {
         kind: 'workflow',
         name,
         description,
+        argumentHint,
         adapterPaths: [
           `claude-code/commands/${name}/${name}.md`,
           `github-copilot/prompts/${name}.prompt.md`,
@@ -400,6 +479,17 @@ function syncWorkflows() {
         argumentHint,
       })
     );
+
+    const manifestPath = path.join(REPO_ROOT, 'github-copilot', 'commands', name, 'manifest.json');
+    if (fs.existsSync(manifestPath)) {
+      const manifest = JSON.parse(read(manifestPath));
+      manifest.version = readLatestReleasedVersion(path.join(canonicalWorkflowsDir, name, 'CHANGELOG.md')) || manifest.version;
+      manifest.download_url = `https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/prompts/${name}.prompt.md`;
+      manifest.install_path = '.github/prompts/';
+      manifest.install_command = `mkdir -p .github/prompts && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/prompts/${name}.prompt.md -o .github/prompts/${name}.prompt.md`;
+      manifest.tooltip_text = description;
+      writeIfChanged(manifestPath, JSON.stringify(manifest, null, 2) + '\n');
+    }
   }
 }
 

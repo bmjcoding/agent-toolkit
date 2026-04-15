@@ -1,6 +1,7 @@
 ---
 name: test
 description: "Write tests to cover gaps and achieve >=80% coverage on changed files."
+argument-hint: "[paths...] [--dry-run]"
 adapters:
   - claude-code/commands/test/test.md
   - github-copilot/prompts/test.prompt.md
