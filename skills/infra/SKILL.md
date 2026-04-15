@@ -7,10 +7,13 @@ disable-model-invocation: true
 # Infrastructure Workflow
 
 Implement infrastructure changes with operational readiness enforcement. Lighter than the full orchestration pipeline.
+Use this path only when the work stays inside infrastructure scope. If the request
+crosses frontend/backend boundaries, needs planning, or includes commit/ship actions,
+escalate to the full orchestrator instead.
 
 ## Process
 
-1. **Implement**: Spawn `staff-engineer` with the task. It handles shared types, config, Docker, scripts, CI/CD, and cross-cutting work.
+1. **Implement**: Spawn `staff-engineer` with the concrete task, target files, and any deployment/runtime constraints. It handles shared types, config, Docker, scripts, CI/CD, and cross-cutting work.
 
 2. **Review**: When implementation completes, spawn `site-reliability-engineer` to review. It checks health endpoints, observability, timeouts, graceful degradation, and deployment readiness. It will fix self-contained issues (missing timeouts, structured logging) inline.
 
@@ -28,6 +31,7 @@ Present a brief summary: what was changed, SRE findings (severity + category), a
 
 - SRE review only covers changed files — pre-existing operational gaps in untouched infra are not reported.
 - Protected files (lockfiles, migration files, auth modules) are flagged but not auto-modified; surface these to the user.
+- Cross-domain requests are out of scope for this lightweight workflow. If the task also changes product logic, UI, release flow, or overall architecture, stop and use the full orchestrator.
 
 ## Task
 

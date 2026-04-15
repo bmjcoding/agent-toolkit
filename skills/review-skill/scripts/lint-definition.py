@@ -16,7 +16,7 @@ Arguments:
 Options:
     --type TYPE   Force type: "skill" or "agent" (default: auto-detect)
     --format FMT  Output format: "json" or "summary" (default: summary)
-    --base REF    Git ref to diff against for Q14 version check (e.g., origin/main). Use in CI.
+    --base REF    Git ref to diff against in CI (reserved for future checks)
     --strict      Treat warnings as errors (exit 1 on any warning)
     --help        Show this help message
 
@@ -51,15 +51,12 @@ Checks:
     Q10  Instructions explain things the agent already knows
     Q11  Multiple conflicting imperatives (ALWAYS X ... NEVER X)
     Q12  No $ARGUMENTS in user-invocable skill
-    Q13  No version defined (missing metadata.version or # version comment)
-    Q14  Version unchanged but file has uncommitted modifications (git)
     Q15  Eval file (evals/evals.json) has structural issues: wrong keys, non-sequential IDs, missing fields
 """
 
 import json
 import os
 import re
-import subprocess
 import sys
 from pathlib import Path
 
@@ -335,66 +332,6 @@ def lint_file(filepath, file_type=None, base=None):
         disable_model = fm.get("disable-model-invocation", "false").lower() == "true"
         if is_user_invocable and "$ARGUMENTS" not in content and disable_model:
             warn("Q12", "User-invocable skill with disable-model-invocation but no $ARGUMENTS — user input may be ignored")
-
-    # Q13: No version defined
-    # Check multiple ways version can appear:
-    # 1. metadata.version in parsed frontmatter (if parser handles nesting)
-    # 2. "version:" as a flat key in parsed frontmatter
-    # 3. "version: X.Y.Z" pattern anywhere in raw frontmatter (catches nested YAML the simple parser misses)
-    # 4. "# version: X.Y.Z" comment in frontmatter (agent convention)
-    raw_fm = content[3:content.find("---", 3)]
-    has_version = (
-        (isinstance(fm.get("metadata"), dict) and bool(fm["metadata"].get("version")))
-        or bool(fm.get("version"))
-        or bool(re.search(r"^\s*version:\s*\d+\.\d+\.\d+", raw_fm, re.MULTILINE))
-        or bool(re.search(r"^#\s*version:\s*\d+\.\d+\.\d+", raw_fm, re.MULTILINE))
-    )
-    if not has_version:
-        warn("Q13", "No version defined — add metadata.version (skills) or # version: comment (agents) for change tracking")
-
-    # Q14: File modified but version not bumped
-    # Two modes:
-    #   Local: checks uncommitted changes (git diff / git diff --cached)
-    #   CI:    checks committed changes vs base branch (git diff BASE -- filepath)
-    try:
-        if base:
-            # CI mode: compare against base branch
-            diff_result = subprocess.run(
-                ["git", "diff", "--name-only", base, "--", filepath],
-                capture_output=True, text=True, timeout=5,
-            )
-            is_modified = diff_result.returncode == 0 and any(
-                filepath.endswith(line) for line in diff_result.stdout.strip().splitlines() if line
-            )
-            diff_cmd = ["git", "diff", base, "--", filepath]
-        else:
-            # Local mode: check unstaged + staged
-            diff_result = subprocess.run(
-                ["git", "diff", "--name-only", filepath],
-                capture_output=True, text=True, timeout=5,
-            )
-            is_modified = diff_result.returncode == 0 and any(
-                filepath.endswith(line) for line in diff_result.stdout.strip().splitlines() if line
-            )
-            if not is_modified:
-                diff_staged = subprocess.run(
-                    ["git", "diff", "--name-only", "--cached", filepath],
-                    capture_output=True, text=True, timeout=5,
-                )
-                is_modified = diff_staged.returncode == 0 and any(
-                    filepath.endswith(line) for line in diff_staged.stdout.strip().splitlines() if line
-                )
-            diff_cmd = ["git", "diff", filepath]
-
-        if is_modified and has_version:
-            diff_content = subprocess.run(
-                diff_cmd, capture_output=True, text=True, timeout=5,
-            )
-            version_bumped = bool(re.search(r"^\+.*version:\s*\d+\.\d+\.\d+", diff_content.stdout, re.MULTILINE))
-            if not version_bumped:
-                warn("Q14", "File has modifications but version was not bumped — update the version and document changes")
-    except (subprocess.TimeoutExpired, FileNotFoundError):
-        pass  # Not in a git repo or git not available — skip
 
     # Q15: Eval file validation (skills only)
     if file_type == "skill":

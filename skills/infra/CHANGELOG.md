@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Clarified that the lightweight infra workflow is only for single-domain infrastructure work and should escalate to the full orchestrator for cross-domain, planning-heavy, or shipping tasks.
+- Tightened the implementation handoff so `staff-engineer` receives concrete file and runtime context instead of a generic task prompt.
+
 ## [4.0.0] - 2026-04-13
 
 ### Removed
