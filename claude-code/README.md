@@ -11,7 +11,7 @@ claude-code/
   agents/     # Claude frontmatter wrappers for canonical root agents/
   commands/   # Claude slash-command wrappers for canonical root workflows/
   hooks/      # 9 shell scripts wired to Claude Code hook events (PreToolUse, PostToolUse, SubagentStart, SubagentStop)
-  bundles/    # YAML bundle files grouping related components for bulk install
+  bundles/    # YAML bundle manifests used by the distribution catalog
   docs/       # Architecture decision records, migration guides, UX design docs
   scripts/
     install.sh  # Symlink manager for ~/.claude/

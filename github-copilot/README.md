@@ -1,16 +1,15 @@
 # github-copilot/
 
 This directory contains **GitHub Copilot for VS Code-specific content** — agents,
-instructions, prompts, hooks, bundles, and install assets. Canonical agent bodies,
-workflow bodies, skills, and rules live at the repo root; this directory keeps only the
-VS Code Copilot adapters and wiring those canonical files require.
+instructions, prompts, hooks, and install assets. Canonical agent bodies, workflow
+bodies, skills, and rules live at the repo root; this directory keeps only the VS Code
+Copilot adapters and wiring those canonical files require.
 
 ## Subdirectory layout
 
 ```text
 github-copilot/
   agents/       # VS Code Copilot agent adapters for root agents/
-  bundles/      # Bundle manifests
   hooks/        # VS Code Copilot hooks
   instructions/ # Rule adapters for root rules/
   prompts/      # Workflow adapters for root workflows/
@@ -31,7 +30,6 @@ Manual wiring:
 ```sh
 TOOLKIT=/path/to/agent-toolkit
 ln -sfn "${TOOLKIT}/github-copilot/agents"       .github/agents
-ln -sfn "${TOOLKIT}/github-copilot/bundles"      .github/bundles
 ln -sfn "${TOOLKIT}/github-copilot/hooks"        .github/hooks
 ln -sfn "${TOOLKIT}/github-copilot/instructions" .github/instructions
 ln -sfn "${TOOLKIT}/github-copilot/prompts"      .github/prompts
@@ -39,9 +37,8 @@ ln -sfn "${TOOLKIT}/github-copilot/prompts"      .github/prompts
 
 ## Shared instructions
 
-`AGENTS.md` is the primary shared instruction surface. `CLAUDE.md` is kept only as a
-compatibility shim for Claude-native consumers and should not be treated as Copilot's
-canonical shared instruction file.
+`AGENTS.md` is the primary shared instruction surface across the toolkit and should be
+treated as the shared instruction source of truth.
 
 ## Rule adapters
 

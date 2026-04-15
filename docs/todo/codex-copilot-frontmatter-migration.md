@@ -1,46 +1,51 @@
-# TODO: Extend Frontmatter-Driven Dependency Migration to openai-codex and github-copilot
+# TODO: Review Dependency-Metadata Gaps for openai-codex and github-copilot
 
 **Created:** 2026-04-13
-**Context:** The claude-code/ subtree completed its migration to frontmatter-driven per-manifest dependency
-aggregation in PR-2 (see ADR-0005, recent CHANGELOG entries). The openai-codex/ and github-copilot/
-subtrees have not yet received this treatment.
+**Context:** The `claude-code/` subtree completed its migration to frontmatter-driven
+dependency metadata in PR-2 (see ADR-0005 and recent CHANGELOG entries). The
+`openai-codex/` and `github-copilot/` surfaces still diverge, and the repo no longer
+ships separate tool-local bundle registries or `dependencies.json` catalogs for them.
 
 ---
 
 ## openai-codex/
 
-**Blockers / differences from claude-code:**
+**Current differences from claude-code:**
 
-- Agent definitions are TOML files (`openai-codex/agents/*.toml`), not JSON — the dependency
-  aggregation script must parse TOML or accept a different manifest format.
-- Hooks are flat `.sh` scripts with companion `manifest.json` files rather than the claude-code
-  hook structure. Confirm whether manifest.json already carries a `dependencies` key; if not,
-  add one before wiring the aggregator.
-- `openai-codex/bundles/` and `openai-codex/hooks/hooks.json` serve as the bundle/hook registries;
-  update both as part of the migration.
+- Agent definitions are TOML files (`openai-codex/agents/*.toml`), not Markdown/YAML
+  wrappers, so any dependency aggregator must parse TOML or consume the canonical
+  `agents/` metadata instead.
+- Hooks are a flat shell-script surface plus `openai-codex/hooks/hooks.json`; there is no
+  per-hook manifest layer today.
+- This subtree currently has no checked-in Codex bundle registry or tool-local
+  `dependencies.json`, so the desired output format needs to be decided before any
+  migration work starts.
 
 **Work items:**
 
-- [ ] Add TOML-manifest support to the dependency aggregation script (or add a shim that converts
-  TOML agent manifests to the expected format).
-- [ ] Audit each `hooks/*.sh` companion `manifest.json` for a `dependencies` field; backfill where
-  missing.
-- [ ] Re-run aggregation and verify `openai-codex/dependencies.json` reflects all per-manifest deps.
-- [ ] Add `[Unreleased]` CHANGELOG entries for hooks/ and agents/ CHANGELOGs.
+- [ ] Decide whether Codex dependency metadata should live in `index.json`, in canonical
+  frontmatter only, or in a new Codex-local manifest.
+- [ ] If Codex-local metadata is still desired, add TOML parsing support or a canonical
+  adapter layer for `openai-codex/agents/*.toml`.
+- [ ] Define how hook dependency metadata should be represented for the flat
+  `openai-codex/hooks/` surface.
+- [ ] Add `[Unreleased]` CHANGELOG entries for any Codex components touched by the
+  chosen approach.
 
 ---
 
 ## github-copilot/
 
-**Blockers / differences from claude-code:**
+**Current differences from claude-code:**
 
-- Uses `instructions/`, `prompts/`, and `rules/` directories with `.instructions.md` files and
-  `applyTo` frontmatter globs — confirm the aggregator ignores `applyTo` and only reads
-  `dependencies` frontmatter keys.
-- No hooks equivalent in github-copilot/; skip hooks migration step for this subtree.
+- Uses generated `agents/`, `prompts/`, and `instructions/` Markdown adapters rather than
+  bundle manifests or tool-local dependency catalogs.
+- Has hook definitions, but they are paired `.sh` and `.json` runtime assets rather than
+  the Claude directory layout.
 
 **Work items:**
 
-- [ ] Verify manifest format parity (or document divergence) between github-copilot/ and claude-code/.
-- [ ] Run aggregator against github-copilot/; produce `github-copilot/dependencies.json`.
-- [ ] Update CHANGELOG for any github-copilot/ components that gain frontmatter dependency keys.
+- [ ] Decide whether GitHub Copilot needs a tool-local dependency catalog at all, or
+  whether `index.json` plus canonical metadata is sufficient.
+- [ ] Document the intended source of truth for Copilot hook dependency metadata.
+- [ ] Update CHANGELOG entries for any Copilot components that gain new metadata fields.
