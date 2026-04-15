@@ -1,6 +1,11 @@
 ---
 name: plan-reviewer
 description: "Plan quality reviewer that validates subtask granularity, dependency gaps, file ownership, feasibility, and integration contracts before implementation begins."
+model-tier: balanced
+capabilities:
+  - read
+  - search
+  - execute
 adapters:
   - claude-code/agents/plan-reviewer/plan-reviewer.md
   - github-copilot/agents/plan-reviewer.agent.md

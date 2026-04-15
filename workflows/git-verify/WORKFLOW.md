@@ -1,6 +1,7 @@
 ---
 name: git-verify
 description: "Verify git hygiene and commit safety — secrets, sensitive files, large files, commit quality."
+argument-hint: "[paths...] [--dry-run]"
 adapters:
   - claude-code/commands/git-verify/git-verify.md
   - github-copilot/prompts/git-verify.prompt.md

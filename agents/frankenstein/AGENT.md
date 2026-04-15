@@ -1,6 +1,27 @@
 ---
 name: frankenstein
 description: "Master orchestrator that decomposes tasks, spawns parallel subagents, and coordinates multi-phase pipelines."
+model-tier: frontier
+capabilities:
+  - read
+  - search
+  - execute
+  - delegate
+subagents:
+  - planner
+  - plan-reviewer
+  - frontend-engineer
+  - backend-engineer
+  - staff-engineer
+  - integration-verifier
+  - quality-engineer
+  - security-engineer
+  - site-reliability-engineer
+  - design-architect
+  - release-gate
+  - doc-writer
+  - release-engineer
+  - autoresearch-analyst
 adapters:
   - claude-code/agents/frankenstein/frankenstein.md
   - github-copilot/agents/frankenstein.agent.md
