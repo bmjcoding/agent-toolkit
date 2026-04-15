@@ -61,22 +61,22 @@ function readHookMetadata() {
 
 function listClaudeHookIds() {
   return fs.readdirSync(path.join(REPO_ROOT, 'claude-code', 'hooks'), { withFileTypes: true })
-    .filter(entry => entry.isDirectory())
+    .filter(entry => entry.isDirectory() && fs.existsSync(path.join(REPO_ROOT, 'claude-code', 'hooks', entry.name, 'CHANGELOG.md')))
     .map(entry => entry.name)
     .sort();
 }
 
 function listCopilotHookIds() {
   return fs.readdirSync(path.join(REPO_ROOT, 'github-copilot', 'hooks'), { withFileTypes: true })
-    .filter(entry => entry.isFile() && entry.name.endsWith('.json'))
-    .map(entry => entry.name.replace(/\.json$/, ''))
+    .filter(entry => entry.isDirectory() && fs.existsSync(path.join(REPO_ROOT, 'github-copilot', 'hooks', entry.name, `${entry.name}.json`)))
+    .map(entry => entry.name)
     .sort();
 }
 
 function listCodexHookIds() {
   return fs.readdirSync(path.join(REPO_ROOT, 'openai-codex', 'hooks'), { withFileTypes: true })
-    .filter(entry => entry.isFile() && entry.name.endsWith('.sh'))
-    .map(entry => entry.name.replace(/\.sh$/, ''))
+    .filter(entry => entry.isDirectory() && fs.existsSync(path.join(REPO_ROOT, 'openai-codex', 'hooks', entry.name, `${entry.name}.sh`)))
+    .map(entry => entry.name)
     .sort();
 }
 
