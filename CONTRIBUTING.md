@@ -12,7 +12,6 @@ agent-toolkit/
   github-copilot/  # VS Code Copilot-native assets
   openai-codex/    # Codex-native assets
   AGENTS.md        # Primary shared instructions
-  CLAUDE.md        # Claude compatibility shim
 ```
 
 ## Ownership rules

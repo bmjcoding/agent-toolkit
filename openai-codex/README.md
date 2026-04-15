@@ -1,9 +1,9 @@
 # openai-codex/
 
 This directory contains **OpenAI Codex-specific adapters and runtime assets** — TOML
-agent wrappers, hooks, bundles, configuration templates, and Codex-specific rule
-composition assets. Canonical agent bodies, workflow bodies, skills, and rules live at
-the repo root.
+agent wrappers, hooks, a configuration template, and Codex-specific rule composition
+assets. Canonical agent bodies, workflow bodies, skills, and rules live at the repo
+root.
 
 ## Subdirectory layout
 
@@ -12,9 +12,7 @@ openai-codex/
   agents/              # Codex TOML adapters for root agents/
   hooks/               # Shell hook scripts + hooks.json manifest
   rules/               # Codex rule-composition assets
-  bundles/             # Bundle manifests
   config.toml.template # Skills config pointing at repo-root skills/
-  dependencies.json    # Tool dependency map
   scripts/
     install.sh
 ```
@@ -67,10 +65,9 @@ Codex can also discover shared skills from `.agents/skills/`.
 Root `rules/` is canonical. `openai-codex/rules/` contains only Codex-specific rule
 composition assets such as `build-agents-md.sh`.
 
-## Bundles
-
-Codex bundles group `agent`, `skill`, and `hook` items only. Skills resolve to the
-canonical root `skills/<slug>/SKILL.md` path.
+The checked-in Codex surface currently consists of agents, hooks, the config template,
+and rule build assets. Use the root `index.json` catalog for machine-readable artifact
+metadata.
 
 ## Tag format
 
