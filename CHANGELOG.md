@@ -20,6 +20,10 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 - Added a component-specific CI changelog gate. Pull requests and pushes that modify a
   monitored component surface now fail unless the associated `CHANGELOG.md` for that
   exact component is updated in the same diff.
+- Pull requests opened, reopened, or moved out of draft now also require touched
+  component changelogs to promote PR-scoped notes out of `## [Unreleased]` into a new
+  dated versioned section, so version bumps happen before review instead of waiting for
+  merge.
 - Fixed the component-changelog CI gate on first pushes to new branches by fetching the
   repository default branch before computing the fallback diff base.
 - Normalized the remaining workflow, rule, Claude command, and Claude hook changelog
@@ -32,6 +36,9 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
   their root definitions so generated adapters and the distribution catalog read
   maturity from one source of truth while tool-local support remains a separate
   availability concern.
+- Release-engineer and the changelog skill now treat `## [Unreleased]` as branch-local
+  scratch space only: PR-bound work is expected to be promoted into the next versioned
+  section before the PR is opened.
 
 ## [4.2.1] - 2026-04-15
 
