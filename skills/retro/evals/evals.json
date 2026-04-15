@@ -27,7 +27,7 @@
         "Section 3.3 (Specification & Planning) analyzes whether the prompt was specific enough",
         "Recommendations include a specific file path for each fix (e.g., AGENTS.md, a skill file)",
         "Each recommendation has What, Where, Why, Priority, Type columns",
-        "Retro was saved to STATE_ROOT/retros/ (markdown + JSON)",
+        "Retro was saved to ~/agent-retros/ (markdown + JSON)",
         "Output ends with improve prompt"
       ]
     },
@@ -45,7 +45,7 @@
         "Model selection section identifies downgrade candidates with rationale",
         "Subject was extracted from orchestrator artifacts (not guessed)",
         "Trends were checked via retro-history.py with --subject flag",
-        "Full retro markdown saved to STATE_ROOT/retros/",
+        "Full retro markdown saved to ~/agent-retros/",
         "Summary JSON saved with subject, run_type, and project fields",
         "Output does NOT end with improve prompt (orchestrator handles the gate)"
       ]
@@ -59,7 +59,7 @@
         "Retro does not fail due to missing git repo",
         "Data collection notes that git history is unavailable",
         "Analysis is based on conversation context",
-        "Retro is still saved to STATE_ROOT/retros/"
+        "Retro is still saved to ~/agent-retros/"
       ]
     }
   ]

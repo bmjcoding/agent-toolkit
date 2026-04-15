@@ -41,6 +41,21 @@ function runNodeScript(scriptPath, extraArgs = []) {
   });
 }
 
+function rgMatches(pattern, paths, extraArgs = []) {
+  try {
+    const output = execFileSync('rg', ['-l', pattern, ...extraArgs, ...paths], {
+      cwd: REPO_ROOT,
+      encoding: 'utf8',
+    }).trim();
+    return output ? output.split('\n').filter(Boolean) : [];
+  } catch (error) {
+    if (error.status === 1) {
+      return [];
+    }
+    throw error;
+  }
+}
+
 function canonicalBody(markdown) {
   let body = markdown;
   if (body.startsWith('---\n')) {
@@ -156,6 +171,34 @@ function assertCatalogEntriesExist(agents, workflows) {
   }
 }
 
+function assertRetroStorageContract() {
+  const scanRoots = ['agents', 'skills', 'workflows', 'docs', 'scripts', 'claude-code', 'github-copilot', 'openai-codex'];
+  const excludes = [
+    '--glob', '!claude-code/retros/**',
+    '--glob', '!**/CHANGELOG.md',
+    '--glob', '!scripts/smoke-generated-assets.js',
+    '--glob', '!scripts/migrate-retros.sh',
+  ];
+
+  const legacyPathMatches = rgMatches('~/.claude/retros', scanRoots, excludes);
+  assert(
+    legacyPathMatches.length === 0,
+    `legacy retro path references remain outside historical artifacts: ${legacyPathMatches.join(', ')}`
+  );
+
+  const legacyStateMatches = rgMatches('STATE_ROOT/retros', scanRoots, excludes);
+  assert(
+    legacyStateMatches.length === 0,
+    `STATE_ROOT/retros references remain in active/generated assets: ${legacyStateMatches.join(', ')}`
+  );
+
+  const canonicalMatches = rgMatches('~/agent-retros', scanRoots, ['--glob', '!claude-code/retros/**']);
+  assert(canonicalMatches.length > 0, 'expected active/generated assets to reference ~/agent-retros');
+
+  const overrideMatches = rgMatches('AGENT_RETRO_DIR', ['skills', 'docs', 'scripts']);
+  assert(overrideMatches.length > 0, 'expected AGENT_RETRO_DIR contract to appear in source docs/scripts');
+}
+
 function main() {
   runNodeScript('scripts/sync-canonical-adapters.js');
   runNodeScript('scripts/generate-index.js');
@@ -165,6 +208,7 @@ function main() {
   assert(exists(path.relative(REPO_ROOT, INDEX_PATH)), 'missing generated index.json');
   assertCodexAgentBodiesMatch(agents);
   assertCatalogEntriesExist(agents, workflows);
+  assertRetroStorageContract();
 
   process.stdout.write(
     `Smoke test passed: ${agents.length} canonical agents, ${workflows.length} canonical workflows, and index.json are all generated.\n`
