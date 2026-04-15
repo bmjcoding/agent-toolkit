@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Declared canonical lifecycle metadata so the distribution catalog can publish normalized lifecycle state for this shared agent.
+- Declared canonical `lifecycle` metadata in the shared root definition so the distribution catalog can publish maturity separately from per-tool availability for this agent.
 - Planner bootstrap guidance now generates missing session context snapshots and treats
   legacy flat orchestrator context as a compatibility fallback instead of a hard
   dependency.

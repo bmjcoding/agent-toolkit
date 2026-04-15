@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Declared canonical lifecycle metadata so the distribution catalog can publish normalized lifecycle state for this shared agent.
+- Declared canonical `lifecycle` metadata in the shared root definition so the distribution catalog can publish maturity separately from per-tool availability for this agent.
 - Clarified that frontend write boundaries are mode-specific: exploration writes only
   orchestrator context artifacts, while implementation remains constrained to
   `owned_files`.
