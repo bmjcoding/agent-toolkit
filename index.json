@@ -1582,7 +1582,7 @@
       "install_path": "~/.claude/skills/improve/SKILL.md",
       "install_command": "mkdir -p \"$HOME/.claude/skills/improve\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/improve/SKILL.md\" -o \"$HOME/.claude/skills/improve/SKILL.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/improve/SKILL.md",
-      "checksum_sha256": "c7b5ab5f9df6d1d1bb0f903ddeea683ecf360dc25f456978fa57eb19a8015d4c",
+      "checksum_sha256": "59bde6f95291b9c0b041cb46e78655ad2ca9e1eede486ba95a89b67b5da7de84",
       "bundle_membership": [
         {
           "bundle_id": "frankenstein-orchestration",
@@ -3160,7 +3160,7 @@
       "install_path": ".agents/skills/improve/SKILL.md",
       "install_command": "mkdir -p \".agents/skills/improve\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/improve/SKILL.md\" -o \".agents/skills/improve/SKILL.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/improve/SKILL.md",
-      "checksum_sha256": "c7b5ab5f9df6d1d1bb0f903ddeea683ecf360dc25f456978fa57eb19a8015d4c",
+      "checksum_sha256": "59bde6f95291b9c0b041cb46e78655ad2ca9e1eede486ba95a89b67b5da7de84",
       "bundle_membership": [],
       "metadata": {}
     },

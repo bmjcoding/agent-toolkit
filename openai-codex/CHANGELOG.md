@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.1.0] - 2026-04-15
+
+### Changed
+
+- Completed the root-hook migration on the Codex surface: `README.md`, `scripts/install.sh`,
+  `scripts/integrity-check.sh`, and the generated hook registry/adapters now treat
+  repo-root `hooks/` as canonical and the remaining Codex-local hook files as thin
+  runtime adapters.
+
 ## [4.0.0] - 2026-04-14
 
 ### Changed
@@ -46,4 +55,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `scripts/install.sh` hooks target corrected to `~/.codex/hooks.json` (parity gap #6 Medium resolved).
 - Group-level `description` field removed from `hooks.json` (parity gap #7 Low resolved).
 
-<!-- No tags pushed yet for this component — compare links omitted until first tag -->
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/openai-codex-v4.1.0...HEAD
+[4.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/openai-codex-v4.0.0...openai-codex-v4.1.0
+[4.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/openai-codex-v4.0.0
