@@ -1199,7 +1199,7 @@
     {
       "component_id": "branch-guard",
       "component_kind": "hook",
-      "component_version": "1.0.0",
+      "component_version": "1.0.1",
       "lifecycle": "stable",
       "target_tool": "claude-code",
       "artifact_path": "hooks/branch-guard/branch-guard.sh",
@@ -1223,7 +1223,7 @@
     {
       "component_id": "changelog-check",
       "component_kind": "hook",
-      "component_version": "1.1.0",
+      "component_version": "1.1.1",
       "lifecycle": "stable",
       "target_tool": "claude-code",
       "artifact_path": "hooks/changelog-check/changelog-check.sh",
@@ -1238,7 +1238,7 @@
     {
       "component_id": "extract-handoff",
       "component_kind": "hook",
-      "component_version": "1.0.0",
+      "component_version": "1.0.1",
       "lifecycle": "stable",
       "target_tool": "claude-code",
       "artifact_path": "hooks/extract-handoff/extract-handoff.sh",
@@ -1258,7 +1258,7 @@
     {
       "component_id": "inject-context",
       "component_kind": "hook",
-      "component_version": "1.0.1",
+      "component_version": "1.0.2",
       "lifecycle": "stable",
       "target_tool": "claude-code",
       "artifact_path": "hooks/inject-context/inject-context.sh",
@@ -1278,7 +1278,7 @@
     {
       "component_id": "integrity-warn",
       "component_kind": "hook",
-      "component_version": "1.0.0",
+      "component_version": "1.0.1",
       "lifecycle": "stable",
       "target_tool": "claude-code",
       "artifact_path": "hooks/integrity-warn/integrity-warn.sh",
@@ -1298,7 +1298,7 @@
     {
       "component_id": "pre-push-secrets",
       "component_kind": "hook",
-      "component_version": "1.0.0",
+      "component_version": "1.0.1",
       "lifecycle": "stable",
       "target_tool": "claude-code",
       "artifact_path": "hooks/pre-push-secrets/pre-push-secrets.sh",
@@ -1326,7 +1326,7 @@
     {
       "component_id": "protect-config",
       "component_kind": "hook",
-      "component_version": "1.0.0",
+      "component_version": "1.0.1",
       "lifecycle": "stable",
       "target_tool": "claude-code",
       "artifact_path": "hooks/protect-config/protect-config.sh",
@@ -2313,7 +2313,7 @@
     {
       "component_id": "branch-guard",
       "component_kind": "hook",
-      "component_version": "1.0.0",
+      "component_version": "1.0.1",
       "lifecycle": "stable",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/hooks/branch-guard/branch-guard.json",
@@ -2332,7 +2332,7 @@
     {
       "component_id": "changelog-check",
       "component_kind": "hook",
-      "component_version": "1.1.0",
+      "component_version": "1.1.1",
       "lifecycle": "stable",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/hooks/changelog-check/changelog-check.json",
@@ -2351,7 +2351,7 @@
     {
       "component_id": "extract-handoff",
       "component_kind": "hook",
-      "component_version": "1.0.0",
+      "component_version": "1.0.1",
       "lifecycle": "stable",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/hooks/extract-handoff/extract-handoff.json",
@@ -2370,7 +2370,7 @@
     {
       "component_id": "inject-context",
       "component_kind": "hook",
-      "component_version": "1.0.1",
+      "component_version": "1.0.2",
       "lifecycle": "stable",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/hooks/inject-context/inject-context.json",
@@ -2389,7 +2389,7 @@
     {
       "component_id": "integrity-warn",
       "component_kind": "hook",
-      "component_version": "1.0.0",
+      "component_version": "1.0.1",
       "lifecycle": "stable",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/hooks/integrity-warn/integrity-warn.json",
@@ -2408,7 +2408,7 @@
     {
       "component_id": "pre-push-secrets",
       "component_kind": "hook",
-      "component_version": "1.0.0",
+      "component_version": "1.0.1",
       "lifecycle": "stable",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/hooks/pre-push-secrets/pre-push-secrets.json",
@@ -2427,7 +2427,7 @@
     {
       "component_id": "protect-config",
       "component_kind": "hook",
-      "component_version": "1.0.0",
+      "component_version": "1.0.1",
       "lifecycle": "stable",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/hooks/protect-config/protect-config.json",
@@ -3200,7 +3200,7 @@
     {
       "component_id": "branch-guard",
       "component_kind": "hook",
-      "component_version": "1.0.0",
+      "component_version": "1.0.1",
       "lifecycle": "stable",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/hooks/branch-guard/branch-guard.sh",
@@ -3221,7 +3221,7 @@
     {
       "component_id": "changelog-check",
       "component_kind": "hook",
-      "component_version": "1.1.0",
+      "component_version": "1.1.1",
       "lifecycle": "stable",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/hooks/changelog-check/changelog-check.sh",
@@ -3242,7 +3242,7 @@
     {
       "component_id": "extract-handoff",
       "component_kind": "hook",
-      "component_version": "1.0.0",
+      "component_version": "1.0.1",
       "lifecycle": "stable",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/hooks/extract-handoff/extract-handoff.sh",
@@ -3263,7 +3263,7 @@
     {
       "component_id": "inject-context",
       "component_kind": "hook",
-      "component_version": "1.0.1",
+      "component_version": "1.0.2",
       "lifecycle": "stable",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/hooks/inject-context/inject-context.sh",
@@ -3284,7 +3284,7 @@
     {
       "component_id": "integrity-warn",
       "component_kind": "hook",
-      "component_version": "1.0.0",
+      "component_version": "1.0.1",
       "lifecycle": "stable",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/hooks/integrity-warn/integrity-warn.sh",
@@ -3306,7 +3306,7 @@
     {
       "component_id": "pre-push-secrets",
       "component_kind": "hook",
-      "component_version": "1.0.0",
+      "component_version": "1.0.1",
       "lifecycle": "stable",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/hooks/pre-push-secrets/pre-push-secrets.sh",
@@ -3327,7 +3327,7 @@
     {
       "component_id": "protect-config",
       "component_kind": "hook",
-      "component_version": "1.0.0",
+      "component_version": "1.0.1",
       "lifecycle": "stable",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/hooks/protect-config/protect-config.sh",
