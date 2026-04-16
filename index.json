@@ -1438,7 +1438,7 @@
     {
       "component_id": "backend",
       "component_kind": "skill",
-      "component_version": "4.2.0",
+      "component_version": "4.3.0",
       "lifecycle": "stable",
       "target_tool": "claude-code",
       "artifact_path": "skills/backend/SKILL.md",
@@ -1446,14 +1446,18 @@
       "install_path": "~/.claude/skills/backend/SKILL.md",
       "install_command": "mkdir -p \"$HOME/.claude/skills/backend\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/backend/SKILL.md\" -o \"$HOME/.claude/skills/backend/SKILL.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/backend/SKILL.md",
-      "checksum_sha256": "074af7f5c304a7ef7c94e837715b11e665039c000143dc50d502fc25b23808d5",
+      "checksum_sha256": "667e3777dfbfe7f75def6958191a26b79f4b8354ba504f9e744b99cc1326672d",
       "bundle_membership": [
         {
           "bundle_id": "backend-development",
           "role": "core"
         }
       ],
-      "metadata": {}
+      "metadata": {
+        "dependencies": [
+          "skill/owasp-reference"
+        ]
+      }
     },
     {
       "component_id": "changelog",
@@ -1481,7 +1485,9 @@
           "role": "core"
         }
       ],
-      "metadata": {}
+      "metadata": {
+        "dependencies": []
+      }
     },
     {
       "component_id": "design-authority",
@@ -1501,7 +1507,9 @@
           "role": "core"
         }
       ],
-      "metadata": {}
+      "metadata": {
+        "dependencies": []
+      }
     },
     {
       "component_id": "design-lint",
@@ -1525,12 +1533,14 @@
           "role": "core"
         }
       ],
-      "metadata": {}
+      "metadata": {
+        "dependencies": []
+      }
     },
     {
       "component_id": "frontend",
       "component_kind": "skill",
-      "component_version": "4.2.0",
+      "component_version": "4.3.0",
       "lifecycle": "stable",
       "target_tool": "claude-code",
       "artifact_path": "skills/frontend/SKILL.md",
@@ -1538,14 +1548,19 @@
       "install_path": "~/.claude/skills/frontend/SKILL.md",
       "install_command": "mkdir -p \"$HOME/.claude/skills/frontend\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/frontend/SKILL.md\" -o \"$HOME/.claude/skills/frontend/SKILL.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/frontend/SKILL.md",
-      "checksum_sha256": "fb6889d11f5748d20badc836019ca5e45b7a81a84e99f6bfba587c41ec857d9e",
+      "checksum_sha256": "7a898870afe6c7ed0327606e080f2e3be9982c3c9747b26901df101202fb883b",
       "bundle_membership": [
         {
           "bundle_id": "frontend-development",
           "role": "core"
         }
       ],
-      "metadata": {}
+      "metadata": {
+        "dependencies": [
+          "skill/design-authority",
+          "skill/design-lint"
+        ]
+      }
     },
     {
       "component_id": "git-ship",
@@ -1569,7 +1584,9 @@
           "role": "core"
         }
       ],
-      "metadata": {}
+      "metadata": {
+        "dependencies": []
+      }
     },
     {
       "component_id": "improve",
@@ -1593,12 +1610,14 @@
           "role": "core"
         }
       ],
-      "metadata": {}
+      "metadata": {
+        "dependencies": []
+      }
     },
     {
       "component_id": "infra",
       "component_kind": "skill",
-      "component_version": "4.2.0",
+      "component_version": "4.3.0",
       "lifecycle": "stable",
       "target_tool": "claude-code",
       "artifact_path": "skills/infra/SKILL.md",
@@ -1606,14 +1625,18 @@
       "install_path": "~/.claude/skills/infra/SKILL.md",
       "install_command": "mkdir -p \"$HOME/.claude/skills/infra\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/infra/SKILL.md\" -o \"$HOME/.claude/skills/infra/SKILL.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/infra/SKILL.md",
-      "checksum_sha256": "751661c41d6d067e73abef469d1d285a7cf01f3dd595b9d99d3896a30ae5bacd",
+      "checksum_sha256": "c9a2f7126e9ea1a4d04708392c4391eafcf5adca2eb4ac8cbfd5f059bc9fa5c9",
       "bundle_membership": [
         {
           "bundle_id": "infrastructure",
           "role": "core"
         }
       ],
-      "metadata": {}
+      "metadata": {
+        "dependencies": [
+          "skill/observability-patterns"
+        ]
+      }
     },
     {
       "component_id": "observability-patterns",
@@ -1633,7 +1656,9 @@
           "role": "core"
         }
       ],
-      "metadata": {}
+      "metadata": {
+        "dependencies": []
+      }
     },
     {
       "component_id": "owasp-reference",
@@ -1653,7 +1678,9 @@
           "role": "core"
         }
       ],
-      "metadata": {}
+      "metadata": {
+        "dependencies": []
+      }
     },
     {
       "component_id": "prod-readiness",
@@ -1677,7 +1704,9 @@
           "role": "core"
         }
       ],
-      "metadata": {}
+      "metadata": {
+        "dependencies": []
+      }
     },
     {
       "component_id": "retro",
@@ -1701,12 +1730,14 @@
           "role": "core"
         }
       ],
-      "metadata": {}
+      "metadata": {
+        "dependencies": []
+      }
     },
     {
       "component_id": "review-skill",
       "component_kind": "skill",
-      "component_version": "5.2.0",
+      "component_version": "5.3.0",
       "lifecycle": "stable",
       "target_tool": "claude-code",
       "artifact_path": "skills/review-skill/SKILL.md",
@@ -1729,7 +1760,9 @@
           "role": "core"
         }
       ],
-      "metadata": {}
+      "metadata": {
+        "dependencies": []
+      }
     },
     {
       "component_id": "autoresearch-analyst",
@@ -2501,7 +2534,7 @@
     {
       "component_id": "backend",
       "component_kind": "skill",
-      "component_version": "4.2.0",
+      "component_version": "4.3.0",
       "lifecycle": "stable",
       "target_tool": "github-copilot",
       "artifact_path": "skills/backend/SKILL.md",
@@ -2509,9 +2542,13 @@
       "install_path": "skills/backend/SKILL.md",
       "install_command": "mkdir -p \"skills/backend\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/backend/SKILL.md\" -o \"skills/backend/SKILL.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/backend/SKILL.md",
-      "checksum_sha256": "074af7f5c304a7ef7c94e837715b11e665039c000143dc50d502fc25b23808d5",
+      "checksum_sha256": "667e3777dfbfe7f75def6958191a26b79f4b8354ba504f9e744b99cc1326672d",
       "bundle_membership": [],
-      "metadata": {}
+      "metadata": {
+        "dependencies": [
+          "skill/owasp-reference"
+        ]
+      }
     },
     {
       "component_id": "changelog",
@@ -2526,7 +2563,9 @@
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/changelog/SKILL.md",
       "checksum_sha256": "4c03d53c6b16f6f40d9814aa9064b2f8a3748a37fb5c8c7899d34f60d6ccbd38",
       "bundle_membership": [],
-      "metadata": {}
+      "metadata": {
+        "dependencies": []
+      }
     },
     {
       "component_id": "design-authority",
@@ -2541,7 +2580,9 @@
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/design-authority/SKILL.md",
       "checksum_sha256": "109d1f24bfb8d9b66a34abc71cc0edd0536b120952e5911076e0ec27db850e2d",
       "bundle_membership": [],
-      "metadata": {}
+      "metadata": {
+        "dependencies": []
+      }
     },
     {
       "component_id": "design-lint",
@@ -2556,12 +2597,14 @@
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/design-lint/SKILL.md",
       "checksum_sha256": "db0701d8cd77c2c6ddeafb454a3179bafc484915bf0fee10ce038b158e882c72",
       "bundle_membership": [],
-      "metadata": {}
+      "metadata": {
+        "dependencies": []
+      }
     },
     {
       "component_id": "frontend",
       "component_kind": "skill",
-      "component_version": "4.2.0",
+      "component_version": "4.3.0",
       "lifecycle": "stable",
       "target_tool": "github-copilot",
       "artifact_path": "skills/frontend/SKILL.md",
@@ -2569,9 +2612,14 @@
       "install_path": "skills/frontend/SKILL.md",
       "install_command": "mkdir -p \"skills/frontend\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/frontend/SKILL.md\" -o \"skills/frontend/SKILL.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/frontend/SKILL.md",
-      "checksum_sha256": "fb6889d11f5748d20badc836019ca5e45b7a81a84e99f6bfba587c41ec857d9e",
+      "checksum_sha256": "7a898870afe6c7ed0327606e080f2e3be9982c3c9747b26901df101202fb883b",
       "bundle_membership": [],
-      "metadata": {}
+      "metadata": {
+        "dependencies": [
+          "skill/design-authority",
+          "skill/design-lint"
+        ]
+      }
     },
     {
       "component_id": "git-ship",
@@ -2586,7 +2634,9 @@
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/git-ship/SKILL.md",
       "checksum_sha256": "742d22e83445253d5404fc00d219acead7fbe9b9b68515cfd81fda95dd00d0d0",
       "bundle_membership": [],
-      "metadata": {}
+      "metadata": {
+        "dependencies": []
+      }
     },
     {
       "component_id": "improve",
@@ -2601,12 +2651,14 @@
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/improve/SKILL.md",
       "checksum_sha256": "3c2601947b2fad28551db399e2482963219db7f04375b7dba0cbfe4244145fb1",
       "bundle_membership": [],
-      "metadata": {}
+      "metadata": {
+        "dependencies": []
+      }
     },
     {
       "component_id": "infra",
       "component_kind": "skill",
-      "component_version": "4.2.0",
+      "component_version": "4.3.0",
       "lifecycle": "stable",
       "target_tool": "github-copilot",
       "artifact_path": "skills/infra/SKILL.md",
@@ -2614,9 +2666,13 @@
       "install_path": "skills/infra/SKILL.md",
       "install_command": "mkdir -p \"skills/infra\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/infra/SKILL.md\" -o \"skills/infra/SKILL.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/infra/SKILL.md",
-      "checksum_sha256": "751661c41d6d067e73abef469d1d285a7cf01f3dd595b9d99d3896a30ae5bacd",
+      "checksum_sha256": "c9a2f7126e9ea1a4d04708392c4391eafcf5adca2eb4ac8cbfd5f059bc9fa5c9",
       "bundle_membership": [],
-      "metadata": {}
+      "metadata": {
+        "dependencies": [
+          "skill/observability-patterns"
+        ]
+      }
     },
     {
       "component_id": "observability-patterns",
@@ -2631,7 +2687,9 @@
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/observability-patterns/SKILL.md",
       "checksum_sha256": "e14b3ee4dcbcfb82558846cacaf63617a35c2102085b3f2e21c543cf62f4f520",
       "bundle_membership": [],
-      "metadata": {}
+      "metadata": {
+        "dependencies": []
+      }
     },
     {
       "component_id": "owasp-reference",
@@ -2646,7 +2704,9 @@
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/owasp-reference/SKILL.md",
       "checksum_sha256": "889afafd9acca825378642c7dc481162ad3e22df94cc7610d851cb0d9c6d2fad",
       "bundle_membership": [],
-      "metadata": {}
+      "metadata": {
+        "dependencies": []
+      }
     },
     {
       "component_id": "prod-readiness",
@@ -2661,7 +2721,9 @@
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/prod-readiness/SKILL.md",
       "checksum_sha256": "a2bb3e2820b8e39945a8d8f197f0fd838ed4cf64125bbab907615320855c98fc",
       "bundle_membership": [],
-      "metadata": {}
+      "metadata": {
+        "dependencies": []
+      }
     },
     {
       "component_id": "retro",
@@ -2676,12 +2738,14 @@
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/retro/SKILL.md",
       "checksum_sha256": "2641bbda90c685af628f1dd61d3c61d1b6751aa6b75728c735f3335cbb27dc81",
       "bundle_membership": [],
-      "metadata": {}
+      "metadata": {
+        "dependencies": []
+      }
     },
     {
       "component_id": "review-skill",
       "component_kind": "skill",
-      "component_version": "5.2.0",
+      "component_version": "5.3.0",
       "lifecycle": "stable",
       "target_tool": "github-copilot",
       "artifact_path": "skills/review-skill/SKILL.md",
@@ -2691,7 +2755,9 @@
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/review-skill/SKILL.md",
       "checksum_sha256": "587883e3e332e9f3bb4703e24387342435f9ef68a7496c467908ca0b32c3edba",
       "bundle_membership": [],
-      "metadata": {}
+      "metadata": {
+        "dependencies": []
+      }
     },
     {
       "component_id": "autoresearch-analyst",
@@ -3272,7 +3338,7 @@
     {
       "component_id": "backend",
       "component_kind": "skill",
-      "component_version": "4.2.0",
+      "component_version": "4.3.0",
       "lifecycle": "stable",
       "target_tool": "openai-codex",
       "artifact_path": "skills/backend/SKILL.md",
@@ -3280,9 +3346,13 @@
       "install_path": ".agents/skills/backend/SKILL.md",
       "install_command": "mkdir -p \".agents/skills/backend\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/backend/SKILL.md\" -o \".agents/skills/backend/SKILL.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/backend/SKILL.md",
-      "checksum_sha256": "074af7f5c304a7ef7c94e837715b11e665039c000143dc50d502fc25b23808d5",
+      "checksum_sha256": "667e3777dfbfe7f75def6958191a26b79f4b8354ba504f9e744b99cc1326672d",
       "bundle_membership": [],
-      "metadata": {}
+      "metadata": {
+        "dependencies": [
+          "skill/owasp-reference"
+        ]
+      }
     },
     {
       "component_id": "changelog",
@@ -3297,7 +3367,9 @@
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/changelog/SKILL.md",
       "checksum_sha256": "4c03d53c6b16f6f40d9814aa9064b2f8a3748a37fb5c8c7899d34f60d6ccbd38",
       "bundle_membership": [],
-      "metadata": {}
+      "metadata": {
+        "dependencies": []
+      }
     },
     {
       "component_id": "design-authority",
@@ -3312,7 +3384,9 @@
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/design-authority/SKILL.md",
       "checksum_sha256": "109d1f24bfb8d9b66a34abc71cc0edd0536b120952e5911076e0ec27db850e2d",
       "bundle_membership": [],
-      "metadata": {}
+      "metadata": {
+        "dependencies": []
+      }
     },
     {
       "component_id": "design-lint",
@@ -3327,12 +3401,14 @@
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/design-lint/SKILL.md",
       "checksum_sha256": "db0701d8cd77c2c6ddeafb454a3179bafc484915bf0fee10ce038b158e882c72",
       "bundle_membership": [],
-      "metadata": {}
+      "metadata": {
+        "dependencies": []
+      }
     },
     {
       "component_id": "frontend",
       "component_kind": "skill",
-      "component_version": "4.2.0",
+      "component_version": "4.3.0",
       "lifecycle": "stable",
       "target_tool": "openai-codex",
       "artifact_path": "skills/frontend/SKILL.md",
@@ -3340,9 +3416,14 @@
       "install_path": ".agents/skills/frontend/SKILL.md",
       "install_command": "mkdir -p \".agents/skills/frontend\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/frontend/SKILL.md\" -o \".agents/skills/frontend/SKILL.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/frontend/SKILL.md",
-      "checksum_sha256": "fb6889d11f5748d20badc836019ca5e45b7a81a84e99f6bfba587c41ec857d9e",
+      "checksum_sha256": "7a898870afe6c7ed0327606e080f2e3be9982c3c9747b26901df101202fb883b",
       "bundle_membership": [],
-      "metadata": {}
+      "metadata": {
+        "dependencies": [
+          "skill/design-authority",
+          "skill/design-lint"
+        ]
+      }
     },
     {
       "component_id": "git-ship",
@@ -3357,7 +3438,9 @@
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/git-ship/SKILL.md",
       "checksum_sha256": "742d22e83445253d5404fc00d219acead7fbe9b9b68515cfd81fda95dd00d0d0",
       "bundle_membership": [],
-      "metadata": {}
+      "metadata": {
+        "dependencies": []
+      }
     },
     {
       "component_id": "improve",
@@ -3372,12 +3455,14 @@
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/improve/SKILL.md",
       "checksum_sha256": "3c2601947b2fad28551db399e2482963219db7f04375b7dba0cbfe4244145fb1",
       "bundle_membership": [],
-      "metadata": {}
+      "metadata": {
+        "dependencies": []
+      }
     },
     {
       "component_id": "infra",
       "component_kind": "skill",
-      "component_version": "4.2.0",
+      "component_version": "4.3.0",
       "lifecycle": "stable",
       "target_tool": "openai-codex",
       "artifact_path": "skills/infra/SKILL.md",
@@ -3385,9 +3470,13 @@
       "install_path": ".agents/skills/infra/SKILL.md",
       "install_command": "mkdir -p \".agents/skills/infra\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/infra/SKILL.md\" -o \".agents/skills/infra/SKILL.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/infra/SKILL.md",
-      "checksum_sha256": "751661c41d6d067e73abef469d1d285a7cf01f3dd595b9d99d3896a30ae5bacd",
+      "checksum_sha256": "c9a2f7126e9ea1a4d04708392c4391eafcf5adca2eb4ac8cbfd5f059bc9fa5c9",
       "bundle_membership": [],
-      "metadata": {}
+      "metadata": {
+        "dependencies": [
+          "skill/observability-patterns"
+        ]
+      }
     },
     {
       "component_id": "observability-patterns",
@@ -3402,7 +3491,9 @@
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/observability-patterns/SKILL.md",
       "checksum_sha256": "e14b3ee4dcbcfb82558846cacaf63617a35c2102085b3f2e21c543cf62f4f520",
       "bundle_membership": [],
-      "metadata": {}
+      "metadata": {
+        "dependencies": []
+      }
     },
     {
       "component_id": "owasp-reference",
@@ -3417,7 +3508,9 @@
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/owasp-reference/SKILL.md",
       "checksum_sha256": "889afafd9acca825378642c7dc481162ad3e22df94cc7610d851cb0d9c6d2fad",
       "bundle_membership": [],
-      "metadata": {}
+      "metadata": {
+        "dependencies": []
+      }
     },
     {
       "component_id": "prod-readiness",
@@ -3432,7 +3525,9 @@
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/prod-readiness/SKILL.md",
       "checksum_sha256": "a2bb3e2820b8e39945a8d8f197f0fd838ed4cf64125bbab907615320855c98fc",
       "bundle_membership": [],
-      "metadata": {}
+      "metadata": {
+        "dependencies": []
+      }
     },
     {
       "component_id": "retro",
@@ -3447,12 +3542,14 @@
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/retro/SKILL.md",
       "checksum_sha256": "2641bbda90c685af628f1dd61d3c61d1b6751aa6b75728c735f3335cbb27dc81",
       "bundle_membership": [],
-      "metadata": {}
+      "metadata": {
+        "dependencies": []
+      }
     },
     {
       "component_id": "review-skill",
       "component_kind": "skill",
-      "component_version": "5.2.0",
+      "component_version": "5.3.0",
       "lifecycle": "stable",
       "target_tool": "openai-codex",
       "artifact_path": "skills/review-skill/SKILL.md",
@@ -3462,7 +3559,9 @@
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/review-skill/SKILL.md",
       "checksum_sha256": "587883e3e332e9f3bb4703e24387342435f9ef68a7496c467908ca0b32c3edba",
       "bundle_membership": [],
-      "metadata": {}
+      "metadata": {
+        "dependencies": []
+      }
     }
   ]
 }
