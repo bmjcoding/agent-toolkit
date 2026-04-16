@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.5.0] - 2026-04-16
+
+### Changed
+
+- Made `STATE_ROOT` resolution lazy so direct improve runs stay stateless until a step actually needs persistence such as memory, rule-expiry metadata, or fallback changelog storage.
+
 ## [4.4.1] - 2026-04-15
 
 ### Fixed
@@ -132,7 +138,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/skill/improve-v4.4.1...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/skill/improve-v4.5.0...HEAD
+[4.5.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/improve-v4.4.1...skill/improve-v4.5.0
 [4.4.1]: https://github.com/bmjcoding/agent-toolkit/compare/skill/improve-v4.4.0...skill/improve-v4.4.1
 [4.4.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/improve-v4.3.1...skill/improve-v4.4.0
 [4.3.1]: https://github.com/bmjcoding/agent-toolkit/compare/skill/improve-v4.3.0...skill/improve-v4.3.1

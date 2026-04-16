@@ -15,8 +15,12 @@ Apply changes to skill/agent definitions, verify each one, accept or revert. Eac
 
 Resolve `STATE_ROOT` once at the start of the run. Prefer, in order: `.agents/`,
 `.claude/`, `.codex/`, `~/.agents/`, `~/.claude/`, `~/.codex/`. Use the first existing
-directory. If none exist and the workflow needs persistent local state, create `.agents/`
-in the current project and use that as `STATE_ROOT`.
+directory.
+
+If none exist, continue without `STATE_ROOT` for now. Create `.agents/` in the current
+project only immediately before a later step that actually needs persistent local state
+(for example memory files, rule-expiry metadata, or the fallback `STATE_ROOT/CHANGELOG.md`
+path). Do not create toolkit state just to parse or apply recommendations.
 
 Resolve `RETRO_ROOT` once at the start of the run for retro reads and writes:
 - `RETRO_ROOT="${AGENT_RETRO_DIR:-$HOME/agent-retros}"`
@@ -350,5 +354,6 @@ This subcommand is disjoint from `improve`'s main retro-application flow. It doe
 - **Bad retro file path is not a fallback trigger.** If `$ARGUMENTS` contains a retro file path that doesn't exist, do not silently fall back to conversation history — report the bad path and stop. Fallbacks (conversation, disk) are for missing arguments, not bad arguments.
 - **`--validate` blocks on user input.** Orchestrators and full-cycle agents should pass `--max-iterations N` in `$ARGUMENTS` rather than relying on the interactive prompt, to avoid blocking mid-execution.
 - **`--skip-validation` disables progressive disclosure pauses.** When `--skip-validation` is passed, the batch-pause after every 3rd change is suppressed and all changes apply in a single uninterrupted pass. Use for non-interactive orchestrator contexts.
+- **`STATE_ROOT` is lazy, not mandatory.** If no toolkit state directory exists, stay stateless until a step actually needs persistence. Only then create `.agents/`; do not front-load local state creation.
 
 $ARGUMENTS
