@@ -1,0 +1,29 @@
+{
+  "name": "agent-toolkit",
+  "private": true,
+  "engines": {
+    "node": ">=22"
+  },
+  "overrides": {
+    "smol-toml": "1.6.1"
+  },
+  "scripts": {
+    "lint": "npm run lint:js && npm run lint:docs && npm run lint:data",
+    "lint:fix": "npm run lint:js:fix && npm run lint:docs:fix && npm run lint:data:fix",
+    "lint:js": "eslint .",
+    "lint:js:fix": "eslint . --fix",
+    "lint:docs": "markdownlint-cli2 \"**/*.md\"",
+    "lint:docs:fix": "markdownlint-cli2 --fix \"**/*.md\"",
+    "lint:data": "prettier --check \"**/*.{json,yaml,yml}\"",
+    "lint:data:fix": "prettier --write \"**/*.{json,yaml,yml}\"",
+    "lint:py": "ruff check .",
+    "lint:py:fix": "ruff check . --fix"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.2.0",
+    "globals": "^17.5.0",
+    "markdownlint-cli2": "^0.22.0",
+    "prettier": "^3.8.3"
+  }
+}

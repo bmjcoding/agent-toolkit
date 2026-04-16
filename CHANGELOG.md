@@ -15,6 +15,10 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
   `rules/`.
 - Added `skills/retro/scripts/validate.py` as the skill-local validator for retro
   summary JSON files after retiring the old `tools/retros/` dependency.
+- Added repo-level lint tooling with `eslint`, `markdownlint-cli2`, `prettier`, and Ruff,
+  plus a GitHub Actions lint workflow for JavaScript, Markdown, JSON, YAML, and Python.
+- Added `requirements-dev.txt` for Python lint bootstrap and a Dependabot config covering
+  npm, GitHub Actions, and Python dev dependencies.
 
 ### Changed
 
@@ -33,6 +37,7 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
   tree.
 - Hardened the generated-asset validation flow so stale generated rule surfaces and
   brittle workflow-version assumptions fail cleanly.
+- Updated local setup docs to prefer `npm ci` now that the repo ships a lockfile.
 
 ## [4.4.0] - 2026-04-15
 

@@ -16,7 +16,6 @@ import re
 import sys
 from pathlib import Path
 
-
 RUN_TYPES = {"single-agent", "subagent", "orchestration", "custom-pipeline", "meta"}
 DEPTHS = {"lightweight", "standard", "full"}
 VERDICTS = {"CLEAR_TO_SHIP", "SHIP_WITH_CAUTION", "BLOCKED", "SHIPPED_CLEAN"}
