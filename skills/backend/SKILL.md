@@ -3,6 +3,8 @@ name: backend
 description: Lightweight backend workflow — implement with convention awareness, security review, and lint. Use when making backend-led changes directly or inside a larger workflow.
 lifecycle: stable
 disable-model-invocation: true
+dependencies:
+  - skill/owasp-reference
 ---
 
 # Backend Workflow

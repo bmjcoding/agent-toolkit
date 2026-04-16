@@ -3,6 +3,9 @@ name: frontend
 description: Lightweight frontend workflow — implement with design system enforcement, review, and lint. Use when making frontend-led changes directly or inside a larger workflow.
 lifecycle: stable
 disable-model-invocation: true
+dependencies:
+  - skill/design-authority
+  - skill/design-lint
 ---
 
 # Frontend Workflow

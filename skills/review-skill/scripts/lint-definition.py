@@ -38,6 +38,7 @@ Checks:
     S09  No unsupported frontmatter fields (skills only)
     S10  Name matches directory name
     S11  Lifecycle is present and one of stable, beta, experimental
+    S12  Skill dependencies use the supported typed format
 
   Quality (warnings, errors in --strict):
     Q01  Description under 250 chars (truncation threshold in skill listing)
@@ -64,7 +65,7 @@ SUPPORTED_SKILL_FIELDS = {
     "name", "description", "argument-hint", "compatibility",
     "disable-model-invocation", "license", "metadata", "user-invocable",
     "context", "agent", "hooks", "paths", "shell", "model", "effort",
-    "lifecycle",
+    "lifecycle", "dependencies",
     "allowed-tools",  # commands support this
 }
 
@@ -99,6 +100,7 @@ AGENT_KNOWLEDGE_PHRASES = [
 ]
 
 VALID_LIFECYCLES = {"stable", "beta", "experimental"}
+DEPENDENCY_REF_RE = re.compile(r"^skill/[a-z0-9][a-z0-9-]*$")
 
 
 def parse_args(argv):
@@ -173,6 +175,23 @@ def parse_frontmatter(content):
         frontmatter[current_key] = " ".join(current_value_lines).strip()
 
     return frontmatter, body, None
+
+
+def parse_list_field(raw_frontmatter, field_name):
+    match = re.search(
+        rf"(?m)^{re.escape(field_name)}:\s*\n((?:[ \t]+-\s+.+\n?)*)",
+        raw_frontmatter,
+    )
+    if not match or not match.group(1).strip():
+        return []
+
+    values = []
+    for line in match.group(1).splitlines():
+        item_match = re.match(r"^[ \t]+-\s+(.+?)\s*$", line)
+        if not item_match:
+            continue
+        values.append(item_match.group(1).strip().strip('"').strip("'"))
+    return values
 
 
 def lint_file(filepath, file_type=None, base=None):
@@ -260,6 +279,17 @@ def lint_file(filepath, file_type=None, base=None):
         for key in fm:
             if key not in SUPPORTED_SKILL_FIELDS:
                 warn("S09", f"Unsupported skill frontmatter field: '{key}'")
+
+        dependencies = parse_list_field(raw_fm, "dependencies")
+        for dependency in dependencies:
+            if not dependency:
+                error("S12", "dependencies entries must be non-empty strings")
+                continue
+            if not DEPENDENCY_REF_RE.match(dependency):
+                error(
+                    "S12",
+                    f"Dependency '{dependency}' must match 'skill/<kebab-case-id>'",
+                )
 
     # === Quality checks ===
 
