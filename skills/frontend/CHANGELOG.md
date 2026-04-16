@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.3.0] - 2026-04-16
+
+### Changed
+
+- Declared canonical shared-skill dependencies on `design-authority` and `design-lint` so the distribution catalog can expose prerequisite shared skills without adding runtime coupling.
+
 ## [4.2.0] - 2026-04-16
 
 ### Changed
@@ -54,7 +60,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/skill/frontend-v4.2.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/skill/frontend-v4.3.0...HEAD
+[4.3.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/frontend-v4.2.0...skill/frontend-v4.3.0
 [4.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/frontend-v4.1.0...skill/frontend-v4.2.0
 [4.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/frontend-v4.0.0...skill/frontend-v4.1.0
 [3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/frontend-v2.0.0...skill/frontend-v3.0.0

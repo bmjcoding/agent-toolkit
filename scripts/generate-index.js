@@ -413,7 +413,11 @@ function readSharedSkills() {
       }),
       version: readLatestReleasedVersion(path.join(skillsDir, id, 'CHANGELOG.md')),
       sourcePath: relativePath(skillPath),
-      metadata: {},
+      metadata: {
+        dependencies: Array.isArray(frontmatter.dependencies)
+          ? frontmatter.dependencies
+          : [],
+      },
     });
   }
 
@@ -1024,6 +1028,16 @@ function runTests() {
         && entry.artifact_path === 'skills/backend/SKILL.md'
     ),
     'expected github-copilot skill artifacts to resolve to the canonical root skill path'
+  );
+  assert(
+    catalog.artifacts.some(
+      entry => entry.component_id === 'frontend'
+        && entry.component_kind === 'skill'
+        && Array.isArray(entry.metadata?.dependencies)
+        && entry.metadata.dependencies.includes('skill/design-authority')
+        && entry.metadata.dependencies.includes('skill/design-lint')
+    ),
+    'expected frontend skill artifacts to expose shared-skill dependencies in metadata'
   );
 
   const plannerCodexArtifact = catalog.artifacts.find(entry => entry.component_id === 'planner' && entry.target_tool === 'openai-codex');
