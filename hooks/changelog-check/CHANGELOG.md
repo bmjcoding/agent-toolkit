@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-04-16
+
+### Changed
+
+- Tightened release-tag enforcement so promoted CHANGELOG headers now require signed annotated tags. Lightweight tags and unsigned annotated tags are rejected before push, with remediation guidance that uses `git tag -s` and `git push --follow-tags`.
+
 ## [1.0.0] - 2026-04-15
 
 ### Added
@@ -15,5 +21,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Root hook tag derivation now recognizes `hooks/<slug>/CHANGELOG.md` as `hook/<slug>` for the emerging shared hook namespace.
 - Historical release continuity remains in the prior tool-local changelog until the dedicated changelog-ownership migration phase moves fully to root `hooks/`.
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/hook/changelog-check-v1.0.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/hook/changelog-check-v1.1.0...HEAD
+[1.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/hook/changelog-check-v1.0.0...hook/changelog-check-v1.1.0
 [1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/hook/changelog-check-v1.0.0

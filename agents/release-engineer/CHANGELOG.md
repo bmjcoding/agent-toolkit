@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.2.0] - 2026-04-16
+
+### Changed
+
+- Release-engineer now records expected tags during changelog promotion, creates signed annotated tags immediately after the matching release commit, and pushes with `--follow-tags` so PR-bound changelog releases cannot land without their tags.
+- Manifest-version releases now use signed annotated root tags (`git tag -s -m "vX.Y.Z" "vX.Y.Z"`) instead of unsigned lightweight tags.
+
 ## [5.1.0] - 2026-04-15
 
 ### Changed
@@ -89,7 +96,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/release-engineer-v5.1.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/release-engineer-v5.2.0...HEAD
+[5.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/release-engineer-v5.1.0...agent/release-engineer-v5.2.0
 [5.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/release-engineer-v5.0.0...agent/release-engineer-v5.1.0
 [5.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/agent/release-engineer-v5.0.0
 [4.0.1]: https://github.com/bmjcoding/agent-toolkit/compare/agent/release-engineer-v4.0.0...agent/release-engineer-v4.0.1

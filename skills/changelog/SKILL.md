@@ -95,6 +95,8 @@ Rules:
 - Shared components use canonical namespaces: `agent/`, `skill/`, `workflow/`, and `rule/`.
 - Tool-specific namespaces such as `claude-code/`, `github-copilot/`, and `openai-codex/` are reserved for genuinely tool-native assets that do not mirror a canonical shared component.
 - All tags are lowercase.
+- `CHANGELOG.md` at the repository root is the one allowed repo-wide exception: it uses bare `vX.Y.Z` tags because it tracks the repository release rather than an independently-versioned component.
+- Release tags must be annotated and signed. Use `git tag -s -m "{tag}" "{tag}"`; lightweight tags (`git tag "{tag}"`) and unsigned annotated tags are non-conformant.
 
 ## Comparison Links
 
@@ -149,10 +151,13 @@ When cutting a tagged release:
 **Atomic ordering at tag creation** — edit, commit, tag, push together:
 
 ```bash
-git commit -m "chore: prepare {slug}-v{X.Y.Z}"
-git tag {slug}-v{X.Y.Z}
-git push origin HEAD {slug}-v{X.Y.Z}
+git commit -m "chore: prepare {tag}"
+git tag -s -m "{tag}" "{tag}"
+git push origin HEAD --follow-tags
 ```
+
+Where `{tag}` is `{slug}-v{X.Y.Z}` for component changelogs, or `v{X.Y.Z}` for a
+repository-root `CHANGELOG.md`.
 
 Do not update the CHANGELOG after the tag is pushed — the rename and tag push must be
 atomic.
@@ -189,8 +194,8 @@ component only.
 
 ```bash
 git commit -m "chore: release {slug}-v{X.Y.Z}"
-git tag {slug}-v{X.Y.Z}
-git push origin HEAD {slug}-v{X.Y.Z}
+git tag -s -m "{slug}-v{X.Y.Z}" "{slug}-v{X.Y.Z}"
+git push origin HEAD --follow-tags
 ```
 
 **Slug derivation:** strip the `CHANGELOG.md` filename, strip the type-directory segment
@@ -222,8 +227,8 @@ exists), the comparison footer link uses the `tree/` form per the Comparison Lin
 | State | Recovery |
 |-------|----------|
 | Promoted file but no commit | `git checkout -- <path>/CHANGELOG.md` to revert, then re-run `changelog release <slug>` |
-| Commit created but tag missing | `git tag {slug}-v{X.Y.Z} HEAD && git push origin HEAD {slug}-v{X.Y.Z}` |
-| Commit + tag created but push failed | `git push origin HEAD {slug}-v{X.Y.Z}` (the tag already exists locally) |
+| Commit created but signed tag missing | `git tag -s -m "{tag}" "{tag}" HEAD && git push origin HEAD --follow-tags` |
+| Commit + signed tag created but push failed | `git push origin HEAD --follow-tags` (the tag already exists locally) |
 
 #### If a multi-component release partially failed
 
@@ -283,6 +288,7 @@ commit-log-versus-changelog rules.
   user-facing outcome. The Keep a Changelog spec explicitly prohibits commit-log dumps.
 - Compare links must reference tags that exist in the repo — verify with
   `git tag -l "{slug}-v*"` before publishing.
+- Compare links must reference signed annotated tags, not lightweight placeholders.
 - Hardcoding a GitHub compare URL in a GitLab or Bitbucket project — the URL will 404.
   Use `scripts/detect-platform.sh` + the correct template from `references/platform-urls.md`.
 
