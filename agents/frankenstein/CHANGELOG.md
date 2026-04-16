@@ -12,6 +12,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Phase 5b post-validation guidance now prefers session-scoped handoff paths under `.orchestrator/sessions/$SID/handoffs/`, with the flat `.orchestrator/handoffs/` path retained as a fallback when no valid session id is active.
 - The untrusted-data boundary now treats both session-scoped and flat handoff JSON files as untrusted input so the runtime guidance matches the current orchestrator layout.
 
+## [5.1.0] - 2026-04-15
+
+### Changed
+
+- Declared canonical `lifecycle` metadata in the shared root definition so the distribution catalog can publish maturity separately from per-tool availability for this agent.
+- Aligned exploration, planning, quality-loop repair ownership, post-validation, and
+  repeated-review handoff contracts with the canonical shared agent definitions.
+
 ## [5.0.0] - 2026-04-15
 
 ### Changed
@@ -84,7 +92,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Phase 4 Quality Loop backlog-seed logic extracted from inline Python heredoc (~92 lines) into `scripts/backlog-seed.py`; frankenstein.md calls the script via a 3-line bash invocation. Same runtime behavior; reduces frankenstein.md by ~92 lines (778 → 692).
+- Phase 4 Quality Loop backlog-seed logic extracted from inline Python heredoc (~92 lines) into `claude-code/scripts/backlog-seed.py`; frankenstein.md calls the script via a 3-line bash invocation. Same runtime behavior; reduces frankenstein.md by ~92 lines (778 → 692).
 - Retrospective Notes table appended with 2026-04-12 entry recording default-branch guard addition.
 - LEAN dispatch prompt enforcement tightened: hard 200-token ceiling on inline prompt text per subtask, enforced as a formatting rule in Phase 2 dispatch template.
 
@@ -250,7 +258,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v5.0.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v5.1.0...HEAD
+[5.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v5.0.0...agent/frankenstein-v5.1.0
 [5.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/agent/frankenstein-v5.0.0
 [4.5.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v4.4.0...agent/frankenstein-v4.5.0
 [4.4.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v4.3.1...agent/frankenstein-v4.4.0

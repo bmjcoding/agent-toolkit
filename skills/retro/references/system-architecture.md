@@ -8,8 +8,8 @@ Diagram: `references/system-overview.svg` (or render `references/system-overview
 
 | Skill | Purpose | Inputs | Outputs |
 |---|---|---|---|
-| `retro` | Post-run diagnosis | Git history, conversation, orchestrator artifacts | Retro markdown + JSON summary + trend data → `STATE_ROOT/retros/` |
-| `improve` | Apply retro recommendations | Retro output (from conversation or file) | File edits + improve outcome JSON → `STATE_ROOT/retros/` |
+| `retro` | Post-run diagnosis | Git history, conversation, orchestrator artifacts | Retro markdown + JSON summary + trend data → `~/agent-retros/` |
+| `improve` | Apply retro recommendations | Retro output (from conversation or file) | File edits + improve outcome JSON → `~/agent-retros/` |
 | `review-skill` | Pre-merge quality gate | Skill/agent definition path | PASS / NEEDS WORK / REWRITE verdict |
 | `git-ship` | Git shipping (commit, PR, merge, cleanup) | Git state + $ARGUMENTS | Commits, PR, branch cleanup |
 | `prod-readiness` | Production readiness pipeline | Changed files | Build/lint/audit/test/verify + ship verdict |
@@ -54,29 +54,20 @@ Diagram: `references/system-overview.svg` (or render `references/system-overview
 
 ### Persistence
 
-All retro data lives at `STATE_ROOT/retros/` (global, cross-project):
+All retro data lives at `~/agent-retros/` by default (override with `AGENT_RETRO_DIR`). This root is global and cross-project:
 
 ```
-STATE_ROOT/retros/
+~/agent-retros/
 ├── history.jsonl
 ├── sessions/
-│   └── YYYY-MM/
-│       └── 20260407T091330/
-│           ├── 20260407T091330.md
-│           └── 20260407T091330.json
+│   └── YYYY-MM/<session-id>/
+│       ├── YYYYMMDDTHHMMSS.md
+│       └── YYYYMMDDTHHMMSS.json
 ├── skill-reviews/
-│   └── git-ship/
-│       └── YYYY-MM/
-│           ├── 20260407T093000.md
-│           └── 20260407T093000.json
+│   └── <skill>/YYYY-MM/
 ├── agent-reviews/
-│   └── frontend-engineer/
-│       └── YYYY-MM/
-│           ├── 20260407T101500.md
-│           └── 20260407T101500.json
+│   └── <agent>/YYYY-MM/
 └── meta/
-    └── YYYY-MM/
-        └── 20260430T120000-meta-retro-N10.md
 ```
 
 ### Changelogs

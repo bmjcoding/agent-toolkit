@@ -1,7 +1,7 @@
 ---
 name: security-engineer
 description: "Cybersecurity engineer performing STRIDE threat modeling, OWASP Top 10 review, auth analysis, and dependency security evaluation. Use during Phase 3a specialist reviews."
-model: "Claude Opus 4.5 (copilot)"
+model: "Claude Opus 4.6"
 tools:
   - read
   - search

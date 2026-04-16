@@ -1,6 +1,7 @@
 ---
 name: security-engineer
 description: "Cybersecurity engineer performing STRIDE threat modeling, OWASP Top 10 review, auth analysis, and dependency security evaluation. Use during Phase 3a specialist reviews."
+lifecycle: stable
 model-tier: frontier
 capabilities:
   - read
@@ -9,7 +10,7 @@ capabilities:
 skills:
   - owasp-reference
 adapters:
-  - claude-code/agents/security-engineer/security-engineer.md
+  - claude-code/agents/security-engineer.md
   - github-copilot/agents/security-engineer.agent.md
   - openai-codex/agents/security-engineer.toml
 ---

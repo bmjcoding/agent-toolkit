@@ -10,9 +10,9 @@ whose content is exactly `@AGENTS.md`.
 ## Project Overview
 
 **agent-toolkit** is a multi-tool AI agent instruction repository containing shared
-skills and rules plus tool-specific agents, commands, hooks, prompts, generated rule
-adapters, bundles, and install assets for the Frankenstein orchestration pipeline and
-related workflows.
+agents, skills, rules, workflows, and hooks plus tool-specific adapters, prompts,
+generated rule adapters, bundles, manifests, and install assets for the Frankenstein
+orchestration pipeline and related workflows.
 
 Directory layout:
 
@@ -21,10 +21,11 @@ agent-toolkit/
   docs/
     adr/           # Repo-wide architecture decisions
   agents/          # Canonical shared agent instruction bodies
+  hooks/           # Canonical shared hook logic (target ownership model; see ADR-0009)
   skills/          # Canonical shared skills
   rules/           # Canonical shared rules
   workflows/       # Canonical shared workflow definitions
-  claude-code/     # Claude-native agents, commands, hooks, bundles, generated rule adapters, scripts
+  claude-code/     # Claude-native agents, commands, hook docs, bundles, generated rule adapters, scripts
   github-copilot/  # VS Code Copilot-native agents, prompts, instructions, hooks, scripts
   openai-codex/    # Codex-native agents, hooks, config templates, rule build assets
   AGENTS.md        # Primary shared instructions
@@ -37,12 +38,14 @@ agent-toolkit/
 - Root `rules/` is the single source of truth for shared rule content.
 - Root `agents/` is the single source of truth for shared agent instruction bodies.
 - Root `workflows/` is the single source of truth for shared workflow bodies.
+- Root `hooks/` is the canonical shared owner of hook logic and hook changelogs.
 - `AGENTS.md` is the canonical shared instruction file.
 - `CLAUDE.md` is a one-line Claude compatibility shim, not the canonical shared
   instruction source.
 - Tool directories should contain tool-native runtime assets or generated adapters only.
 - Shared skills are tagged as `skill/<slug>-v<major>.<minor>.<patch>`.
 - Shared rules are tagged as `rule/<slug>-v<major>.<minor>.<patch>`.
+- Shared hooks are tagged as `hook/<slug>-v<major>.<minor>.<patch>`.
 
 ---
 

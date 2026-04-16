@@ -79,6 +79,7 @@ Expected fields include:
 - component id
 - component kind
 - component version
+- lifecycle
 - target tool
 - artifact path
 - install path

@@ -1,6 +1,7 @@
 ---
 name: design-lint
 description: Deterministic design system linting checks. Use when reviewing Tailwind CSS/React components for structural violations. Defines grep/regex patterns run by the design-linter agent.
+lifecycle: stable
 ---
 
 # Design Lint — Deterministic Check Catalog

@@ -19,7 +19,7 @@ Arguments:
     SUMMARY_JSON   JSON string or file path containing the retro summary
 
 Options:
-    --history DIR    Directory for history file (default: resolved STATE_ROOT/retros)
+    --history DIR    Directory for history file (default: ~/agent-retros or $AGENT_RETRO_DIR)
     --subject NAME   Filter by retro subject (e.g., orchestrator, git-ship, frontend-engineer)
     --last N         For trends, compare against last N retros (default: 10)
     --metric NAME    For trends, also emit a focused value series for one summary metric
@@ -38,20 +38,7 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-
-def resolve_state_root():
-    candidates = [
-        Path(".agents"),
-        Path(".claude"),
-        Path(".codex"),
-        Path.home() / ".agents",
-        Path.home() / ".claude",
-        Path.home() / ".codex",
-    ]
-    for candidate in candidates:
-        if candidate.is_dir():
-            return candidate
-    return Path(".agents")
+from retro_paths import candidate_history_paths, default_history_dir
 
 
 def parse_args(argv):
@@ -59,6 +46,8 @@ def parse_args(argv):
         "command": None,
         "summary": None,
         "history_dir": None,
+        "history_dir_explicit": False,
+        "include_legacy": False,
         "subject": None,
         "last": 10,
         "metric": None,
@@ -71,6 +60,7 @@ def parse_args(argv):
             sys.exit(0)
         elif argv[i] == "--history" and i + 1 < len(argv):
             args["history_dir"] = argv[i + 1]
+            args["history_dir_explicit"] = True
             i += 2
         elif argv[i] == "--subject" and i + 1 < len(argv):
             args["subject"] = argv[i + 1]
@@ -98,31 +88,38 @@ def parse_args(argv):
         print("Error: Command required (save, trends, list).", file=sys.stderr)
         sys.exit(1)
 
-    # Default to the first available shared/tool compatibility state root.
     if not args["history_dir"]:
-        args["history_dir"] = os.path.join(resolve_state_root(), "retros")
+        args["history_dir"] = str(default_history_dir())
+    args["include_legacy"] = not args["history_dir_explicit"]
 
     return args
 
 
 def history_path(history_dir):
-    return os.path.join(history_dir, "history.jsonl")
+    return str(Path(history_dir).expanduser() / "history.jsonl")
 
 
-def load_history(history_dir):
-    """Load all retro entries from history."""
-    path = history_path(history_dir)
-    if not os.path.isfile(path):
-        return []
+def load_history(history_dir, *, include_legacy=False):
+    """Load retro entries from canonical history, then legacy histories."""
     entries = []
-    with open(path) as f:
-        for line in f:
-            line = line.strip()
-            if line:
+    seen: set[str] = set()
+    for path in candidate_history_paths(history_dir, include_legacy=include_legacy):
+        if not path.is_file():
+            continue
+        with path.open() as f:
+            for line in f:
+                line = line.strip()
+                if not line:
+                    continue
                 try:
-                    entries.append(json.loads(line))
+                    entry = json.loads(line)
                 except json.JSONDecodeError:
                     continue
+                key = json.dumps(entry, sort_keys=True)
+                if key in seen:
+                    continue
+                seen.add(key)
+                entries.append(entry)
     return entries
 
 
@@ -179,7 +176,7 @@ def cmd_save(args):
     with open(path, "a") as f:
         f.write(json.dumps(entry) + "\n")
 
-    count = len(load_history(args["history_dir"]))
+    count = len(load_history(args["history_dir"], include_legacy=args.get("include_legacy", False)))
     return {"status": "saved", "history_file": path, "total_entries": count}
 
 
@@ -216,7 +213,7 @@ def filter_by_subject(entries, subject):
 
 def cmd_trends(args):
     """Analyze trends across historical retros."""
-    entries = load_history(args["history_dir"])
+    entries = load_history(args["history_dir"], include_legacy=args.get("include_legacy", False))
     entries = filter_by_subject(entries, args.get("subject"))
 
     if len(entries) < 2:
@@ -420,7 +417,7 @@ def cmd_trends(args):
 
 def cmd_list(args):
     """List all saved retros."""
-    entries = load_history(args["history_dir"])
+    entries = load_history(args["history_dir"], include_legacy=args.get("include_legacy", False))
     entries = filter_by_subject(entries, args.get("subject"))
     if not entries:
         subject_msg = f" for subject '{args['subject']}'" if args.get("subject") else ""

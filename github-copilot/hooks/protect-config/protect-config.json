@@ -1,0 +1,10 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "type": "command",
+        "command": "bash \"$AGENT_TOOLKIT_DIR/github-copilot/hooks/protect-config/protect-config.sh\""
+      }
+    ]
+  }
+}

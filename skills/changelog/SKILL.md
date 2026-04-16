@@ -4,15 +4,29 @@ description: >
   Canonical CHANGELOG.md standard: Keep a Changelog 1.1.0 + SemVer, required header,
   version sections, categories, per-component tags, comparison links, bump table. Use
   when creating or editing any CHANGELOG.md in the toolkit.
+lifecycle: stable
 disable-model-invocation: true
 argument-hint: "[path to CHANGELOG.md to edit or create]"
+lifecycle: stable
 ---
 
 # Changelog Standard
 
 Canonical definition of `CHANGELOG.md` format for every component in the agent-toolkit
 ecosystem (agents, skills, commands, hooks, rules). Read this before creating or editing
-any `CHANGELOG.md`.
+any `CHANGELOG.md`. Use progressive disclosure: load only the sections needed for the
+task at hand.
+
+## Quick Routing
+
+| If you are... | Read |
+|---|---|
+| Fixing format or writing a new entry | Required Header Block, Version Section Format, Change Categories, Gotchas |
+| Appending under `[Unreleased]` | Change Categories, `changelog append <category> <message>`, Gotchas |
+| Cutting a release | Comparison Links, `[Unreleased]` Workflow, Release Subcommand, Failure Recovery |
+| Adapting footer URLs for a non-GitHub host | Comparison Links, `references/platform-urls.md` |
+
+Do not load the release sections for a simple entry edit.
 
 ## Standards
 
@@ -76,11 +90,10 @@ Canonical tag format: `<namespace>/<slug>-v{version}`
 | `rules/docker/`                        | `rule/docker`    | `rule/docker-v1.0.0`               |
 
 Rules:
-- The slug is the component's directory name (the `{name}` segment in `skills/{name}/`).
-- Hyphens are allowed in slugs. Do not use slashes, `@`, or spaces — they require URL
-  encoding and cause routing issues on Bitbucket Cloud and Datacenter.
-- Shared skills and shared rules always use the `skill/` and `rule/` namespaces.
-- Tool-specific assets use their tool namespace (`claude-code/`, `github-copilot/`, `openai-codex/`).
+- The slug segment is the component's directory name (the `{name}` segment in `skills/{name}/`).
+- Use exactly one namespace separator slash between the component family and slug, as in `skill/changelog`. The slug segment itself may include hyphens but should not include additional slashes, `@`, or spaces.
+- Shared components use canonical namespaces: `agent/`, `skill/`, `workflow/`, and `rule/`.
+- Tool-specific namespaces such as `claude-code/`, `github-copilot/`, and `openai-codex/` are reserved for genuinely tool-native assets that do not mirror a canonical shared component.
 - All tags are lowercase.
 
 ## Comparison Links
@@ -112,10 +125,21 @@ by creating `.changelog-platform.yml` at the repo root: `platform: gitlab` (or `
 
 ## [Unreleased] Workflow
 
-Always maintain `## [Unreleased]` at the top of the version list. It accumulates changes
-that are merged but not yet tagged.
+Always maintain `## [Unreleased]` at the top of the version list. It accumulates
+branch-local changes before a PR is opened, and resets to empty after those changes are
+promoted into the next versioned section.
 
-When cutting a release:
+When preparing a PR that changes a component:
+
+1. Promote the touched component's non-empty `## [Unreleased]` section to
+   `## [X.Y.Z] - YYYY-MM-DD`.
+2. Insert a fresh empty `## [Unreleased]` above the new versioned section.
+3. Update the comparison links so `[Unreleased]` points at the new version and the new
+   version points at the previous one.
+4. Continue editing the versioned section for that PR instead of adding new PR-scoped
+   bullets back under `## [Unreleased]`.
+
+When cutting a tagged release:
 
 1. Rename `## [Unreleased]` to `## [X.Y.Z] - YYYY-MM-DD`.
 2. Update the comparison link footer with the new version.
@@ -139,7 +163,8 @@ unrelated component's release.
 
 **Who triggers:** a human developer, the `sync-toolkit` workflow, or the
 release-engineer agent when dispatched by the orchestrator. Automated CI does not cut
-releases without explicit invocation.
+releases, but PR validation may require that touched component changelogs have already
+been promoted out of `## [Unreleased]`.
 
 ## Release Subcommand
 

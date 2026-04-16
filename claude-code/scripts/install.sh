@@ -10,7 +10,7 @@
 # SYMLINK MAP:
 #   ~/.claude/agents   ->  <REPO>/claude-code/agents
 #   ~/.claude/commands ->  <REPO>/claude-code/commands
-#   ~/.claude/hooks    ->  <REPO>/claude-code/hooks
+#   ~/.claude/hooks    ->  <REPO>/hooks
 #   ~/.claude/rules    ->  <REPO>/claude-code/rules
 #   ~/.claude/skills   ->  <REPO>/skills
 #
@@ -110,7 +110,7 @@ fi
 declare -a SYMLINKS=(
   "agents|claude-code/agents"
   "commands|claude-code/commands"
-  "hooks|claude-code/hooks"
+  "hooks|hooks"
   "rules|claude-code/rules"
   "skills|skills"
 )
