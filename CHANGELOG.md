@@ -8,8 +8,18 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [4.6.0] - 2026-04-15
+
+### Added
+
+- Added a checked-in reference-integrity validator to the smoke test so broken Markdown
+  links and leaked machine-specific absolute repo paths fail repository validation.
+
 ### Changed
 
+- Removed the remaining hardcoded local toolkit checkout fallback from the canonical
+  `sync-toolkit` workflow and tightened the Codex install docs so the documented manual
+  setup matches the live installer behavior more closely.
 - Removed the redundant `tools/catalog-metadata.json` hook lifecycle lookup and taught
   the catalog generator/validator to derive hook maturity from per-tool defaults
   instead.
@@ -19,6 +29,12 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 - Folded the open Dependabot GitHub Actions major-version bumps into the current CI
   workflow files by upgrading `actions/checkout`, `actions/setup-node`, and the
   remaining `actions/setup-python` usage to `v6`.
+
+### Fixed
+
+- Fixed the Codex hook install contract so the generated registry, installer, and catalog
+  agree on the fallback adapter location and the catalog now carries the companion files
+  required for standalone hook installs.
 
 ## [4.5.0] - 2026-04-15
 
@@ -270,8 +286,8 @@ No action required for users who install via symlinks (`./claude-code/scripts/in
     Codex CLI v0.120.0+.
   - Codex: fixed 3 `config.toml.template` schema errors (`[[skills.config]]` table
     format, `instructions_template` key, `timeout` type).
-  - Codex: corrected `install.sh` hooks path from `~/.codex/hooks.json` to
-    `~/.openai-codex/hooks.json`.
+  - Codex: corrected `install.sh` hooks path from the erroneous
+    `~/.openai-codex/hooks.json` location to `~/.codex/hooks.json`.
 
 ### Changed
 
@@ -351,7 +367,8 @@ No action required for users who install via symlinks (`./claude-code/scripts/in
 3. Re-run the install script: `./claude-code/scripts/install.sh`.
 4. Verify: `./claude-code/scripts/install.sh --check`.
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/v4.5.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/v4.6.0...HEAD
+[4.6.0]: https://github.com/bmjcoding/agent-toolkit/compare/v4.5.0...v4.6.0
 [4.5.0]: https://github.com/bmjcoding/agent-toolkit/compare/v4.4.0...v4.5.0
 [4.4.0]: https://github.com/bmjcoding/agent-toolkit/compare/v4.3.0...v4.4.0
 [4.3.0]: https://github.com/bmjcoding/agent-toolkit/compare/v4.2.1...v4.3.0

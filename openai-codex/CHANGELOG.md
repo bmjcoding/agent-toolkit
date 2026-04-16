@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.1.2] - 2026-04-15
+
+### Changed
+
+- Clarified the manual Codex install docs so they create the required directories,
+  symlink the live `hooks.json` registry, and warn that copying the config template
+  directly can overwrite an existing `~/.codex/config.toml`.
+
+### Fixed
+
+- Aligned the Codex hook runtime contract across `hooks.json`, the installer, and the
+  distribution catalog so the fallback adapter path under `~/.codex/openai-codex/hooks/`
+  is now installed and the machine-readable install metadata includes the companion files
+  each hook needs at runtime.
+
 ## [4.1.1] - 2026-04-15
 
 ### Changed
@@ -63,7 +78,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `scripts/install.sh` hooks target corrected to `~/.codex/hooks.json` (parity gap #6 Medium resolved).
 - Group-level `description` field removed from `hooks.json` (parity gap #7 Low resolved).
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/openai-codex-v4.1.1...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/openai-codex-v4.1.2...HEAD
+[4.1.2]: https://github.com/bmjcoding/agent-toolkit/compare/openai-codex-v4.1.1...openai-codex-v4.1.2
 [4.1.1]: https://github.com/bmjcoding/agent-toolkit/compare/openai-codex-v4.1.0...openai-codex-v4.1.1
 [4.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/openai-codex-v4.0.0...openai-codex-v4.1.0
 [4.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/openai-codex-v4.0.0

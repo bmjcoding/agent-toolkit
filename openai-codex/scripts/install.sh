@@ -10,6 +10,7 @@
 #   Agents:   openai-codex/agents/*.toml   -> ~/.codex/agents/  (user-global)
 #             OR .codex/agents/             (project-local with --project)
 #   Hooks:    openai-codex/hooks/hooks.json -> ~/.codex/hooks.json  (sibling to config.toml)
+#             openai-codex/hooks/           -> ~/.codex/openai-codex/hooks/  (fallback adapter tree)
 #             hooks.json may reference thin Codex adapters under openai-codex/hooks/<slug>/<slug>.sh
 #             which delegate to the canonical root hooks/<slug>/<slug>.sh implementation
 #   Config:   Appends [[skills.config]] blocks from config.toml.template
@@ -105,10 +106,12 @@ CONFIG_TEMPLATE="${REPO_DIR}/openai-codex/config.toml.template"
 if [[ "$SCOPE" == "project" ]]; then
   AGENTS_DEST="${PWD}/.codex/agents"
   HOOKS_JSON_DEST="${HOME}/.codex/hooks.json"   # hooks.json always goes to user-global, sibling to config.toml
+  HOOKS_TREE_DEST="${HOME}/.codex/openai-codex/hooks"
   CODEX_CONFIG="${HOME}/.codex/config.toml"
 else
   AGENTS_DEST="${HOME}/.codex/agents"
   HOOKS_JSON_DEST="${HOME}/.codex/hooks.json"
+  HOOKS_TREE_DEST="${HOME}/.codex/openai-codex/hooks"
   CODEX_CONFIG="${HOME}/.codex/config.toml"
 fi
 
@@ -142,6 +145,7 @@ echo "======================================="
 echo "REPO_DIR:    ${REPO_DIR}"
 echo "Scope:       ${SCOPE} (agents -> ${AGENTS_DEST})"
 echo "Hooks JSON:  ${HOOKS_JSON_DEST}"
+echo "Hooks tree:  ${HOOKS_TREE_DEST}"
 echo "Config:      ${CODEX_CONFIG}"
 echo ""
 
@@ -203,6 +207,25 @@ if [[ "$CHECK_MODE" == "true" ]]; then
       skip "hooks.json (copy — not a symlink; run install to convert)"
     else
       miss "hooks.json not found: ${HOOKS_JSON_DEST}"
+      all_ok=false
+    fi
+    echo ""
+
+    echo "Hooks adapter tree (${HOOKS_TREE_DEST}):"
+    if [[ -L "${HOOKS_TREE_DEST}" ]]; then
+      current_target="$(readlink "${HOOKS_TREE_DEST}")"
+      if [[ "${current_target}" == "${HOOKS_SRC}" ]]; then
+        ok "hooks/ -> ${current_target}"
+      else
+        printf '  [DIFF]       hooks/\n' >&2
+        printf '                 current:  %s\n' "${current_target}" >&2
+        printf '                 expected: %s\n' "${HOOKS_SRC}" >&2
+        all_ok=false
+      fi
+    elif [[ -d "${HOOKS_TREE_DEST}" ]]; then
+      skip "hooks/ (real directory — not a symlink; run install to convert)"
+    else
+      miss "hooks adapter tree not found: ${HOOKS_TREE_DEST}"
       all_ok=false
     fi
     echo ""
@@ -338,11 +361,12 @@ else
   echo "  NOTE: Codex hooks are experimental. They require Codex CLI v0.120.0+."
   echo "        You will be prompted before enabling features.codex_hooks in config."
   echo "        hooks.json stays symlinked to ~/.codex/hooks.json (sibling to config.toml)"
-  echo "        per the official spec; any remaining Codex shell files are thin adapters"
-  echo "        that delegate to the canonical root hooks/ implementations."
+  echo "        per the official spec; ~/.codex/openai-codex/hooks stays symlinked to"
+  echo "        the repo adapter tree so hooks work even when AGENT_TOOLKIT_DIR is unset."
   echo ""
 
   hooks_json_src="${HOOKS_SRC}/hooks.json"
+  hooks_tree_src="${HOOKS_SRC}"
   dest_path="${HOOKS_JSON_DEST}"
 
   if [[ "$DRY_RUN" == "true" ]]; then
@@ -358,9 +382,22 @@ else
     else
       printf '  would create symlink: %s -> %s\n' "${dest_path}" "${hooks_json_src}"
     fi
+    if [[ -L "${HOOKS_TREE_DEST}" ]]; then
+      current="$(readlink "${HOOKS_TREE_DEST}")"
+      if [[ "$current" == "$hooks_tree_src" ]]; then
+        printf '  unchanged:   hooks adapter tree (already symlinked)\n'
+      else
+        printf '  would update: hooks adapter tree\n'
+        printf '    before: %s\n' "${current}"
+        printf '    after:  %s\n' "${hooks_tree_src}"
+      fi
+    else
+      printf '  would create symlink: %s -> %s\n' "${HOOKS_TREE_DEST}" "${hooks_tree_src}"
+    fi
   else
     # Ensure ~/.codex/ directory exists
     mkdir -p "$(dirname "${dest_path}")"
+    mkdir -p "$(dirname "${HOOKS_TREE_DEST}")"
 
     # Guard: abort if a real file occupies the link path (hooks are sensitive — skip, don't overwrite)
     if [[ -e "${dest_path}" && ! -L "${dest_path}" ]]; then
@@ -376,6 +413,22 @@ else
         printf '  unchanged:   hooks.json\n'
       else
         printf '  installed:   hooks.json -> %s\n' "${after}"
+      fi
+    fi
+
+    if [[ -e "${HOOKS_TREE_DEST}" && ! -L "${HOOKS_TREE_DEST}" ]]; then
+      echo "  SKIP (real directory exists — not overwriting): ${HOOKS_TREE_DEST}" >&2
+    else
+      before="(none)"
+      [[ -L "${HOOKS_TREE_DEST}" ]] && before="$(readlink "${HOOKS_TREE_DEST}")"
+
+      ln -sfn "${hooks_tree_src}" "${HOOKS_TREE_DEST}"
+      after="$(readlink "${HOOKS_TREE_DEST}")"
+
+      if [[ "$before" == "$after" ]]; then
+        printf '  unchanged:   hooks adapter tree\n'
+      else
+        printf '  installed:   hooks adapter tree -> %s\n' "${after}"
       fi
     fi
   fi
