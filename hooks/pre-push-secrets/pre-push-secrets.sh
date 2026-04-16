@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# lifecycle: stable
 # PreToolUse hook: scan for secrets before git push
 # Runs gitleaks if available, falls back to grep for common patterns.
 # Outputs a deny response to stdout if secrets are found; exits 0 if clean.

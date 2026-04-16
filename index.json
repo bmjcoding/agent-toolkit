@@ -16,11 +16,11 @@
       "checksum_sha256": "8138ae1c2f28c7a2cee4cb5070767489884468115f55096313997db27f8f783b",
       "bundle_membership": [
         {
-          "bundle_id": "frankenstein-orchestration",
+          "bundle_id": "self-improvement",
           "role": "core"
         },
         {
-          "bundle_id": "self-improvement",
+          "bundle_id": "ultra-dev",
           "role": "core"
         }
       ],
@@ -61,7 +61,7 @@
           "role": "core"
         },
         {
-          "bundle_id": "frankenstein-orchestration",
+          "bundle_id": "ultra-dev",
           "role": "core"
         }
       ],
@@ -93,7 +93,7 @@
       "checksum_sha256": "8dd48f2f6d233f710f916bba823d098c284803221766b2ddea0c0cc690debc48",
       "bundle_membership": [
         {
-          "bundle_id": "frankenstein-orchestration",
+          "bundle_id": "ultra-dev",
           "role": "core"
         }
       ],
@@ -126,7 +126,7 @@
       "checksum_sha256": "f65874e1ee2548576523acfa29dea53dc6c8264aeee55aa110baf3f971f63ba8",
       "bundle_membership": [
         {
-          "bundle_id": "frankenstein-orchestration",
+          "bundle_id": "ultra-dev",
           "role": "core"
         }
       ],
@@ -158,7 +158,7 @@
       "checksum_sha256": "1f0439309a4fa22e40b66abaee3e93294d34567e483efe7165f966a6b528f15f",
       "bundle_membership": [
         {
-          "bundle_id": "frankenstein-orchestration",
+          "bundle_id": "ultra-dev",
           "role": "core"
         }
       ],
@@ -204,11 +204,11 @@
       "checksum_sha256": "14f2b095a63ffbe2ed662da511c1d74d6c23318239e0895b766b80095fda2d58",
       "bundle_membership": [
         {
-          "bundle_id": "frankenstein-orchestration",
+          "bundle_id": "frontend-development",
           "role": "core"
         },
         {
-          "bundle_id": "frontend-development",
+          "bundle_id": "ultra-dev",
           "role": "core"
         }
       ],
@@ -242,7 +242,7 @@
       "checksum_sha256": "186907fdebb084d809e860ebf1bdfe4da98f9727c8258e39749dfa5bfdc9fc63",
       "bundle_membership": [
         {
-          "bundle_id": "frankenstein-orchestration",
+          "bundle_id": "ultra-dev",
           "role": "core"
         }
       ],
@@ -274,7 +274,7 @@
       "checksum_sha256": "1122cac274912cf4f598769f8b6bf51de27efee6fce744aa8e44d5e320f6a3b7",
       "bundle_membership": [
         {
-          "bundle_id": "frankenstein-orchestration",
+          "bundle_id": "ultra-dev",
           "role": "core"
         }
       ],
@@ -304,7 +304,7 @@
       "checksum_sha256": "486265f3cf7ae3cdd75f86300dfb65844fbf461c02774d3b4337dc2ecb570bac",
       "bundle_membership": [
         {
-          "bundle_id": "frankenstein-orchestration",
+          "bundle_id": "ultra-dev",
           "role": "core"
         }
       ],
@@ -335,7 +335,7 @@
       "checksum_sha256": "7dd6de8f990be96ddefd770d779b2cc51832759dbd939cad97e44fe237315c1f",
       "bundle_membership": [
         {
-          "bundle_id": "frankenstein-orchestration",
+          "bundle_id": "ultra-dev",
           "role": "core"
         }
       ],
@@ -367,7 +367,7 @@
       "checksum_sha256": "c6d68a4f0a9b5163b2022e4ef3796144379955f773b3039aa6053b0c697c650b",
       "bundle_membership": [
         {
-          "bundle_id": "frankenstein-orchestration",
+          "bundle_id": "ultra-dev",
           "role": "core"
         }
       ],
@@ -401,7 +401,7 @@
       "checksum_sha256": "e012a1b53a80eddc5a5672bf8f0250096ee3c97ffad8b90dfa6fbeff031e817d",
       "bundle_membership": [
         {
-          "bundle_id": "frankenstein-orchestration",
+          "bundle_id": "ultra-dev",
           "role": "core"
         }
       ],
@@ -433,11 +433,11 @@
       "checksum_sha256": "607b20026f611b9eeb9b3467960ee9647e389d53b0bb61df35fa41145d587430",
       "bundle_membership": [
         {
-          "bundle_id": "frankenstein-orchestration",
+          "bundle_id": "security-hardening",
           "role": "core"
         },
         {
-          "bundle_id": "security-hardening",
+          "bundle_id": "ultra-dev",
           "role": "core"
         }
       ],
@@ -469,11 +469,11 @@
       "checksum_sha256": "667af814b0540d2a1f97c17da7e49659c0098992ac7af83a7f7ca0df2224194a",
       "bundle_membership": [
         {
-          "bundle_id": "frankenstein-orchestration",
+          "bundle_id": "infrastructure",
           "role": "core"
         },
         {
-          "bundle_id": "infrastructure",
+          "bundle_id": "ultra-dev",
           "role": "core"
         }
       ],
@@ -507,7 +507,7 @@
       "checksum_sha256": "4fe8ef91f8ef5199ee812b4ddd838c3ac5c38d231b95a4aaafb25d0cc93def2f",
       "bundle_membership": [
         {
-          "bundle_id": "frankenstein-orchestration",
+          "bundle_id": "ultra-dev",
           "role": "core"
         }
       ],
@@ -531,11 +531,11 @@
       "component_version": "1.0.0",
       "lifecycle": "stable",
       "target_tool": "claude-code",
-      "artifact_path": "claude-code/bundles/backend-development/bundle.yaml",
-      "source_path": "claude-code/bundles/backend-development/bundle.yaml",
+      "artifact_path": "bundles/backend-development/bundle.yaml",
+      "source_path": "bundles/backend-development/bundle.yaml",
       "install_path": "~/.claude/bundles/backend-development/bundle.yaml",
-      "install_command": "mkdir -p \"$HOME/.claude/bundles/backend-development\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/bundles/backend-development/bundle.yaml\" -o \"$HOME/.claude/bundles/backend-development/bundle.yaml\"",
-      "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/bundles/backend-development/bundle.yaml",
+      "install_command": "mkdir -p \"$HOME/.claude/bundles/backend-development\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/bundles/backend-development/bundle.yaml\" -o \"$HOME/.claude/bundles/backend-development/bundle.yaml\"",
+      "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/bundles/backend-development/bundle.yaml",
       "checksum_sha256": "3f6f16a04855f794cf1658d5c5b4bb69785cebed6ae42467211f41f4c8fb406c",
       "bundle_membership": [],
       "metadata": {
@@ -546,6 +546,7 @@
           "api",
           "engineering"
         ],
+        "aliases": [],
         "components": [
           {
             "type": "skill",
@@ -566,11 +567,11 @@
       "component_version": "1.0.0",
       "lifecycle": "stable",
       "target_tool": "claude-code",
-      "artifact_path": "claude-code/bundles/code-quality/bundle.yaml",
-      "source_path": "claude-code/bundles/code-quality/bundle.yaml",
+      "artifact_path": "bundles/code-quality/bundle.yaml",
+      "source_path": "bundles/code-quality/bundle.yaml",
       "install_path": "~/.claude/bundles/code-quality/bundle.yaml",
-      "install_command": "mkdir -p \"$HOME/.claude/bundles/code-quality\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/bundles/code-quality/bundle.yaml\" -o \"$HOME/.claude/bundles/code-quality/bundle.yaml\"",
-      "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/bundles/code-quality/bundle.yaml",
+      "install_command": "mkdir -p \"$HOME/.claude/bundles/code-quality\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/bundles/code-quality/bundle.yaml\" -o \"$HOME/.claude/bundles/code-quality/bundle.yaml\"",
+      "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/bundles/code-quality/bundle.yaml",
       "checksum_sha256": "53704dded57e64feb62d1c007e9df10da276e241e70629fccf6e07fb229e517d",
       "bundle_membership": [],
       "metadata": {
@@ -582,6 +583,7 @@
           "testing",
           "auditing"
         ],
+        "aliases": [],
         "components": [
           {
             "type": "skill",
@@ -617,26 +619,269 @@
       }
     },
     {
-      "component_id": "frankenstein-orchestration",
+      "component_id": "frontend-development",
       "component_kind": "bundle",
       "component_version": "1.0.0",
       "lifecycle": "stable",
       "target_tool": "claude-code",
-      "artifact_path": "claude-code/bundles/frankenstein-orchestration/bundle.yaml",
-      "source_path": "claude-code/bundles/frankenstein-orchestration/bundle.yaml",
-      "install_path": "~/.claude/bundles/frankenstein-orchestration/bundle.yaml",
-      "install_command": "mkdir -p \"$HOME/.claude/bundles/frankenstein-orchestration\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/bundles/frankenstein-orchestration/bundle.yaml\" -o \"$HOME/.claude/bundles/frankenstein-orchestration/bundle.yaml\"",
-      "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/bundles/frankenstein-orchestration/bundle.yaml",
-      "checksum_sha256": "1517d35e50341d314c11c40adf23a20d225d47231a3e147f2c6f403982947823",
+      "artifact_path": "bundles/frontend-development/bundle.yaml",
+      "source_path": "bundles/frontend-development/bundle.yaml",
+      "install_path": "~/.claude/bundles/frontend-development/bundle.yaml",
+      "install_command": "mkdir -p \"$HOME/.claude/bundles/frontend-development\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/bundles/frontend-development/bundle.yaml\" -o \"$HOME/.claude/bundles/frontend-development/bundle.yaml\"",
+      "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/bundles/frontend-development/bundle.yaml",
+      "checksum_sha256": "04136418b911892393e31b6a7a7cd4a5f4348e74528944ed07c3e4673e3cfa10",
       "bundle_membership": [],
       "metadata": {
-        "name": "Frankenstein Orchestration",
-        "description": "The full multi-agent orchestration suite — all 15 agents, 6 skills, 5 commands, and 6 hooks required to run the Frankenstein pipeline end-to-end.",
+        "name": "Frontend Development",
+        "description": "Provides frontend, design-authority, and design-lint skills alongside the frontend-engineer agent for UI implementation and design system compliance.",
+        "tags": [
+          "frontend",
+          "ui",
+          "design",
+          "engineering"
+        ],
+        "aliases": [],
+        "components": [
+          {
+            "type": "skill",
+            "id": "frontend",
+            "role": "core"
+          },
+          {
+            "type": "skill",
+            "id": "design-authority",
+            "role": "core"
+          },
+          {
+            "type": "skill",
+            "id": "design-lint",
+            "role": "core"
+          },
+          {
+            "type": "agent",
+            "id": "frontend-engineer",
+            "role": "core"
+          }
+        ]
+      }
+    },
+    {
+      "component_id": "git-workflow",
+      "component_kind": "bundle",
+      "component_version": "1.0.0",
+      "lifecycle": "stable",
+      "target_tool": "claude-code",
+      "artifact_path": "bundles/git-workflow/bundle.yaml",
+      "source_path": "bundles/git-workflow/bundle.yaml",
+      "install_path": "~/.claude/bundles/git-workflow/bundle.yaml",
+      "install_command": "mkdir -p \"$HOME/.claude/bundles/git-workflow\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/bundles/git-workflow/bundle.yaml\" -o \"$HOME/.claude/bundles/git-workflow/bundle.yaml\"",
+      "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/bundles/git-workflow/bundle.yaml",
+      "checksum_sha256": "3bdf8b764ac581dcc6d5bb77641161cfbb35a1608f7ce174d1c866edd664d6d0",
+      "bundle_membership": [],
+      "metadata": {
+        "name": "Git Workflow",
+        "description": "Combines git-ship and changelog skills with the git-verify command and branch/secrets hooks for a complete git-disciplined workflow.",
+        "tags": [
+          "git",
+          "workflow",
+          "changelog",
+          "security"
+        ],
+        "aliases": [],
+        "components": [
+          {
+            "type": "skill",
+            "id": "git-ship",
+            "role": "core"
+          },
+          {
+            "type": "skill",
+            "id": "changelog",
+            "role": "core"
+          },
+          {
+            "type": "command",
+            "id": "git-verify",
+            "role": "core"
+          },
+          {
+            "type": "hook",
+            "id": "branch-guard",
+            "role": "core"
+          },
+          {
+            "type": "hook",
+            "id": "pre-push-secrets",
+            "role": "core"
+          }
+        ]
+      }
+    },
+    {
+      "component_id": "infrastructure",
+      "component_kind": "bundle",
+      "component_version": "1.0.0",
+      "lifecycle": "stable",
+      "target_tool": "claude-code",
+      "artifact_path": "bundles/infrastructure/bundle.yaml",
+      "source_path": "bundles/infrastructure/bundle.yaml",
+      "install_path": "~/.claude/bundles/infrastructure/bundle.yaml",
+      "install_command": "mkdir -p \"$HOME/.claude/bundles/infrastructure\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/bundles/infrastructure/bundle.yaml\" -o \"$HOME/.claude/bundles/infrastructure/bundle.yaml\"",
+      "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/bundles/infrastructure/bundle.yaml",
+      "checksum_sha256": "ef88590afc86a3ecd67e46294bf414b1d7dfe59eacb49c30ae5071546f9907fc",
+      "bundle_membership": [],
+      "metadata": {
+        "name": "Infrastructure",
+        "description": "Bundles the infra and observability-patterns skills with the site-reliability-engineer agent for infrastructure automation and operational excellence.",
+        "tags": [
+          "infrastructure",
+          "observability",
+          "sre",
+          "operations"
+        ],
+        "aliases": [],
+        "components": [
+          {
+            "type": "skill",
+            "id": "infra",
+            "role": "core"
+          },
+          {
+            "type": "skill",
+            "id": "observability-patterns",
+            "role": "core"
+          },
+          {
+            "type": "agent",
+            "id": "site-reliability-engineer",
+            "role": "core"
+          }
+        ]
+      }
+    },
+    {
+      "component_id": "security-hardening",
+      "component_kind": "bundle",
+      "component_version": "1.0.0",
+      "lifecycle": "stable",
+      "target_tool": "claude-code",
+      "artifact_path": "bundles/security-hardening/bundle.yaml",
+      "source_path": "bundles/security-hardening/bundle.yaml",
+      "install_path": "~/.claude/bundles/security-hardening/bundle.yaml",
+      "install_command": "mkdir -p \"$HOME/.claude/bundles/security-hardening\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/bundles/security-hardening/bundle.yaml\" -o \"$HOME/.claude/bundles/security-hardening/bundle.yaml\"",
+      "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/bundles/security-hardening/bundle.yaml",
+      "checksum_sha256": "1f8fddc9a0cb91ccacacdea0e625f2da40c6f536a377735f59aa29dc7445cd32",
+      "bundle_membership": [],
+      "metadata": {
+        "name": "Security Hardening",
+        "description": "Provides the OWASP reference skill, security-engineer agent, and secrets/config protection hooks for end-to-end security hardening.",
+        "tags": [
+          "security",
+          "owasp",
+          "hardening",
+          "secrets"
+        ],
+        "aliases": [],
+        "components": [
+          {
+            "type": "skill",
+            "id": "owasp-reference",
+            "role": "core"
+          },
+          {
+            "type": "agent",
+            "id": "security-engineer",
+            "role": "core"
+          },
+          {
+            "type": "hook",
+            "id": "pre-push-secrets",
+            "role": "core"
+          },
+          {
+            "type": "hook",
+            "id": "protect-config",
+            "role": "core"
+          }
+        ]
+      }
+    },
+    {
+      "component_id": "self-improvement",
+      "component_kind": "bundle",
+      "component_version": "1.0.0",
+      "lifecycle": "stable",
+      "target_tool": "claude-code",
+      "artifact_path": "bundles/self-improvement/bundle.yaml",
+      "source_path": "bundles/self-improvement/bundle.yaml",
+      "install_path": "~/.claude/bundles/self-improvement/bundle.yaml",
+      "install_command": "mkdir -p \"$HOME/.claude/bundles/self-improvement\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/bundles/self-improvement/bundle.yaml\" -o \"$HOME/.claude/bundles/self-improvement/bundle.yaml\"",
+      "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/bundles/self-improvement/bundle.yaml",
+      "checksum_sha256": "54341134b97fcbdebf69e797a6e992ddda465492734f233cbe3871d756822fe0",
+      "bundle_membership": [],
+      "metadata": {
+        "name": "Self-Improvement",
+        "description": "Aggregates retro, improve, review-skill, and changelog skills with the autoresearch-analyst agent for continuous workflow reflection and improvement.",
+        "tags": [
+          "improvement",
+          "retro",
+          "review",
+          "changelog"
+        ],
+        "aliases": [],
+        "components": [
+          {
+            "type": "skill",
+            "id": "retro",
+            "role": "core"
+          },
+          {
+            "type": "skill",
+            "id": "improve",
+            "role": "core"
+          },
+          {
+            "type": "skill",
+            "id": "review-skill",
+            "role": "core"
+          },
+          {
+            "type": "skill",
+            "id": "changelog",
+            "role": "core"
+          },
+          {
+            "type": "agent",
+            "id": "autoresearch-analyst",
+            "role": "core"
+          }
+        ]
+      }
+    },
+    {
+      "component_id": "ultra-dev",
+      "component_kind": "bundle",
+      "component_version": "1.0.0",
+      "lifecycle": "stable",
+      "target_tool": "claude-code",
+      "artifact_path": "bundles/ultra-dev/bundle.yaml",
+      "source_path": "bundles/ultra-dev/bundle.yaml",
+      "install_path": "~/.claude/bundles/ultra-dev/bundle.yaml",
+      "install_command": "mkdir -p \"$HOME/.claude/bundles/ultra-dev\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/bundles/ultra-dev/bundle.yaml\" -o \"$HOME/.claude/bundles/ultra-dev/bundle.yaml\"",
+      "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/bundles/ultra-dev/bundle.yaml",
+      "checksum_sha256": "eab084ec0fa3b1415f5423068148aac892b34dacb2b85926d4018a6ce2d2aefa",
+      "bundle_membership": [],
+      "metadata": {
+        "name": "Ultra Dev",
+        "description": "The full multi-agent orchestration suite — all 15 agents, 6 skills, 5 commands, and 6 hooks required to run the Ultra Dev pipeline end-to-end.",
         "tags": [
           "orchestration",
           "multi-agent",
           "pipeline",
           "frankenstein"
+        ],
+        "aliases": [
+          "frankenstein-orchestration"
         ],
         "components": [
           {
@@ -803,241 +1048,6 @@
       }
     },
     {
-      "component_id": "frontend-development",
-      "component_kind": "bundle",
-      "component_version": "1.0.0",
-      "lifecycle": "stable",
-      "target_tool": "claude-code",
-      "artifact_path": "claude-code/bundles/frontend-development/bundle.yaml",
-      "source_path": "claude-code/bundles/frontend-development/bundle.yaml",
-      "install_path": "~/.claude/bundles/frontend-development/bundle.yaml",
-      "install_command": "mkdir -p \"$HOME/.claude/bundles/frontend-development\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/bundles/frontend-development/bundle.yaml\" -o \"$HOME/.claude/bundles/frontend-development/bundle.yaml\"",
-      "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/bundles/frontend-development/bundle.yaml",
-      "checksum_sha256": "04136418b911892393e31b6a7a7cd4a5f4348e74528944ed07c3e4673e3cfa10",
-      "bundle_membership": [],
-      "metadata": {
-        "name": "Frontend Development",
-        "description": "Provides frontend, design-authority, and design-lint skills alongside the frontend-engineer agent for UI implementation and design system compliance.",
-        "tags": [
-          "frontend",
-          "ui",
-          "design",
-          "engineering"
-        ],
-        "components": [
-          {
-            "type": "skill",
-            "id": "frontend",
-            "role": "core"
-          },
-          {
-            "type": "skill",
-            "id": "design-authority",
-            "role": "core"
-          },
-          {
-            "type": "skill",
-            "id": "design-lint",
-            "role": "core"
-          },
-          {
-            "type": "agent",
-            "id": "frontend-engineer",
-            "role": "core"
-          }
-        ]
-      }
-    },
-    {
-      "component_id": "git-workflow",
-      "component_kind": "bundle",
-      "component_version": "1.0.0",
-      "lifecycle": "stable",
-      "target_tool": "claude-code",
-      "artifact_path": "claude-code/bundles/git-workflow/bundle.yaml",
-      "source_path": "claude-code/bundles/git-workflow/bundle.yaml",
-      "install_path": "~/.claude/bundles/git-workflow/bundle.yaml",
-      "install_command": "mkdir -p \"$HOME/.claude/bundles/git-workflow\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/bundles/git-workflow/bundle.yaml\" -o \"$HOME/.claude/bundles/git-workflow/bundle.yaml\"",
-      "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/bundles/git-workflow/bundle.yaml",
-      "checksum_sha256": "3bdf8b764ac581dcc6d5bb77641161cfbb35a1608f7ce174d1c866edd664d6d0",
-      "bundle_membership": [],
-      "metadata": {
-        "name": "Git Workflow",
-        "description": "Combines git-ship and changelog skills with the git-verify command and branch/secrets hooks for a complete git-disciplined workflow.",
-        "tags": [
-          "git",
-          "workflow",
-          "changelog",
-          "security"
-        ],
-        "components": [
-          {
-            "type": "skill",
-            "id": "git-ship",
-            "role": "core"
-          },
-          {
-            "type": "skill",
-            "id": "changelog",
-            "role": "core"
-          },
-          {
-            "type": "command",
-            "id": "git-verify",
-            "role": "core"
-          },
-          {
-            "type": "hook",
-            "id": "branch-guard",
-            "role": "core"
-          },
-          {
-            "type": "hook",
-            "id": "pre-push-secrets",
-            "role": "core"
-          }
-        ]
-      }
-    },
-    {
-      "component_id": "infrastructure",
-      "component_kind": "bundle",
-      "component_version": "1.0.0",
-      "lifecycle": "stable",
-      "target_tool": "claude-code",
-      "artifact_path": "claude-code/bundles/infrastructure/bundle.yaml",
-      "source_path": "claude-code/bundles/infrastructure/bundle.yaml",
-      "install_path": "~/.claude/bundles/infrastructure/bundle.yaml",
-      "install_command": "mkdir -p \"$HOME/.claude/bundles/infrastructure\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/bundles/infrastructure/bundle.yaml\" -o \"$HOME/.claude/bundles/infrastructure/bundle.yaml\"",
-      "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/bundles/infrastructure/bundle.yaml",
-      "checksum_sha256": "ef88590afc86a3ecd67e46294bf414b1d7dfe59eacb49c30ae5071546f9907fc",
-      "bundle_membership": [],
-      "metadata": {
-        "name": "Infrastructure",
-        "description": "Bundles the infra and observability-patterns skills with the site-reliability-engineer agent for infrastructure automation and operational excellence.",
-        "tags": [
-          "infrastructure",
-          "observability",
-          "sre",
-          "operations"
-        ],
-        "components": [
-          {
-            "type": "skill",
-            "id": "infra",
-            "role": "core"
-          },
-          {
-            "type": "skill",
-            "id": "observability-patterns",
-            "role": "core"
-          },
-          {
-            "type": "agent",
-            "id": "site-reliability-engineer",
-            "role": "core"
-          }
-        ]
-      }
-    },
-    {
-      "component_id": "security-hardening",
-      "component_kind": "bundle",
-      "component_version": "1.0.0",
-      "lifecycle": "stable",
-      "target_tool": "claude-code",
-      "artifact_path": "claude-code/bundles/security-hardening/bundle.yaml",
-      "source_path": "claude-code/bundles/security-hardening/bundle.yaml",
-      "install_path": "~/.claude/bundles/security-hardening/bundle.yaml",
-      "install_command": "mkdir -p \"$HOME/.claude/bundles/security-hardening\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/bundles/security-hardening/bundle.yaml\" -o \"$HOME/.claude/bundles/security-hardening/bundle.yaml\"",
-      "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/bundles/security-hardening/bundle.yaml",
-      "checksum_sha256": "1f8fddc9a0cb91ccacacdea0e625f2da40c6f536a377735f59aa29dc7445cd32",
-      "bundle_membership": [],
-      "metadata": {
-        "name": "Security Hardening",
-        "description": "Provides the OWASP reference skill, security-engineer agent, and secrets/config protection hooks for end-to-end security hardening.",
-        "tags": [
-          "security",
-          "owasp",
-          "hardening",
-          "secrets"
-        ],
-        "components": [
-          {
-            "type": "skill",
-            "id": "owasp-reference",
-            "role": "core"
-          },
-          {
-            "type": "agent",
-            "id": "security-engineer",
-            "role": "core"
-          },
-          {
-            "type": "hook",
-            "id": "pre-push-secrets",
-            "role": "core"
-          },
-          {
-            "type": "hook",
-            "id": "protect-config",
-            "role": "core"
-          }
-        ]
-      }
-    },
-    {
-      "component_id": "self-improvement",
-      "component_kind": "bundle",
-      "component_version": "1.0.0",
-      "lifecycle": "stable",
-      "target_tool": "claude-code",
-      "artifact_path": "claude-code/bundles/self-improvement/bundle.yaml",
-      "source_path": "claude-code/bundles/self-improvement/bundle.yaml",
-      "install_path": "~/.claude/bundles/self-improvement/bundle.yaml",
-      "install_command": "mkdir -p \"$HOME/.claude/bundles/self-improvement\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/bundles/self-improvement/bundle.yaml\" -o \"$HOME/.claude/bundles/self-improvement/bundle.yaml\"",
-      "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/bundles/self-improvement/bundle.yaml",
-      "checksum_sha256": "54341134b97fcbdebf69e797a6e992ddda465492734f233cbe3871d756822fe0",
-      "bundle_membership": [],
-      "metadata": {
-        "name": "Self-Improvement",
-        "description": "Aggregates retro, improve, review-skill, and changelog skills with the autoresearch-analyst agent for continuous workflow reflection and improvement.",
-        "tags": [
-          "improvement",
-          "retro",
-          "review",
-          "changelog"
-        ],
-        "components": [
-          {
-            "type": "skill",
-            "id": "retro",
-            "role": "core"
-          },
-          {
-            "type": "skill",
-            "id": "improve",
-            "role": "core"
-          },
-          {
-            "type": "skill",
-            "id": "review-skill",
-            "role": "core"
-          },
-          {
-            "type": "skill",
-            "id": "changelog",
-            "role": "core"
-          },
-          {
-            "type": "agent",
-            "id": "autoresearch-analyst",
-            "role": "core"
-          }
-        ]
-      }
-    },
-    {
       "component_id": "audit",
       "component_kind": "command",
       "component_version": "4.2.0",
@@ -1055,7 +1065,7 @@
           "role": "core"
         },
         {
-          "bundle_id": "frankenstein-orchestration",
+          "bundle_id": "ultra-dev",
           "role": "core"
         }
       ],
@@ -1078,7 +1088,7 @@
       "checksum_sha256": "1dec6045e63449e3993113d0d81c7d2e9a8dba8dcc6744237a0ed272142441d5",
       "bundle_membership": [
         {
-          "bundle_id": "frankenstein-orchestration",
+          "bundle_id": "ultra-dev",
           "role": "core"
         }
       ],
@@ -1101,11 +1111,11 @@
       "checksum_sha256": "45a88a9e75957dbe89b8d2dd9424b279527d5d7a5dae05f00bfbca40941f0f3a",
       "bundle_membership": [
         {
-          "bundle_id": "frankenstein-orchestration",
+          "bundle_id": "git-workflow",
           "role": "core"
         },
         {
-          "bundle_id": "git-workflow",
+          "bundle_id": "ultra-dev",
           "role": "core"
         }
       ],
@@ -1132,7 +1142,7 @@
           "role": "core"
         },
         {
-          "bundle_id": "frankenstein-orchestration",
+          "bundle_id": "ultra-dev",
           "role": "core"
         }
       ],
@@ -1177,7 +1187,7 @@
           "role": "core"
         },
         {
-          "bundle_id": "frankenstein-orchestration",
+          "bundle_id": "ultra-dev",
           "role": "core"
         }
       ],
@@ -1189,7 +1199,7 @@
     {
       "component_id": "branch-guard",
       "component_kind": "hook",
-      "component_version": "1.0.0",
+      "component_version": "1.0.1",
       "lifecycle": "stable",
       "target_tool": "claude-code",
       "artifact_path": "hooks/branch-guard/branch-guard.sh",
@@ -1197,14 +1207,14 @@
       "install_path": "~/.claude/hooks/branch-guard/branch-guard.sh",
       "install_command": "mkdir -p \"$HOME/.claude/hooks/branch-guard\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/branch-guard/branch-guard.sh\" -o \"$HOME/.claude/hooks/branch-guard/branch-guard.sh\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/branch-guard/branch-guard.sh",
-      "checksum_sha256": "0a071e2eff13627b2712642564774378c9573402285f5f78dfdcef8f0b8a3425",
+      "checksum_sha256": "b8e3c1dc0846e1e26544c1cbd9999bf6ed2946631c8d7168c0a097219607037e",
       "bundle_membership": [
         {
-          "bundle_id": "frankenstein-orchestration",
+          "bundle_id": "git-workflow",
           "role": "core"
         },
         {
-          "bundle_id": "git-workflow",
+          "bundle_id": "ultra-dev",
           "role": "core"
         }
       ],
@@ -1213,7 +1223,7 @@
     {
       "component_id": "changelog-check",
       "component_kind": "hook",
-      "component_version": "1.1.0",
+      "component_version": "1.1.1",
       "lifecycle": "stable",
       "target_tool": "claude-code",
       "artifact_path": "hooks/changelog-check/changelog-check.sh",
@@ -1221,14 +1231,14 @@
       "install_path": "~/.claude/hooks/changelog-check/changelog-check.sh",
       "install_command": "mkdir -p \"$HOME/.claude/hooks/changelog-check\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/changelog-check/changelog-check.sh\" -o \"$HOME/.claude/hooks/changelog-check/changelog-check.sh\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/changelog-check/changelog-check.sh",
-      "checksum_sha256": "7f0c70ca5271508d14e990c5563a84a3d968d376f572c93391ea7080de4601ea",
+      "checksum_sha256": "9231c99cfed3c73e6eb63d204f0e021c6b81955510f0496d7e8d21f444238389",
       "bundle_membership": [],
       "metadata": {}
     },
     {
       "component_id": "extract-handoff",
       "component_kind": "hook",
-      "component_version": "1.0.0",
+      "component_version": "1.0.1",
       "lifecycle": "stable",
       "target_tool": "claude-code",
       "artifact_path": "hooks/extract-handoff/extract-handoff.sh",
@@ -1236,10 +1246,10 @@
       "install_path": "~/.claude/hooks/extract-handoff/extract-handoff.sh",
       "install_command": "mkdir -p \"$HOME/.claude/hooks/extract-handoff\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/extract-handoff/extract-handoff.sh\" -o \"$HOME/.claude/hooks/extract-handoff/extract-handoff.sh\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/extract-handoff/extract-handoff.sh",
-      "checksum_sha256": "0e7ddd1e4c913b67162077576c2932e3ddcfc573e187c24b88682fabcd9a0be2",
+      "checksum_sha256": "b245cb0ac30d7d2659a5f0ddcb7eefbfd6a2d7fcea85bff1afcb45cc55c89b9d",
       "bundle_membership": [
         {
-          "bundle_id": "frankenstein-orchestration",
+          "bundle_id": "ultra-dev",
           "role": "core"
         }
       ],
@@ -1248,7 +1258,7 @@
     {
       "component_id": "inject-context",
       "component_kind": "hook",
-      "component_version": "1.0.1",
+      "component_version": "1.0.2",
       "lifecycle": "stable",
       "target_tool": "claude-code",
       "artifact_path": "hooks/inject-context/inject-context.sh",
@@ -1256,10 +1266,10 @@
       "install_path": "~/.claude/hooks/inject-context/inject-context.sh",
       "install_command": "mkdir -p \"$HOME/.claude/hooks/inject-context\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/inject-context/inject-context.sh\" -o \"$HOME/.claude/hooks/inject-context/inject-context.sh\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/inject-context/inject-context.sh",
-      "checksum_sha256": "33906f47a33a9c7cedb91c5bb1de0ee263a7f86a8610a95db0ecebfa04e10eda",
+      "checksum_sha256": "ca1042b2859ec71345c473280c12b1257bc149600d385d18b948e295beb3e60c",
       "bundle_membership": [
         {
-          "bundle_id": "frankenstein-orchestration",
+          "bundle_id": "ultra-dev",
           "role": "core"
         }
       ],
@@ -1268,7 +1278,7 @@
     {
       "component_id": "integrity-warn",
       "component_kind": "hook",
-      "component_version": "1.0.0",
+      "component_version": "1.0.1",
       "lifecycle": "stable",
       "target_tool": "claude-code",
       "artifact_path": "hooks/integrity-warn/integrity-warn.sh",
@@ -1276,10 +1286,10 @@
       "install_path": "~/.claude/hooks/integrity-warn/integrity-warn.sh",
       "install_command": "mkdir -p \"$HOME/.claude/hooks/integrity-warn\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/integrity-warn/integrity-warn.sh\" -o \"$HOME/.claude/hooks/integrity-warn/integrity-warn.sh\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/integrity-warn/integrity-warn.sh",
-      "checksum_sha256": "f79f48be0391c25f822c83a4b14aab90a3d89327ba31c0c3ba5b449c62656223",
+      "checksum_sha256": "d9418f10321f743fac57f3a67fe35e39cfdaf9ab3134d752b73a7a099057be47",
       "bundle_membership": [
         {
-          "bundle_id": "frankenstein-orchestration",
+          "bundle_id": "ultra-dev",
           "role": "core"
         }
       ],
@@ -1288,7 +1298,7 @@
     {
       "component_id": "pre-push-secrets",
       "component_kind": "hook",
-      "component_version": "1.0.0",
+      "component_version": "1.0.1",
       "lifecycle": "stable",
       "target_tool": "claude-code",
       "artifact_path": "hooks/pre-push-secrets/pre-push-secrets.sh",
@@ -1296,18 +1306,18 @@
       "install_path": "~/.claude/hooks/pre-push-secrets/pre-push-secrets.sh",
       "install_command": "mkdir -p \"$HOME/.claude/hooks/pre-push-secrets\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/pre-push-secrets/pre-push-secrets.sh\" -o \"$HOME/.claude/hooks/pre-push-secrets/pre-push-secrets.sh\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/pre-push-secrets/pre-push-secrets.sh",
-      "checksum_sha256": "7813abc8da80d43016284448dcf2217efd5baced3f790231489d24bd5581403e",
+      "checksum_sha256": "2f3351d3d33fb24cbdb990fd3b0559d5bc681c2866f31eca10c15c409796c358",
       "bundle_membership": [
-        {
-          "bundle_id": "frankenstein-orchestration",
-          "role": "core"
-        },
         {
           "bundle_id": "git-workflow",
           "role": "core"
         },
         {
           "bundle_id": "security-hardening",
+          "role": "core"
+        },
+        {
+          "bundle_id": "ultra-dev",
           "role": "core"
         }
       ],
@@ -1316,7 +1326,7 @@
     {
       "component_id": "protect-config",
       "component_kind": "hook",
-      "component_version": "1.0.0",
+      "component_version": "1.0.1",
       "lifecycle": "stable",
       "target_tool": "claude-code",
       "artifact_path": "hooks/protect-config/protect-config.sh",
@@ -1324,14 +1334,14 @@
       "install_path": "~/.claude/hooks/protect-config/protect-config.sh",
       "install_command": "mkdir -p \"$HOME/.claude/hooks/protect-config\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/protect-config/protect-config.sh\" -o \"$HOME/.claude/hooks/protect-config/protect-config.sh\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/protect-config/protect-config.sh",
-      "checksum_sha256": "f6d82adffccc9dc9095e370c4d32b2824347a1ab1ba126966fb46f9e719fa848",
+      "checksum_sha256": "e68748e0632d3346e94c95030be5d07351c362bb39ed4a06a464ac0fc0d6161d",
       "bundle_membership": [
         {
-          "bundle_id": "frankenstein-orchestration",
+          "bundle_id": "security-hardening",
           "role": "core"
         },
         {
-          "bundle_id": "security-hardening",
+          "bundle_id": "ultra-dev",
           "role": "core"
         }
       ],
@@ -1473,15 +1483,15 @@
       "checksum_sha256": "4c03d53c6b16f6f40d9814aa9064b2f8a3748a37fb5c8c7899d34f60d6ccbd38",
       "bundle_membership": [
         {
-          "bundle_id": "frankenstein-orchestration",
-          "role": "core"
-        },
-        {
           "bundle_id": "git-workflow",
           "role": "core"
         },
         {
           "bundle_id": "self-improvement",
+          "role": "core"
+        },
+        {
+          "bundle_id": "ultra-dev",
           "role": "core"
         }
       ],
@@ -1576,11 +1586,11 @@
       "checksum_sha256": "742d22e83445253d5404fc00d219acead7fbe9b9b68515cfd81fda95dd00d0d0",
       "bundle_membership": [
         {
-          "bundle_id": "frankenstein-orchestration",
+          "bundle_id": "git-workflow",
           "role": "core"
         },
         {
-          "bundle_id": "git-workflow",
+          "bundle_id": "ultra-dev",
           "role": "core"
         }
       ],
@@ -1602,11 +1612,11 @@
       "checksum_sha256": "3c2601947b2fad28551db399e2482963219db7f04375b7dba0cbfe4244145fb1",
       "bundle_membership": [
         {
-          "bundle_id": "frankenstein-orchestration",
+          "bundle_id": "self-improvement",
           "role": "core"
         },
         {
-          "bundle_id": "self-improvement",
+          "bundle_id": "ultra-dev",
           "role": "core"
         }
       ],
@@ -1700,7 +1710,7 @@
           "role": "core"
         },
         {
-          "bundle_id": "frankenstein-orchestration",
+          "bundle_id": "ultra-dev",
           "role": "core"
         }
       ],
@@ -1722,11 +1732,11 @@
       "checksum_sha256": "2641bbda90c685af628f1dd61d3c61d1b6751aa6b75728c735f3335cbb27dc81",
       "bundle_membership": [
         {
-          "bundle_id": "frankenstein-orchestration",
+          "bundle_id": "self-improvement",
           "role": "core"
         },
         {
-          "bundle_id": "self-improvement",
+          "bundle_id": "ultra-dev",
           "role": "core"
         }
       ],
@@ -1752,11 +1762,11 @@
           "role": "core"
         },
         {
-          "bundle_id": "frankenstein-orchestration",
+          "bundle_id": "self-improvement",
           "role": "core"
         },
         {
-          "bundle_id": "self-improvement",
+          "bundle_id": "ultra-dev",
           "role": "core"
         }
       ],
@@ -2303,7 +2313,7 @@
     {
       "component_id": "branch-guard",
       "component_kind": "hook",
-      "component_version": "1.0.0",
+      "component_version": "1.0.1",
       "lifecycle": "stable",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/hooks/branch-guard/branch-guard.json",
@@ -2322,7 +2332,7 @@
     {
       "component_id": "changelog-check",
       "component_kind": "hook",
-      "component_version": "1.1.0",
+      "component_version": "1.1.1",
       "lifecycle": "stable",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/hooks/changelog-check/changelog-check.json",
@@ -2341,7 +2351,7 @@
     {
       "component_id": "extract-handoff",
       "component_kind": "hook",
-      "component_version": "1.0.0",
+      "component_version": "1.0.1",
       "lifecycle": "stable",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/hooks/extract-handoff/extract-handoff.json",
@@ -2360,7 +2370,7 @@
     {
       "component_id": "inject-context",
       "component_kind": "hook",
-      "component_version": "1.0.1",
+      "component_version": "1.0.2",
       "lifecycle": "stable",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/hooks/inject-context/inject-context.json",
@@ -2379,7 +2389,7 @@
     {
       "component_id": "integrity-warn",
       "component_kind": "hook",
-      "component_version": "1.0.0",
+      "component_version": "1.0.1",
       "lifecycle": "stable",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/hooks/integrity-warn/integrity-warn.json",
@@ -2398,7 +2408,7 @@
     {
       "component_id": "pre-push-secrets",
       "component_kind": "hook",
-      "component_version": "1.0.0",
+      "component_version": "1.0.1",
       "lifecycle": "stable",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/hooks/pre-push-secrets/pre-push-secrets.json",
@@ -2417,7 +2427,7 @@
     {
       "component_id": "protect-config",
       "component_kind": "hook",
-      "component_version": "1.0.0",
+      "component_version": "1.0.1",
       "lifecycle": "stable",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/hooks/protect-config/protect-config.json",
@@ -3190,8 +3200,8 @@
     {
       "component_id": "branch-guard",
       "component_kind": "hook",
-      "component_version": "1.0.0",
-      "lifecycle": "experimental",
+      "component_version": "1.0.1",
+      "lifecycle": "stable",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/hooks/branch-guard/branch-guard.sh",
       "source_path": "openai-codex/hooks/branch-guard/branch-guard.sh",
@@ -3211,8 +3221,8 @@
     {
       "component_id": "changelog-check",
       "component_kind": "hook",
-      "component_version": "1.1.0",
-      "lifecycle": "experimental",
+      "component_version": "1.1.1",
+      "lifecycle": "stable",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/hooks/changelog-check/changelog-check.sh",
       "source_path": "openai-codex/hooks/changelog-check/changelog-check.sh",
@@ -3232,8 +3242,8 @@
     {
       "component_id": "extract-handoff",
       "component_kind": "hook",
-      "component_version": "1.0.0",
-      "lifecycle": "experimental",
+      "component_version": "1.0.1",
+      "lifecycle": "stable",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/hooks/extract-handoff/extract-handoff.sh",
       "source_path": "openai-codex/hooks/extract-handoff/extract-handoff.sh",
@@ -3253,8 +3263,8 @@
     {
       "component_id": "inject-context",
       "component_kind": "hook",
-      "component_version": "1.0.1",
-      "lifecycle": "experimental",
+      "component_version": "1.0.2",
+      "lifecycle": "stable",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/hooks/inject-context/inject-context.sh",
       "source_path": "openai-codex/hooks/inject-context/inject-context.sh",
@@ -3274,8 +3284,8 @@
     {
       "component_id": "integrity-warn",
       "component_kind": "hook",
-      "component_version": "1.0.0",
-      "lifecycle": "experimental",
+      "component_version": "1.0.1",
+      "lifecycle": "stable",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/hooks/integrity-warn/integrity-warn.sh",
       "source_path": "openai-codex/hooks/integrity-warn/integrity-warn.sh",
@@ -3296,8 +3306,8 @@
     {
       "component_id": "pre-push-secrets",
       "component_kind": "hook",
-      "component_version": "1.0.0",
-      "lifecycle": "experimental",
+      "component_version": "1.0.1",
+      "lifecycle": "stable",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/hooks/pre-push-secrets/pre-push-secrets.sh",
       "source_path": "openai-codex/hooks/pre-push-secrets/pre-push-secrets.sh",
@@ -3317,8 +3327,8 @@
     {
       "component_id": "protect-config",
       "component_kind": "hook",
-      "component_version": "1.0.0",
-      "lifecycle": "experimental",
+      "component_version": "1.0.1",
+      "lifecycle": "stable",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/hooks/protect-config/protect-config.sh",
       "source_path": "openai-codex/hooks/protect-config/protect-config.sh",
