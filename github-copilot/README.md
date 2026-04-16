@@ -40,14 +40,16 @@ For hooks, prefer `github-copilot/scripts/install.sh`. Copilot expects a flat
 
 ## Shared instructions
 
-`AGENTS.md` is the primary shared instruction surface across the toolkit and should be
-treated as the shared instruction source of truth.
+`AGENTS.md` is the primary shared instruction surface across the toolkit. Root
+`CLAUDE.md` remains only the one-line Claude compatibility shim `@AGENTS.md` and should
+not be treated as Copilot's canonical instruction file.
 
 ## Rule adapters
 
 `github-copilot/agents/` and `github-copilot/prompts/` are generated adapters for the
-canonical root `agents/` and `workflows/`. `github-copilot/instructions/` contains the VS
-Code Copilot-native adapters for the canonical root rules in `rules/`.
+canonical root `agents/` and `workflows/`. `github-copilot/instructions/` is also
+generated from the canonical root rules in `rules/` via
+`node scripts/sync-canonical-adapters.js`.
 
 ## Hooks
 

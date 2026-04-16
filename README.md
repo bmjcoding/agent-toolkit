@@ -1,11 +1,12 @@
 # agent-toolkit — Multi-tool agent scaffolding
 
-A configuration library for AI coding assistants. It provides shared skills, shared rules,
-and tool-specific agents, commands, hooks, prompts, and install assets, plus bundle
-manifests where the target tool supports them, for **Claude Code**, **GitHub Copilot for
-VS Code**, and **OpenAI Codex**.
+A configuration library for AI coding assistants. It provides shared skills, shared
+rules, shared hooks, and tool-specific agents, commands, prompts, generated rule
+adapters, and install assets, plus bundle manifests where the target tool supports them,
+for **Claude Code**, **GitHub Copilot for VS Code**, and **OpenAI Codex**.
 
-`AGENTS.md` is the primary shared instruction source across tools, including Claude Code.
+`AGENTS.md` is the primary shared instruction source across tools. Root `CLAUDE.md` is a
+one-line Claude compatibility shim whose content is exactly `@AGENTS.md`.
 
 ## Repository layout
 
@@ -13,15 +14,16 @@ VS Code**, and **OpenAI Codex**.
 agent-toolkit/
   docs/
     adr/                  # Repo-wide architecture decisions
-    todo/                 # Working notes and follow-up docs
   agents/                 # Canonical shared agent instruction bodies
+  hooks/                  # Canonical shared hook logic
   skills/                 # Canonical shared skills
   rules/                  # Canonical shared rules
   workflows/              # Canonical shared workflow definitions
-  claude-code/            # Claude-native agents, commands, hooks, bundles, docs, scripts
+  claude-code/            # Claude-native agents, commands, hook docs, bundles, generated rule adapters, scripts
   github-copilot/         # VS Code Copilot-native agents, prompts, instructions, hooks, scripts
   openai-codex/           # Codex-native agents, hooks, config templates, rule build assets
   AGENTS.md               # Primary shared instructions
+  CLAUDE.md               # One-line Claude compatibility shim: @AGENTS.md
 ```
 
 ## Ownership model
@@ -30,11 +32,17 @@ agent-toolkit/
 - Root `rules/` is the single source of truth for shared rule content.
 - Root `agents/` is the single source of truth for shared agent instruction bodies.
 - Root `workflows/` is the single source of truth for shared workflow bodies.
+- Root `hooks/` is the canonical shared owner of hook logic.
 - `AGENTS.md` is the canonical shared instruction file.
+- `CLAUDE.md` is a one-line Claude compatibility shim, not the canonical shared
+  instruction source.
 - Tool directories contain only tool-native assets or adapters:
-  - `claude-code/`: Claude frontmatter wrappers, slash-command adapters, hooks, bundles, docs, install scripts.
-  - `github-copilot/`: VS Code Copilot agent adapters, prompt adapters, instruction adapters, hooks, install scripts.
+  - `claude-code/`: Claude frontmatter wrappers, slash-command adapters, hook docs, bundles, generated rule adapters, install scripts.
+  - `github-copilot/`: VS Code Copilot agent adapters, prompt adapters, generated instruction adapters, hook manifests/adapters, install scripts.
   - `openai-codex/`: Codex TOML agent adapters, hooks, config templates, rule composition assets.
+- Canonical root `rules/` content is adapted into:
+  - `claude-code/rules/`
+  - `github-copilot/instructions/`
 - Shared skills and shared rules are versioned once only at the root:
   - `skill/<slug>-vX.Y.Z`
   - `rule/<slug>-vX.Y.Z`
@@ -62,16 +70,15 @@ node scripts/smoke-generated-assets.js
 
 ### Claude Code
 
-Claude Code loads tool-native surfaces from `~/.claude/`, while shared content comes from
-the repo-root canonical directories.
+Claude Code loads tool-native surfaces from `~/.claude/`. Shared skills stay canonical at
+repo root, while rules are exposed through generated adapters under `claude-code/rules/`.
 
 ```bash
 TOOLKIT=$(pwd)
 ln -sfn "$TOOLKIT/claude-code/agents"   ~/.claude/agents
 ln -sfn "$TOOLKIT/claude-code/commands" ~/.claude/commands
-ln -sfn "$TOOLKIT/claude-code/docs"     ~/.claude/docs
-ln -sfn "$TOOLKIT/claude-code/hooks"    ~/.claude/hooks
-ln -sfn "$TOOLKIT/rules"                ~/.claude/rules
+ln -sfn "$TOOLKIT/hooks"                ~/.claude/hooks
+ln -sfn "$TOOLKIT/claude-code/rules"    ~/.claude/rules
 ln -sfn "$TOOLKIT/skills"               ~/.claude/skills
 ```
 
@@ -91,10 +98,13 @@ at the repo root and is adapted into the Copilot-native files under `github-copi
 ```sh
 TOOLKIT=$(pwd)
 ln -sfn "$TOOLKIT/github-copilot/agents"       .github/agents
-ln -sfn "$TOOLKIT/github-copilot/hooks"        .github/hooks
 ln -sfn "$TOOLKIT/github-copilot/instructions" .github/instructions
 ln -sfn "$TOOLKIT/github-copilot/prompts"      .github/prompts
 ```
+
+For hooks, prefer `./github-copilot/scripts/install.sh --target /path/to/project`. The
+installer flattens the checked-in hook manifests into the `.github/hooks/*.json` shape
+that Copilot expects at runtime.
 
 Or use:
 
@@ -139,7 +149,7 @@ tool-specific adapters only when a runtime requires a different format or discov
 surface, then regenerate them with `node scripts/sync-canonical-adapters.js` when
 applicable.
 
-When a canonical agent or workflow changes, CI also re-runs adapter sync and catalog
+When canonical shared content changes, CI also re-runs adapter sync and catalog
 generation. For example, editing `agents/frankenstein/AGENT.md` regenerates:
 
 - `claude-code/agents/`
@@ -153,8 +163,17 @@ Editing a canonical workflow under `workflows/<slug>/WORKFLOW.md` regenerates:
 - `github-copilot/prompts/`
 - `index.json`
 
-Pull requests fail if those generated surfaces are stale. Pushes to branches auto-commit
-the regenerated outputs back to the branch when needed.
+Editing a canonical rule under `rules/<slug>/<slug>.md` regenerates:
+
+- `claude-code/rules/`
+- `github-copilot/instructions/`
+- `index.json`
+
+Editing shared skills, indexed hook assets, or Claude bundle manifests also refreshes
+`index.json`.
+
+Pull requests fail if generated adapters or `index.json` are stale. Pushes to branches
+auto-commit the regenerated outputs back to the branch when needed.
 
 See [AGENTS.md](AGENTS.md), [CONTRIBUTING.md](CONTRIBUTING.md), and [docs/adr/](docs/adr/)
 for the detailed repo conventions.

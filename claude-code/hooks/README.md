@@ -20,12 +20,12 @@ Scans for secrets before commits and pushes. Uses [gitleaks](https://github.com/
 ### `extract-handoff.sh`
 **Event:** `SubagentStop`
 
-Extracts structured handoff JSON from a subagent's final message (fenced in ` ```handoff ` blocks) and writes it to `.orchestrator/handoffs/<agent_id>.json`. Also logs agent stop events with token/turn/duration metrics to `.orchestrator/sessions/<SESSION_ID>/logs/agents.log` (where `SESSION_ID` is resolved from `.orchestrator/session.id` via `$ORCH_BASE`). Exits silently when not in an orchestrator context.
+Extracts structured handoff JSON from a subagent's final message (fenced in ` ```handoff ` blocks) and writes it to `.orchestrator/sessions/<SESSION_ID>/handoffs/<agent_id>.json` when a valid session id is present, otherwise to the flat fallback `.orchestrator/handoffs/<agent_id>.json`. Also logs agent stop events with token/turn/duration metrics to `.orchestrator/sessions/<SESSION_ID>/logs/agents.log` when session-scoped mode is active. Exits silently when not in an orchestrator context.
 
 ### `inject-context.sh`
 **Event:** `SubagentStart`
 
-Injects orchestrator constraints into subagent context at launch: file ownership rules, protected file list, single-writer discipline, and handoff protocol. Reads the plan from `.orchestrator/plan.json` to scope each agent's owned files. Exits silently when not in an orchestrator context.
+Injects orchestrator constraints into subagent context at launch: file ownership rules, protected file list, single-writer discipline, and handoff protocol. Reads the session-scoped plan from `.orchestrator/sessions/<SESSION_ID>/plan.json` when available, otherwise falls back to `.orchestrator/plan.json`. Exits silently when not in an orchestrator context.
 
 ## Template (customize per environment)
 

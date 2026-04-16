@@ -355,6 +355,45 @@ function renderCopilotPromptMarkdown({ name, description, body, argumentHint }) 
   return lines.join('\n');
 }
 
+function renderCopilotInstructionMarkdown({ description, applyTo, body }) {
+  const lines = [
+    '---',
+    `description: ${JSON.stringify(description)}`,
+    `applyTo: ${JSON.stringify(applyTo)}`,
+    '---',
+    '',
+    body.trim(),
+    '',
+  ];
+
+  return lines.join('\n');
+}
+
+function deriveRuleDescription(body) {
+  const firstLine = body
+    .split('\n')
+    .map(line => line.trim())
+    .find(Boolean);
+
+  if (!firstLine) {
+    return 'Shared rule adapter generated from the canonical root rule.';
+  }
+
+  const normalized = firstLine
+    .replace(/^[-*]\s+/, '')
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    .replace(/`([^`]+)`/g, '$1')
+    .replace(/\*\*([^*]+)\*\*/g, '$1')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  if (normalized.length <= 140) {
+    return normalized;
+  }
+
+  return `${normalized.slice(0, 137).trimEnd()}...`;
+}
+
 function extractCanonicalMetadata(markdown) {
   const parts = splitFrontmatter(markdown);
   const body = parts.body.replace(
@@ -785,12 +824,81 @@ function syncWorkflows() {
   }
 }
 
+function syncRules() {
+  const canonicalRulesDir = path.join(REPO_ROOT, 'rules');
+  const claudeRulesDir = path.join(REPO_ROOT, 'claude-code', 'rules');
+  const copilotInstructionsDir = path.join(REPO_ROOT, 'github-copilot', 'instructions');
+
+  const names = fs.readdirSync(canonicalRulesDir, { withFileTypes: true })
+    .filter(entry => entry.isDirectory())
+    .map(entry => entry.name)
+    .filter(name => fs.existsSync(path.join(canonicalRulesDir, name, `${name}.md`)))
+    .sort();
+
+  for (const entry of fs.readdirSync(claudeRulesDir, { withFileTypes: true })) {
+    if (!entry.isDirectory() || names.includes(entry.name)) continue;
+    removePathIfExists(path.join(claudeRulesDir, entry.name));
+  }
+
+  for (const entry of fs.readdirSync(copilotInstructionsDir, { withFileTypes: true })) {
+    if (!entry.isFile() || !entry.name.endsWith('.instructions.md')) continue;
+    const slug = entry.name.replace(/\.instructions\.md$/, '');
+    if (!names.includes(slug)) removePathIfExists(path.join(copilotInstructionsDir, entry.name));
+  }
+
+  for (const name of names) {
+    const canonicalPath = path.join(canonicalRulesDir, name, `${name}.md`);
+    const claudePath = path.join(claudeRulesDir, name, `${name}.md`);
+    const copilotPath = path.join(copilotInstructionsDir, `${name}.instructions.md`);
+
+    const canonicalMarkdown = read(canonicalPath);
+    const parts = splitFrontmatter(canonicalMarkdown);
+    const body = stripLeadingHtmlComments(parts.body);
+
+    const explicitDescription = normalizeFrontmatterValue(
+      extractField(/^description:\s*(.+)$/m, parts.frontmatter, '')
+    );
+    const description = explicitDescription || deriveRuleDescription(body);
+
+    const explicitApplyTo = normalizeFrontmatterValue(
+      extractField(/^applyTo:\s*(.+)$/m, parts.frontmatter, '')
+    );
+
+    let paths = parseYamlList(parts.frontmatter, 'paths');
+    const pathsRaw = extractField(/^paths:\s*(.+)$/m, parts.frontmatter, '');
+    if (paths.length === 0 && pathsRaw) {
+      try {
+        const parsed = JSON.parse(pathsRaw);
+        if (Array.isArray(parsed)) paths = parsed;
+      } catch {
+        paths = [];
+      }
+    }
+
+    const applyTo = explicitApplyTo || (paths.length > 0 ? paths.join(',') : '**/*');
+
+    writeIfChanged(
+      claudePath,
+      canonicalMarkdown.endsWith('\n') ? canonicalMarkdown : `${canonicalMarkdown}\n`
+    );
+    writeIfChanged(
+      copilotPath,
+      renderCopilotInstructionMarkdown({
+        description,
+        applyTo,
+        body,
+      })
+    );
+  }
+}
+
 function main() {
   const modes = new Set(process.argv.slice(2));
   const runAll = modes.size === 0 || modes.has('--all');
 
   if (runAll || modes.has('--agents')) syncAgents();
   if (runAll || modes.has('--workflows')) syncWorkflows();
+  if (runAll || modes.has('--rules')) syncRules();
   if (runAll || modes.has('--hooks')) syncHooks();
 }
 

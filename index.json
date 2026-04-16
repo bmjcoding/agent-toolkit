@@ -147,7 +147,7 @@
     {
       "component_id": "frankenstein",
       "component_kind": "agent",
-      "component_version": "5.1.0",
+      "component_version": "5.1.1",
       "lifecycle": "stable",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/agents/frankenstein.md",
@@ -155,7 +155,7 @@
       "install_path": "~/.claude/agents/frankenstein.md",
       "install_command": "mkdir -p \"$HOME/.claude/agents\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/frankenstein.md\" -o \"$HOME/.claude/agents/frankenstein.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/frankenstein.md",
-      "checksum_sha256": "224dca1fe1a9330b3236976267be95afcff764bd93b232c602b9e620c446ece7",
+      "checksum_sha256": "f7f0c4442420bc918d7e7b254ae67b93192021d9764601b27db8f5af186b626c",
       "bundle_membership": [
         {
           "bundle_id": "frankenstein-orchestration",
@@ -1248,7 +1248,7 @@
     {
       "component_id": "inject-context",
       "component_kind": "hook",
-      "component_version": "1.0.0",
+      "component_version": "1.0.1",
       "lifecycle": "stable",
       "target_tool": "claude-code",
       "artifact_path": "hooks/inject-context/inject-context.sh",
@@ -1256,7 +1256,7 @@
       "install_path": "~/.claude/hooks/inject-context/inject-context.sh",
       "install_command": "mkdir -p \"$HOME/.claude/hooks/inject-context\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/inject-context/inject-context.sh\" -o \"$HOME/.claude/hooks/inject-context/inject-context.sh\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/inject-context/inject-context.sh",
-      "checksum_sha256": "c613c77cd0bde2496ef4db4e563b307dc04b8a1cb3aa993dc25d66fead24c885",
+      "checksum_sha256": "33906f47a33a9c7cedb91c5bb1de0ee263a7f86a8610a95db0ecebfa04e10eda",
       "bundle_membership": [
         {
           "bundle_id": "frankenstein-orchestration",
@@ -1343,11 +1343,11 @@
       "component_version": "4.1.0",
       "lifecycle": "stable",
       "target_tool": "claude-code",
-      "artifact_path": "rules/docker/docker.md",
+      "artifact_path": "claude-code/rules/docker/docker.md",
       "source_path": "rules/docker/docker.md",
       "install_path": "~/.claude/rules/docker/docker.md",
-      "install_command": "mkdir -p \"$HOME/.claude/rules/docker\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/rules/docker/docker.md\" -o \"$HOME/.claude/rules/docker/docker.md\"",
-      "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/rules/docker/docker.md",
+      "install_command": "mkdir -p \"$HOME/.claude/rules/docker\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/rules/docker/docker.md\" -o \"$HOME/.claude/rules/docker/docker.md\"",
+      "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/rules/docker/docker.md",
       "checksum_sha256": "823379fd724f287c8879e6e975b4a6bb75fd5b729f43aaab1a9aa1fae61faff0",
       "bundle_membership": [],
       "metadata": {
@@ -1366,11 +1366,11 @@
       "component_version": "4.1.0",
       "lifecycle": "stable",
       "target_tool": "claude-code",
-      "artifact_path": "rules/logging/logging.md",
+      "artifact_path": "claude-code/rules/logging/logging.md",
       "source_path": "rules/logging/logging.md",
       "install_path": "~/.claude/rules/logging/logging.md",
-      "install_command": "mkdir -p \"$HOME/.claude/rules/logging\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/rules/logging/logging.md\" -o \"$HOME/.claude/rules/logging/logging.md\"",
-      "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/rules/logging/logging.md",
+      "install_command": "mkdir -p \"$HOME/.claude/rules/logging\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/rules/logging/logging.md\" -o \"$HOME/.claude/rules/logging/logging.md\"",
+      "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/rules/logging/logging.md",
       "checksum_sha256": "bed80b3a1d3f5835efdddb95da26339561ee1d43731f076025706c2bd7f7510f",
       "bundle_membership": [],
       "metadata": {
@@ -1395,11 +1395,11 @@
       "component_version": "4.1.0",
       "lifecycle": "stable",
       "target_tool": "claude-code",
-      "artifact_path": "rules/node/node.md",
+      "artifact_path": "claude-code/rules/node/node.md",
       "source_path": "rules/node/node.md",
       "install_path": "~/.claude/rules/node/node.md",
-      "install_command": "mkdir -p \"$HOME/.claude/rules/node\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/rules/node/node.md\" -o \"$HOME/.claude/rules/node/node.md\"",
-      "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/rules/node/node.md",
+      "install_command": "mkdir -p \"$HOME/.claude/rules/node\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/rules/node/node.md\" -o \"$HOME/.claude/rules/node/node.md\"",
+      "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/rules/node/node.md",
       "checksum_sha256": "562c16cba69652a77a567f53906f54c28dfeead06c781fd3e5a78ec178b2f603",
       "bundle_membership": [],
       "metadata": {
@@ -1419,11 +1419,11 @@
       "component_version": "4.1.0",
       "lifecycle": "stable",
       "target_tool": "claude-code",
-      "artifact_path": "rules/python/python.md",
+      "artifact_path": "claude-code/rules/python/python.md",
       "source_path": "rules/python/python.md",
       "install_path": "~/.claude/rules/python/python.md",
-      "install_command": "mkdir -p \"$HOME/.claude/rules/python\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/rules/python/python.md\" -o \"$HOME/.claude/rules/python/python.md\"",
-      "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/rules/python/python.md",
+      "install_command": "mkdir -p \"$HOME/.claude/rules/python\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/rules/python/python.md\" -o \"$HOME/.claude/rules/python/python.md\"",
+      "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/rules/python/python.md",
       "checksum_sha256": "0ac406d81cc4c008e103558b63089062483091ab2da86682ad1da4fc06fd5a2d",
       "bundle_membership": [],
       "metadata": {
@@ -1682,7 +1682,7 @@
     {
       "component_id": "retro",
       "component_kind": "skill",
-      "component_version": "5.1.0",
+      "component_version": "5.1.1",
       "lifecycle": "stable",
       "target_tool": "claude-code",
       "artifact_path": "skills/retro/SKILL.md",
@@ -1848,7 +1848,7 @@
     {
       "component_id": "frankenstein",
       "component_kind": "agent",
-      "component_version": "5.1.0",
+      "component_version": "5.1.1",
       "lifecycle": "stable",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/agents/frankenstein.agent.md",
@@ -1856,7 +1856,7 @@
       "install_path": ".github/agents/frankenstein.agent.md",
       "install_command": "mkdir -p \".github/agents\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/frankenstein.agent.md\" -o \".github/agents/frankenstein.agent.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/frankenstein.agent.md",
-      "checksum_sha256": "3232716ac9c5b5fc277ec71cf3b4cb396dd806cf2d928d7eaaab8fe05026229e",
+      "checksum_sha256": "5b212147d9d5595a851c4b1965b05057701969456b5d77d3d2b4b655ffe81231",
       "bundle_membership": [],
       "metadata": {
         "model_tier": "frontier",
@@ -2327,7 +2327,7 @@
     {
       "component_id": "inject-context",
       "component_kind": "hook",
-      "component_version": "1.0.0",
+      "component_version": "1.0.1",
       "lifecycle": "stable",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/hooks/inject-context/inject-context.json",
@@ -2411,7 +2411,7 @@
       "install_path": ".github/instructions/docker.instructions.md",
       "install_command": "mkdir -p \".github/instructions\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/instructions/docker.instructions.md\" -o \".github/instructions/docker.instructions.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/instructions/docker.instructions.md",
-      "checksum_sha256": "c0b75b8480fea494e6045f3bc3c33333d8b569cf3aa63c828e35ad3a90e9847a",
+      "checksum_sha256": "0f8280c27535f21834218cff44be432c57748620e231e7bcdc9aea47e9e1b673",
       "bundle_membership": [],
       "metadata": {
         "apply_to": null,
@@ -2434,7 +2434,7 @@
       "install_path": ".github/instructions/logging.instructions.md",
       "install_command": "mkdir -p \".github/instructions\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/instructions/logging.instructions.md\" -o \".github/instructions/logging.instructions.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/instructions/logging.instructions.md",
-      "checksum_sha256": "bc76a10639ac148183278fd333179870d2ce2926b876d4397f5b0f1ec3ce9b05",
+      "checksum_sha256": "a7b2a1cd04353ca92f86f723cb27dd5ec197a1a5ae18ca8b6a48a897ea4ce154",
       "bundle_membership": [],
       "metadata": {
         "apply_to": null,
@@ -2463,7 +2463,7 @@
       "install_path": ".github/instructions/node.instructions.md",
       "install_command": "mkdir -p \".github/instructions\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/instructions/node.instructions.md\" -o \".github/instructions/node.instructions.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/instructions/node.instructions.md",
-      "checksum_sha256": "edcc287d9e066f2bf95e39fa14f236972a568192fe553ce874ce21d4c1719db4",
+      "checksum_sha256": "ae84cc767fdb312a5151dfefed4e09f397879fc115539c2d6e952f38dc5d3acd",
       "bundle_membership": [],
       "metadata": {
         "apply_to": null,
@@ -2487,7 +2487,7 @@
       "install_path": ".github/instructions/python.instructions.md",
       "install_command": "mkdir -p \".github/instructions\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/instructions/python.instructions.md\" -o \".github/instructions/python.instructions.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/instructions/python.instructions.md",
-      "checksum_sha256": "2e5ea1b7c91e1cb5b4ce155059d27b64d9b9cfa0715ffd791c58b85a665caf3f",
+      "checksum_sha256": "56f36acc6384f7fd73b8a20de6a4db578edb8df9100136bb6f969e9c8b6cfaeb",
       "bundle_membership": [],
       "metadata": {
         "apply_to": null,
@@ -2615,7 +2615,7 @@
     {
       "component_id": "frankenstein",
       "component_kind": "agent",
-      "component_version": "5.1.0",
+      "component_version": "5.1.1",
       "lifecycle": "stable",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/agents/frankenstein.toml",
@@ -2623,7 +2623,7 @@
       "install_path": "~/.codex/agents/frankenstein.toml",
       "install_command": "mkdir -p \"$HOME/.codex/agents\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/frankenstein.toml\" -o \"$HOME/.codex/agents/frankenstein.toml\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/frankenstein.toml",
-      "checksum_sha256": "a402ac19a7d7c5ff10917558f12499195630e5e75b0dde0d4846aac78376e6bd",
+      "checksum_sha256": "fa7dae0a1625222b149a6144c5b1b6a8176f9314c46e1a233b84dbde87b2c878",
       "bundle_membership": [],
       "metadata": {
         "model_tier": "frontier",
@@ -2986,7 +2986,7 @@
     {
       "component_id": "inject-context",
       "component_kind": "hook",
-      "component_version": "1.0.0",
+      "component_version": "1.0.1",
       "lifecycle": "experimental",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/hooks/inject-context/inject-context.sh",
@@ -3227,7 +3227,7 @@
     {
       "component_id": "retro",
       "component_kind": "skill",
-      "component_version": "5.1.0",
+      "component_version": "5.1.1",
       "lifecycle": "stable",
       "target_tool": "openai-codex",
       "artifact_path": "skills/retro/SKILL.md",

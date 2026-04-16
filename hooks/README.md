@@ -24,8 +24,8 @@ node scripts/sync-canonical-adapters.js --hooks
 
 ## Canonical Set
 
-These canonical scripts are seeded from the current tool-local implementations per
-`docs/todo/hook-standardization-plan.md`:
+These canonical scripts are seeded from the current tool-local implementations described
+in `docs/adr/0009-root-hooks-ownership.md`:
 
 - Seeded from Claude: `changelog-check`, `protect-config`
 - Seeded from an existing current copy: `branch-guard`, `extract-handoff`, `inject-context`, `integrity-warn`, `pre-push-secrets`

@@ -22,6 +22,7 @@ Options:
     --history DIR    Directory for history file (default: ~/agent-retros or $AGENT_RETRO_DIR)
     --subject NAME   Filter by retro subject (e.g., orchestrator, git-ship, frontend-engineer)
     --last N         For trends, compare against last N retros (default: 10)
+    --metric NAME    For trends, also emit a focused value series for one summary metric
     --output FILE    Write output to FILE instead of stdout
     --help           Show this help message
 
@@ -49,6 +50,7 @@ def parse_args(argv):
         "include_legacy": False,
         "subject": None,
         "last": 10,
+        "metric": None,
         "output": None,
     }
     i = 1
@@ -65,6 +67,9 @@ def parse_args(argv):
             i += 2
         elif argv[i] == "--last" and i + 1 < len(argv):
             args["last"] = int(argv[i + 1])
+            i += 2
+        elif argv[i] == "--metric" and i + 1 < len(argv):
+            args["metric"] = argv[i + 1]
             i += 2
         elif argv[i] == "--output" and i + 1 < len(argv):
             args["output"] = argv[i + 1]
@@ -239,6 +244,8 @@ def cmd_trends(args):
         "findings_total": [],
         "findings_critical": [],
         "model_downgrades": [],
+        "frankenstein_line_count": [],
+        "net_line_delta": [],
     }
 
     for e in recent:
@@ -276,6 +283,14 @@ def cmd_trends(args):
         downgrades = s.get("model_downgrades_recommended") or s.get("model_downgrades")
         if downgrades is not None:
             series["model_downgrades"].append(downgrades)
+
+        frankenstein_lines = s.get("frankenstein_line_count")
+        if isinstance(frankenstein_lines, (int, float)):
+            series["frankenstein_line_count"].append(frankenstein_lines)
+
+        net_line_delta = s.get("net_line_delta")
+        if isinstance(net_line_delta, (int, float)):
+            series["net_line_delta"].append(net_line_delta)
 
     # Compute trends
     trends = {}
@@ -365,6 +380,37 @@ def cmd_trends(args):
 
     if observations:
         result["observations"] = observations
+
+    if args.get("metric"):
+        metric_name = args["metric"]
+        metric_values = []
+        for entry in recent:
+            value = entry.get("summary", {}).get(metric_name)
+            if isinstance(value, (int, float)):
+                metric_values.append(value)
+
+        requested = {
+            "name": metric_name,
+            "values": metric_values,
+            "count": len(metric_values),
+        }
+
+        if metric_values:
+            requested["latest"] = metric_values[-1]
+        if len(metric_values) >= 2:
+            requested["previous"] = metric_values[-2]
+            if metric_values[-1] > metric_values[-2]:
+                requested["direction"] = "increasing"
+            elif metric_values[-1] < metric_values[-2]:
+                requested["direction"] = "decreasing"
+            else:
+                requested["direction"] = "stable"
+            requested["monotonic_non_decreasing"] = all(
+                metric_values[index] >= metric_values[index - 1]
+                for index in range(1, len(metric_values))
+            )
+
+        result["requested_metric"] = requested
 
     return result
 

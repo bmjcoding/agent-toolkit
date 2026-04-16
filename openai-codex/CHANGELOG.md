@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.1.1] - 2026-04-15
+
+### Changed
+
+- Tightened `README.md` so the checked-in Codex surface description matches the current
+  layout cleanly and the `Tag format` section remains visually separated from the
+  preceding install/reference guidance.
+
 ## [4.1.0] - 2026-04-15
 
 ### Changed
@@ -55,6 +63,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `scripts/install.sh` hooks target corrected to `~/.codex/hooks.json` (parity gap #6 Medium resolved).
 - Group-level `description` field removed from `hooks.json` (parity gap #7 Low resolved).
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/openai-codex-v4.1.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/openai-codex-v4.1.1...HEAD
+[4.1.1]: https://github.com/bmjcoding/agent-toolkit/compare/openai-codex-v4.1.0...openai-codex-v4.1.1
 [4.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/openai-codex-v4.0.0...openai-codex-v4.1.0
 [4.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/openai-codex-v4.0.0

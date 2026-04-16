@@ -69,6 +69,7 @@ composition assets such as `build-agents-md.sh`.
 The checked-in Codex surface currently consists of agents, hooks, the config template,
 and rule build assets. Use the root `index.json` catalog for machine-readable artifact
 metadata.
+
 ## Tag format
 
 Tool-specific Codex assets use:

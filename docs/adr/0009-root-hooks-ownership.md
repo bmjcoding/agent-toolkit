@@ -236,7 +236,6 @@ drift, or changelog duplication.
 
 - `AGENTS.md`
 - `docs/adr/0005-multi-tool-restructure.md`
-- `docs/todo/hook-standardization-plan.md`
 - <https://code.claude.com/docs/en/hooks>
 - <https://code.visualstudio.com/docs/copilot/customization/hooks>
 - <https://developers.openai.com/codex/hooks>

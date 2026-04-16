@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.1.1] - 2026-04-15
+
+### Changed
+
+- Updated finalization references to use a skill-local retro summary validator instead of
+  the removed `tools/retros/` path, and aligned `SKILL.md` save-path wording with the
+  type-scoped `STATE_ROOT/retros/` layout.
+
+### Added
+
+- New `scripts/validate.py` validator for retro summary JSON files. It enforces the v5.0
+  required fields, enums, numeric totals, and optional metric types without depending on
+  the removed `tools/retros/` tree.
+
 ## [5.1.0] - 2026-04-15
 
 ### Changed
@@ -130,7 +144,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/skill/retro-v5.1.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/skill/retro-v5.1.1...HEAD
+[5.1.1]: https://github.com/bmjcoding/agent-toolkit/compare/skill/retro-v5.1.0...skill/retro-v5.1.1
 [5.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/retro-v5.0.0...skill/retro-v5.1.0
 [5.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/retro-v4.2.4...skill/retro-v5.0.0
 [4.2.4]: https://github.com/bmjcoding/agent-toolkit/compare/skill/retro-v4.2.3...skill/retro-v4.2.4

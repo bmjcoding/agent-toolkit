@@ -48,6 +48,7 @@ Diagram: `references/system-overview.svg` (or render `references/system-overview
 |---|---|---|
 | `parse-metrics.py` | retro | Parse orchestrator artifacts → structured JSON |
 | `verify-claims.py` | retro | Verify retro claims (file paths, agent IDs, SHAs, severities) |
+| `validate.py` | retro | Validate saved retro summary JSON against the v5.0 contract |
 | `retro-history.py` | retro | Save/list/trends for retro history with --subject filtering |
 | `lint-definition.py` | review-skill | 12 structural + 12 quality checks on skill/agent definitions |
 
@@ -78,7 +79,7 @@ Maintained by `improve` on version bumps:
 | Skills | `skills/{name}/CHANGELOG.md` (per-skill) |
 | Agents | `agents/{name}/CHANGELOG.md` (per-component) |
 | Workflows | `workflows/{name}/CHANGELOG.md` (per-component) |
-| Hooks | `hooks/{name}/CHANGELOG.md` (per-component) |
+| Hooks | `claude-code/hooks/{name}/CHANGELOG.md` (per-component) |
 | Rules | `rules/{name}/CHANGELOG.md` (per-component) |
 
 ## Flow
@@ -115,6 +116,7 @@ PR submitted → lint-definition.py --strict (CI) → review-skill (semantic) �
 | From | To | Mechanism |
 |---|---|---|
 | retro → improve | Recommendations table in conversation | improve parses section 3.7 from conversation context |
+| retro → validate.py | Script invocation | Resilient path: tries repo checkout, `.agents/`, `.claude/`, `.codex/`, then user-global installs |
 | improve → lint-definition.py | Script invocation | Resilient path: tries repo checkout, `.agents/`, `.claude/`, `.codex/`, then user-global installs |
 | retro → retro-history.py | Script invocation | Resilient path: tries repo checkout, `.agents/`, `.claude/`, `.codex/`, then user-global installs |
 | improve → retro-history.py | Script invocation | Resilient path: tries repo checkout, `.agents/`, `.claude/`, `.codex/`, then user-global installs |

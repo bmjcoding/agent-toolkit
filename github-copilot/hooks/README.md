@@ -77,7 +77,7 @@ of the same shared hooks.
 | `protect-config` | `PreToolUse` | Block writes to control-plane files |
 | `integrity-warn` | `SubagentStop` | Advisory integrity check via `integrity-check.sh`; never blocks |
 | `inject-context` | `SubagentStart` | Inject orchestrator project brief and ownership constraints |
-| `extract-handoff` | `SubagentStop` | Extract handoff JSON from the agent final message |
+| `extract-handoff` | `SubagentStop` | Extract handoff JSON from the agent final message into the session-scoped handoff directory, with flat fallback semantics when no valid session id exists |
 
 ## Environment Variable
 
