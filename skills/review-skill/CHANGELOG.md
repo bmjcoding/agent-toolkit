@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.2.0] - 2026-04-16
+
+### Changed
+
+- Reworded batch-review and JSON-output guidance so direct invocation and generic automation are first-class, with delegation treated as optional.
+
 ## [5.1.1] - 2026-04-15
 
 ### Fixed
@@ -67,7 +73,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/skill/review-skill-v5.1.1...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/skill/review-skill-v5.2.0...HEAD
+[5.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/review-skill-v5.1.1...skill/review-skill-v5.2.0
 [5.1.1]: https://github.com/bmjcoding/agent-toolkit/compare/skill/review-skill-v5.1.0...skill/review-skill-v5.1.1
 [5.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/review-skill-v5.0.0...skill/review-skill-v5.1.0
 [5.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/review-skill-v4.0.0...skill/review-skill-v5.0.0
