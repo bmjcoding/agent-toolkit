@@ -1,8 +1,9 @@
 # agent-toolkit — Multi-tool agent scaffolding
 
-A configuration library for AI coding assistants. It provides shared skills, shared rules,
-and tool-specific agents, commands, hooks, prompts, generated rule adapters, and install
-assets for **Claude Code**, **GitHub Copilot for VS Code**, and **OpenAI Codex**.
+A configuration library for AI coding assistants. It provides shared skills, shared
+rules, shared hooks, and tool-specific agents, commands, prompts, generated rule
+adapters, and install assets, plus bundle manifests where the target tool supports them,
+for **Claude Code**, **GitHub Copilot for VS Code**, and **OpenAI Codex**.
 
 `AGENTS.md` is the primary shared instruction source across tools. Root `CLAUDE.md` is a
 one-line Claude compatibility shim whose content is exactly `@AGENTS.md`.
@@ -14,10 +15,11 @@ agent-toolkit/
   docs/
     adr/                  # Repo-wide architecture decisions
   agents/                 # Canonical shared agent instruction bodies
+  hooks/                  # Canonical shared hook logic
   skills/                 # Canonical shared skills
   rules/                  # Canonical shared rules
   workflows/              # Canonical shared workflow definitions
-  claude-code/            # Claude-native agents, commands, hooks, bundles, generated rule adapters, scripts
+  claude-code/            # Claude-native agents, commands, hook docs, bundles, generated rule adapters, scripts
   github-copilot/         # VS Code Copilot-native agents, prompts, instructions, hooks, scripts
   openai-codex/           # Codex-native agents, hooks, config templates, rule build assets
   AGENTS.md               # Primary shared instructions
@@ -30,12 +32,13 @@ agent-toolkit/
 - Root `rules/` is the single source of truth for shared rule content.
 - Root `agents/` is the single source of truth for shared agent instruction bodies.
 - Root `workflows/` is the single source of truth for shared workflow bodies.
+- Root `hooks/` is the canonical shared owner of hook logic.
 - `AGENTS.md` is the canonical shared instruction file.
 - `CLAUDE.md` is a one-line Claude compatibility shim, not the canonical shared
   instruction source.
 - Tool directories contain only tool-native assets or adapters:
-  - `claude-code/`: Claude frontmatter wrappers, slash-command adapters, hooks, bundles, generated rule adapters, install scripts.
-  - `github-copilot/`: VS Code Copilot agent adapters, prompt adapters, generated instruction adapters, hooks, install scripts.
+  - `claude-code/`: Claude frontmatter wrappers, slash-command adapters, hook docs, bundles, generated rule adapters, install scripts.
+  - `github-copilot/`: VS Code Copilot agent adapters, prompt adapters, generated instruction adapters, hook manifests/adapters, install scripts.
   - `openai-codex/`: Codex TOML agent adapters, hooks, config templates, rule composition assets.
 - Canonical root `rules/` content is adapted into:
   - `claude-code/rules/`
@@ -74,7 +77,7 @@ repo root, while rules are exposed through generated adapters under `claude-code
 TOOLKIT=$(pwd)
 ln -sfn "$TOOLKIT/claude-code/agents"   ~/.claude/agents
 ln -sfn "$TOOLKIT/claude-code/commands" ~/.claude/commands
-ln -sfn "$TOOLKIT/claude-code/hooks"    ~/.claude/hooks
+ln -sfn "$TOOLKIT/hooks"                ~/.claude/hooks
 ln -sfn "$TOOLKIT/claude-code/rules"    ~/.claude/rules
 ln -sfn "$TOOLKIT/skills"               ~/.claude/skills
 ```
@@ -95,10 +98,13 @@ at the repo root and is adapted into the Copilot-native files under `github-copi
 ```sh
 TOOLKIT=$(pwd)
 ln -sfn "$TOOLKIT/github-copilot/agents"       .github/agents
-ln -sfn "$TOOLKIT/github-copilot/hooks"        .github/hooks
 ln -sfn "$TOOLKIT/github-copilot/instructions" .github/instructions
 ln -sfn "$TOOLKIT/github-copilot/prompts"      .github/prompts
 ```
+
+For hooks, prefer `./github-copilot/scripts/install.sh --target /path/to/project`. The
+installer flattens the checked-in hook manifests into the `.github/hooks/*.json` shape
+that Copilot expects at runtime.
 
 Or use:
 

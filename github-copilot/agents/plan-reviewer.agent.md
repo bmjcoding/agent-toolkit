@@ -1,7 +1,7 @@
 ---
 name: plan-reviewer
 description: "Plan quality reviewer that validates subtask granularity, dependency gaps, file ownership, feasibility, and integration contracts before implementation begins."
-model: "Claude Sonnet 4.5 (copilot)"
+model: "Claude Sonnet 4.5"
 tools:
   - read
   - search

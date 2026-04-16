@@ -40,10 +40,10 @@ graph TB
         PARSE --> LOOP --> VER --> PAT --> SAVE_I
     end
 
-    subgraph STORE["Persistence — STATE_ROOT/retros/"]
+    subgraph STORE["Persistence — ~/agent-retros/"]
         direction LR
         HIST["history.jsonl<br/>global trend index"]
-        SUBDIR["{subject}/<br/>retro .md + .json<br/>improve .json"]
+        SUBDIR["sessions / reviews / meta<br/>typed retro directories"]
     end
 
     FRANK -->|"Phase 7a: spawn<br/>autoresearch-analyst<br/>(retro mode)"| DIAG

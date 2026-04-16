@@ -1,6 +1,7 @@
 ---
 name: lint
 description: "Run linting and standards compliance checks, auto-fix everything possible."
+lifecycle: stable
 argument-hint: "[paths...] [--dry-run]"
 adapters:
   - claude-code/commands/lint/lint.md

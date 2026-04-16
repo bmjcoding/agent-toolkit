@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Canonical changelog ownership moved to root `hooks/protect-config/CHANGELOG.md`. This Claude-local file now remains only as a historical redirect.
+
 ## [4.0.0] - 2026-04-13
 
 ### Removed
@@ -45,4 +49,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/protect-config-v2.0.0...claude-code/protect-config-v3.0.0
 [2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/protect-config-v1.0.1...claude-code/protect-config-v2.0.0
 [1.0.1]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/protect-config-v1.0.0...claude-code/protect-config-v1.0.1
-[1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/protect-config-v1.0.0
+[1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/claude-code/protect-config-v1.0.0

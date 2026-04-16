@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.1.0] - 2026-04-15
+
+### Added
+
+- Added an exploration mode that writes session-scoped staff summaries and inventories
+  for shared types, config, tooling, and infrastructure planning.
+
+### Changed
+
+- Declared canonical `lifecycle` metadata in the shared root definition so the distribution catalog can publish maturity separately from per-tool availability for this agent.
+- Clarified that staff-engineer write boundaries are mode-specific: exploration writes
+  only orchestrator context artifacts, while implementation remains constrained to
+  `owned_files`.
+- Updated the Claude adapter reference to the flattened `claude-code/agents/<name>.md`
+  layout used by the tool-specific generated surfaces.
+
 ## [5.0.0] - 2026-04-15
 
 ### Changed
@@ -46,7 +62,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/staff-engineer-v5.0.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/staff-engineer-v5.1.0...HEAD
+[5.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/staff-engineer-v5.0.0...agent/staff-engineer-v5.1.0
 [5.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/agent/staff-engineer-v5.0.0
 [3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/staff-engineer-v2.0.0...agent/staff-engineer-v3.0.0
 [2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/staff-engineer-v1.0.0...agent/staff-engineer-v2.0.0

@@ -1,15 +1,46 @@
 # github-copilot/hooks/
 
-GitHub Copilot hook definitions for the agent-toolkit. Each hook is a pair of files:
+GitHub Copilot hook adapter components for the agent-toolkit.
 
-- `<slug>.json` — VS Code Copilot hook manifest (event binding)
-- `<slug>.sh` — Shell script implementing the hook logic
+## Source layout
+
+Canonical shared hook logic now lives under repo-root `hooks/`. The Copilot subtree keeps
+the tool-facing manifests plus any tool-local adapters required by VS Code Copilot's
+payload semantics.
+
+Each logical hook still lives in its own adapter directory:
+
+- `github-copilot/hooks/<slug>/<slug>.json` — VS Code Copilot manifest
+- `github-copilot/hooks/<slug>/<slug>.sh` — generated Copilot adapter
+
+This keeps the repo aligned with the shared per-hook component layout while still
+preserving the flat install surface Copilot expects.
+
+## Installed layout
+
+VS Code Copilot discovers hooks from flat manifest files under `.github/hooks/*.json`.
+The installer now creates `.github/hooks/` as a real directory and symlinks each nested
+manifest into that flat location:
+
+```text
+.github/hooks/branch-guard.json        -> github-copilot/hooks/branch-guard/branch-guard.json
+.github/hooks/changelog-check.json     -> github-copilot/hooks/changelog-check/changelog-check.json
+...
+```
+
+Each manifest then invokes its paired adapter script from the toolkit checkout via
+`$AGENT_TOOLKIT_DIR/github-copilot/hooks/<slug>/<slug>.sh`. Those adapters are generated
+from the canonical root hook set and delegate to `hooks/<slug>/`.
+
+Refresh them with:
+
+```sh
+node scripts/sync-canonical-adapters.js --hooks
+```
 
 ## VS Code Hook Format
 
-Hooks are loaded from `.github/hooks/*.json` (install.sh symlinks `github-copilot/hooks/` to `.github/hooks/`).
-
-Format per the [VS Code Copilot hooks spec](https://code.visualstudio.com/docs/copilot/customization/hooks) (Preview, April 2026):
+Manifest shape:
 
 ```json
 {
@@ -24,7 +55,7 @@ Format per the [VS Code Copilot hooks spec](https://code.visualstudio.com/docs/c
 }
 ```
 
-Exit code semantics (same as Claude Code):
+Exit code semantics:
 
 | Exit code | Meaning |
 |-----------|---------|
@@ -34,45 +65,24 @@ Exit code semantics (same as Claude Code):
 
 ## Hook Inventory
 
+GitHub Copilot does not have more logical hooks than Claude here. The apparent
+"abundance" came from storing both a manifest and an adapter script side by side for each
+of the same shared hooks.
+
 | Slug | Event | Purpose |
 |------|-------|---------|
-| `branch-guard` | `PreToolUse` | Block git push/commit directly to `main` or `master` |
-| `changelog-check` | `PreToolUse` | Validate CHANGELOG.md was updated in commits being pushed (KaC 1.1.0) |
-| `pre-push-secrets` | `PreToolUse` | Scan for secrets before git push (gitleaks + grep fallback) |
-| `protect-config` | `PreToolUse` | Block writes to control-plane files (settings.json, hooks/, compatibility shims, canonical definitions) |
-| `integrity-warn` | `SubagentStop` | Advisory integrity check via integrity-check.sh; warns on mismatches, never blocks |
-| `toolkit-drift-check` | `SubagentStop` | Warn (once per session) when toolkit components are edited without a CHANGELOG.md update |
-| `toolkit-edit-reminder` | `PostToolUse` | Remind agents editing toolkit components to update CHANGELOG.md per KaC 1.1.0 |
-| `inject-context` | `SubagentStart` | Inject orchestrator project-brief and file-ownership constraints into subagents |
-| `extract-handoff` | `SubagentStop` | Extract handoff JSON from agent final message, validate schema, write to session-scoped handoffs (or the flat fallback when no valid session id exists) |
-
-## Event Mapping from Claude Code
-
-| Claude Code event | VS Code Copilot event |
-|-------------------|-----------------------|
-| `PreToolUse` | `PreToolUse` |
-| `PostToolUse` | `PostToolUse` |
-| `SubagentStart` | `SubagentStart` |
-| `SubagentStop` | `SubagentStop` |
-
-All four events are natively supported by VS Code Copilot hooks (Preview as of April 2026). No event remapping is required.
-
-## Activation
-
-`install.sh` creates a symlink:
-
-```sh
-ln -sfn "$REPO_DIR/github-copilot/hooks" ".github/hooks"
-```
-
-VS Code Copilot automatically loads all `.json` files from `.github/hooks/` and registers the declared hooks.
+| `branch-guard` | `PreToolUse` | Block git push or commit directly to `main` or `master` |
+| `changelog-check` | `PreToolUse` | Validate `CHANGELOG.md` was updated in commits being pushed |
+| `pre-push-secrets` | `PreToolUse` | Scan for secrets before git push |
+| `protect-config` | `PreToolUse` | Block writes to control-plane files |
+| `integrity-warn` | `SubagentStop` | Advisory integrity check via `integrity-check.sh`; never blocks |
+| `inject-context` | `SubagentStart` | Inject orchestrator project brief and ownership constraints |
+| `extract-handoff` | `SubagentStop` | Extract handoff JSON from the agent final message into the session-scoped handoff directory, with flat fallback semantics when no valid session id exists |
 
 ## Environment Variable
 
-Each hook's `command` field references `$AGENT_TOOLKIT_DIR`, which must be set to the absolute path of your agent-toolkit checkout:
+Each manifest expects `AGENT_TOOLKIT_DIR` to point at the toolkit checkout:
 
 ```sh
 export AGENT_TOOLKIT_DIR=/path/to/agent-toolkit
 ```
-
-Add this to your shell profile or VS Code workspace settings.

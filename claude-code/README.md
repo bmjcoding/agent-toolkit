@@ -8,9 +8,9 @@ event wiring, and install surfaces that differ from other tools.
 
 ```
 claude-code/
-  agents/     # Claude frontmatter wrappers for canonical root agents/
+  agents/     # Flat Claude frontmatter wrappers for canonical root agents/
   commands/   # Claude slash-command wrappers for canonical root workflows/
-  hooks/      # 9 shell scripts wired to Claude Code hook events (PreToolUse, PostToolUse, SubagentStart, SubagentStop)
+  hooks/      # Hook docs plus historical redirect changelogs
   bundles/    # YAML bundle files grouping related components for bulk install
   rules/      # Generated Claude-facing adapters for canonical root rules/
   scripts/
@@ -20,8 +20,8 @@ claude-code/
 
 Canonical agents live at repo-root `agents/`. Canonical workflows live at repo-root
 `workflows/`. Shared skills and rules live at repo-root `skills/` and `rules/`.
-`claude-code/rules/` is generated from the canonical root rules by
-`node scripts/sync-canonical-adapters.js`.
+Canonical shared hook logic now also lives at repo-root `hooks/`. `claude-code/rules/`
+is generated from the canonical root rules by `node scripts/sync-canonical-adapters.js`.
 Changelog helper scripts such as platform detection and historical tag backfill live
 canonically under `skills/changelog/scripts/`, not under `claude-code/scripts/`.
 
@@ -32,7 +32,7 @@ Claude Code loads these components via symlinks from `~/.claude/`:
 ```sh
 ~/.claude/agents   -> /path/to/agent-toolkit/claude-code/agents
 ~/.claude/commands -> /path/to/agent-toolkit/claude-code/commands
-~/.claude/hooks    -> /path/to/agent-toolkit/claude-code/hooks
+~/.claude/hooks    -> /path/to/agent-toolkit/hooks
 ~/.claude/rules    -> /path/to/agent-toolkit/claude-code/rules
 ~/.claude/skills   -> /path/to/agent-toolkit/skills
 ```
@@ -52,21 +52,39 @@ Run the install script to create or retarget all five symlinks atomically:
 
 Hooks must also be registered in `~/.claude/settings.json` under the `hooks` key with the correct event type and matcher. See `claude-code/hooks/README.md` for wiring details.
 
+Claude now installs `~/.claude/hooks` from the canonical repo-root `hooks/` tree. The
+remaining files under `claude-code/hooks/` are documentation plus historical changelog
+redirects for the old Claude-owned hook path.
+
 ## Component Format Reference
 
-- **Agent** (`<name>.md`): Claude-native frontmatter wrapper around the canonical root
-  `agents/<name>/AGENT.md` body.
+- **Agent** (`claude-code/agents/<name>.md`): Claude-native frontmatter wrapper around the
+  canonical root `agents/<name>/AGENT.md` body.
 - **Command** (`<name>.md`): Claude-native slash-command wrapper around the canonical root
   `workflows/<name>/WORKFLOW.md` body.
-- **Hook** (`<name>.sh`): Plain Bash, registered by event type in `settings.json`; exit 2 blocks, exit 1 warns, exit 0 continues.
+- **Hook** (`hooks/<name>/<name>.sh` at runtime): Plain Bash, registered by event type in
+  `settings.json`; exit 2 blocks, exit 1 warns, exit 0 continues.
 - **Bundle** (`bundle.yaml`): YAML file with `id`, `name`, `description`, `status`, `tags[]`, `components[]` (each entry has `type`, `id`, `role`). Dependency metadata for agents and skills is declared in the component's own `.md` frontmatter (`tools:` for agents, `skills:` for skills/commands), not in the bundle file. Valid `role` values: `core` (required for the bundle to function), `optional` (nice-to-have, installable separately), `deprecated` (scheduled for removal). All current entries use `core`. The generated `index.json` distribution catalog is the stable lookup surface for bundle artifacts; use each entry's `artifact_path`, `component_version`, checksum, and install metadata instead of reconstructing paths from slugs.
 - **Rule** (`<name>.md`): Generated Claude-facing adapter for the canonical root
   `rules/<name>/<name>.md` body.
 
 ## Tag Format
 
+Shared Claude adapters use the canonical tag lineage of the root component they mirror:
+
+```text
+agent/<slug>-v<major>.<minor>.<patch>
+workflow/<slug>-v<major>.<minor>.<patch>
 ```
+
+Examples: `agent/frankenstein-v3.1.0`, `workflow/backlog-v5.0.0`
+
+Claude-only runtime assets keep the `claude-code/` namespace:
+
+```text
 claude-code/<slug>-v<major>.<minor>.<patch>
 ```
 
-Example: `claude-code/frankenstein-v3.1.0`
+Example: `claude-code/branch-guard-v3.0.0`
+
+Use `claude-code/*` only for tool-native surfaces such as hooks and bundles.

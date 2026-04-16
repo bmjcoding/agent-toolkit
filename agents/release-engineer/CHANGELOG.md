@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.1.0] - 2026-04-15
+
+### Changed
+
+- Declared canonical `lifecycle` metadata in the shared root definition so the distribution catalog can publish maturity separately from per-tool availability for this agent.
+- Release-engineer now treats PR-bound changelog promotion as part of Step 2: touched
+  components must be moved out of `## [Unreleased]` into a versioned section before the
+  PR is opened, while branch-local work can still accumulate under `## [Unreleased]`
+  until that promotion point.
+
+- Resolved default-branch handling across PR-description, lint, and publish steps and
+  clarified that publish-phase-only runs must not perform version bumps.
+- Updated the Claude adapter reference to the flattened `claude-code/agents/<name>.md`
+  layout used by the tool-specific generated surfaces.
+
 ## [5.0.0] - 2026-04-15
 
 ### Changed
@@ -74,7 +89,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/release-engineer-v5.0.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/release-engineer-v5.1.0...HEAD
+[5.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/release-engineer-v5.0.0...agent/release-engineer-v5.1.0
 [5.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/agent/release-engineer-v5.0.0
 [4.0.1]: https://github.com/bmjcoding/agent-toolkit/compare/agent/release-engineer-v4.0.0...agent/release-engineer-v4.0.1
 [4.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/release-engineer-v3.0.0...agent/release-engineer-v4.0.0

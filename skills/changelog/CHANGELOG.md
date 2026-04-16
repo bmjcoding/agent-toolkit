@@ -7,9 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [6.2.0] - 2026-04-15
+
 ### Changed
 
+- Clarified that canonical shared components use `agent/`, `skill/`, `workflow/`, and `rule/` tags, while tool namespaces such as `claude-code/` are reserved for genuinely tool-native assets. Migration guidance now also covers retiring redundant mirrored tool-local tags once live refs have moved.
+
+## [6.1.0] - 2026-04-15
+
+### Changed
+
+- Declared canonical `lifecycle` metadata in the shared root definition so the distribution catalog can publish maturity separately from per-tool availability for this skill.
+- Clarified the `[Unreleased]` workflow so branch-local work can accumulate there until a
+  PR is opened, but PR-bound components must be promoted into a dated versioned section
+  before validation passes.
 - Updated shared skill wording to reference workflow and skill names in a tool-agnostic way instead of assuming Claude slash-command invocation.
+- Added a quick-routing section so simple changelog edits can load only the relevant sections instead of reading the full release workflow every time.
+- Updated migration guidance so renumbering removes legacy inline `# version:` markers instead of trying to keep definition files in sync with released versions.
+- Updated tag-migration guidance and the backfill helper help text to use canonical namespaced slugs and to explicitly retire obsolete flat component tags after footer migration and tag backfill complete.
 
 ### Added
 
@@ -99,7 +114,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial changelog skill defining Keep a Changelog 1.1.0 + SemVer standard for all toolkit components
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/skill/changelog-v6.0.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/skill/changelog-v6.2.0...HEAD
+[6.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/changelog-v6.1.0...skill/changelog-v6.2.0
+[6.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/changelog-v6.0.0...skill/changelog-v6.1.0
 [6.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/changelog-v5.0.0...skill/changelog-v6.0.0
 [5.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/changelog-v4.0.0...skill/changelog-v5.0.0
 [4.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/changelog-v3.0.0...skill/changelog-v4.0.0

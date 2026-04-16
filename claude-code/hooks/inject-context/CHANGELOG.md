@@ -9,8 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- The injected orchestrator constraints now point single-writer and handoff guidance at the resolved session-scoped handoff directory when a valid session id is active, falling back to the flat handoff directory otherwise.
-- The hook's additional context message now emits the resolved project-brief and plan paths instead of hardcoded flat `.orchestrator/` locations.
+- Canonical changelog ownership moved to root `hooks/inject-context/CHANGELOG.md`. This Claude-local file now remains only as a historical redirect.
 
 ## [4.0.0] - 2026-04-13
 
@@ -51,5 +50,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/inject-context-v3.0.0...HEAD
 [3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/inject-context-v2.0.0...claude-code/inject-context-v3.0.0
 [2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/inject-context-v1.1.0...claude-code/inject-context-v2.0.0
-[1.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/inject-context-v1.0.0...inject-context-v1.1.0
-[1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/inject-context-v1.0.0
+[1.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/inject-context-v1.0.0...claude-code/inject-context-v1.1.0
+[1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/claude-code/inject-context-v1.0.0

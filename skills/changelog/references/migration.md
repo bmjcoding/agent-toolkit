@@ -16,25 +16,35 @@ to migrate.
 grep -r '^\[.*\]: .*compare/v[0-9]' **/CHANGELOG.md
 ```
 
-### 2. Rewrite footers to dash-style
+### 2. Rewrite footers to canonical namespaced tags
 
 Replace monolithic tag refs with per-component tags following the exemplar in
 `skills/changelog/CHANGELOG.md`. The oldest-version footer switches from
 `releases/tag/v{version}` to `tree/{slug}-v{version}`.
 
-### 3. Do NOT delete old monolithic tags
+### 3. Remove obsolete flat tags only after the migration is complete
 
-Old `v{version}` tags can coexist with new `{slug}-v{version}` tags indefinitely.
-Removing them rewrites history and breaks anyone referencing them externally (links, CI
-pipelines, package registries).
+Do not delete historical flat tags until both of these are true:
+- every affected `CHANGELOG.md` footer has been rewritten to the canonical namespaced
+  tag format
+- the replacement `<namespace>/<slug>-v{version}` tags already exist locally and on the remote
+
+Once the changelog links and replacement tags are in place, delete only the superseded
+flat component tags that no longer have any live references. Keep repo-wide release tags
+such as `v{version}` when the root `CHANGELOG.md` still uses them.
+
+If the repository previously created mirrored tool-local tags for shared components
+(for example `claude-code/frankenstein-v3.0.0` alongside `agent/frankenstein-v3.0.0`),
+rewrite the live refs first and then delete the redundant mirrored tool-local tags too.
 
 ### 4. Order of operations
 
-1. Rewrite all CHANGELOG footers to use `{slug}-v{version}` format.
+1. Rewrite all CHANGELOG footers to use `<namespace>/<slug>-v{version}` format.
 2. Commit the footer changes.
-3. Run `scripts/backfill-changelog-tags.sh --slug <slug> --changelog <path>` to generate
+3. Run `scripts/backfill-changelog-tags.sh --slug <namespace>/<slug> --changelog <path>` to generate
    historical per-component tags. Use `--dry-run` first to preview.
-4. Push the new tags: `git push origin --tags`. Existing monolithic tags are untouched.
+4. Push the new tags: `git push origin --tags`.
+5. Delete only the now-unreferenced flat component tags and redundant mirrored tool-local tags locally and on the remote.
 
 ---
 
@@ -52,18 +62,18 @@ Rewrite the `## [X.Y.Z]` headers in `CHANGELOG.md` using the new numbering.
 
 Update the comparison links at the bottom of `CHANGELOG.md` to match the new versions.
 
-### 3. Update definition file version comments (REQUIRED)
+### 3. Remove legacy inline version markers
 
-Search the component directory for definition files (`*.md`) and update any
-`# version:` comment to match the new highest released version. The version comment is
-the single source of truth visible to agents loading the definition — a mismatch causes
-confusion about which feature set is loaded.
+If the component directory still contains any inline version markers in definition files,
+delete them during the migration. Released versions are tracked only in `CHANGELOG.md`.
 
 ```bash
-grep -l "# version:" agents/{name}/*.md skills/{name}/*.md 2>/dev/null
+rg -n "# version:" agents/{name} skills/{name} 2>/dev/null
 ```
 
 ### 4. Verify
 
-Confirm `grep "# version:" <definition-file>` matches the highest `## [X.Y.Z]` header
-in the CHANGELOG.
+Confirm the renumbered `CHANGELOG.md` is internally consistent:
+- the highest released `## [X.Y.Z]` header is correct
+- comparison links match the new numbering
+- no legacy inline `# version:` markers remain in the component definition files
