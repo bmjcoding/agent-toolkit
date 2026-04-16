@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.2.0] - 2026-04-16
+
+### Changed
+
+- Made backlog integration optional: `prod-readiness` now consumes `STATE_ROOT/backlog.md` only when it already exists and otherwise reports unresolved items without creating backlog state.
+- Made `STATE_ROOT` resolution lazy so direct readiness checks stay stateless unless the user explicitly wants persistent backlog tracking.
+- Reworded phase and verdict instructions so specialist-agent checks are optional delegation paths, not required runtime dependencies.
+
 ## [4.1.0] - 2026-04-15
 
 ### Changed
@@ -48,7 +56,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/skill/prod-readiness-v4.1.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/skill/prod-readiness-v4.2.0...HEAD
+[4.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/prod-readiness-v4.1.0...skill/prod-readiness-v4.2.0
 [4.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/prod-readiness-v4.0.0...skill/prod-readiness-v4.1.0
 [3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/prod-readiness-v2.0.0...skill/prod-readiness-v3.0.0
 [2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/prod-readiness-v1.1.0...skill/prod-readiness-v2.0.0
