@@ -17,6 +17,7 @@ this file when linting a CHANGELOG or authoring automated entry generation.
 | Commit-log dumps (`git log`) | Process | Noise; conflates internal churn with user-facing change |
 | Using a future or guessed release date | Process | Date must be the actual tag-push date in ISO 8601; placeholders like `YYYY-MM-DD` left in published CHANGELOGs are invalid |
 | Compare link references a tag that does not exist in the repo | Process | Link 404s silently; verify every tag in the link footer exists with `git tag -l "{slug}-v*"` before publishing |
+| Using a lightweight or unsigned tag for a released version | Process | Provenance cannot be verified and `--follow-tags` will not carry lightweight tags; use signed annotated tags via `git tag -s -m "{tag}" "{tag}"` |
 | Hardcoding a GitHub compare URL in a project hosted on GitLab or Bitbucket | Process | URL will 404; use the correct platform template from `references/platform-urls.md` |
 | Using a monolithic repo tag (`v1.2.0`) in a monorepo with per-component changelogs | Process | Implies a single release covering all components; use per-component tags (`{slug}-v{version}`) |
 | Lumping unrelated changes | Semantic | One bullet = one idea; avoid "and also fixed X" entries |

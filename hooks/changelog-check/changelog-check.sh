@@ -39,6 +39,12 @@ changelog_slug() {
   esac
 }
 
+tag_has_signature() {
+  local tag_name="$1"
+  git cat-file -p "refs/tags/${tag_name}" 2>/dev/null \
+    | grep -Eq '^-----BEGIN [A-Z0-9 ]*SIGNATURE-----$'
+}
+
 # Get the remote and URL
 remote="$1"
 url="$2"
@@ -119,7 +125,8 @@ while read local_ref local_sha remote_ref remote_sha; do
     fi
   done < <(printf '%s\n' "$diff_output" | grep 'CHANGELOG.md')
 
-  # Tag-presence check: every NEW ## [X.Y.Z] header in this push must have a matching tag.
+  # Tag check: every NEW ## [X.Y.Z] header in this push must have a matching
+  # signed annotated tag. Lightweight or unsigned tags are rejected.
   while IFS= read -r changelog_path; do
     slug=$(changelog_slug "$changelog_path")
     ver_pattern='^## \[[0-9]+\.[0-9]+\.[0-9]+\] - [0-9]{4}-[0-9]{2}-[0-9]{2}'
@@ -148,10 +155,32 @@ while read local_ref local_sha remote_ref remote_sha; do
       [ -n "$slug" ] && expected_tag="${slug}-v${version}" || expected_tag="v${version}"
       if ! git tag -l "$expected_tag" | grep -qxF "$expected_tag"; then
         echo ""
-        echo "ERROR: Promoted CHANGELOG entry [${version}] in ${changelog_path%/CHANGELOG.md} has no matching tag ${expected_tag}."
+        echo "ERROR: Promoted CHANGELOG entry [${version}] in ${changelog_path%/CHANGELOG.md} has no matching signed annotated tag ${expected_tag}."
         echo ""
-        echo "   Run: /changelog release"
-        echo "   Or: git push origin HEAD && git tag '${expected_tag}' && git push origin '${expected_tag}'"
+        echo "   Run: git tag -s -m '${expected_tag}' '${expected_tag}'"
+        echo "   Then: git push origin HEAD --follow-tags"
+        echo ""
+        echo "   To bypass: git push --no-verify"
+        echo ""
+        exit 1
+      fi
+      if [[ "$(git cat-file -t "refs/tags/${expected_tag}" 2>/dev/null || true)" != "tag" ]]; then
+        echo ""
+        echo "ERROR: Release tag ${expected_tag} is lightweight. Promoted CHANGELOG entries require signed annotated tags."
+        echo ""
+        echo "   Delete and recreate it as: git tag -d '${expected_tag}' && git tag -s -m '${expected_tag}' '${expected_tag}'"
+        echo "   Then push with: git push origin HEAD --follow-tags"
+        echo ""
+        echo "   To bypass: git push --no-verify"
+        echo ""
+        exit 1
+      fi
+      if ! tag_has_signature "$expected_tag"; then
+        echo ""
+        echo "ERROR: Release tag ${expected_tag} is annotated but unsigned. Promoted CHANGELOG entries require signed annotated tags."
+        echo ""
+        echo "   Recreate it as: git tag -d '${expected_tag}' && git tag -s -m '${expected_tag}' '${expected_tag}'"
+        echo "   Then push with: git push origin HEAD --follow-tags"
         echo ""
         echo "   To bypass: git push --no-verify"
         echo ""

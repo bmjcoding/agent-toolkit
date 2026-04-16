@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [6.3.0] - 2026-04-16
+
+### Changed
+
+- Declared the repository-root `CHANGELOG.md` as the one allowed bare-tag exception (`vX.Y.Z`) and tightened all release examples to require signed annotated tags via `git tag -s -m`.
+- Updated the backfill helper and recovery guidance to treat lightweight or unsigned tags as non-conformant instead of silently accepting them.
+
 ## [6.2.0] - 2026-04-15
 
 ### Changed
@@ -114,7 +121,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial changelog skill defining Keep a Changelog 1.1.0 + SemVer standard for all toolkit components
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/skill/changelog-v6.2.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/skill/changelog-v6.3.0...HEAD
+[6.3.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/changelog-v6.2.0...skill/changelog-v6.3.0
 [6.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/changelog-v6.1.0...skill/changelog-v6.2.0
 [6.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/changelog-v6.0.0...skill/changelog-v6.1.0
 [6.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/changelog-v5.0.0...skill/changelog-v6.0.0
