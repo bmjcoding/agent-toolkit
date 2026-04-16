@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# lifecycle: stable
 # changelog-check — pre-push hook
 # Blocks git push if CHANGELOG.md was not modified in any commit being pushed.
 # This enforces the changelog-first workflow: run the /changelog skill before shipping.

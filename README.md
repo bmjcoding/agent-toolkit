@@ -19,7 +19,8 @@ agent-toolkit/
   skills/                 # Canonical shared skills
   rules/                  # Canonical shared rules
   workflows/              # Canonical shared workflow definitions
-  claude-code/            # Claude-native agents, commands, hook docs, bundles, generated rule adapters, scripts
+  bundles/                # Canonical shared bundle manifests
+  claude-code/            # Claude-native agents, commands, hook docs, generated rule adapters, scripts
   github-copilot/         # VS Code Copilot-native agents, prompts, instructions, hooks, scripts
   openai-codex/           # Codex-native agents, hooks, config templates, rule build assets
   AGENTS.md               # Primary shared instructions
@@ -32,12 +33,13 @@ agent-toolkit/
 - Root `rules/` is the single source of truth for shared rule content.
 - Root `agents/` is the single source of truth for shared agent instruction bodies.
 - Root `workflows/` is the single source of truth for shared workflow bodies.
+- Root `bundles/` is the single source of truth for shared bundle manifests.
 - Root `hooks/` is the canonical shared owner of hook logic.
 - `AGENTS.md` is the canonical shared instruction file.
 - `CLAUDE.md` is a one-line Claude compatibility shim, not the canonical shared
   instruction source.
 - Tool directories contain only tool-native assets or adapters:
-  - `claude-code/`: Claude frontmatter wrappers, slash-command adapters, hook docs, bundles, generated rule adapters, install scripts.
+- `claude-code/`: Claude frontmatter wrappers, slash-command adapters, hook docs, generated rule adapters, install scripts.
   - `github-copilot/`: VS Code Copilot agent adapters, prompt adapters, generated instruction adapters, hook manifests/adapters, install scripts.
   - `openai-codex/`: Codex TOML agent adapters, hooks, config templates, rule composition assets.
 - Canonical root `rules/` content is adapted into:
@@ -215,7 +217,7 @@ Editing a canonical rule under `rules/<slug>/<slug>.md` regenerates:
 - `github-copilot/instructions/`
 - `index.json`
 
-Editing shared skills, indexed hook assets, or Claude bundle manifests also refreshes
+Editing shared skills, indexed hook assets, or canonical bundle manifests also refreshes
 `index.json`.
 
 Pull requests fail if generated adapters or `index.json` are stale. Pushes to branches

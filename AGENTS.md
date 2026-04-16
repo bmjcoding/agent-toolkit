@@ -25,6 +25,7 @@ agent-toolkit/
   skills/          # Canonical shared skills
   rules/           # Canonical shared rules
   workflows/       # Canonical shared workflow definitions
+  bundles/         # Canonical shared bundle manifests
   claude-code/     # Claude-native agents, commands, hook docs, bundles, generated rule adapters, scripts
   github-copilot/  # VS Code Copilot-native agents, prompts, instructions, hooks, scripts
   openai-codex/    # Codex-native agents, hooks, config templates, rule build assets
@@ -38,6 +39,7 @@ agent-toolkit/
 - Root `rules/` is the single source of truth for shared rule content.
 - Root `agents/` is the single source of truth for shared agent instruction bodies.
 - Root `workflows/` is the single source of truth for shared workflow bodies.
+- Root `bundles/` is the single source of truth for shared bundle manifests.
 - Root `hooks/` is the canonical shared owner of hook logic and hook changelogs.
 - `AGENTS.md` is the canonical shared instruction file.
 - `CLAUDE.md` is a one-line Claude compatibility shim, not the canonical shared

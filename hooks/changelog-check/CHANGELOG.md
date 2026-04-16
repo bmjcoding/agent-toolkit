@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.1] - 2026-04-16
+
+### Changed
+
+- Declared canonical lifecycle metadata inline in the root hook script so generated catalog and validation flows derive hook maturity from the shared hook source.
+
 ## [1.1.0] - 2026-04-16
 
 ### Changed
@@ -21,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Root hook tag derivation now recognizes `hooks/<slug>/CHANGELOG.md` as `hook/<slug>` for the emerging shared hook namespace.
 - Historical release continuity remains in the prior tool-local changelog until the dedicated changelog-ownership migration phase moves fully to root `hooks/`.
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/hook/changelog-check-v1.1.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/hook/changelog-check-v1.1.1...HEAD
+[1.1.1]: https://github.com/bmjcoding/agent-toolkit/compare/hook/changelog-check-v1.1.0...hook/changelog-check-v1.1.1
 [1.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/hook/changelog-check-v1.0.0...hook/changelog-check-v1.1.0
 [1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/hook/changelog-check-v1.0.0

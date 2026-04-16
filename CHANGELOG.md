@@ -8,6 +8,18 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [4.8.0] - 2026-04-16
+
+### Changed
+
+- Canonicalized bundle ownership under root `bundles/` so generated catalog metadata now treats shared bundle definitions like the rest of the root toolkit surfaces instead of crawling Claude-specific bundle manifests.
+- Renamed the `frankenstein-orchestration` bundle to `ultra-dev`, preserving the legacy alias in generated catalog metadata and compatibility-facing documentation.
+- Taught the catalog generator and lifecycle validator to derive bundle and hook lifecycle metadata from canonical root definitions, including lifecycle aggregation across bundle members.
+
+### Fixed
+
+- Bundle membership generation and smoke validation now stay aligned after the root bundle move, including alias coverage for `ultra-dev` and lifecycle aggregation checks for generated bundle artifacts.
+
 ## [4.7.0] - 2026-04-16
 
 ### Added
