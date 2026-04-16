@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Removed stale import noise from `scripts/lint-definition.py` so the shared review-skill
+  tooling passes the new repo-wide Ruff baseline cleanly.
+
 ## [5.1.0] - 2026-04-15
 
 ### Changed
