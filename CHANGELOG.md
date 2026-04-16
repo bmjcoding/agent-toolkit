@@ -8,6 +8,8 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [4.5.0] - 2026-04-15
+
 ### Added
 
 - Added generated Claude rule adapters under `claude-code/rules/` so Claude Code and
@@ -337,7 +339,8 @@ No action required for users who install via symlinks (`./claude-code/scripts/in
 3. Re-run the install script: `./claude-code/scripts/install.sh`.
 4. Verify: `./claude-code/scripts/install.sh --check`.
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/v4.4.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/v4.5.0...HEAD
+[4.5.0]: https://github.com/bmjcoding/agent-toolkit/compare/v4.4.0...v4.5.0
 [4.4.0]: https://github.com/bmjcoding/agent-toolkit/compare/v4.3.0...v4.4.0
 [4.3.0]: https://github.com/bmjcoding/agent-toolkit/compare/v4.2.1...v4.3.0
 [4.2.1]: https://github.com/bmjcoding/agent-toolkit/compare/v4.2.0...v4.2.1

@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.1.2] - 2026-04-15
+
 ### Fixed
 
 - Cleaned up retro helper scripts and normalized `references/model-pricing.json` so the
@@ -150,7 +152,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/skill/retro-v5.1.1...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/skill/retro-v5.1.2...HEAD
+[5.1.2]: https://github.com/bmjcoding/agent-toolkit/compare/skill/retro-v5.1.1...skill/retro-v5.1.2
 [5.1.1]: https://github.com/bmjcoding/agent-toolkit/compare/skill/retro-v5.1.0...skill/retro-v5.1.1
 [5.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/retro-v5.0.0...skill/retro-v5.1.0
 [5.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/retro-v4.2.4...skill/retro-v5.0.0
