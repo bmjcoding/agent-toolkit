@@ -356,7 +356,7 @@
     {
       "component_id": "release-engineer",
       "component_kind": "agent",
-      "component_version": "5.1.0",
+      "component_version": "5.2.0",
       "lifecycle": "stable",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/agents/release-engineer.md",
@@ -364,7 +364,7 @@
       "install_path": "~/.claude/agents/release-engineer.md",
       "install_command": "mkdir -p \"$HOME/.claude/agents\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/release-engineer.md\" -o \"$HOME/.claude/agents/release-engineer.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/release-engineer.md",
-      "checksum_sha256": "4d73f1b20cb8351a8f9d82ccbe65aaa2b082c53f80b7b71adc00dc4074a5ce49",
+      "checksum_sha256": "c6d68a4f0a9b5163b2022e4ef3796144379955f773b3039aa6053b0c697c650b",
       "bundle_membership": [
         {
           "bundle_id": "frankenstein-orchestration",
@@ -1213,7 +1213,7 @@
     {
       "component_id": "changelog-check",
       "component_kind": "hook",
-      "component_version": "1.0.0",
+      "component_version": "1.1.0",
       "lifecycle": "stable",
       "target_tool": "claude-code",
       "artifact_path": "hooks/changelog-check/changelog-check.sh",
@@ -1221,7 +1221,7 @@
       "install_path": "~/.claude/hooks/changelog-check/changelog-check.sh",
       "install_command": "mkdir -p \"$HOME/.claude/hooks/changelog-check\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/changelog-check/changelog-check.sh\" -o \"$HOME/.claude/hooks/changelog-check/changelog-check.sh\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/changelog-check/changelog-check.sh",
-      "checksum_sha256": "b02bcb4b8fd49239a0fbb59afff01d20a518afdf2df9147d0a4e7fee54c9eed6",
+      "checksum_sha256": "7f0c70ca5271508d14e990c5563a84a3d968d376f572c93391ea7080de4601ea",
       "bundle_membership": [],
       "metadata": {}
     },
@@ -1458,7 +1458,7 @@
     {
       "component_id": "changelog",
       "component_kind": "skill",
-      "component_version": "6.2.0",
+      "component_version": "6.3.0",
       "lifecycle": "stable",
       "target_tool": "claude-code",
       "artifact_path": "skills/changelog/SKILL.md",
@@ -1466,7 +1466,7 @@
       "install_path": "~/.claude/skills/changelog/SKILL.md",
       "install_command": "mkdir -p \"$HOME/.claude/skills/changelog\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/changelog/SKILL.md\" -o \"$HOME/.claude/skills/changelog/SKILL.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/changelog/SKILL.md",
-      "checksum_sha256": "b3eb832190897a9a1b92ee36c0a0c15cba484546f83944ee685c320e4f4cd7b0",
+      "checksum_sha256": "4c03d53c6b16f6f40d9814aa9064b2f8a3748a37fb5c8c7899d34f60d6ccbd38",
       "bundle_membership": [
         {
           "bundle_id": "frankenstein-orchestration",
@@ -2023,7 +2023,7 @@
     {
       "component_id": "release-engineer",
       "component_kind": "agent",
-      "component_version": "5.1.0",
+      "component_version": "5.2.0",
       "lifecycle": "stable",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/agents/release-engineer.agent.md",
@@ -2031,7 +2031,7 @@
       "install_path": ".github/agents/release-engineer.agent.md",
       "install_command": "mkdir -p \".github/agents\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/release-engineer.agent.md\" -o \".github/agents/release-engineer.agent.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/release-engineer.agent.md",
-      "checksum_sha256": "60f5a2cfc9331d0da732f25a6a52f4f25aa6132ded4770c5f27f364056ab4002",
+      "checksum_sha256": "ab93fa9b4fb3ca8ead82594c9c55840388e0706cbb90330c16e916c871fe391c",
       "bundle_membership": [],
       "metadata": {
         "model_tier": "balanced",
@@ -2289,7 +2289,7 @@
     {
       "component_id": "changelog-check",
       "component_kind": "hook",
-      "component_version": "1.0.0",
+      "component_version": "1.1.0",
       "lifecycle": "stable",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/hooks/changelog-check/changelog-check.json",
@@ -2516,7 +2516,7 @@
     {
       "component_id": "changelog",
       "component_kind": "skill",
-      "component_version": "6.2.0",
+      "component_version": "6.3.0",
       "lifecycle": "stable",
       "target_tool": "github-copilot",
       "artifact_path": "skills/changelog/SKILL.md",
@@ -2524,7 +2524,7 @@
       "install_path": "skills/changelog/SKILL.md",
       "install_command": "mkdir -p \"skills/changelog\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/changelog/SKILL.md\" -o \"skills/changelog/SKILL.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/changelog/SKILL.md",
-      "checksum_sha256": "b3eb832190897a9a1b92ee36c0a0c15cba484546f83944ee685c320e4f4cd7b0",
+      "checksum_sha256": "4c03d53c6b16f6f40d9814aa9064b2f8a3748a37fb5c8c7899d34f60d6ccbd38",
       "bundle_membership": [],
       "metadata": {}
     },
@@ -2985,7 +2985,7 @@
     {
       "component_id": "release-engineer",
       "component_kind": "agent",
-      "component_version": "5.1.0",
+      "component_version": "5.2.0",
       "lifecycle": "stable",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/agents/release-engineer.toml",
@@ -2993,7 +2993,7 @@
       "install_path": "~/.codex/agents/release-engineer.toml",
       "install_command": "mkdir -p \"$HOME/.codex/agents\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/release-engineer.toml\" -o \"$HOME/.codex/agents/release-engineer.toml\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/release-engineer.toml",
-      "checksum_sha256": "961127e536f40b80f005f5f42cb309282a75b2defa89880c3ea31c1f7eecbd19",
+      "checksum_sha256": "9990c2ee06983d7713bf6d9d71fa5b2a4f6c5523cc4676257911a61b99710435",
       "bundle_membership": [],
       "metadata": {
         "model_tier": "balanced",
@@ -3145,7 +3145,7 @@
     {
       "component_id": "changelog-check",
       "component_kind": "hook",
-      "component_version": "1.0.0",
+      "component_version": "1.1.0",
       "lifecycle": "experimental",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/hooks/changelog-check/changelog-check.sh",
@@ -3287,7 +3287,7 @@
     {
       "component_id": "changelog",
       "component_kind": "skill",
-      "component_version": "6.2.0",
+      "component_version": "6.3.0",
       "lifecycle": "stable",
       "target_tool": "openai-codex",
       "artifact_path": "skills/changelog/SKILL.md",
@@ -3295,7 +3295,7 @@
       "install_path": ".agents/skills/changelog/SKILL.md",
       "install_command": "mkdir -p \".agents/skills/changelog\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/changelog/SKILL.md\" -o \".agents/skills/changelog/SKILL.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/skills/changelog/SKILL.md",
-      "checksum_sha256": "b3eb832190897a9a1b92ee36c0a0c15cba484546f83944ee685c320e4f4cd7b0",
+      "checksum_sha256": "4c03d53c6b16f6f40d9814aa9064b2f8a3748a37fb5c8c7899d34f60d6ccbd38",
       "bundle_membership": [],
       "metadata": {}
     },

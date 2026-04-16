@@ -2,8 +2,8 @@
 # backfill-changelog-tags.sh — Create per-component git tags from a CHANGELOG.md.
 #
 # Reads "## [X.Y.Z] - YYYY-MM-DD" headers from a CHANGELOG.md and tags the commit that
-# introduced each version header with {full-slug}-v{X.Y.Z}. Existing tags are skipped,
-# not modified.
+# introduced each version header with a signed annotated {full-slug}-v{X.Y.Z} tag.
+# Existing conformant tags are skipped. Lightweight or unsigned tags are reported as failures.
 #
 # Intended use: one-time migration from monolithic (`vX.Y.Z`) to per-component
 # (`{namespace}/{slug}-vX.Y.Z`) tagging. See references/migration.md.
@@ -28,8 +28,9 @@ BEHAVIOR:
   1. Parse "## [X.Y.Z] - YYYY-MM-DD" headers from the CHANGELOG (skips [Unreleased]).
   2. For each version, use `git log -S "## [X.Y.Z]"` on the CHANGELOG path to find
      the commit that introduced that version header.
-  3. Tag that commit with {full-slug}-v{X.Y.Z}.
-  4. Skip any version whose tag already exists (does not overwrite).
+  3. Tag that commit with a signed annotated {full-slug}-v{X.Y.Z} tag.
+  4. Skip any version whose existing tag is already signed and annotated.
+  5. Fail any version whose existing tag is lightweight or unsigned.
 
 AFTER SUCCESS:
   Run: git push origin --tags
@@ -93,13 +94,29 @@ FAIL_COUNT=0
 CREATED_COUNT=0
 SKIPPED_COUNT=0
 
+tag_has_signature() {
+  local tag_name="$1"
+  git cat-file -p "refs/tags/${tag_name}" 2>/dev/null \
+    | grep -Eq '^-----BEGIN [A-Z0-9 ]*SIGNATURE-----$'
+}
+
 while IFS= read -r VERSION; do
   [[ -z "$VERSION" ]] && continue
   TAG="${SLUG}-v${VERSION}"
 
   # Skip if tag already exists
   if git rev-parse -q --verify "refs/tags/${TAG}" >/dev/null 2>&1; then
-    echo "skip  ${TAG} (already exists)"
+    if [[ "$(git cat-file -t "refs/tags/${TAG}" 2>/dev/null || true)" != "tag" ]]; then
+      echo "FAIL  ${TAG} (existing tag is lightweight; recreate it as a signed annotated tag)" >&2
+      FAIL_COUNT=$((FAIL_COUNT + 1))
+      continue
+    fi
+    if ! tag_has_signature "$TAG"; then
+      echo "FAIL  ${TAG} (existing tag is annotated but unsigned; recreate it as a signed annotated tag)" >&2
+      FAIL_COUNT=$((FAIL_COUNT + 1))
+      continue
+    fi
+    echo "skip  ${TAG} (already exists and is signed annotated)"
     SKIPPED_COUNT=$((SKIPPED_COUNT + 1))
     continue
   fi
@@ -116,7 +133,11 @@ while IFS= read -r VERSION; do
   if [[ $DRY_RUN -eq 1 ]]; then
     echo "plan  ${TAG} -> ${COMMIT:0:12}"
   else
-    git tag "$TAG" "$COMMIT"
+    if ! git tag -s -m "$TAG" "$TAG" "$COMMIT"; then
+      echo "FAIL  ${TAG} (signed tag creation failed; verify your signing agent and git tag signing config)" >&2
+      FAIL_COUNT=$((FAIL_COUNT + 1))
+      continue
+    fi
     echo "tag   ${TAG} -> ${COMMIT:0:12}"
     CREATED_COUNT=$((CREATED_COUNT + 1))
   fi
