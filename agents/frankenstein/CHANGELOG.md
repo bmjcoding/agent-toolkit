@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.1.1] - 2026-04-15
+
 ### Changed
 
 - Phase 5b post-validation guidance now prefers session-scoped handoff paths under `.orchestrator/sessions/$SID/handoffs/`, with the flat `.orchestrator/handoffs/` path retained as a fallback when no valid session id is active.
@@ -258,7 +260,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v5.1.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v5.1.1...HEAD
+[5.1.1]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v5.1.0...agent/frankenstein-v5.1.1
 [5.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v5.0.0...agent/frankenstein-v5.1.0
 [5.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/agent/frankenstein-v5.0.0
 [4.5.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v4.4.0...agent/frankenstein-v4.5.0

@@ -147,7 +147,7 @@
     {
       "component_id": "frankenstein",
       "component_kind": "agent",
-      "component_version": "5.1.0",
+      "component_version": "5.1.1",
       "lifecycle": "stable",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/agents/frankenstein.md",
@@ -1248,7 +1248,7 @@
     {
       "component_id": "inject-context",
       "component_kind": "hook",
-      "component_version": "1.0.0",
+      "component_version": "1.0.1",
       "lifecycle": "stable",
       "target_tool": "claude-code",
       "artifact_path": "hooks/inject-context/inject-context.sh",
@@ -1682,7 +1682,7 @@
     {
       "component_id": "retro",
       "component_kind": "skill",
-      "component_version": "5.1.0",
+      "component_version": "5.1.1",
       "lifecycle": "stable",
       "target_tool": "claude-code",
       "artifact_path": "skills/retro/SKILL.md",
@@ -1848,7 +1848,7 @@
     {
       "component_id": "frankenstein",
       "component_kind": "agent",
-      "component_version": "5.1.0",
+      "component_version": "5.1.1",
       "lifecycle": "stable",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/agents/frankenstein.agent.md",
@@ -2327,7 +2327,7 @@
     {
       "component_id": "inject-context",
       "component_kind": "hook",
-      "component_version": "1.0.0",
+      "component_version": "1.0.1",
       "lifecycle": "stable",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/hooks/inject-context/inject-context.json",
@@ -2615,7 +2615,7 @@
     {
       "component_id": "frankenstein",
       "component_kind": "agent",
-      "component_version": "5.1.0",
+      "component_version": "5.1.1",
       "lifecycle": "stable",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/agents/frankenstein.toml",
@@ -2986,7 +2986,7 @@
     {
       "component_id": "inject-context",
       "component_kind": "hook",
-      "component_version": "1.0.0",
+      "component_version": "1.0.1",
       "lifecycle": "experimental",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/hooks/inject-context/inject-context.sh",
@@ -3227,7 +3227,7 @@
     {
       "component_id": "retro",
       "component_kind": "skill",
-      "component_version": "5.1.0",
+      "component_version": "5.1.1",
       "lifecycle": "stable",
       "target_tool": "openai-codex",
       "artifact_path": "skills/retro/SKILL.md",
