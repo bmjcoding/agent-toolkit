@@ -147,7 +147,7 @@
     {
       "component_id": "frankenstein",
       "component_kind": "agent",
-      "component_version": "5.1.1",
+      "component_version": "5.1.2",
       "lifecycle": "stable",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/agents/frankenstein.md",
@@ -155,7 +155,7 @@
       "install_path": "~/.claude/agents/frankenstein.md",
       "install_command": "mkdir -p \"$HOME/.claude/agents\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/frankenstein.md\" -o \"$HOME/.claude/agents/frankenstein.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/frankenstein.md",
-      "checksum_sha256": "f7f0c4442420bc918d7e7b254ae67b93192021d9764601b27db8f5af186b626c",
+      "checksum_sha256": "1f0439309a4fa22e40b66abaee3e93294d34567e483efe7165f966a6b528f15f",
       "bundle_membership": [
         {
           "bundle_id": "frankenstein-orchestration",
@@ -1144,7 +1144,7 @@
     {
       "component_id": "sync-toolkit",
       "component_kind": "command",
-      "component_version": "4.2.0",
+      "component_version": "4.2.1",
       "lifecycle": "stable",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/commands/sync-toolkit/sync-toolkit.md",
@@ -1152,7 +1152,7 @@
       "install_path": "~/.claude/commands/sync-toolkit/sync-toolkit.md",
       "install_command": "mkdir -p \"$HOME/.claude/commands/sync-toolkit\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/commands/sync-toolkit/sync-toolkit.md\" -o \"$HOME/.claude/commands/sync-toolkit/sync-toolkit.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/commands/sync-toolkit/sync-toolkit.md",
-      "checksum_sha256": "2c01d1e970e71d1bef433557937d5c5f4800f99f51ce0b8098bea6c1621bb908",
+      "checksum_sha256": "19809d1e2639db93310ae05db1d53b608a84867e25ff4cb6d7c6c048b3203ab5",
       "bundle_membership": [],
       "metadata": {
         "argument_hint": "[--dry-run] [--no-pr] [--component TYPE/NAME]",
@@ -1848,7 +1848,7 @@
     {
       "component_id": "frankenstein",
       "component_kind": "agent",
-      "component_version": "5.1.1",
+      "component_version": "5.1.2",
       "lifecycle": "stable",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/agents/frankenstein.agent.md",
@@ -1856,7 +1856,7 @@
       "install_path": ".github/agents/frankenstein.agent.md",
       "install_command": "mkdir -p \".github/agents\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/frankenstein.agent.md\" -o \".github/agents/frankenstein.agent.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/frankenstein.agent.md",
-      "checksum_sha256": "5b212147d9d5595a851c4b1965b05057701969456b5d77d3d2b4b655ffe81231",
+      "checksum_sha256": "0b86f54264b3691606357ca80faba33255a6187a8827461bfc713a94ac2bf91d",
       "bundle_membership": [],
       "metadata": {
         "model_tier": "frontier",
@@ -2234,7 +2234,7 @@
     {
       "component_id": "sync-toolkit",
       "component_kind": "command",
-      "component_version": "4.2.0",
+      "component_version": "4.2.1",
       "lifecycle": "stable",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/prompts/sync-toolkit.prompt.md",
@@ -2242,7 +2242,7 @@
       "install_path": ".github/prompts/sync-toolkit.prompt.md",
       "install_command": "mkdir -p \".github/prompts\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/prompts/sync-toolkit.prompt.md\" -o \".github/prompts/sync-toolkit.prompt.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/prompts/sync-toolkit.prompt.md",
-      "checksum_sha256": "3eae5ff10b5667651b221133a1b15dea41c2ea15268829b4e73848d7129f2d66",
+      "checksum_sha256": "be7e00f08c28fdc599a78e7fb9d207e22e7e0dc483393a7079251b50fce37bc9",
       "bundle_membership": [],
       "metadata": {
         "argument_hint": "[--dry-run] [--no-pr] [--component TYPE/NAME]",
@@ -2615,7 +2615,7 @@
     {
       "component_id": "frankenstein",
       "component_kind": "agent",
-      "component_version": "5.1.1",
+      "component_version": "5.1.2",
       "lifecycle": "stable",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/agents/frankenstein.toml",
@@ -2623,7 +2623,7 @@
       "install_path": "~/.codex/agents/frankenstein.toml",
       "install_command": "mkdir -p \"$HOME/.codex/agents\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/frankenstein.toml\" -o \"$HOME/.codex/agents/frankenstein.toml\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/frankenstein.toml",
-      "checksum_sha256": "fa7dae0a1625222b149a6144c5b1b6a8176f9314c46e1a233b84dbde87b2c878",
+      "checksum_sha256": "4481aaf8bbfa334ce5e17f352ff51f0dbeb735921bfda95aa5745162339629b8",
       "bundle_membership": [],
       "metadata": {
         "model_tier": "frontier",
@@ -2934,14 +2934,16 @@
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/hooks/branch-guard/branch-guard.sh",
       "source_path": "openai-codex/hooks/branch-guard/branch-guard.sh",
-      "install_path": "~/.codex/hooks/branch-guard.sh",
-      "install_command": "mkdir -p \"$HOME/.codex/hooks\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/branch-guard/branch-guard.sh\" -o \"$HOME/.codex/hooks/branch-guard.sh\" && mkdir -p \"$HOME/.codex\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/hooks.json\" -o \"$HOME/.codex/hooks.json\"",
+      "install_path": "~/.codex/openai-codex/hooks/branch-guard/branch-guard.sh",
+      "install_command": "mkdir -p \"$HOME/.codex/openai-codex/hooks/branch-guard\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/branch-guard/branch-guard.sh\" -o \"$HOME/.codex/openai-codex/hooks/branch-guard/branch-guard.sh\" && mkdir -p \"$HOME/.codex\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/hooks.json\" -o \"$HOME/.codex/hooks.json\" && mkdir -p \"$HOME/.codex/hooks\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/_adapter_lib.sh\" -o \"$HOME/.codex/hooks/_adapter_lib.sh\" && mkdir -p \"$HOME/.codex/hooks/branch-guard\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/branch-guard/branch-guard.sh\" -o \"$HOME/.codex/hooks/branch-guard/branch-guard.sh\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/branch-guard/branch-guard.sh",
       "checksum_sha256": "b9d032a2ef2bf6dbf289c1581a32a5d07a391cf918e4934052e5e34841449138",
       "bundle_membership": [],
       "metadata": {
         "companion_artifacts": [
-          "openai-codex/hooks/hooks.json"
+          "openai-codex/hooks/hooks.json",
+          "hooks/_adapter_lib.sh",
+          "hooks/branch-guard/branch-guard.sh"
         ]
       }
     },
@@ -2953,14 +2955,16 @@
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/hooks/changelog-check/changelog-check.sh",
       "source_path": "openai-codex/hooks/changelog-check/changelog-check.sh",
-      "install_path": "~/.codex/hooks/changelog-check.sh",
-      "install_command": "mkdir -p \"$HOME/.codex/hooks\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/changelog-check/changelog-check.sh\" -o \"$HOME/.codex/hooks/changelog-check.sh\" && mkdir -p \"$HOME/.codex\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/hooks.json\" -o \"$HOME/.codex/hooks.json\"",
+      "install_path": "~/.codex/openai-codex/hooks/changelog-check/changelog-check.sh",
+      "install_command": "mkdir -p \"$HOME/.codex/openai-codex/hooks/changelog-check\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/changelog-check/changelog-check.sh\" -o \"$HOME/.codex/openai-codex/hooks/changelog-check/changelog-check.sh\" && mkdir -p \"$HOME/.codex\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/hooks.json\" -o \"$HOME/.codex/hooks.json\" && mkdir -p \"$HOME/.codex/hooks\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/_adapter_lib.sh\" -o \"$HOME/.codex/hooks/_adapter_lib.sh\" && mkdir -p \"$HOME/.codex/hooks/changelog-check\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/changelog-check/changelog-check.sh\" -o \"$HOME/.codex/hooks/changelog-check/changelog-check.sh\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/changelog-check/changelog-check.sh",
       "checksum_sha256": "10a0aa46daaf2ae091b55bb87d41e1b3f8f53f3bbdc0ed6f6c6320ece97a132b",
       "bundle_membership": [],
       "metadata": {
         "companion_artifacts": [
-          "openai-codex/hooks/hooks.json"
+          "openai-codex/hooks/hooks.json",
+          "hooks/_adapter_lib.sh",
+          "hooks/changelog-check/changelog-check.sh"
         ]
       }
     },
@@ -2972,14 +2976,16 @@
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/hooks/extract-handoff/extract-handoff.sh",
       "source_path": "openai-codex/hooks/extract-handoff/extract-handoff.sh",
-      "install_path": "~/.codex/hooks/extract-handoff.sh",
-      "install_command": "mkdir -p \"$HOME/.codex/hooks\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/extract-handoff/extract-handoff.sh\" -o \"$HOME/.codex/hooks/extract-handoff.sh\" && mkdir -p \"$HOME/.codex\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/hooks.json\" -o \"$HOME/.codex/hooks.json\"",
+      "install_path": "~/.codex/openai-codex/hooks/extract-handoff/extract-handoff.sh",
+      "install_command": "mkdir -p \"$HOME/.codex/openai-codex/hooks/extract-handoff\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/extract-handoff/extract-handoff.sh\" -o \"$HOME/.codex/openai-codex/hooks/extract-handoff/extract-handoff.sh\" && mkdir -p \"$HOME/.codex\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/hooks.json\" -o \"$HOME/.codex/hooks.json\" && mkdir -p \"$HOME/.codex/hooks\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/_adapter_lib.sh\" -o \"$HOME/.codex/hooks/_adapter_lib.sh\" && mkdir -p \"$HOME/.codex/hooks/extract-handoff\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/extract-handoff/extract-handoff.sh\" -o \"$HOME/.codex/hooks/extract-handoff/extract-handoff.sh\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/extract-handoff/extract-handoff.sh",
       "checksum_sha256": "cdb0f06688d78f4502f1e0b621d4b9d11b6ea4e1dbe8025ad8a916d04a330c64",
       "bundle_membership": [],
       "metadata": {
         "companion_artifacts": [
-          "openai-codex/hooks/hooks.json"
+          "openai-codex/hooks/hooks.json",
+          "hooks/_adapter_lib.sh",
+          "hooks/extract-handoff/extract-handoff.sh"
         ]
       }
     },
@@ -2991,14 +2997,16 @@
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/hooks/inject-context/inject-context.sh",
       "source_path": "openai-codex/hooks/inject-context/inject-context.sh",
-      "install_path": "~/.codex/hooks/inject-context.sh",
-      "install_command": "mkdir -p \"$HOME/.codex/hooks\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/inject-context/inject-context.sh\" -o \"$HOME/.codex/hooks/inject-context.sh\" && mkdir -p \"$HOME/.codex\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/hooks.json\" -o \"$HOME/.codex/hooks.json\"",
+      "install_path": "~/.codex/openai-codex/hooks/inject-context/inject-context.sh",
+      "install_command": "mkdir -p \"$HOME/.codex/openai-codex/hooks/inject-context\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/inject-context/inject-context.sh\" -o \"$HOME/.codex/openai-codex/hooks/inject-context/inject-context.sh\" && mkdir -p \"$HOME/.codex\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/hooks.json\" -o \"$HOME/.codex/hooks.json\" && mkdir -p \"$HOME/.codex/hooks\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/_adapter_lib.sh\" -o \"$HOME/.codex/hooks/_adapter_lib.sh\" && mkdir -p \"$HOME/.codex/hooks/inject-context\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/inject-context/inject-context.sh\" -o \"$HOME/.codex/hooks/inject-context/inject-context.sh\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/inject-context/inject-context.sh",
       "checksum_sha256": "9de7c20d92ba0f40dbf76f4f4d0723f85ac7fa05b688415ce17285b04d26cd78",
       "bundle_membership": [],
       "metadata": {
         "companion_artifacts": [
-          "openai-codex/hooks/hooks.json"
+          "openai-codex/hooks/hooks.json",
+          "hooks/_adapter_lib.sh",
+          "hooks/inject-context/inject-context.sh"
         ]
       }
     },
@@ -3010,14 +3018,17 @@
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/hooks/integrity-warn/integrity-warn.sh",
       "source_path": "openai-codex/hooks/integrity-warn/integrity-warn.sh",
-      "install_path": "~/.codex/hooks/integrity-warn.sh",
-      "install_command": "mkdir -p \"$HOME/.codex/hooks\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/integrity-warn/integrity-warn.sh\" -o \"$HOME/.codex/hooks/integrity-warn.sh\" && mkdir -p \"$HOME/.codex\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/hooks.json\" -o \"$HOME/.codex/hooks.json\"",
+      "install_path": "~/.codex/openai-codex/hooks/integrity-warn/integrity-warn.sh",
+      "install_command": "mkdir -p \"$HOME/.codex/openai-codex/hooks/integrity-warn\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/integrity-warn/integrity-warn.sh\" -o \"$HOME/.codex/openai-codex/hooks/integrity-warn/integrity-warn.sh\" && mkdir -p \"$HOME/.codex\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/hooks.json\" -o \"$HOME/.codex/hooks.json\" && mkdir -p \"$HOME/.codex/hooks\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/_adapter_lib.sh\" -o \"$HOME/.codex/hooks/_adapter_lib.sh\" && mkdir -p \"$HOME/.codex/hooks/integrity-warn\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/integrity-warn/integrity-warn.sh\" -o \"$HOME/.codex/hooks/integrity-warn/integrity-warn.sh\" && mkdir -p \"$HOME/.codex/openai-codex/scripts\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/scripts/integrity-check.sh\" -o \"$HOME/.codex/openai-codex/scripts/integrity-check.sh\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/integrity-warn/integrity-warn.sh",
       "checksum_sha256": "c9d5f185740b56aa028738334ef86cfd6ccd37c489d4265fe0d366183cb879dd",
       "bundle_membership": [],
       "metadata": {
         "companion_artifacts": [
-          "openai-codex/hooks/hooks.json"
+          "openai-codex/hooks/hooks.json",
+          "hooks/_adapter_lib.sh",
+          "hooks/integrity-warn/integrity-warn.sh",
+          "openai-codex/scripts/integrity-check.sh"
         ]
       }
     },
@@ -3029,14 +3040,16 @@
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/hooks/pre-push-secrets/pre-push-secrets.sh",
       "source_path": "openai-codex/hooks/pre-push-secrets/pre-push-secrets.sh",
-      "install_path": "~/.codex/hooks/pre-push-secrets.sh",
-      "install_command": "mkdir -p \"$HOME/.codex/hooks\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/pre-push-secrets/pre-push-secrets.sh\" -o \"$HOME/.codex/hooks/pre-push-secrets.sh\" && mkdir -p \"$HOME/.codex\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/hooks.json\" -o \"$HOME/.codex/hooks.json\"",
+      "install_path": "~/.codex/openai-codex/hooks/pre-push-secrets/pre-push-secrets.sh",
+      "install_command": "mkdir -p \"$HOME/.codex/openai-codex/hooks/pre-push-secrets\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/pre-push-secrets/pre-push-secrets.sh\" -o \"$HOME/.codex/openai-codex/hooks/pre-push-secrets/pre-push-secrets.sh\" && mkdir -p \"$HOME/.codex\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/hooks.json\" -o \"$HOME/.codex/hooks.json\" && mkdir -p \"$HOME/.codex/hooks\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/_adapter_lib.sh\" -o \"$HOME/.codex/hooks/_adapter_lib.sh\" && mkdir -p \"$HOME/.codex/hooks/pre-push-secrets\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/pre-push-secrets/pre-push-secrets.sh\" -o \"$HOME/.codex/hooks/pre-push-secrets/pre-push-secrets.sh\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/pre-push-secrets/pre-push-secrets.sh",
       "checksum_sha256": "b6e31de7d62485b8c564a59213ac45fd55a87681cd996517efbd4ef929218d20",
       "bundle_membership": [],
       "metadata": {
         "companion_artifacts": [
-          "openai-codex/hooks/hooks.json"
+          "openai-codex/hooks/hooks.json",
+          "hooks/_adapter_lib.sh",
+          "hooks/pre-push-secrets/pre-push-secrets.sh"
         ]
       }
     },
@@ -3048,14 +3061,16 @@
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/hooks/protect-config/protect-config.sh",
       "source_path": "openai-codex/hooks/protect-config/protect-config.sh",
-      "install_path": "~/.codex/hooks/protect-config.sh",
-      "install_command": "mkdir -p \"$HOME/.codex/hooks\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/protect-config/protect-config.sh\" -o \"$HOME/.codex/hooks/protect-config.sh\" && mkdir -p \"$HOME/.codex\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/hooks.json\" -o \"$HOME/.codex/hooks.json\"",
+      "install_path": "~/.codex/openai-codex/hooks/protect-config/protect-config.sh",
+      "install_command": "mkdir -p \"$HOME/.codex/openai-codex/hooks/protect-config\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/protect-config/protect-config.sh\" -o \"$HOME/.codex/openai-codex/hooks/protect-config/protect-config.sh\" && mkdir -p \"$HOME/.codex\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/hooks.json\" -o \"$HOME/.codex/hooks.json\" && mkdir -p \"$HOME/.codex/hooks\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/_adapter_lib.sh\" -o \"$HOME/.codex/hooks/_adapter_lib.sh\" && mkdir -p \"$HOME/.codex/hooks/protect-config\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/protect-config/protect-config.sh\" -o \"$HOME/.codex/hooks/protect-config/protect-config.sh\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/protect-config/protect-config.sh",
       "checksum_sha256": "3dea6f446dab32620d93d674152f7ebc6543339cdae60786a8bd4a9f5a2413a6",
       "bundle_membership": [],
       "metadata": {
         "companion_artifacts": [
-          "openai-codex/hooks/hooks.json"
+          "openai-codex/hooks/hooks.json",
+          "hooks/_adapter_lib.sh",
+          "hooks/protect-config/protect-config.sh"
         ]
       }
     },

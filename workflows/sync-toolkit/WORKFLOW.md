@@ -29,7 +29,9 @@ Scope resolution and `--dry-run` rules are defined in AGENTS.md.
 
 ## Phase 0: Detect changes
 
-Resolve toolkit root: use `$TOOLKIT_PATH` env var if set, otherwise `/Users/bmj/Developer/git/agent-toolkit`.
+Resolve toolkit root in this order: `$AGENT_TOOLKIT_DIR`, then `$TOOLKIT_PATH` as a
+compatibility alias, otherwise the current git repo root reported by
+`git rev-parse --show-toplevel`.
 
 Run: `git -C $TOOLKIT status --porcelain`
 
@@ -107,5 +109,7 @@ List any skipped files or blocked adapter follow-ups below the table.
 - **Changelog bracket format**: all `CHANGELOG.md` entries must use `## [X.Y.Z] - YYYY-MM-DD` bracket format. Bare `## X.Y.Z` headers fail the changelog-check pre-push hook.
 - **Dry-run forwarding**: if `--dry-run` is passed, forward it explicitly to all subagents. No files written, no commits, no copies.
 - **Version source of truth**: the version comment in the definition file (`# version: X.Y.Z` in frontmatter or YAML) must be updated to match the new CHANGELOG version.
-- **Toolkit repo path**: resolve from `$AGENT_TOOLKIT_DIR` or `$TOOLKIT_PATH` if set; otherwise default to `/Users/bmj/Developer/git/agent-toolkit`.
+- **Toolkit repo path**: resolve from `$AGENT_TOOLKIT_DIR`, then `$TOOLKIT_PATH` for
+  compatibility, otherwise the current git repo root. Never hardcode a machine-specific
+  checkout path.
 - **Commits route through release-engineer**: do not run `git commit` inline in this command. Phase 4 delegates to `release-engineer` per the frankenstein Ship phase rule.

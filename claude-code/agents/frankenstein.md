@@ -86,7 +86,8 @@ fi
 **Stale toolkit artifact warning** (REC-12): If the toolkit repo contains a `.orchestrator/plan.json` from a prior session, agents dispatched in this session may read the wrong plan. Check immediately after writing session.id:
 ```bash
 REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
-TOOLKIT_PLAN="${TOOLKIT_PATH:-${REPO_ROOT}/../agent-toolkit}/.orchestrator/plan.json"
+TOOLKIT_ROOT="${AGENT_TOOLKIT_DIR:-${TOOLKIT_PATH:-${REPO_ROOT}/../agent-toolkit}}"
+TOOLKIT_PLAN="${TOOLKIT_ROOT}/.orchestrator/plan.json"
 if [ -f "$TOOLKIT_PLAN" ]; then
   STALE_SID=$(jq -r '.session_id // empty' "$TOOLKIT_PLAN" 2>/dev/null || echo "")
   if [ -n "$STALE_SID" ] && [ "$STALE_SID" != "$SESSION_ID" ]; then

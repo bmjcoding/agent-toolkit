@@ -929,7 +929,27 @@ function buildCatalog() {
     if (!exists(path.join(REPO_ROOT, artifactPath))) continue;
 
     const hookMetadata = readHookRuntimeMetadata('openai-codex', id);
-    const installPath = `~/.codex/hooks/${id}.sh`;
+    const installPath = `~/.codex/openai-codex/hooks/${id}/${id}.sh`;
+    const companionArtifacts = [
+      {
+        url: downloadUrlFor(codexHooksRegistry),
+        path: '~/.codex/hooks.json',
+      },
+      {
+        url: downloadUrlFor('hooks/_adapter_lib.sh'),
+        path: '~/.codex/hooks/_adapter_lib.sh',
+      },
+      {
+        url: downloadUrlFor(`hooks/${id}/${id}.sh`),
+        path: `~/.codex/hooks/${id}/${id}.sh`,
+      },
+    ];
+    if (id === 'integrity-warn') {
+      companionArtifacts.push({
+        url: downloadUrlFor('openai-codex/scripts/integrity-check.sh'),
+        path: '~/.codex/openai-codex/scripts/integrity-check.sh',
+      });
+    }
     catalog.artifacts.push(createArtifactRecord({
       componentId: id,
       componentKind: 'hook',
@@ -946,16 +966,11 @@ function buildCatalog() {
         componentId: id,
         artifactPath,
         installPath,
-        companionArtifacts: [
-          {
-            url: downloadUrlFor(codexHooksRegistry),
-            path: '~/.codex/hooks.json',
-          },
-        ],
+        companionArtifacts,
       }),
       bundleMembership: [],
       metadata: {
-        companion_artifacts: [codexHooksRegistry],
+        companion_artifacts: companionArtifacts.map(artifact => artifact.url.replace(RAW_BASE_URL, '')),
       },
     }));
   }

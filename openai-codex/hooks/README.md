@@ -33,7 +33,9 @@ Manual wiring:
 
 1. Point `AGENT_TOOLKIT_DIR` at this repo checkout.
 2. Symlink or copy `openai-codex/hooks/hooks.json` to `~/.codex/hooks.json`.
-3. Enable `features.codex_hooks = true` in `~/.codex/config.toml`.
+3. Symlink `openai-codex/hooks/` to `~/.codex/openai-codex/hooks/` so the generated
+   fallback path works when `AGENT_TOOLKIT_DIR` is unset.
+4. Enable `features.codex_hooks = true` in `~/.codex/config.toml`.
 
 The shared hook scripts stay in the repo under `hooks/<slug>/`. Generated Codex adapters,
 where still needed, remain under `openai-codex/hooks/<slug>/`; do not copy a flat `*.sh`

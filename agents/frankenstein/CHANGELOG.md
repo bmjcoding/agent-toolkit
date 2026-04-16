@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.1.2] - 2026-04-15
+
+### Changed
+
+- The stale-toolkit-plan warning snippet now prefers `AGENT_TOOLKIT_DIR`, keeps
+  `TOOLKIT_PATH` as a compatibility fallback, and avoids assuming a single hardcoded
+  toolkit checkout layout.
+
 ## [5.1.1] - 2026-04-15
 
 ### Changed
@@ -260,7 +268,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v5.1.1...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v5.1.2...HEAD
+[5.1.2]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v5.1.1...agent/frankenstein-v5.1.2
 [5.1.1]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v5.1.0...agent/frankenstein-v5.1.1
 [5.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v5.0.0...agent/frankenstein-v5.1.0
 [5.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/agent/frankenstein-v5.0.0

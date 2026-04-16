@@ -157,13 +157,22 @@ Codex reads `AGENTS.md` natively and should load shared skills from the repo-roo
 canonical `skills/` tree.
 
 ```sh
-cp openai-codex/agents/*.toml ~/.codex/agents/
-cp openai-codex/hooks/hooks.json ~/.codex/hooks.json
-cp openai-codex/config.toml.template ~/.codex/config.toml
-ln -sfn "$(pwd)/skills" .agents/skills
+export AGENT_TOOLKIT_DIR="$(pwd)"
+mkdir -p "$HOME/.codex/agents" .agents
+cp openai-codex/agents/*.toml "$HOME/.codex/agents/"
+ln -sfn "$AGENT_TOOLKIT_DIR/openai-codex/hooks/hooks.json" "$HOME/.codex/hooks.json"
+mkdir -p "$HOME/.codex/openai-codex"
+ln -sfn "$AGENT_TOOLKIT_DIR/openai-codex/hooks" "$HOME/.codex/openai-codex/hooks"
+cp openai-codex/config.toml.template "$HOME/.codex/config.toml"
+ln -sfn "$AGENT_TOOLKIT_DIR/skills" .agents/skills
 ```
 
 The config template points directly at `${AGENT_TOOLKIT_DIR}/skills/<slug>/SKILL.md`.
+Use the installer instead of the manual `cp` flow if you already have a populated
+`~/.codex/config.toml`; the installer appends skill entries and preserves existing
+settings. The `.agents/skills` symlink is an optional project-local discovery fallback.
+The `~/.codex/openai-codex/hooks` symlink preserves the generated Codex hook fallback
+path when `AGENT_TOOLKIT_DIR` is not exported into the Codex runtime shell.
 
 ## Versioning
 
