@@ -8,6 +8,12 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [4.6.1] - 2026-04-16
+
+### Fixed
+
+- Fixed the GitHub Copilot catalog so shared root skills are emitted alongside Claude Code and Codex entries, and smoke validation now catches regressions in universal skill coverage.
+
 ## [4.6.0] - 2026-04-15
 
 ### Added
@@ -367,7 +373,8 @@ No action required for users who install via symlinks (`./claude-code/scripts/in
 3. Re-run the install script: `./claude-code/scripts/install.sh`.
 4. Verify: `./claude-code/scripts/install.sh --check`.
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/v4.6.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/v4.6.1...HEAD
+[4.6.1]: https://github.com/bmjcoding/agent-toolkit/compare/v4.6.0...v4.6.1
 [4.6.0]: https://github.com/bmjcoding/agent-toolkit/compare/v4.5.0...v4.6.0
 [4.5.0]: https://github.com/bmjcoding/agent-toolkit/compare/v4.4.0...v4.5.0
 [4.4.0]: https://github.com/bmjcoding/agent-toolkit/compare/v4.3.0...v4.4.0

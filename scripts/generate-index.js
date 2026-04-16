@@ -595,6 +595,7 @@ function installPathForArtifact(targetTool, componentKind, componentId) {
     if (componentKind === 'command') return `.github/prompts/${componentId}.prompt.md`;
     if (componentKind === 'bundle') return `.github/bundles/${componentId}/bundle.yaml`;
     if (componentKind === 'hook') return `.github/hooks/${componentId}.json`;
+    if (componentKind === 'skill') return `skills/${componentId}/SKILL.md`;
     if (componentKind === 'rule') return `.github/instructions/${componentId}.instructions.md`;
   }
 
@@ -753,7 +754,7 @@ function buildCatalog() {
   }
 
   for (const skill of sharedSkills) {
-    for (const targetTool of ['claude-code', 'openai-codex']) {
+    for (const targetTool of ['claude-code', 'github-copilot', 'openai-codex']) {
       const installPath = installPathForArtifact(targetTool, 'skill', skill.id);
       catalog.artifacts.push(createArtifactRecord({
         componentId: skill.id,
@@ -1014,6 +1015,15 @@ function runTests() {
   assert(
     catalog.artifacts.every(entry => VALID_LIFECYCLES.has(entry.lifecycle)),
     'expected every artifact to expose a valid lifecycle'
+  );
+  assert(
+    catalog.artifacts.some(
+      entry => entry.component_id === 'backend'
+        && entry.component_kind === 'skill'
+        && entry.target_tool === 'github-copilot'
+        && entry.artifact_path === 'skills/backend/SKILL.md'
+    ),
+    'expected github-copilot skill artifacts to resolve to the canonical root skill path'
   );
 
   const plannerCodexArtifact = catalog.artifacts.find(entry => entry.component_id === 'planner' && entry.target_tool === 'openai-codex');
