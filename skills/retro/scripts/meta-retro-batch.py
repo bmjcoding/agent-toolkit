@@ -684,7 +684,6 @@ def build_meta_retro(
     if not window_improve:
         window_improve = improve_retros[max(0, len(improve_retros) - len(window_retros)):]
 
-    ts_str = now.strftime("%Y-%m-%dT%H%M%S")
     date_str = now.strftime("%Y-%m-%d %H:%M UTC")
     since_count = retro_count - last_meta_count
 

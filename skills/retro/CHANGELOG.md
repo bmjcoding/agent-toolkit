@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Updated follow-up workflow wording to refer to `improve` generically so the shared skill text does not assume Claude slash-command syntax.
+- Moved retro utility scripts and schema references from the removed `tools/retros/` directory into `skills/retro/scripts/` and `skills/retro/references/`.
 
 ## [5.0.0] - 2026-04-14
 

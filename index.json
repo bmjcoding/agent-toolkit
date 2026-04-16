@@ -5,7 +5,7 @@
     {
       "component_id": "autoresearch-analyst",
       "component_kind": "agent",
-      "component_version": "5.1.1",
+      "component_version": "6.0.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/agents/autoresearch-analyst/autoresearch-analyst.md",
       "source_path": "agents/autoresearch-analyst/AGENT.md",
@@ -45,7 +45,7 @@
     {
       "component_id": "backend-engineer",
       "component_kind": "agent",
-      "component_version": "1.3.1",
+      "component_version": "2.0.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/agents/backend-engineer/backend-engineer.md",
       "source_path": "agents/backend-engineer/AGENT.md",
@@ -80,7 +80,7 @@
     {
       "component_id": "design-architect",
       "component_kind": "agent",
-      "component_version": "1.2.1",
+      "component_version": "2.0.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/agents/design-architect/design-architect.md",
       "source_path": "agents/design-architect/AGENT.md",
@@ -112,7 +112,7 @@
     {
       "component_id": "doc-writer",
       "component_kind": "agent",
-      "component_version": "1.2.3",
+      "component_version": "2.0.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/agents/doc-writer/doc-writer.md",
       "source_path": "agents/doc-writer/AGENT.md",
@@ -143,7 +143,7 @@
     {
       "component_id": "frankenstein",
       "component_kind": "agent",
-      "component_version": "4.5.0",
+      "component_version": "5.0.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/agents/frankenstein/frankenstein.md",
       "source_path": "agents/frankenstein/AGENT.md",
@@ -188,7 +188,7 @@
     {
       "component_id": "frontend-engineer",
       "component_kind": "agent",
-      "component_version": "1.3.1",
+      "component_version": "2.0.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/agents/frontend-engineer/frontend-engineer.md",
       "source_path": "agents/frontend-engineer/AGENT.md",
@@ -225,7 +225,7 @@
     {
       "component_id": "integration-verifier",
       "component_kind": "agent",
-      "component_version": "1.4.2",
+      "component_version": "2.0.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/agents/integration-verifier/integration-verifier.md",
       "source_path": "agents/integration-verifier/AGENT.md",
@@ -256,7 +256,7 @@
     {
       "component_id": "plan-reviewer",
       "component_kind": "agent",
-      "component_version": "1.4.2",
+      "component_version": "2.0.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/agents/plan-reviewer/plan-reviewer.md",
       "source_path": "agents/plan-reviewer/AGENT.md",
@@ -285,7 +285,7 @@
     {
       "component_id": "planner",
       "component_kind": "agent",
-      "component_version": "1.10.0",
+      "component_version": "2.0.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/agents/planner/planner.md",
       "source_path": "agents/planner/AGENT.md",
@@ -315,7 +315,7 @@
     {
       "component_id": "quality-engineer",
       "component_kind": "agent",
-      "component_version": "1.4.1",
+      "component_version": "2.0.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/agents/quality-engineer/quality-engineer.md",
       "source_path": "agents/quality-engineer/AGENT.md",
@@ -346,7 +346,7 @@
     {
       "component_id": "release-engineer",
       "component_kind": "agent",
-      "component_version": "4.0.1",
+      "component_version": "5.0.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/agents/release-engineer/release-engineer.md",
       "source_path": "agents/release-engineer/AGENT.md",
@@ -379,7 +379,7 @@
     {
       "component_id": "release-gate",
       "component_kind": "agent",
-      "component_version": "1.2.1",
+      "component_version": "2.0.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/agents/release-gate/release-gate.md",
       "source_path": "agents/release-gate/AGENT.md",
@@ -410,7 +410,7 @@
     {
       "component_id": "security-engineer",
       "component_kind": "agent",
-      "component_version": "1.4.1",
+      "component_version": "2.0.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/agents/security-engineer/security-engineer.md",
       "source_path": "agents/security-engineer/AGENT.md",
@@ -445,7 +445,7 @@
     {
       "component_id": "site-reliability-engineer",
       "component_kind": "agent",
-      "component_version": "1.4.2",
+      "component_version": "2.0.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/agents/site-reliability-engineer/site-reliability-engineer.md",
       "source_path": "agents/site-reliability-engineer/AGENT.md",
@@ -482,7 +482,7 @@
     {
       "component_id": "staff-engineer",
       "component_kind": "agent",
-      "component_version": "4.0.0",
+      "component_version": "5.0.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/agents/staff-engineer/staff-engineer.md",
       "source_path": "agents/staff-engineer/AGENT.md",
@@ -1025,7 +1025,7 @@
     {
       "component_id": "audit",
       "component_kind": "command",
-      "component_version": "4.0.0",
+      "component_version": "4.1.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/commands/audit/audit.md",
       "source_path": "workflows/audit/WORKFLOW.md",
@@ -1051,7 +1051,7 @@
     {
       "component_id": "backlog",
       "component_kind": "command",
-      "component_version": "5.0.0",
+      "component_version": "5.1.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/commands/backlog/backlog.md",
       "source_path": "workflows/backlog/WORKFLOW.md",
@@ -1073,7 +1073,7 @@
     {
       "component_id": "git-verify",
       "component_kind": "command",
-      "component_version": "4.0.0",
+      "component_version": "4.1.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/commands/git-verify/git-verify.md",
       "source_path": "workflows/git-verify/WORKFLOW.md",
@@ -1099,7 +1099,7 @@
     {
       "component_id": "lint",
       "component_kind": "command",
-      "component_version": "4.0.0",
+      "component_version": "4.1.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/commands/lint/lint.md",
       "source_path": "workflows/lint/WORKFLOW.md",
@@ -1125,7 +1125,7 @@
     {
       "component_id": "sync-toolkit",
       "component_kind": "command",
-      "component_version": "4.0.0",
+      "component_version": "4.1.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/commands/sync-toolkit/sync-toolkit.md",
       "source_path": "workflows/sync-toolkit/WORKFLOW.md",
@@ -1142,7 +1142,7 @@
     {
       "component_id": "test",
       "component_kind": "command",
-      "component_version": "4.0.0",
+      "component_version": "4.1.0",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/commands/test/test.md",
       "source_path": "workflows/test/WORKFLOW.md",
@@ -1717,7 +1717,7 @@
     {
       "component_id": "autoresearch-analyst",
       "component_kind": "agent",
-      "component_version": "5.1.1",
+      "component_version": "6.0.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/agents/autoresearch-analyst.agent.md",
       "source_path": "agents/autoresearch-analyst/AGENT.md",
@@ -1748,7 +1748,7 @@
     {
       "component_id": "backend-engineer",
       "component_kind": "agent",
-      "component_version": "1.3.1",
+      "component_version": "2.0.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/agents/backend-engineer.agent.md",
       "source_path": "agents/backend-engineer/AGENT.md",
@@ -1774,7 +1774,7 @@
     {
       "component_id": "design-architect",
       "component_kind": "agent",
-      "component_version": "1.2.1",
+      "component_version": "2.0.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/agents/design-architect.agent.md",
       "source_path": "agents/design-architect/AGENT.md",
@@ -1801,7 +1801,7 @@
     {
       "component_id": "doc-writer",
       "component_kind": "agent",
-      "component_version": "1.2.3",
+      "component_version": "2.0.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/agents/doc-writer.agent.md",
       "source_path": "agents/doc-writer/AGENT.md",
@@ -1827,7 +1827,7 @@
     {
       "component_id": "frankenstein",
       "component_kind": "agent",
-      "component_version": "4.5.0",
+      "component_version": "5.0.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/agents/frankenstein.agent.md",
       "source_path": "agents/frankenstein/AGENT.md",
@@ -1867,7 +1867,7 @@
     {
       "component_id": "frontend-engineer",
       "component_kind": "agent",
-      "component_version": "1.3.1",
+      "component_version": "2.0.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/agents/frontend-engineer.agent.md",
       "source_path": "agents/frontend-engineer/AGENT.md",
@@ -1895,7 +1895,7 @@
     {
       "component_id": "integration-verifier",
       "component_kind": "agent",
-      "component_version": "1.4.2",
+      "component_version": "2.0.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/agents/integration-verifier.agent.md",
       "source_path": "agents/integration-verifier/AGENT.md",
@@ -1921,7 +1921,7 @@
     {
       "component_id": "plan-reviewer",
       "component_kind": "agent",
-      "component_version": "1.4.2",
+      "component_version": "2.0.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/agents/plan-reviewer.agent.md",
       "source_path": "agents/plan-reviewer/AGENT.md",
@@ -1945,7 +1945,7 @@
     {
       "component_id": "planner",
       "component_kind": "agent",
-      "component_version": "1.10.0",
+      "component_version": "2.0.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/agents/planner.agent.md",
       "source_path": "agents/planner/AGENT.md",
@@ -1970,7 +1970,7 @@
     {
       "component_id": "quality-engineer",
       "component_kind": "agent",
-      "component_version": "1.4.1",
+      "component_version": "2.0.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/agents/quality-engineer.agent.md",
       "source_path": "agents/quality-engineer/AGENT.md",
@@ -1996,7 +1996,7 @@
     {
       "component_id": "release-engineer",
       "component_kind": "agent",
-      "component_version": "4.0.1",
+      "component_version": "5.0.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/agents/release-engineer.agent.md",
       "source_path": "agents/release-engineer/AGENT.md",
@@ -2024,7 +2024,7 @@
     {
       "component_id": "release-gate",
       "component_kind": "agent",
-      "component_version": "1.2.1",
+      "component_version": "2.0.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/agents/release-gate.agent.md",
       "source_path": "agents/release-gate/AGENT.md",
@@ -2050,7 +2050,7 @@
     {
       "component_id": "security-engineer",
       "component_kind": "agent",
-      "component_version": "1.4.1",
+      "component_version": "2.0.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/agents/security-engineer.agent.md",
       "source_path": "agents/security-engineer/AGENT.md",
@@ -2076,7 +2076,7 @@
     {
       "component_id": "site-reliability-engineer",
       "component_kind": "agent",
-      "component_version": "1.4.2",
+      "component_version": "2.0.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/agents/site-reliability-engineer.agent.md",
       "source_path": "agents/site-reliability-engineer/AGENT.md",
@@ -2104,7 +2104,7 @@
     {
       "component_id": "staff-engineer",
       "component_kind": "agent",
-      "component_version": "4.0.0",
+      "component_version": "5.0.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/agents/staff-engineer.agent.md",
       "source_path": "agents/staff-engineer/AGENT.md",
@@ -2130,7 +2130,7 @@
     {
       "component_id": "audit",
       "component_kind": "command",
-      "component_version": "4.0.0",
+      "component_version": "4.1.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/prompts/audit.prompt.md",
       "source_path": "workflows/audit/WORKFLOW.md",
@@ -2147,7 +2147,7 @@
     {
       "component_id": "backlog",
       "component_kind": "command",
-      "component_version": "5.0.0",
+      "component_version": "5.1.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/prompts/backlog.prompt.md",
       "source_path": "workflows/backlog/WORKFLOW.md",
@@ -2164,7 +2164,7 @@
     {
       "component_id": "git-verify",
       "component_kind": "command",
-      "component_version": "4.0.0",
+      "component_version": "4.1.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/prompts/git-verify.prompt.md",
       "source_path": "workflows/git-verify/WORKFLOW.md",
@@ -2181,7 +2181,7 @@
     {
       "component_id": "lint",
       "component_kind": "command",
-      "component_version": "4.0.0",
+      "component_version": "4.1.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/prompts/lint.prompt.md",
       "source_path": "workflows/lint/WORKFLOW.md",
@@ -2198,7 +2198,7 @@
     {
       "component_id": "sync-toolkit",
       "component_kind": "command",
-      "component_version": "4.0.0",
+      "component_version": "4.1.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/prompts/sync-toolkit.prompt.md",
       "source_path": "workflows/sync-toolkit/WORKFLOW.md",
@@ -2215,7 +2215,7 @@
     {
       "component_id": "test",
       "component_kind": "command",
-      "component_version": "4.0.0",
+      "component_version": "4.1.0",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/prompts/test.prompt.md",
       "source_path": "workflows/test/WORKFLOW.md",
@@ -2488,7 +2488,7 @@
     {
       "component_id": "autoresearch-analyst",
       "component_kind": "agent",
-      "component_version": "5.1.1",
+      "component_version": "6.0.0",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/agents/autoresearch-analyst.toml",
       "source_path": "agents/autoresearch-analyst/AGENT.md",
@@ -2519,7 +2519,7 @@
     {
       "component_id": "backend-engineer",
       "component_kind": "agent",
-      "component_version": "1.3.1",
+      "component_version": "2.0.0",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/agents/backend-engineer.toml",
       "source_path": "agents/backend-engineer/AGENT.md",
@@ -2545,7 +2545,7 @@
     {
       "component_id": "design-architect",
       "component_kind": "agent",
-      "component_version": "1.2.1",
+      "component_version": "2.0.0",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/agents/design-architect.toml",
       "source_path": "agents/design-architect/AGENT.md",
@@ -2572,7 +2572,7 @@
     {
       "component_id": "doc-writer",
       "component_kind": "agent",
-      "component_version": "1.2.3",
+      "component_version": "2.0.0",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/agents/doc-writer.toml",
       "source_path": "agents/doc-writer/AGENT.md",
@@ -2598,7 +2598,7 @@
     {
       "component_id": "frankenstein",
       "component_kind": "agent",
-      "component_version": "4.5.0",
+      "component_version": "5.0.0",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/agents/frankenstein.toml",
       "source_path": "agents/frankenstein/AGENT.md",
@@ -2638,7 +2638,7 @@
     {
       "component_id": "frontend-engineer",
       "component_kind": "agent",
-      "component_version": "1.3.1",
+      "component_version": "2.0.0",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/agents/frontend-engineer.toml",
       "source_path": "agents/frontend-engineer/AGENT.md",
@@ -2666,7 +2666,7 @@
     {
       "component_id": "integration-verifier",
       "component_kind": "agent",
-      "component_version": "1.4.2",
+      "component_version": "2.0.0",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/agents/integration-verifier.toml",
       "source_path": "agents/integration-verifier/AGENT.md",
@@ -2692,7 +2692,7 @@
     {
       "component_id": "plan-reviewer",
       "component_kind": "agent",
-      "component_version": "1.4.2",
+      "component_version": "2.0.0",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/agents/plan-reviewer.toml",
       "source_path": "agents/plan-reviewer/AGENT.md",
@@ -2716,7 +2716,7 @@
     {
       "component_id": "planner",
       "component_kind": "agent",
-      "component_version": "1.10.0",
+      "component_version": "2.0.0",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/agents/planner.toml",
       "source_path": "agents/planner/AGENT.md",
@@ -2741,7 +2741,7 @@
     {
       "component_id": "quality-engineer",
       "component_kind": "agent",
-      "component_version": "1.4.1",
+      "component_version": "2.0.0",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/agents/quality-engineer.toml",
       "source_path": "agents/quality-engineer/AGENT.md",
@@ -2767,7 +2767,7 @@
     {
       "component_id": "release-engineer",
       "component_kind": "agent",
-      "component_version": "4.0.1",
+      "component_version": "5.0.0",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/agents/release-engineer.toml",
       "source_path": "agents/release-engineer/AGENT.md",
@@ -2795,7 +2795,7 @@
     {
       "component_id": "release-gate",
       "component_kind": "agent",
-      "component_version": "1.2.1",
+      "component_version": "2.0.0",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/agents/release-gate.toml",
       "source_path": "agents/release-gate/AGENT.md",
@@ -2821,7 +2821,7 @@
     {
       "component_id": "security-engineer",
       "component_kind": "agent",
-      "component_version": "1.4.1",
+      "component_version": "2.0.0",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/agents/security-engineer.toml",
       "source_path": "agents/security-engineer/AGENT.md",
@@ -2847,7 +2847,7 @@
     {
       "component_id": "site-reliability-engineer",
       "component_kind": "agent",
-      "component_version": "1.4.2",
+      "component_version": "2.0.0",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/agents/site-reliability-engineer.toml",
       "source_path": "agents/site-reliability-engineer/AGENT.md",
@@ -2875,7 +2875,7 @@
     {
       "component_id": "staff-engineer",
       "component_kind": "agent",
-      "component_version": "4.0.0",
+      "component_version": "5.0.0",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/agents/staff-engineer.toml",
       "source_path": "agents/staff-engineer/AGENT.md",

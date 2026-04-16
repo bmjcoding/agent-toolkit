@@ -13,8 +13,8 @@ Expects these temp files to exist (written by the Phase 4 bash loop):
     /tmp/backlog_new_human_rows.txt
 """
 
-import os
 import datetime
+import os
 
 BACKLOG = '.orchestrator/backlog.md'
 TMP_PATH = BACKLOG + '.tmp'
@@ -27,7 +27,8 @@ HUMAN_COL_HDR = '| # | status | severity | environment | file | item | reason | 
 
 def read_staging(path):
     try:
-        return [l for l in open(path).read().splitlines() if l.strip()]
+        with open(path) as handle:
+            return [line for line in handle.read().splitlines() if line.strip()]
     except Exception:
         return []
 
@@ -42,21 +43,25 @@ def extract_fid(row):
 existing_agent_rows, existing_human_rows, existing_ids, preamble_lines = [], [], set(), []
 if os.path.exists(BACKLOG):
     section = None
-    for line in open(BACKLOG).read().splitlines():
-        stripped = line.strip()
-        if stripped == AGENT_HDR:
-            section = 'agent'; continue
-        if stripped == HUMAN_HDR:
-            section = 'human'; continue
-        if section is None:
-            preamble_lines.append(line); continue
-        if stripped in (AGENT_COL_HDR.strip(), HUMAN_COL_HDR.strip(), COL_SEP.strip()):
-            continue
-        if section in ('agent', 'human') and line.startswith('| '):
-            fid = extract_fid(line)
-            if fid:
-                existing_ids.add(fid)
-            (existing_agent_rows if section == 'agent' else existing_human_rows).append(line)
+    with open(BACKLOG) as handle:
+        for line in handle.read().splitlines():
+            stripped = line.strip()
+            if stripped == AGENT_HDR:
+                section = 'agent'
+                continue
+            if stripped == HUMAN_HDR:
+                section = 'human'
+                continue
+            if section is None:
+                preamble_lines.append(line)
+                continue
+            if stripped in (AGENT_COL_HDR.strip(), HUMAN_COL_HDR.strip(), COL_SEP.strip()):
+                continue
+            if section in ('agent', 'human') and line.startswith('| '):
+                fid = extract_fid(line)
+                if fid:
+                    existing_ids.add(fid)
+                (existing_agent_rows if section == 'agent' else existing_human_rows).append(line)
 else:
     preamble_lines = ['# Backlog', '']
 
@@ -96,7 +101,8 @@ ts = datetime.datetime.now().strftime('%Y-%m-%dT%H:%M')
 new_preamble, updated = [], False
 for line in preamble_lines:
     if line.startswith('Last updated:'):
-        new_preamble.append(f'Last updated: {ts}'); updated = True
+        new_preamble.append(f'Last updated: {ts}')
+        updated = True
     else:
         new_preamble.append(line)
 if not updated:

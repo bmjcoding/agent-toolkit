@@ -61,8 +61,6 @@ import os
 import re
 import subprocess
 import sys
-from pathlib import Path
-
 
 SUPPORTED_SKILL_FIELDS = {
     "name", "description", "argument-hint", "compatibility",

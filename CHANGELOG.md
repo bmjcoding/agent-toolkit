@@ -13,6 +13,10 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 - Added a GitHub Actions sync gate that reruns canonical adapter generation on matching
   pushes and pull requests, fails stale PRs, and smoke-tests that generated tool
   surfaces and `index.json` are present and internally consistent.
+- Added repo-level lint tooling with `eslint`, `markdownlint-cli2`, `prettier`, and Ruff,
+  plus a GitHub Actions lint workflow for JavaScript, Markdown, JSON, YAML, and Python.
+- Added `requirements-dev.txt` for Python lint bootstrap and a Dependabot config covering
+  npm, GitHub Actions, and Python dev dependencies.
 
 ### Changed
 
@@ -28,6 +32,15 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 - Updated generated OpenAI Codex agent adapters to emit readable multiline TOML for
   `developer_instructions` instead of a single escaped line, while preserving the exact
   canonical instruction body in smoke tests.
+- Normalized several repository manifests, schema files, and helper scripts so the new
+  lint checks pass cleanly without local-only paths or generated assets causing failures.
+- Pinned transitive `smol-toml` to `1.6.1` with `npm overrides` because the latest
+  `markdownlint-cli2` release still resolves `1.6.0`, which triggers a moderate
+  advisory.
+- Updated local setup docs to prefer `npm ci` over `npm install` now that the repo ships
+  a lockfile.
+- Moved retro utility scripts and schema assets out of the stray `tools/retros/`
+  directory into `skills/retro/` so the repo no longer recreates or carries that path.
 
 ## [4.1.0] - 2026-04-14
 

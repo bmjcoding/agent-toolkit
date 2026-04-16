@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 'use strict';
 
-const crypto = require('crypto');
+const nodeCrypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 
@@ -31,7 +31,7 @@ function downloadUrlFor(relPath) {
 function sha256For(relPath) {
   const absolutePath = path.join(REPO_ROOT, relPath);
   const buffer = fs.readFileSync(absolutePath);
-  return crypto.createHash('sha256').update(buffer).digest('hex');
+  return nodeCrypto.createHash('sha256').update(buffer).digest('hex');
 }
 
 function extractFrontmatterBlock(content) {
@@ -823,7 +823,7 @@ function assert(condition, message) {
 }
 
 function runTests() {
-  assert(readLatestReleasedVersion(path.join(REPO_ROOT, 'workflows', 'lint', 'CHANGELOG.md')) === '4.0.0', 'expected latest lint workflow version to parse');
+  assert(readLatestReleasedVersion(path.join(REPO_ROOT, 'workflows', 'lint', 'CHANGELOG.md')) === '4.1.0', 'expected latest lint workflow version to parse');
 
   const plannerFallback = parseClaudeAgentFallback('planner');
   assert(plannerFallback.modelTier === 'frontier', 'expected planner model tier fallback to map from inherit');

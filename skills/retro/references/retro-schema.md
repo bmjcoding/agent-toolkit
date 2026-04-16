@@ -2,7 +2,7 @@
 
 Canonical schema for toolkit retrospective JSON files. Normalizes Gen1–Gen4 format variants into a single queryable structure.
 
-Schema file: `tools/retros/schemas/retro-v5.0.json`
+Schema file: `skills/retro/references/retro-v5.0.schema.json`
 
 ---
 
@@ -56,7 +56,7 @@ The corpus spans four generations of retro format before v5.0. Key diffs:
 
 ## Normalization Rules
 
-Applied by `tools/retros/normalize.py` to produce v5.0 output. Rules run in order:
+Applied by `skills/retro/scripts/normalize.py` to produce v5.0 output. Rules run in order:
 
 1. Set `schema_version = "5.0"`.
 2. Rename `session` → `session_id` (Gen1 field name).
@@ -87,20 +87,20 @@ Applied by `tools/retros/normalize.py` to produce v5.0 output. Rules run in orde
 
 ```bash
 # Redact PII from a single retro file
-python3 tools/retros/scrub.py ~/.claude/retros/sessions/2026-04/20260414T100456/retro.json \
+python3 skills/retro/scripts/scrub.py ~/.claude/retros/sessions/2026-04/20260414T100456/retro.json \
   $HOME/Developer/git/agent-toolkit/claude-code/retros/sessions/2026-04/20260414T100456/retro.json
 
 # Normalize a Gen1 retro to v5.0
-python3 tools/retros/normalize.py \
+python3 skills/retro/scripts/normalize.py \
   $HOME/Developer/git/agent-toolkit/claude-code/retros/sessions/2026-04/20260407T164326/retro.json \
   --output-dir /tmp/normalized/
 
 # Validate a file against the v5.0 schema
-python3 tools/retros/validate.py \
+python3 skills/retro/scripts/validate.py \
   $HOME/Developer/git/agent-toolkit/claude-code/retros/sessions/2026-04/20260414T100456/retro.json
 
 # Rebuild the full local index
-bash tools/retros/index.sh ~/.claude/retros ~/.claude/retros/index
+bash skills/retro/scripts/index.sh ~/.claude/retros ~/.claude/retros/index
 ```
 
 ---

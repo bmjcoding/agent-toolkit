@@ -31,13 +31,12 @@ CLI: scrub.py INPUT OUTPUT [--dry-run] [--rules RULES_JSON]
      SCRUB_RULES=/path/to/rules.json scrub.py INPUT OUTPUT
 """
 
+import argparse
 import json
 import os
 import re
 import sys
-import argparse
 from pathlib import Path
-
 
 # ---------------------------------------------------------------------------
 # Rule definitions -- ordered so more-specific patterns run before catch-alls

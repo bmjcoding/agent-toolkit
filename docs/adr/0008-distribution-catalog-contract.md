@@ -59,6 +59,10 @@ generation.
 Metadata that affects multiple tool surfaces must move into canonical root definitions
 instead of being inferred from Claude-native wrappers.
 
+This ADR does not introduce a separate `tools/catalog-metadata.json` file. Catalog data
+should be derived from canonical root definitions plus existing checked-in bundle and
+adapter metadata.
+
 This includes, at minimum:
 
 - model tier or equivalent shared execution tier
@@ -93,7 +97,7 @@ The repository should fail validation when:
 
 - canonical metadata and generated adapters disagree
 - catalog entries reference missing artifacts
-- catalog metadata drifts from generated install surfaces
+- catalog fields derived from canonical definitions drift from generated install surfaces
 
 ## Diagram
 
@@ -142,6 +146,10 @@ checked-in artifact model is the safer stepping stone.
 
 ## References
 
+Concrete contract surface:
+
+- `scripts/generate-index.js` generates the published distribution catalog
+- `index.json` is the generated catalog external consumers should read
 - `docs/adr/0005-multi-tool-restructure.md`
 - `scripts/sync-canonical-adapters.js`
 - `scripts/generate-index.js`

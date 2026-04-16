@@ -10,9 +10,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Updated shared wording to refer to `retro`, `review-skill`, and `improve` as cross-tool workflows rather than Claude-specific slash-command forms.
-
-### Changed
-
 - Step 2f now delegates CHANGELOG writes to the `/changelog` skill rather than writing entries inline; this ensures format consistency and keeps the SemVer bump logic in one place.
 
 ## [4.3.0] - 2026-04-14

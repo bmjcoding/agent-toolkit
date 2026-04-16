@@ -56,6 +56,8 @@ Hooks must also be registered in `~/.claude/settings.json` under the `hooks` key
   `workflows/<name>/WORKFLOW.md` body.
 - **Hook** (`<name>.sh`): Plain Bash, registered by event type in `settings.json`; exit 2 blocks, exit 1 warns, exit 0 continues.
 - **Bundle** (`bundle.yaml`): YAML file with `id`, `name`, `description`, `status`, `tags[]`, `components[]` (each entry has `type`, `id`, `role`). Dependency metadata for agents and skills is declared in the component's own `.md` frontmatter (`tools:` for agents, `skills:` for skills/commands), not in the bundle file. Valid `role` values: `core` (required for the bundle to function), `optional` (nice-to-have, installable separately), `deprecated` (scheduled for removal). All current entries use `core`. The generated `index.json` distribution catalog is the stable lookup surface for bundle artifacts; use each entry's `artifact_path`, `component_version`, checksum, and install metadata instead of reconstructing paths from slugs.
+  The catalog is generated from canonical root definitions plus checked-in bundle and
+  adapter metadata; it is not backed by a separate `tools/catalog-metadata.json` file.
 
 ## Tag Format
 

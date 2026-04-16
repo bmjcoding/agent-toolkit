@@ -1,6 +1,6 @@
 {
   "_comment": "scrub.py rule configuration file. Copy to scrub-rules.json (gitignored) and customize for your environment.",
-  "_doc": "Each rule: {id, pattern, replacement, flags_dotall (optional bool)}. Rules apply in array order — place more-specific rules before catch-alls. See SCHEMA.md 'Rule Ordering' for ordering constraints.",
+  "_doc": "Each rule: {id, pattern, replacement, flags_dotall (optional bool)}. Rules apply in array order — place more-specific rules before catch-alls. See retro-schema.md 'Rule Ordering' for ordering constraints.",
   "rules": [
     {
       "id": "R-10",
@@ -71,9 +71,21 @@
     }
   ],
   "skipped": [
-    {"id": "R-08", "pattern": "bmjcoding/claude-toolkit", "_comment": "bmjcoding org preserved — user decision"},
-    {"id": "R-09", "pattern": "bmjcoding/agent-toolkit", "_comment": "bmjcoding org preserved — user decision"},
-    {"id": "R-15", "pattern": "git@github.com:bmjcoding/", "_comment": "bmjcoding org preserved — user decision"},
-    {"id": "R-16", "_comment": "commit SHAs — preserved — user decision"}
+    {
+      "id": "R-08",
+      "pattern": "bmjcoding/claude-toolkit",
+      "_comment": "bmjcoding org preserved — user decision"
+    },
+    {
+      "id": "R-09",
+      "pattern": "bmjcoding/agent-toolkit",
+      "_comment": "bmjcoding org preserved — user decision"
+    },
+    {
+      "id": "R-15",
+      "pattern": "git@github.com:bmjcoding/",
+      "_comment": "bmjcoding org preserved — user decision"
+    },
+    { "id": "R-16", "_comment": "commit SHAs — preserved — user decision" }
   ]
 }

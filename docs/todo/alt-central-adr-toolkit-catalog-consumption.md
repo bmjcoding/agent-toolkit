@@ -55,7 +55,11 @@ The change is in lookup strategy, not packaging strategy.
 ### 3. Install commands and bundle resolution will be catalog-driven
 
 Install commands displayed in the frontend and bundle resolution performed in the backend
-will be generated from catalog metadata rather than embedded per-tool rules.
+will be generated from the published catalog, whose fields come from canonical toolkit
+definitions and checked-in bundle metadata rather than embedded per-tool rules.
+
+This does not imply a separate `tools/catalog-metadata.json` file in the toolkit repo;
+the contract is the generated `index.json` catalog.
 
 ### 4. A compatibility layer will exist during migration
 

@@ -47,6 +47,8 @@ agent-toolkit/
 consumers. It is artifact-oriented and tool-aware: each entry resolves a concrete
 checked-in asset with its component id, kind, version, target tool, artifact path,
 install metadata, checksum, and any bundle or capability metadata the installer needs.
+It is generated from the canonical root definitions plus existing checked-in bundle and
+adapter metadata; there is no separate `tools/catalog-metadata.json` source of truth.
 
 Regenerate it with:
 
@@ -59,6 +61,44 @@ Smoke-test the full adapter and catalog generation flow with:
 ```sh
 node scripts/smoke-generated-assets.js
 ```
+
+## Linting
+
+Install the Node-based lint tooling with:
+
+```sh
+npm ci
+```
+
+Install Ruff in a local virtualenv with:
+
+```sh
+python3 -m venv .venv
+.venv/bin/pip install -r requirements-dev.txt
+```
+
+Run the repo linters with:
+
+```sh
+npm run lint
+.venv/bin/ruff check .
+```
+
+Auto-fix what can be fixed with:
+
+```sh
+npm run lint:fix
+.venv/bin/ruff check . --fix
+```
+
+The Node entrypoint covers:
+
+- `eslint` for repository JavaScript
+- `markdownlint-cli2` for Markdown docs and instruction files
+- `prettier --check` for JSON and YAML
+
+Ruff is configured separately for the Python utilities and helper scripts.
+Python dev dependencies live in `requirements-dev.txt`.
 
 ## Install
 
