@@ -6,8 +6,9 @@ toolkit's supported AI surfaces.
 ## Ownership
 
 - Root `rules/` is canonical.
-- Claude Code consumes these rules directly through the `claude-code/` install surface.
-- GitHub Copilot for VS Code adapts them through `github-copilot/instructions/`.
+- Claude Code consumes generated adapters under `claude-code/rules/`.
+- GitHub Copilot for VS Code consumes generated adapters under
+  `github-copilot/instructions/`.
 - OpenAI Codex uses them through `openai-codex/rules/build-agents-md.sh` and related
   composition assets.
 

@@ -12,7 +12,7 @@ agent-toolkit/
   github-copilot/  # VS Code Copilot-native assets
   openai-codex/    # Codex-native assets
   AGENTS.md        # Primary shared instructions
-  CLAUDE.md        # Claude compatibility shim
+  CLAUDE.md        # One-line Claude compatibility shim: @AGENTS.md
 ```
 
 ## Ownership rules
@@ -32,12 +32,14 @@ agent-toolkit/
 - Keep tool-specific behavior inside its own tool directory.
 - Edit shared agent definitions in `agents/<slug>/AGENT.md` and shared workflows in
   `workflows/<slug>/WORKFLOW.md`.
+- Edit shared rule definitions in `rules/<slug>/<slug>.md`.
 - Regenerate adapters with `node scripts/sync-canonical-adapters.js` and the catalog with
   `node scripts/generate-index.js` after editing those canonical definitions.
 - Smoke-test the full generation flow with `node scripts/smoke-generated-assets.js`.
-- CI also re-runs both generators when canonical `agents/` or `workflows/` files change.
-- Pull requests fail if generated agent/workflow surfaces, related GitHub Copilot
-  manifest metadata, or `index.json` are stale.
+- CI also re-runs both generators when canonical `agents/`, `workflows/`, or `rules/`
+  files change, and when indexed shared assets such as skills, hooks, or Claude bundles
+  change.
+- Pull requests fail if generated agent/workflow/rule surfaces or `index.json` are stale.
 - Pushes to branches auto-commit regenerated tool surfaces and `index.json` back to the
   branch when needed.
 

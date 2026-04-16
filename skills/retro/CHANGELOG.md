@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Updated follow-up workflow wording to refer to `improve` generically so the shared skill text does not assume Claude slash-command syntax.
+- Updated finalization references to use a skill-local retro summary validator instead of the removed `tools/retros/` path, and aligned `SKILL.md` save-path wording with the type-scoped `STATE_ROOT/retros/` layout.
+
+### Added
+
+- New `scripts/validate.py` validator for retro summary JSON files. It enforces the v5.0 required fields, enums, numeric totals, and optional metric types without depending on the removed `tools/retros/` tree.
 
 ## [5.0.0] - 2026-04-14
 

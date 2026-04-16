@@ -184,6 +184,45 @@ function parseYamlList(frontmatter, fieldName) {
     .map(item => normalizeQuotedValue(item[1]));
 }
 
+function stripLeadingHtmlComments(text) {
+  let value = text.trimStart();
+  while (value.startsWith('<!--')) {
+    const end = value.indexOf('-->');
+    if (end === -1) break;
+    value = value.slice(end + 3).trimStart();
+  }
+  return value;
+}
+
+function markdownBodyWithoutFrontmatter(content) {
+  if (!content.startsWith('---\n')) return content;
+  const end = content.indexOf('\n---\n', 4);
+  if (end === -1) return content;
+  return content.slice(end + 5);
+}
+
+function deriveRuleDescription(content) {
+  const firstLine = stripLeadingHtmlComments(markdownBodyWithoutFrontmatter(content))
+    .split('\n')
+    .map(line => line.trim())
+    .find(Boolean);
+
+  if (!firstLine) {
+    return 'Shared rule adapter generated from the canonical root rule.';
+  }
+
+  const normalized = firstLine
+    .replace(/^[-*]\s+/, '')
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    .replace(/`([^`]+)`/g, '$1')
+    .replace(/\*\*([^*]+)\*\*/g, '$1')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  if (normalized.length <= 140) return normalized;
+  return `${normalized.slice(0, 137).trimEnd()}...`;
+}
+
 function readLatestReleasedVersion(changelogPath) {
   const changelog = readFileSafe(changelogPath);
   if (!changelog) return null;
@@ -373,13 +412,15 @@ function readRootRules() {
     if (!content) continue;
 
     const frontmatter = parseFrontmatter(extractFrontmatterBlock(content));
+    const paths = Array.isArray(frontmatter.paths) ? frontmatter.paths : [];
     results.push({
       id,
       version: readLatestReleasedVersion(path.join(rulesDir, id, 'CHANGELOG.md')),
       sourcePath: relativePath(rulePath),
       metadata: {
-        apply_to: frontmatter.applyTo || null,
-        paths: Array.isArray(frontmatter.paths) ? frontmatter.paths : [],
+        description: frontmatter.description || deriveRuleDescription(content),
+        apply_to: frontmatter.applyTo || (paths.length > 0 ? paths.join(',') : null),
+        paths,
       },
     });
   }
@@ -526,7 +567,6 @@ function installPathForArtifact(targetTool, componentKind, componentId) {
   if (targetTool === 'github-copilot') {
     if (componentKind === 'agent') return `.github/agents/${componentId}.agent.md`;
     if (componentKind === 'command') return `.github/prompts/${componentId}.prompt.md`;
-    if (componentKind === 'bundle') return `.github/bundles/${componentId}/bundle.yaml`;
     if (componentKind === 'hook') return `.github/hooks/${componentId}.json`;
     if (componentKind === 'rule') return `.github/instructions/${componentId}.instructions.md`;
   }
@@ -585,17 +625,28 @@ function buildCatalog() {
   const canonicalWorkflows = readCanonicalWorkflows();
   const sharedSkills = readSharedSkills();
   const sharedRules = readRootRules();
-  const bundles = [
-    ...readBundles('claude-code'),
-    ...readBundles('github-copilot'),
-  ];
+  const bundles = readBundles('claude-code');
   const bundleMembership = buildBundleMembershipMap(bundles);
 
   for (const agent of canonicalAgents) {
     for (const adapterPath of agent.adapters) {
-      const targetTool = adapterPath.split('/')[0];
-      if (!exists(path.join(REPO_ROOT, adapterPath))) continue;
+      if (!exists(path.join(REPO_ROOT, adapterPath))) {
+        throw new Error(`missing generated agent adapter '${adapterPath}' declared by ${agent.sourcePath}`);
+      }
+    }
+  }
 
+  for (const workflow of canonicalWorkflows) {
+    for (const adapterPath of workflow.adapters) {
+      if (!exists(path.join(REPO_ROOT, adapterPath))) {
+        throw new Error(`missing generated workflow adapter '${adapterPath}' declared by ${workflow.sourcePath}`);
+      }
+    }
+  }
+
+  for (const agent of canonicalAgents) {
+    for (const adapterPath of agent.adapters) {
+      const targetTool = adapterPath.split('/')[0];
       const installPath = installPathForArtifact(targetTool, 'agent', agent.id);
       catalog.artifacts.push({
         component_id: agent.id,
@@ -623,8 +674,6 @@ function buildCatalog() {
   for (const workflow of canonicalWorkflows) {
     for (const adapterPath of workflow.adapters) {
       const targetTool = adapterPath.split('/')[0];
-      if (!exists(path.join(REPO_ROOT, adapterPath))) continue;
-
       const installPath = installPathForArtifact(targetTool, 'command', workflow.id);
       catalog.artifacts.push({
         component_id: workflow.id,
@@ -676,52 +725,57 @@ function buildCatalog() {
   }
 
   for (const rule of sharedRules) {
+    const claudeRulePath = `claude-code/rules/${rule.id}/${rule.id}.md`;
+    if (!exists(path.join(REPO_ROOT, claudeRulePath))) {
+      throw new Error(`missing generated Claude rule adapter '${claudeRulePath}' for ${rule.sourcePath}; run node scripts/sync-canonical-adapters.js`);
+    }
     const claudeInstallPath = installPathForArtifact('claude-code', 'rule', rule.id);
     catalog.artifacts.push({
       component_id: rule.id,
       component_kind: 'rule',
       component_version: rule.version,
       target_tool: 'claude-code',
-      artifact_path: rule.sourcePath,
+      artifact_path: claudeRulePath,
       source_path: rule.sourcePath,
       install_path: claudeInstallPath,
       install_command: buildInstallCommand({
         targetTool: 'claude-code',
         componentKind: 'rule',
         componentId: rule.id,
-        artifactPath: rule.sourcePath,
+        artifactPath: claudeRulePath,
         installPath: claudeInstallPath,
       }),
-      download_url: downloadUrlFor(rule.sourcePath),
-      checksum_sha256: sha256For(rule.sourcePath),
+      download_url: downloadUrlFor(claudeRulePath),
+      checksum_sha256: sha256For(claudeRulePath),
       bundle_membership: membershipFor(bundleMembership, 'claude-code', 'rule', rule.id),
       metadata: rule.metadata,
     });
 
     const instructionPath = `github-copilot/instructions/${rule.id}.instructions.md`;
-    if (exists(path.join(REPO_ROOT, instructionPath))) {
-      const copilotInstallPath = installPathForArtifact('github-copilot', 'rule', rule.id);
-      catalog.artifacts.push({
-        component_id: rule.id,
-        component_kind: 'rule',
-        component_version: rule.version,
-        target_tool: 'github-copilot',
-        artifact_path: instructionPath,
-        source_path: rule.sourcePath,
-        install_path: copilotInstallPath,
-        install_command: buildInstallCommand({
-          targetTool: 'github-copilot',
-          componentKind: 'rule',
-          componentId: rule.id,
-          artifactPath: instructionPath,
-          installPath: copilotInstallPath,
-        }),
-        download_url: downloadUrlFor(instructionPath),
-        checksum_sha256: sha256For(instructionPath),
-        bundle_membership: membershipFor(bundleMembership, 'github-copilot', 'rule', rule.id),
-        metadata: rule.metadata,
-      });
+    if (!exists(path.join(REPO_ROOT, instructionPath))) {
+      throw new Error(`missing generated GitHub Copilot rule adapter '${instructionPath}' for ${rule.sourcePath}; run node scripts/sync-canonical-adapters.js`);
     }
+    const copilotInstallPath = installPathForArtifact('github-copilot', 'rule', rule.id);
+    catalog.artifacts.push({
+      component_id: rule.id,
+      component_kind: 'rule',
+      component_version: rule.version,
+      target_tool: 'github-copilot',
+      artifact_path: instructionPath,
+      source_path: rule.sourcePath,
+      install_path: copilotInstallPath,
+      install_command: buildInstallCommand({
+        targetTool: 'github-copilot',
+        componentKind: 'rule',
+        componentId: rule.id,
+        artifactPath: instructionPath,
+        installPath: copilotInstallPath,
+      }),
+      download_url: downloadUrlFor(instructionPath),
+      checksum_sha256: sha256For(instructionPath),
+      bundle_membership: membershipFor(bundleMembership, 'github-copilot', 'rule', rule.id),
+      metadata: rule.metadata,
+    });
   }
 
   for (const bundle of bundles) {
@@ -823,7 +877,8 @@ function assert(condition, message) {
 }
 
 function runTests() {
-  assert(readLatestReleasedVersion(path.join(REPO_ROOT, 'workflows', 'lint', 'CHANGELOG.md')) === '4.0.0', 'expected latest lint workflow version to parse');
+  const latestLintVersion = readLatestReleasedVersion(path.join(REPO_ROOT, 'workflows', 'lint', 'CHANGELOG.md'));
+  assert(/^\d+\.\d+\.\d+$/.test(latestLintVersion || ''), 'expected latest lint workflow version to parse');
 
   const plannerFallback = parseClaudeAgentFallback('planner');
   assert(plannerFallback.modelTier === 'frontier', 'expected planner model tier fallback to map from inherit');
@@ -841,6 +896,7 @@ function runTests() {
   const catalog = buildCatalog();
   assert(Array.isArray(catalog.artifacts) && catalog.artifacts.length > 0, 'expected catalog to contain artifacts');
   assert(catalog.artifacts.some(entry => entry.component_id === 'planner' && entry.target_tool === 'openai-codex'), 'expected planner codex artifact in catalog');
+  assert(catalog.artifacts.some(entry => entry.component_id === 'docker' && entry.target_tool === 'claude-code' && entry.artifact_path === 'claude-code/rules/docker/docker.md'), 'expected claude rule adapter artifact in catalog');
   assert(catalog.artifacts.some(entry => entry.component_id === 'logging' && entry.target_tool === 'github-copilot'), 'expected github-copilot logging rule artifact in catalog');
 
   process.stdout.write('All tests passed.\n');

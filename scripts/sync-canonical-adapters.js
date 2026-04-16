@@ -103,6 +103,19 @@ function readLatestReleasedVersion(changelogPath) {
   return match ? match[1] : null;
 }
 
+function listCanonicalComponentNames(rootDir, markerFile) {
+  const absoluteRoot = path.join(REPO_ROOT, rootDir);
+  return fs.readdirSync(absoluteRoot, { withFileTypes: true })
+    .filter(entry => entry.isDirectory())
+    .map(entry => entry.name)
+    .filter(name => fs.existsSync(path.join(absoluteRoot, name, markerFile)))
+    .sort();
+}
+
+function firstAdapterPath(adapters, prefix, fallbackPath) {
+  return adapters.find(adapter => adapter.startsWith(prefix)) || fallbackPath;
+}
+
 function parseClaudeAgentConfig(frontmatter) {
   const model = normalizeFrontmatterValue(extractField(/^model:\s*(.+)$/m, frontmatter, 'inherit'));
   const toolsRaw = extractField(/^tools:\s*(.+)$/m, frontmatter, '');
@@ -290,6 +303,45 @@ function renderCopilotPromptMarkdown({ name, description, body, argumentHint }) 
   return lines.join('\n');
 }
 
+function renderCopilotInstructionMarkdown({ description, applyTo, body }) {
+  const lines = [
+    '---',
+    `description: ${JSON.stringify(description)}`,
+    `applyTo: ${JSON.stringify(applyTo)}`,
+    '---',
+    '',
+    body.trim(),
+    '',
+  ];
+
+  return lines.join('\n');
+}
+
+function deriveRuleDescription(body) {
+  const firstLine = body
+    .split('\n')
+    .map(line => line.trim())
+    .find(Boolean);
+
+  if (!firstLine) {
+    return 'Shared rule adapter generated from the canonical root rule.';
+  }
+
+  const normalized = firstLine
+    .replace(/^[-*]\s+/, '')
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    .replace(/`([^`]+)`/g, '$1')
+    .replace(/\*\*([^*]+)\*\*/g, '$1')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  if (normalized.length <= 140) {
+    return normalized;
+  }
+
+  return `${normalized.slice(0, 137).trimEnd()}...`;
+}
+
 function extractCanonicalMetadata(markdown) {
   const parts = splitFrontmatter(markdown);
   const body = parts.body.replace(
@@ -305,54 +357,52 @@ function extractCanonicalMetadata(markdown) {
     capabilities: parseYamlList(parts.frontmatter, 'capabilities'),
     subagents: parseYamlList(parts.frontmatter, 'subagents'),
     skills: parseYamlList(parts.frontmatter, 'skills'),
+    adapters: parseYamlList(parts.frontmatter, 'adapters'),
     argumentHint: normalizeFrontmatterValue(extractField(/^argument-hint:\s*(.+)$/m, parts.frontmatter, '')),
   };
 }
 
 function syncAgents() {
-  const claudeAgentsDir = path.join(REPO_ROOT, 'claude-code', 'agents');
   const copilotAgentsDir = path.join(REPO_ROOT, 'github-copilot', 'agents');
-  const codexAgentsDir = path.join(REPO_ROOT, 'openai-codex', 'agents');
   const canonicalAgentsDir = path.join(REPO_ROOT, 'agents');
 
-  const names = fs.readdirSync(claudeAgentsDir)
-    .filter(name => fs.existsSync(path.join(claudeAgentsDir, name, `${name}.md`)))
-    .sort();
+  const names = listCanonicalComponentNames('agents', 'AGENT.md');
 
   for (const name of names) {
-    const claudePath = path.join(claudeAgentsDir, name, `${name}.md`);
-    const copilotPath = path.join(copilotAgentsDir, `${name}.agent.md`);
-    const codexPath = path.join(codexAgentsDir, `${name}.toml`);
     const canonicalPath = path.join(canonicalAgentsDir, name, 'AGENT.md');
     const canonicalChangelogPath = path.join(canonicalAgentsDir, name, 'CHANGELOG.md');
-    const claudeChangelogPath = path.join(claudeAgentsDir, name, 'CHANGELOG.md');
+    const canonical = extractCanonicalMetadata(read(canonicalPath));
+    const claudePath = path.join(
+      REPO_ROOT,
+      firstAdapterPath(canonical.adapters, 'claude-code/', `claude-code/agents/${name}/${name}.md`)
+    );
+    const copilotPath = path.join(
+      REPO_ROOT,
+      firstAdapterPath(canonical.adapters, 'github-copilot/', `github-copilot/agents/${name}.agent.md`)
+    );
+    const codexPath = path.join(
+      REPO_ROOT,
+      firstAdapterPath(canonical.adapters, 'openai-codex/', `openai-codex/agents/${name}.toml`)
+    );
+    const claudeChangelogPath = path.join(path.dirname(claudePath), 'CHANGELOG.md');
 
-    const claudeMarkdown = read(claudePath);
-    const copilotMarkdown = read(copilotPath);
-    const claudeParts = splitFrontmatter(claudeMarkdown);
-    const copilotParts = splitFrontmatter(copilotMarkdown);
+    if (!fs.existsSync(claudePath)) {
+      throw new Error(`missing Claude agent adapter for canonical agent '${name}': ${path.relative(REPO_ROOT, claudePath)}`);
+    }
+
+    const claudeParts = splitFrontmatter(read(claudePath));
     const claudeConfig = parseClaudeAgentConfig(claudeParts.frontmatter);
-    const existingCanonical = fs.existsSync(canonicalPath) ? extractCanonicalMetadata(read(canonicalPath)) : null;
-    const canonicalBody = existingCanonical
-      ? existingCanonical.body
-      : stripLeadingHtmlComments(copilotParts.body || claudeParts.body);
-    const description = existingCanonical
-      ? existingCanonical.description
-      : normalizeFrontmatterValue(
-          extractField(/^description:\s*(.+)$/m, copilotParts.frontmatter, '') ||
-          extractField(/^description:\s*(.+)$/m, claudeParts.frontmatter, '')
-        );
-    const modelTier = existingCanonical && existingCanonical.modelTier
-      ? existingCanonical.modelTier
-      : claudeConfig.modelTier;
-    const capabilities = existingCanonical && existingCanonical.capabilities.length > 0
-      ? existingCanonical.capabilities
+    const canonicalBody = canonical.body;
+    const description = canonical.description;
+    const modelTier = canonical.modelTier || claudeConfig.modelTier;
+    const capabilities = canonical.capabilities.length > 0
+      ? canonical.capabilities
       : claudeConfig.capabilities;
-    const subagents = existingCanonical && existingCanonical.subagents.length > 0
-      ? existingCanonical.subagents
+    const subagents = canonical.subagents.length > 0
+      ? canonical.subagents
       : claudeConfig.childAgents;
-    const skills = existingCanonical && existingCanonical.skills.length > 0
-      ? existingCanonical.skills
+    const skills = canonical.skills.length > 0
+      ? canonical.skills
       : claudeConfig.skills;
 
     writeIfChanged(
@@ -415,40 +465,34 @@ function syncAgents() {
 }
 
 function syncWorkflows() {
-  const claudeCommandsDir = path.join(REPO_ROOT, 'claude-code', 'commands');
-  const copilotPromptsDir = path.join(REPO_ROOT, 'github-copilot', 'prompts');
   const canonicalWorkflowsDir = path.join(REPO_ROOT, 'workflows');
 
-  const names = fs.readdirSync(claudeCommandsDir)
-    .filter(name => fs.existsSync(path.join(claudeCommandsDir, name, `${name}.md`)))
-    .sort();
+  const names = listCanonicalComponentNames('workflows', 'WORKFLOW.md');
 
   for (const name of names) {
-    const claudePath = path.join(claudeCommandsDir, name, `${name}.md`);
-    const copilotPath = path.join(copilotPromptsDir, `${name}.prompt.md`);
     const canonicalPath = path.join(canonicalWorkflowsDir, name, 'WORKFLOW.md');
     const canonicalChangelogPath = path.join(canonicalWorkflowsDir, name, 'CHANGELOG.md');
-    const claudeChangelogPath = path.join(claudeCommandsDir, name, 'CHANGELOG.md');
-
-    const claudeMarkdown = read(claudePath);
-    const copilotMarkdown = read(copilotPath);
-    const claudeParts = splitFrontmatter(claudeMarkdown);
-    const copilotParts = splitFrontmatter(copilotMarkdown);
-    const existingCanonical = fs.existsSync(canonicalPath) ? extractCanonicalMetadata(read(canonicalPath)) : null;
-    const argumentHint = normalizeFrontmatterValue(
-      (existingCanonical && existingCanonical.argumentHint) ||
-      extractField(/^argument-hint:\s*(.+)$/m, claudeParts.frontmatter, '') ||
-      extractField(/^argument-hint:\s*(.+)$/m, copilotParts.frontmatter, '')
+    const canonical = extractCanonicalMetadata(read(canonicalPath));
+    const claudePath = path.join(
+      REPO_ROOT,
+      firstAdapterPath(canonical.adapters, 'claude-code/', `claude-code/commands/${name}/${name}.md`)
     );
-    const canonicalBody = existingCanonical
-      ? existingCanonical.body
-      : stripLeadingHtmlComments(copilotParts.body || claudeParts.body);
-    const description = existingCanonical
-      ? existingCanonical.description
-      : normalizeFrontmatterValue(
-          extractField(/^description:\s*(.+)$/m, copilotParts.frontmatter, '') ||
-          extractField(/^description:\s*(.+)$/m, claudeParts.frontmatter, '')
-        );
+    const copilotPath = path.join(
+      REPO_ROOT,
+      firstAdapterPath(canonical.adapters, 'github-copilot/', `github-copilot/prompts/${name}.prompt.md`)
+    );
+    const claudeChangelogPath = path.join(path.dirname(claudePath), 'CHANGELOG.md');
+
+    if (!fs.existsSync(claudePath)) {
+      throw new Error(`missing Claude workflow adapter for canonical workflow '${name}': ${path.relative(REPO_ROOT, claudePath)}`);
+    }
+
+    const claudeParts = splitFrontmatter(read(claudePath));
+    const argumentHint = canonical.argumentHint || normalizeFrontmatterValue(
+      extractField(/^argument-hint:\s*(.+)$/m, claudeParts.frontmatter, '')
+    );
+    const canonicalBody = canonical.body;
+    const description = canonical.description;
 
     writeIfChanged(
       canonicalPath,
@@ -480,22 +524,70 @@ function syncWorkflows() {
       })
     );
 
-    const manifestPath = path.join(REPO_ROOT, 'github-copilot', 'commands', name, 'manifest.json');
-    if (fs.existsSync(manifestPath)) {
-      const manifest = JSON.parse(read(manifestPath));
-      manifest.version = readLatestReleasedVersion(path.join(canonicalWorkflowsDir, name, 'CHANGELOG.md')) || manifest.version;
-      manifest.download_url = `https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/prompts/${name}.prompt.md`;
-      manifest.install_path = '.github/prompts/';
-      manifest.install_command = `mkdir -p .github/prompts && curl -fsSL https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/prompts/${name}.prompt.md -o .github/prompts/${name}.prompt.md`;
-      manifest.tooltip_text = description;
-      writeIfChanged(manifestPath, JSON.stringify(manifest, null, 2) + '\n');
+  }
+}
+
+function syncRules() {
+  const canonicalRulesDir = path.join(REPO_ROOT, 'rules');
+  const claudeRulesDir = path.join(REPO_ROOT, 'claude-code', 'rules');
+  const copilotInstructionsDir = path.join(REPO_ROOT, 'github-copilot', 'instructions');
+
+  const names = fs.readdirSync(canonicalRulesDir, { withFileTypes: true })
+    .filter(entry => entry.isDirectory())
+    .map(entry => entry.name)
+    .filter(name => fs.existsSync(path.join(canonicalRulesDir, name, `${name}.md`)))
+    .sort();
+
+  for (const name of names) {
+    const canonicalPath = path.join(canonicalRulesDir, name, `${name}.md`);
+    const claudePath = path.join(claudeRulesDir, name, `${name}.md`);
+    const copilotPath = path.join(copilotInstructionsDir, `${name}.instructions.md`);
+
+    const canonicalMarkdown = read(canonicalPath);
+    const parts = splitFrontmatter(canonicalMarkdown);
+    const body = stripLeadingHtmlComments(parts.body);
+
+    const explicitDescription = normalizeFrontmatterValue(
+      extractField(/^description:\s*(.+)$/m, parts.frontmatter, '')
+    );
+    const description = explicitDescription || deriveRuleDescription(body);
+
+    const explicitApplyTo = normalizeFrontmatterValue(
+      extractField(/^applyTo:\s*(.+)$/m, parts.frontmatter, '')
+    );
+
+    let paths = parseYamlList(parts.frontmatter, 'paths');
+    const pathsRaw = extractField(/^paths:\s*(.+)$/m, parts.frontmatter, '');
+    if (paths.length === 0 && pathsRaw) {
+      try {
+        const parsed = JSON.parse(pathsRaw);
+        if (Array.isArray(parsed)) paths = parsed;
+      } catch {
+        paths = [];
+      }
     }
+
+    const applyTo = explicitApplyTo || (paths.length > 0 ? paths.join(',') : '**/*');
+
+    writeIfChanged(
+      claudePath,
+      canonicalMarkdown.endsWith('\n') ? canonicalMarkdown : `${canonicalMarkdown}\n`
+    );
+    writeIfChanged(
+      copilotPath,
+      renderCopilotInstructionMarkdown({
+        description,
+        applyTo,
+        body,
+      })
+    );
   }
 }
 
 function main() {
   syncAgents();
   syncWorkflows();
+  syncRules();
 }
 
 main();

@@ -1,7 +1,16 @@
 # claude-code/rules/
 
-Claude Code now consumes the canonical shared rules directly from repo-root `rules/`
-via `~/.claude/rules`.
+Generated Claude-facing rule adapters.
 
-This directory is retained only as a documentation stub so older references have a stable
-landing point. Edit shared rule content in [rules](/Users/bmj/Developer/git/agent-toolkit/rules).
+## Ownership
+
+- Canonical rule content lives in repo-root `rules/`.
+- `claude-code/rules/<slug>/<slug>.md` is generated from that canonical source by
+  `node scripts/sync-canonical-adapters.js`.
+- Do not hand-edit generated rule adapters; edit the root rule and regenerate instead.
+
+## Install Surface
+
+`claude-code/scripts/install.sh` points `~/.claude/rules` at this directory so Claude
+receives a tool-local, adapter-shaped rule surface while root `rules/` remains the single
+source of truth.

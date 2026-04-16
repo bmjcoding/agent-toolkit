@@ -9,7 +9,8 @@
 # (.agent_id, .last_assistant_message, etc.). Check Codex docs for exact field names at runtime.
 #
 # Original purpose: SubagentStop hook — extract handoff JSON from agent's final message,
-# validate against canonical schema, and write to .orchestrator/handoffs/<agent_id>.json.
+# validate against canonical schema, and write to .orchestrator/sessions/$SID/handoffs/<agent_id>.json
+# when session-scoped mode is active, otherwise to the flat .orchestrator/handoffs/ fallback.
 set -uo pipefail
 
 # Resolve ORCH_BASE: session-scoped if session.id exists and is valid, else flat

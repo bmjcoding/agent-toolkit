@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Session-aware handoff wiring is now documented and emitted consistently across the Copilot hook surface: `inject-context.sh` points agents at the resolved session-scoped handoff directory, and `extract-handoff.sh` documents the same session-first write target with flat fallback semantics.
+
 ## [3.0.0] - 2026-04-12
 
 ### Added

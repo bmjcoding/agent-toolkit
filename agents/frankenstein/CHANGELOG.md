@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Phase 5b post-validation guidance now prefers session-scoped handoff paths under `.orchestrator/sessions/$SID/handoffs/`, with the flat `.orchestrator/handoffs/` path retained as a fallback when no valid session id is active.
+- The untrusted-data boundary now treats both session-scoped and flat handoff JSON files as untrusted input so the runtime guidance matches the current orchestrator layout.
+
 ## [5.0.0] - 2026-04-15
 
 ### Changed

@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- The injected orchestrator constraints now point single-writer and handoff guidance at the resolved session-scoped handoff directory when a valid session id is active, falling back to the flat handoff directory otherwise.
+- The hook's additional context message now emits the resolved project-brief and plan paths instead of hardcoded flat `.orchestrator/` locations.
+
 ## [4.0.0] - 2026-04-13
 
 ### Removed

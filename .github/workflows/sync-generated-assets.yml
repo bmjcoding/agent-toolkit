@@ -4,15 +4,27 @@ on:
   push:
     paths:
       - "agents/**"
+      - "skills/**"
+      - "rules/**"
       - "workflows/**"
+      - "claude-code/bundles/**"
+      - "claude-code/hooks/**"
+      - "github-copilot/hooks/**"
       - "scripts/sync-canonical-adapters.js"
       - "scripts/generate-index.js"
+      - "scripts/smoke-generated-assets.js"
   pull_request:
     paths:
       - "agents/**"
+      - "skills/**"
+      - "rules/**"
       - "workflows/**"
+      - "claude-code/bundles/**"
+      - "claude-code/hooks/**"
+      - "github-copilot/hooks/**"
       - "scripts/sync-canonical-adapters.js"
       - "scripts/generate-index.js"
+      - "scripts/smoke-generated-assets.js"
 
 concurrency:
   group: sync-generated-assets-${{ github.ref }}
@@ -42,8 +54,9 @@ jobs:
           generated_paths=(
             claude-code/agents
             claude-code/commands
+            claude-code/rules
             github-copilot/agents
-            github-copilot/commands
+            github-copilot/instructions
             github-copilot/prompts
             openai-codex/agents
             index.json
@@ -82,8 +95,9 @@ jobs:
           generated_paths=(
             claude-code/agents
             claude-code/commands
+            claude-code/rules
             github-copilot/agents
-            github-copilot/commands
+            github-copilot/instructions
             github-copilot/prompts
             openai-codex/agents
             index.json
@@ -102,8 +116,9 @@ jobs:
           generated_paths=(
             claude-code/agents
             claude-code/commands
+            claude-code/rules
             github-copilot/agents
-            github-copilot/commands
+            github-copilot/instructions
             github-copilot/prompts
             openai-codex/agents
             index.json

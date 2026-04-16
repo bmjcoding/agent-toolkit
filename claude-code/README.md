@@ -12,13 +12,18 @@ claude-code/
   commands/   # Claude slash-command wrappers for canonical root workflows/
   hooks/      # 9 shell scripts wired to Claude Code hook events (PreToolUse, PostToolUse, SubagentStart, SubagentStop)
   bundles/    # YAML bundle files grouping related components for bulk install
-  docs/       # Architecture decision records, migration guides, UX design docs
+  rules/      # Generated Claude-facing adapters for canonical root rules/
   scripts/
-    install.sh  # Symlink manager for ~/.claude/
+    install.sh         # Symlink manager for ~/.claude/
+    integrity-check.sh # Claude hook support script used by integrity-warn
 ```
 
 Canonical agents live at repo-root `agents/`. Canonical workflows live at repo-root
 `workflows/`. Shared skills and rules live at repo-root `skills/` and `rules/`.
+`claude-code/rules/` is generated from the canonical root rules by
+`node scripts/sync-canonical-adapters.js`.
+Changelog helper scripts such as platform detection and historical tag backfill live
+canonically under `skills/changelog/scripts/`, not under `claude-code/scripts/`.
 
 ## Install (Symlinks)
 
@@ -27,13 +32,12 @@ Claude Code loads these components via symlinks from `~/.claude/`:
 ```sh
 ~/.claude/agents   -> /path/to/agent-toolkit/claude-code/agents
 ~/.claude/commands -> /path/to/agent-toolkit/claude-code/commands
-~/.claude/docs     -> /path/to/agent-toolkit/claude-code/docs
 ~/.claude/hooks    -> /path/to/agent-toolkit/claude-code/hooks
 ~/.claude/rules    -> /path/to/agent-toolkit/claude-code/rules
 ~/.claude/skills   -> /path/to/agent-toolkit/skills
 ```
 
-Run the install script to create or retarget all six symlinks atomically:
+Run the install script to create or retarget all five symlinks atomically:
 
 ```sh
 # Preview changes
@@ -56,6 +60,8 @@ Hooks must also be registered in `~/.claude/settings.json` under the `hooks` key
   `workflows/<name>/WORKFLOW.md` body.
 - **Hook** (`<name>.sh`): Plain Bash, registered by event type in `settings.json`; exit 2 blocks, exit 1 warns, exit 0 continues.
 - **Bundle** (`bundle.yaml`): YAML file with `id`, `name`, `description`, `status`, `tags[]`, `components[]` (each entry has `type`, `id`, `role`). Dependency metadata for agents and skills is declared in the component's own `.md` frontmatter (`tools:` for agents, `skills:` for skills/commands), not in the bundle file. Valid `role` values: `core` (required for the bundle to function), `optional` (nice-to-have, installable separately), `deprecated` (scheduled for removal). All current entries use `core`. The generated `index.json` distribution catalog is the stable lookup surface for bundle artifacts; use each entry's `artifact_path`, `component_version`, checksum, and install metadata instead of reconstructing paths from slugs.
+- **Rule** (`<name>.md`): Generated Claude-facing adapter for the canonical root
+  `rules/<name>/<name>.md` body.
 
 ## Tag Format
 

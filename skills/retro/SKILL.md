@@ -245,7 +245,7 @@ Common retro mistakes — read before analyzing:
 
 After completing the analysis, read `references/finalization.md` and follow all steps in order: validation, output formatting with summary table, trend analysis, and saving to `STATE_ROOT/retros/`. All steps must complete before presenting the improve prompt.
 
-Steps in order: (1) write draft to temp path (e.g., `/tmp/retro-draft-TIMESTAMP.md`) → (2) run verify-claims → (3) fix failures → (4) format output with summary table → (5) check trends → (6) save final to `STATE_ROOT/retros/{subject}/`.
+Steps in order: (1) write draft to temp path (e.g., `/tmp/retro-draft-TIMESTAMP.md`) → (2) run verify-claims → (3) fix failures → (4) format output with summary table → (5) check trends → (6) save final to the correct type-scoped path under `STATE_ROOT/retros/`.
 
 **Rule-expiry surfacer (runs after step 1):** Check whether `STATE_ROOT/metadata/rule-expiry.json` exists. If it does, find all entries where `status == "active"` and `review_by < today`. If any exist, append a single P2 recommendation to the 3.7 Recommendations section:
 

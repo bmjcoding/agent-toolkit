@@ -141,10 +141,17 @@ Use the `session_id` (compact `YYYYMMDDTHHMMSS`) as `<session-id>`. For skill/ag
 
 1. Create the target directory: `mkdir -p <path>`
 2. Write the full retro markdown to `<path>/YYYYMMDDTHHMMSS.md`
-3. Write the summary metrics as a v5.0-schema JSON to `<path>/YYYYMMDDTHHMMSS.json`. The JSON must validate against the v5.0 schema:
+3. Write the summary metrics as a v5.0-schema JSON to `<path>/YYYYMMDDTHHMMSS.json`. The JSON must validate against the v5.0 summary contract:
 
    ```bash
-   python3 tools/retros/validate.py <retro.json>
+   VALIDATE_SCRIPT=$(find skills/retro/scripts -name "validate.py" 2>/dev/null | head -1)
+   [ -z "$VALIDATE_SCRIPT" ] && VALIDATE_SCRIPT=$(find .agents/skills/retro/scripts -name "validate.py" 2>/dev/null | head -1)
+   [ -z "$VALIDATE_SCRIPT" ] && VALIDATE_SCRIPT=$(find .claude/skills/retro/scripts -name "validate.py" 2>/dev/null | head -1)
+   [ -z "$VALIDATE_SCRIPT" ] && VALIDATE_SCRIPT=$(find .codex/skills/retro/scripts -name "validate.py" 2>/dev/null | head -1)
+   [ -z "$VALIDATE_SCRIPT" ] && VALIDATE_SCRIPT=$(find ~/.agents/skills/retro/scripts -name "validate.py" 2>/dev/null | head -1)
+   [ -z "$VALIDATE_SCRIPT" ] && VALIDATE_SCRIPT=$(find ~/.claude/skills/retro/scripts -name "validate.py" 2>/dev/null | head -1)
+   [ -z "$VALIDATE_SCRIPT" ] && VALIDATE_SCRIPT=$(find ~/.codex/skills/retro/scripts -name "validate.py" 2>/dev/null | head -1)
+   python3 "${VALIDATE_SCRIPT:-validate.py}" <retro.json>
    ```
 
    Fix any validation errors before saving to the canonical path.
