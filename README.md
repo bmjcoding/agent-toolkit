@@ -66,6 +66,44 @@ Smoke-test the full adapter and catalog generation flow with:
 node scripts/smoke-generated-assets.js
 ```
 
+## Linting
+
+Install the Node-based lint tooling with:
+
+```sh
+npm ci
+```
+
+Install Ruff in a local virtualenv with:
+
+```sh
+python3 -m venv .venv
+.venv/bin/pip install -r requirements-dev.txt
+```
+
+Run the repo linters with:
+
+```sh
+npm run lint
+.venv/bin/ruff check .
+```
+
+Auto-fix what can be fixed with:
+
+```sh
+npm run lint:fix
+.venv/bin/ruff check . --fix
+```
+
+The Node entrypoint covers:
+
+- `eslint` for repository JavaScript
+- `markdownlint-cli2` for Markdown docs and instruction files
+- `prettier --check` for JSON and YAML
+
+Ruff is configured separately for the Python utilities and helper scripts.
+Python dev dependencies live in `requirements-dev.txt`.
+
 ## Install
 
 ### Claude Code

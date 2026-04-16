@@ -32,7 +32,6 @@ import re
 import subprocess
 import sys
 from collections import Counter, defaultdict
-from pathlib import Path
 
 
 def parse_args(argv):

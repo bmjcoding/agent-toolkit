@@ -14,7 +14,7 @@ Expects these temp files to exist (written by the Phase 4 bash loop):
 """
 
 import os
-import datetime
+from datetime import datetime
 
 BACKLOG = '.orchestrator/backlog.md'
 TMP_PATH = BACKLOG + '.tmp'
@@ -27,7 +27,7 @@ HUMAN_COL_HDR = '| # | status | severity | environment | file | item | reason | 
 
 def read_staging(path):
     try:
-        return [l for l in open(path).read().splitlines() if l.strip()]
+        return [line for line in open(path).read().splitlines() if line.strip()]
     except Exception:
         return []
 
@@ -45,11 +45,14 @@ if os.path.exists(BACKLOG):
     for line in open(BACKLOG).read().splitlines():
         stripped = line.strip()
         if stripped == AGENT_HDR:
-            section = 'agent'; continue
+            section = 'agent'
+            continue
         if stripped == HUMAN_HDR:
-            section = 'human'; continue
+            section = 'human'
+            continue
         if section is None:
-            preamble_lines.append(line); continue
+            preamble_lines.append(line)
+            continue
         if stripped in (AGENT_COL_HDR.strip(), HUMAN_COL_HDR.strip(), COL_SEP.strip()):
             continue
         if section in ('agent', 'human') and line.startswith('| '):
@@ -92,11 +95,12 @@ def renumber(rows):
 
 
 # ---- Rebuild preamble (update Last updated timestamp) ----
-ts = datetime.datetime.now().strftime('%Y-%m-%dT%H:%M')
+ts = datetime.now().strftime('%Y-%m-%dT%H:%M')
 new_preamble, updated = [], False
 for line in preamble_lines:
     if line.startswith('Last updated:'):
-        new_preamble.append(f'Last updated: {ts}'); updated = True
+        new_preamble.append(f'Last updated: {ts}')
+        updated = True
     else:
         new_preamble.append(line)
 if not updated:
