@@ -9,11 +9,6 @@ const REPO_ROOT = path.resolve(__dirname, '..');
 const OUTPUT_FILE = path.join(REPO_ROOT, 'index.json');
 const RAW_BASE_URL = 'https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/';
 const VALID_LIFECYCLES = new Set(['stable', 'beta', 'experimental']);
-const DEFAULT_HOOK_LIFECYCLE_BY_TOOL = Object.freeze({
-  'claude-code': 'stable',
-  'github-copilot': 'stable',
-  'openai-codex': 'experimental',
-});
 
 function readFileSafe(filePath) {
   try {
@@ -178,19 +173,28 @@ function parseFrontmatter(block) {
   return result;
 }
 
-function readHookRuntimeMetadata(targetTool, hookId) {
-  const lifecycle = DEFAULT_HOOK_LIFECYCLE_BY_TOOL[targetTool];
-  if (!lifecycle) {
-    throw new Error(`missing derived hook lifecycle for ${targetTool} hook ${hookId}`);
+function readCanonicalHookMetadata(hookId) {
+  const scriptPath = path.join(REPO_ROOT, 'hooks', hookId, `${hookId}.sh`);
+  const content = readFileSafe(scriptPath);
+  if (!content) {
+    throw new Error(`missing canonical hook script for ${hookId}`);
   }
+
+  const lifecycleMatch = content.match(/^#\s*lifecycle:\s*(.+)$/m);
+  const lifecycle = lifecycleMatch ? lifecycleMatch[1].trim() : null;
+
   return {
     lifecycle: requireLifecycle(lifecycle, {
       componentKind: 'hook',
       componentId: hookId,
-      sourcePath: `derived hook lifecycle defaults (${targetTool})`,
+      sourcePath: scriptPath,
     }),
     lifecycleNotes: null,
   };
+}
+
+function readHookRuntimeMetadata(_targetTool, hookId) {
+  return readCanonicalHookMetadata(hookId);
 }
 
 function splitTopLevelCommaList(value) {
@@ -465,6 +469,7 @@ function parseBundleManifest(bundlePath) {
     description: null,
     status: null,
     tags: [],
+    aliases: [],
     components: [],
   };
 
@@ -495,6 +500,11 @@ function parseBundleManifest(bundlePath) {
       currentComponent = null;
       continue;
     }
+    if (/^aliases:\s*$/.test(line)) {
+      mode = 'aliases';
+      currentComponent = null;
+      continue;
+    }
     if (/^components:\s*$/.test(line)) {
       mode = 'components';
       currentComponent = null;
@@ -505,6 +515,15 @@ function parseBundleManifest(bundlePath) {
       const tagMatch = line.match(/^\s*-\s+(.+)$/);
       if (tagMatch) {
         bundle.tags.push(normalizeQuotedValue(tagMatch[1]));
+        continue;
+      }
+      mode = null;
+    }
+
+    if (mode === 'aliases') {
+      const aliasMatch = line.match(/^\s*-\s+(.+)$/);
+      if (aliasMatch) {
+        bundle.aliases.push(normalizeQuotedValue(aliasMatch[1]));
         continue;
       }
       mode = null;
@@ -529,8 +548,58 @@ function parseBundleManifest(bundlePath) {
   return bundle;
 }
 
-function readBundles(tool) {
-  const bundlesDir = path.join(REPO_ROOT, tool, 'bundles');
+function pickMoreSevereLifecycle(current, next) {
+  const weight = { stable: 0, beta: 1, experimental: 2 };
+  return weight[next] > weight[current] ? next : current;
+}
+
+function buildBundleComponentLifecycleMap({ canonicalAgents, canonicalWorkflows, sharedSkills, sharedRules }) {
+  const lifecycleByComponent = new Map();
+
+  for (const agent of canonicalAgents) {
+    lifecycleByComponent.set(`agent|${agent.id}`, agent.lifecycle);
+  }
+  for (const workflow of canonicalWorkflows) {
+    lifecycleByComponent.set(`command|${workflow.id}`, workflow.lifecycle);
+  }
+  for (const skill of sharedSkills) {
+    lifecycleByComponent.set(`skill|${skill.id}`, skill.lifecycle);
+  }
+  for (const rule of sharedRules) {
+    lifecycleByComponent.set(`rule|${rule.id}`, rule.lifecycle);
+  }
+
+  const canonicalHooksDir = path.join(REPO_ROOT, 'hooks');
+  for (const entry of fs.readdirSync(canonicalHooksDir, { withFileTypes: true }).filter(dirent => dirent.isDirectory()).sort((a, b) => a.name.localeCompare(b.name))) {
+    const id = entry.name;
+    const artifactPath = path.join(REPO_ROOT, 'hooks', id, `${id}.sh`);
+    if (!exists(artifactPath)) continue;
+    lifecycleByComponent.set(`hook|${id}`, readHookRuntimeMetadata('claude-code', id).lifecycle);
+  }
+
+  return lifecycleByComponent;
+}
+
+function aggregateBundleLifecycle(components, componentLifecycles, bundlePath, bundleId) {
+  let lifecycle = 'stable';
+
+  for (const component of components) {
+    if (!component.type || !component.id) continue;
+
+    const componentLifecycle = componentLifecycles.get(`${component.type}|${component.id}`);
+    if (!componentLifecycle) {
+      throw new Error(`missing lifecycle for bundle member ${component.type}/${component.id} referenced by ${relativePath(bundlePath)} (${bundleId})`);
+    }
+
+    lifecycle = pickMoreSevereLifecycle(lifecycle, componentLifecycle);
+    if (lifecycle === 'experimental') return lifecycle;
+  }
+
+  return lifecycle;
+}
+
+function readBundles(componentLifecycles) {
+  const bundlesDir = path.join(REPO_ROOT, 'bundles');
   if (!exists(bundlesDir)) return [];
 
   const results = [];
@@ -543,19 +612,17 @@ function readBundles(tool) {
     if (!parsed) continue;
 
     results.push({
-      tool,
+      tool: 'claude-code',
       id: parsed.id || id,
-      lifecycle: requireLifecycle(parsed.status, {
-        componentKind: 'bundle',
-        componentId: parsed.id || id,
-        sourcePath: bundlePath,
-      }),
+      lifecycle: aggregateBundleLifecycle(parsed.components, componentLifecycles, bundlePath, parsed.id || id),
       version: readLatestReleasedVersion(path.join(bundlesDir, id, 'CHANGELOG.md')),
       artifactPath: relativePath(bundlePath),
+      sourcePath: relativePath(bundlePath),
       metadata: {
         name: parsed.name,
         description: parsed.description,
         tags: parsed.tags,
+        aliases: parsed.aliases,
         components: parsed.components,
       },
     });
@@ -695,10 +762,13 @@ function buildCatalog() {
   const canonicalWorkflows = readCanonicalWorkflows();
   const sharedSkills = readSharedSkills();
   const sharedRules = readRootRules();
-  const bundles = [
-    ...readBundles('claude-code'),
-    ...readBundles('github-copilot'),
-  ];
+  const bundleComponentLifecycles = buildBundleComponentLifecycleMap({
+    canonicalAgents,
+    canonicalWorkflows,
+    sharedSkills,
+    sharedRules,
+  });
+  const bundles = readBundles(bundleComponentLifecycles);
   const bundleMembership = buildBundleMembershipMap(bundles);
 
   for (const agent of canonicalAgents) {
@@ -843,7 +913,7 @@ function buildCatalog() {
       lifecycle: bundle.lifecycle,
       targetTool: bundle.tool,
       artifactPath: bundle.artifactPath,
-      sourcePath: bundle.artifactPath,
+      sourcePath: bundle.sourcePath,
       installPath,
       installCommand: buildInstallCommand({
         targetTool: bundle.tool,
@@ -1000,9 +1070,10 @@ function runTests() {
   assert(frankensteinFallback.capabilities.includes('delegate'), 'expected frankenstein fallback to include delegate capability');
   assert(frankensteinFallback.subagents.includes('planner'), 'expected frankenstein fallback to parse subagents');
 
-  const bundle = parseBundleManifest(path.join(REPO_ROOT, 'claude-code', 'bundles', 'frankenstein-orchestration', 'bundle.yaml'));
+  const bundle = parseBundleManifest(path.join(REPO_ROOT, 'bundles', 'ultra-dev', 'bundle.yaml'));
   assert(bundle && bundle.components.length > 0, 'expected bundle manifest parser to extract components');
   assert(bundle.components.some(component => component.type === 'agent' && component.id === 'frankenstein'), 'expected bundle parser to extract agent component ids');
+  assert(Array.isArray(bundle.aliases) && bundle.aliases.includes('frankenstein-orchestration'), 'expected bundle parser to extract aliases');
 
   const catalog = buildCatalog();
   assert(Array.isArray(catalog.artifacts) && catalog.artifacts.length > 0, 'expected catalog to contain artifacts');
@@ -1043,8 +1114,25 @@ function runTests() {
   const plannerCodexArtifact = catalog.artifacts.find(entry => entry.component_id === 'planner' && entry.target_tool === 'openai-codex');
   assert(plannerCodexArtifact && plannerCodexArtifact.lifecycle === 'stable', 'expected planner codex artifact lifecycle to come from canonical root metadata');
 
-  const bundleArtifact = catalog.artifacts.find(entry => entry.component_id === 'frontend-development' && entry.component_kind === 'bundle');
-  assert(bundleArtifact && bundleArtifact.lifecycle === 'stable', 'expected bundle lifecycle to normalize from bundle status');
+  const bundleArtifact = catalog.artifacts.find(entry => entry.component_id === 'ultra-dev' && entry.component_kind === 'bundle');
+  assert(bundleArtifact && bundleArtifact.lifecycle === 'stable', 'expected ultra-dev lifecycle to aggregate from canonical member lifecycle metadata');
+  assert(bundleArtifact && Array.isArray(bundleArtifact.metadata?.aliases) && bundleArtifact.metadata.aliases.includes('frankenstein-orchestration'), 'expected ultra-dev bundle artifact to expose legacy alias metadata');
+
+  const betaLifecycle = aggregateBundleLifecycle(
+    [{ type: 'skill', id: 'synthetic-beta' }],
+    new Map([['skill|synthetic-beta', 'beta']]),
+    path.join(REPO_ROOT, 'bundles', 'ultra-dev', 'bundle.yaml'),
+    'synthetic-beta-bundle'
+  );
+  assert(betaLifecycle === 'beta', 'expected aggregateBundleLifecycle to promote to beta when any member is beta');
+
+  const experimentalLifecycle = aggregateBundleLifecycle(
+    [{ type: 'skill', id: 'synthetic-experimental' }],
+    new Map([['skill|synthetic-experimental', 'experimental']]),
+    path.join(REPO_ROOT, 'bundles', 'ultra-dev', 'bundle.yaml'),
+    'synthetic-experimental-bundle'
+  );
+  assert(experimentalLifecycle === 'experimental', 'expected aggregateBundleLifecycle to promote to experimental when any member is experimental');
 
   process.stdout.write('All tests passed.\n');
 }

@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# lifecycle: stable
 # version: 2.0.0
 # PreToolUse hook: block Bash writes to control-plane files
 # Fires on EVERY Bash call. Kept minimal for latency (<10ms common case).

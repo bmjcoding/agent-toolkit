@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# lifecycle: stable
 # integrity-warn.sh — advisory integrity check for session-start / PreToolUse wiring
 # Runs integrity-check.sh verify silently; prints a WARNING to stderr if mismatches found.
 # Always exits 0 — never blocks a legitimate change.

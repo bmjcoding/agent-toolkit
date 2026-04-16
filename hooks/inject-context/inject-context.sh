@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# lifecycle: stable
 # SubagentStart hook: inject orchestrator context into subagents
 set -uo pipefail
 

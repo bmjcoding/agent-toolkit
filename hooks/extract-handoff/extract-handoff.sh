@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# lifecycle: stable
 # SubagentStop hook: extract handoff JSON from agent's final message
 # Writes to .orchestrator/handoffs/<agent_id>.json (or session-scoped equivalent)
 set -uo pipefail
