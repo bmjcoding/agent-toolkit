@@ -1,8 +1,9 @@
 # AGENTS.md — Agent Toolkit
 
 This file follows the [agents.md](https://agents.md) open convention. It is the primary
-shared instruction source for this repository. OpenAI Codex, GitHub Copilot, and Claude
-Code all consume `AGENTS.md` directly.
+shared instruction source for this repository. OpenAI Codex and GitHub Copilot read it
+natively; Claude Code consumes it through the root `CLAUDE.md` compatibility shim,
+whose content is exactly `@AGENTS.md`.
 
 ---
 
@@ -10,8 +11,8 @@ Code all consume `AGENTS.md` directly.
 
 **agent-toolkit** is a multi-tool AI agent instruction repository containing shared
 agents, skills, rules, workflows, and hooks plus tool-specific adapters, prompts,
-bundles, manifests, and install assets for the Frankenstein orchestration pipeline and
-related workflows.
+generated rule adapters, bundles, manifests, and install assets for the Frankenstein
+orchestration pipeline and related workflows.
 
 Directory layout:
 
@@ -19,17 +20,16 @@ Directory layout:
 agent-toolkit/
   docs/
     adr/           # Repo-wide architecture decisions
-    todo/          # Working notes and follow-up docs
   agents/          # Canonical shared agent instruction bodies
   hooks/           # Canonical shared hook logic (target ownership model; see ADR-0009)
   skills/          # Canonical shared skills
   rules/           # Canonical shared rules
   workflows/       # Canonical shared workflow definitions
-  claude-code/     # Claude-native agents, commands, hooks, bundles, docs, scripts
+  claude-code/     # Claude-native agents, commands, hook docs, bundles, generated rule adapters, scripts
   github-copilot/  # VS Code Copilot-native agents, prompts, instructions, hooks, scripts
   openai-codex/    # Codex-native agents, hooks, config templates, rule build assets
   AGENTS.md        # Primary shared instructions
-  CLAUDE.md        # Claude compatibility shim that imports AGENTS.md
+  CLAUDE.md        # One-line Claude compatibility shim: @AGENTS.md
 ```
 
 ## Ownership Model
@@ -40,8 +40,9 @@ agent-toolkit/
 - Root `workflows/` is the single source of truth for shared workflow bodies.
 - Root `hooks/` is the canonical shared owner of hook logic and hook changelogs.
 - `AGENTS.md` is the canonical shared instruction file.
-- `CLAUDE.md` is a compatibility shim for Claude-native consumers.
-- Tool directories should contain tool-native runtime assets or adapters only.
+- `CLAUDE.md` is a one-line Claude compatibility shim, not the canonical shared
+  instruction source.
+- Tool directories should contain tool-native runtime assets or generated adapters only.
 - Shared skills are tagged as `skill/<slug>-v<major>.<minor>.<patch>`.
 - Shared rules are tagged as `rule/<slug>-v<major>.<minor>.<patch>`.
 - Shared hooks are tagged as `hook/<slug>-v<major>.<minor>.<patch>`.

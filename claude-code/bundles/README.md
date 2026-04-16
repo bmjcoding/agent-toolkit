@@ -3,7 +3,7 @@
 Bundle manifests group related Claude Code components for cataloging and discovery. Each
 bundle lives in its own directory and is described by a checked-in `bundle.yaml`.
 
-## Bundle Format
+## Format
 
 Each bundle lives at `claude-code/bundles/<slug>/bundle.yaml` and uses this shape:
 
@@ -32,7 +32,9 @@ components:
 | `hook`   | `hooks/<itemId>/<itemId>.sh` |
 | `rule`   | `rules/<itemId>/<itemId>.md` |
 
-## Bundles
+The checked-in bundles are indexed in `index.json` and can be consumed by external
+installers or catalogs. `claude-code/scripts/install.sh` currently installs the full
+Claude surface via directory symlinks; it does not perform bundle-selective installs.
 
 | Bundle ID | Name | Status | Description |
 |-----------|------|--------|-------------|
@@ -57,3 +59,4 @@ runtime Claude surfaces directly and does not accept a `--bundle` flag.
 2. Use `status: placeholder` only while referenced components are still being authored.
 3. Add an entry to the table in this README.
 4. Re-run `node scripts/generate-index.js` so the catalog reflects the new bundle.
+5. Run `node scripts/smoke-generated-assets.js` before merging.

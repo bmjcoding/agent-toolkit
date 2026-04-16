@@ -3,16 +3,15 @@
 # install.sh — ~/.claude/ symlink manager for agent-toolkit
 #
 # PURPOSE:
-#   Creates or retargets the 6 live symlinks under ~/.claude/ so that Claude
-#   Code resolves agents, commands, docs, hooks, rules, and skills from the
+#   Creates or retargets the 5 live symlinks under ~/.claude/ so that Claude
+#   Code resolves agents, commands, hooks, rules, and skills from the
 #   correct subdirectories of this repository.
 #
 # SYMLINK MAP:
 #   ~/.claude/agents   ->  <REPO>/claude-code/agents
 #   ~/.claude/commands ->  <REPO>/claude-code/commands
-#   ~/.claude/docs     ->  <REPO>/claude-code/docs
 #   ~/.claude/hooks    ->  <REPO>/hooks
-#   ~/.claude/rules    ->  <REPO>/rules
+#   ~/.claude/rules    ->  <REPO>/claude-code/rules
 #   ~/.claude/skills   ->  <REPO>/skills
 #
 # IDEMPOTENT: uses `ln -sfn` so re-running is always safe.
@@ -111,9 +110,8 @@ fi
 declare -a SYMLINKS=(
   "agents|claude-code/agents"
   "commands|claude-code/commands"
-  "docs|claude-code/docs"
   "hooks|hooks"
-  "rules|rules"
+  "rules|claude-code/rules"
   "skills|skills"
 )
 
@@ -189,7 +187,7 @@ if [[ "$CHECK_MODE" == "true" ]]; then
 
   echo ""
   if [[ "$all_match" == "true" ]]; then
-    echo "All 6 symlinks match expected targets. OK."
+    echo "All 5 symlinks match expected targets. OK."
     exit 0
   else
     echo "One or more symlinks differ from expected targets." >&2
@@ -274,7 +272,7 @@ for entry in "${SYMLINKS[@]}"; do
 done
 
 # ---------------------------------------------------------------------------
-# Smoke test: verify all 6 symlinks resolve to real directories with expected targets (sre-9)
+# Smoke test: verify all 5 symlinks resolve to real directories with expected targets (sre-9)
 # ---------------------------------------------------------------------------
 
 echo "Smoke test..."
@@ -304,7 +302,7 @@ for entry in "${SYMLINKS[@]}"; do
     continue
   fi
 
-  entry_count="$(find "${link_path}" -maxdepth 1 -mindepth 1 | wc -l | tr -d ' ')"
+  entry_count="$(find -H "${link_path}" -maxdepth 1 -mindepth 1 | wc -l | tr -d ' ')"
   printf '  ~/.claude/%-10s  resolves OK (%s entries)\n' "${name}" "${entry_count}"
 done
 
@@ -313,7 +311,7 @@ if [[ "$smoke_ok" != "true" ]]; then
 fi
 
 echo ""
-echo "Done. All 6 symlinks are in place."
+echo "Done. All 5 symlinks are in place."
 echo ""
 echo "Next steps:"
 echo "  1. Restart Claude Code to pick up any changed hook or agent definitions."

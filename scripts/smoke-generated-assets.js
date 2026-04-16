@@ -34,6 +34,14 @@ function listCanonicalSlugs(rootDir, markerFile) {
     .sort();
 }
 
+function listRuleSlugs() {
+  return fs.readdirSync(path.join(REPO_ROOT, 'rules'), { withFileTypes: true })
+    .filter(entry => entry.isDirectory())
+    .map(entry => entry.name)
+    .filter(name => exists(path.join('rules', name, `${name}.md`)))
+    .sort();
+}
+
 function listDirectoryBackedSlugs(rootDir, fileNameForSlug) {
   return fs.readdirSync(path.join(REPO_ROOT, rootDir), { withFileTypes: true })
     .filter(entry => entry.isDirectory() && exists(path.join(rootDir, entry.name, fileNameForSlug(entry.name))))
@@ -205,6 +213,7 @@ function parseTomlMultilineBasicString(text, key) {
 function assertGeneratedFilesExist() {
   const agents = listCanonicalSlugs('agents', 'AGENT.md');
   const workflows = listCanonicalSlugs('workflows', 'WORKFLOW.md');
+  const rules = listRuleSlugs();
   const hooks = listDirectoryBackedSlugs('hooks', slug => `${slug}.sh`);
   const claudeAgents = listDirectoryBackedSlugs(path.join('claude-code', 'agents'), slug => `${slug}.md`);
   const copilotAgents = listFileBackedSlugs(path.join('github-copilot', 'agents'), '.agent.md');
@@ -233,6 +242,11 @@ function assertGeneratedFilesExist() {
     assert(exists(path.join('github-copilot', 'prompts', `${workflow}.prompt.md`)), `missing GitHub Copilot prompt adapter for ${workflow}`);
   }
 
+  for (const rule of rules) {
+    assert(exists(path.join('claude-code', 'rules', rule, `${rule}.md`)), `missing Claude rule adapter for ${rule}`);
+    assert(exists(path.join('github-copilot', 'instructions', `${rule}.instructions.md`)), `missing GitHub Copilot instruction adapter for ${rule}`);
+  }
+
   for (const hook of hooks) {
     assert(exists(path.join('github-copilot', 'hooks', hook, `${hook}.json`)), `missing GitHub Copilot hook manifest for ${hook}`);
     assert(exists(path.join('github-copilot', 'hooks', hook, `${hook}.sh`)), `missing GitHub Copilot hook adapter for ${hook}`);
@@ -240,8 +254,9 @@ function assertGeneratedFilesExist() {
   }
 
   assert(exists(path.join('openai-codex', 'hooks', 'hooks.json')), 'missing OpenAI Codex hooks registry');
+  assert(!exists(path.join('github-copilot', 'commands')), 'github-copilot/commands should not exist');
 
-  return { agents, workflows, hooks };
+  return { agents, workflows, rules, hooks };
 }
 
 function assertCodexAgentBodiesMatch(agents) {
@@ -258,7 +273,7 @@ function assertCodexAgentBodiesMatch(agents) {
   }
 }
 
-function assertCatalogEntriesExist(agents, workflows, hooks) {
+function assertCatalogEntriesExist(agents, workflows, rules, hooks) {
   const index = readJson('index.json');
   const artifactKeys = new Set(
     (index.artifacts || []).map(artifact => `${artifact.target_tool}|${artifact.artifact_path}`)
@@ -292,6 +307,17 @@ function assertCatalogEntriesExist(agents, workflows, hooks) {
     assert(
       artifactKeys.has(`github-copilot|github-copilot/prompts/${workflow}.prompt.md`),
       `missing index.json entry for GitHub Copilot prompt ${workflow}`
+    );
+  }
+
+  for (const rule of rules) {
+    assert(
+      artifactKeys.has(`claude-code|claude-code/rules/${rule}/${rule}.md`),
+      `missing index.json entry for Claude rule ${rule}`
+    );
+    assert(
+      artifactKeys.has(`github-copilot|github-copilot/instructions/${rule}.instructions.md`),
+      `missing index.json entry for GitHub Copilot rule ${rule}`
     );
   }
 
@@ -343,14 +369,14 @@ function main() {
   runNodeScript('scripts/generate-index.js', ['--test']);
   runNodeScript('scripts/generate-index.js', ['--check']);
 
-  const { agents, workflows, hooks } = assertGeneratedFilesExist();
+  const { agents, workflows, rules, hooks } = assertGeneratedFilesExist();
   assert(exists(path.relative(REPO_ROOT, INDEX_PATH)), 'missing generated index.json');
   assertCodexAgentBodiesMatch(agents);
-  assertCatalogEntriesExist(agents, workflows, hooks);
+  assertCatalogEntriesExist(agents, workflows, rules, hooks);
   assertRetroStorageContract();
 
   process.stdout.write(
-    `Smoke test passed: ${agents.length} canonical agents, ${workflows.length} canonical workflows, ${hooks.length} canonical hooks, and index.json are all generated.\n`
+    `Smoke test passed: ${agents.length} canonical agents, ${workflows.length} canonical workflows, ${rules.length} canonical rules, ${hooks.length} canonical hooks, and index.json are all generated.\n`
   );
 }
 

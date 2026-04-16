@@ -791,6 +791,10 @@ function buildCatalog() {
   }
 
   for (const rule of sharedRules) {
+    const claudeRulePath = `claude-code/rules/${rule.id}/${rule.id}.md`;
+    if (!exists(path.join(REPO_ROOT, claudeRulePath))) {
+      throw new Error(`missing generated Claude rule adapter '${claudeRulePath}' for ${rule.sourcePath}; run node scripts/sync-canonical-adapters.js`);
+    }
     const claudeInstallPath = installPathForArtifact('claude-code', 'rule', rule.id);
     catalog.artifacts.push(createArtifactRecord({
       componentId: rule.id,
@@ -798,14 +802,14 @@ function buildCatalog() {
       componentVersion: rule.version,
       lifecycle: rule.lifecycle,
       targetTool: 'claude-code',
-      artifactPath: rule.sourcePath,
+      artifactPath: claudeRulePath,
       sourcePath: rule.sourcePath,
       installPath: claudeInstallPath,
       installCommand: buildInstallCommand({
         targetTool: 'claude-code',
         componentKind: 'rule',
         componentId: rule.id,
-        artifactPath: rule.sourcePath,
+        artifactPath: claudeRulePath,
         installPath: claudeInstallPath,
       }),
       bundleMembership: membershipFor(bundleMembership, 'claude-code', 'rule', rule.id),
@@ -813,28 +817,29 @@ function buildCatalog() {
     }));
 
     const instructionPath = `github-copilot/instructions/${rule.id}.instructions.md`;
-    if (exists(path.join(REPO_ROOT, instructionPath))) {
-      const copilotInstallPath = installPathForArtifact('github-copilot', 'rule', rule.id);
-      catalog.artifacts.push(createArtifactRecord({
-        componentId: rule.id,
-        componentKind: 'rule',
-        componentVersion: rule.version,
-        lifecycle: rule.lifecycle,
-        targetTool: 'github-copilot',
-        artifactPath: instructionPath,
-        sourcePath: rule.sourcePath,
-        installPath: copilotInstallPath,
-        installCommand: buildInstallCommand({
-          targetTool: 'github-copilot',
-          componentKind: 'rule',
-          componentId: rule.id,
-          artifactPath: instructionPath,
-          installPath: copilotInstallPath,
-        }),
-        bundleMembership: membershipFor(bundleMembership, 'github-copilot', 'rule', rule.id),
-        metadata: rule.metadata,
-      }));
+    if (!exists(path.join(REPO_ROOT, instructionPath))) {
+      throw new Error(`missing generated GitHub Copilot rule adapter '${instructionPath}' for ${rule.sourcePath}; run node scripts/sync-canonical-adapters.js`);
     }
+    const copilotInstallPath = installPathForArtifact('github-copilot', 'rule', rule.id);
+    catalog.artifacts.push(createArtifactRecord({
+      componentId: rule.id,
+      componentKind: 'rule',
+      componentVersion: rule.version,
+      lifecycle: rule.lifecycle,
+      targetTool: 'github-copilot',
+      artifactPath: instructionPath,
+      sourcePath: rule.sourcePath,
+      installPath: copilotInstallPath,
+      installCommand: buildInstallCommand({
+        targetTool: 'github-copilot',
+        componentKind: 'rule',
+        componentId: rule.id,
+        artifactPath: instructionPath,
+        installPath: copilotInstallPath,
+      }),
+      bundleMembership: membershipFor(bundleMembership, 'github-copilot', 'rule', rule.id),
+      metadata: rule.metadata,
+    }));
   }
 
   for (const bundle of bundles) {
