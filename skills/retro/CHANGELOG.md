@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Cleaned up retro helper scripts and normalized `references/model-pricing.json` so the
+  repo-wide ESLint/Markdownlint/Prettier/Ruff baseline passes without retro-specific lint
+  noise.
+
 ## [5.1.1] - 2026-04-15
 
 ### Changed
