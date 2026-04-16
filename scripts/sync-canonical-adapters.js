@@ -158,13 +158,6 @@ function normalizeFrontmatterValue(value) {
   return trimmed;
 }
 
-function readLatestReleasedVersion(changelogPath) {
-  if (!fs.existsSync(changelogPath)) return null;
-  const changelog = read(changelogPath);
-  const match = changelog.match(/^## \[(?!Unreleased\])([^\]]+)\]/m);
-  return match ? match[1] : null;
-}
-
 function listCanonicalNames(rootDir, markerFile) {
   return fs.readdirSync(path.join(REPO_ROOT, rootDir), { withFileTypes: true })
     .filter(entry => entry.isDirectory() && fs.existsSync(path.join(REPO_ROOT, rootDir, entry.name, markerFile)))

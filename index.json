@@ -1682,7 +1682,7 @@
     {
       "component_id": "retro",
       "component_kind": "skill",
-      "component_version": "5.1.1",
+      "component_version": "5.1.2",
       "lifecycle": "stable",
       "target_tool": "claude-code",
       "artifact_path": "skills/retro/SKILL.md",
@@ -1706,7 +1706,7 @@
     {
       "component_id": "review-skill",
       "component_kind": "skill",
-      "component_version": "5.1.0",
+      "component_version": "5.1.1",
       "lifecycle": "stable",
       "target_tool": "claude-code",
       "artifact_path": "skills/review-skill/SKILL.md",
@@ -3227,7 +3227,7 @@
     {
       "component_id": "retro",
       "component_kind": "skill",
-      "component_version": "5.1.1",
+      "component_version": "5.1.2",
       "lifecycle": "stable",
       "target_tool": "openai-codex",
       "artifact_path": "skills/retro/SKILL.md",
@@ -3242,7 +3242,7 @@
     {
       "component_id": "review-skill",
       "component_kind": "skill",
-      "component_version": "5.1.0",
+      "component_version": "5.1.1",
       "lifecycle": "stable",
       "target_tool": "openai-codex",
       "artifact_path": "skills/review-skill/SKILL.md",

@@ -1,0 +1,45 @@
+name: Lint
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  docs-and-scripts:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check Out Repository
+        uses: actions/checkout@v4
+
+      - name: Set Up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install Node Lint Dependencies
+        run: npm ci
+
+      - name: Run JavaScript, Markdown, and Data Linters
+        run: npm run lint
+
+  python:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check Out Repository
+        uses: actions/checkout@v4
+
+      - name: Set Up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Python Dev Dependencies
+        run: python -m pip install -r requirements-dev.txt
+
+      - name: Run Python Linter
+        run: python -m ruff check .

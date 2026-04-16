@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.1.1] - 2026-04-15
+
+### Fixed
+
+- Removed stale import noise from `scripts/lint-definition.py` so the shared review-skill
+  tooling passes the new repo-wide Ruff baseline cleanly.
+
 ## [5.1.0] - 2026-04-15
 
 ### Changed
@@ -60,7 +67,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/skill/review-skill-v5.1.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/skill/review-skill-v5.1.1...HEAD
+[5.1.1]: https://github.com/bmjcoding/agent-toolkit/compare/skill/review-skill-v5.1.0...skill/review-skill-v5.1.1
 [5.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/review-skill-v5.0.0...skill/review-skill-v5.1.0
 [5.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/review-skill-v4.0.0...skill/review-skill-v5.0.0
 [4.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/review-skill-v3.0.0...skill/review-skill-v4.0.0
