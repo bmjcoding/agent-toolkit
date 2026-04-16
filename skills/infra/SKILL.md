@@ -3,6 +3,8 @@ name: infra
 description: Lightweight infrastructure workflow — implement with SRE review for operational readiness. Use when making config, Docker, CI/CD, or infra-led changes directly or inside a larger workflow.
 lifecycle: stable
 disable-model-invocation: true
+dependencies:
+  - skill/observability-patterns
 ---
 
 # Infrastructure Workflow

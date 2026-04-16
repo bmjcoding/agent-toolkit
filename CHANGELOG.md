@@ -8,6 +8,16 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [4.7.0] - 2026-04-16
+
+### Added
+
+- Added canonical shared-skill dependency metadata to the distribution catalog so shared skill artifacts now publish prerequisite skills under `metadata.dependencies`.
+
+### Changed
+
+- Tightened the shared definition linter to allow and validate typed `dependencies:` frontmatter entries for shared skills, and regenerated `index.json` with the new metadata contract.
+
 ## [4.6.1] - 2026-04-16
 
 ### Fixed
@@ -373,7 +383,8 @@ No action required for users who install via symlinks (`./claude-code/scripts/in
 3. Re-run the install script: `./claude-code/scripts/install.sh`.
 4. Verify: `./claude-code/scripts/install.sh --check`.
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/v4.6.1...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/v4.7.0...HEAD
+[4.7.0]: https://github.com/bmjcoding/agent-toolkit/compare/v4.6.1...v4.7.0
 [4.6.1]: https://github.com/bmjcoding/agent-toolkit/compare/v4.6.0...v4.6.1
 [4.6.0]: https://github.com/bmjcoding/agent-toolkit/compare/v4.5.0...v4.6.0
 [4.5.0]: https://github.com/bmjcoding/agent-toolkit/compare/v4.4.0...v4.5.0

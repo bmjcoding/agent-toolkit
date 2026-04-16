@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.3.0] - 2026-04-16
+
+### Changed
+
+- Added structural validation for shared-skill `dependencies:` frontmatter entries and allowlisted the field so malformed typed dependency references fail lint cleanly.
+
 ## [5.2.0] - 2026-04-16
 
 ### Changed
@@ -73,7 +79,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/skill/review-skill-v5.2.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/skill/review-skill-v5.3.0...HEAD
+[5.3.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/review-skill-v5.2.0...skill/review-skill-v5.3.0
 [5.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/review-skill-v5.1.1...skill/review-skill-v5.2.0
 [5.1.1]: https://github.com/bmjcoding/agent-toolkit/compare/skill/review-skill-v5.1.0...skill/review-skill-v5.1.1
 [5.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/review-skill-v5.0.0...skill/review-skill-v5.1.0
