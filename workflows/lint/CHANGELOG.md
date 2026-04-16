@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Replaced Python vulnerability audit guidance with `uvx pip-audit` so the workflow no
+  longer assumes `pip`-managed tooling.
+
 ## [4.2.0] - 2026-04-15
 
 ### Changed

@@ -35,9 +35,9 @@
 - **Remediation**: Harden defaults. Strip debug info in production. Add security headers.
 
 ## A06: Vulnerable and Outdated Components
-- Known CVEs in dependencies (`npm audit`, `pip audit`)
+- Known CVEs in dependencies (`npm audit`, `uvx pip-audit`)
 - Unmaintained packages (no updates in 12+ months)
-- **Remediation**: Run `npm audit`/`pip audit`. Update or replace vulnerable deps.
+- **Remediation**: Run `npm audit`/`uvx pip-audit`. Update or replace vulnerable deps.
 
 ## A07: Identification and Authentication Failures
 - Weak password policies (no minimum length/complexity)

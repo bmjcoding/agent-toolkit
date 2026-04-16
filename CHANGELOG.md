@@ -8,6 +8,18 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Changed
+
+- Removed the redundant `tools/catalog-metadata.json` hook lifecycle lookup and taught
+  the catalog generator/validator to derive hook maturity from per-tool defaults
+  instead.
+- Switched Python linting from `pip`-managed virtualenv bootstrap to pinned `uvx`
+  Ruff invocations in docs, CI, and repo scripts, and dropped the now-unused Python
+  Dependabot surface.
+- Folded the open Dependabot GitHub Actions major-version bumps into the current CI
+  workflow files by upgrading `actions/checkout`, `actions/setup-node`, and the
+  remaining `actions/setup-python` usage to `v6`.
+
 ## [4.5.0] - 2026-04-15
 
 ### Added

@@ -84,17 +84,15 @@ Before opening a pull request, run:
 
 ```sh
 npm ci
-python3 -m venv .venv
-.venv/bin/pip install -r requirements-dev.txt
 npm run lint
-.venv/bin/ruff check .
+npm run lint:py
 ```
 
 If you want auto-fixes where available, run:
 
 ```sh
 npm run lint:fix
-.venv/bin/ruff check . --fix
+npm run lint:py:fix
 ```
 
 ## Pull requests

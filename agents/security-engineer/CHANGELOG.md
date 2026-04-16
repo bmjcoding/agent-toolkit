@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Replaced Python dependency-audit guidance with `uvx pip-audit` so the agent matches
+  the repo's `uv`-first tooling guidance.
+
 ## [2.1.0] - 2026-04-15
 
 ### Changed

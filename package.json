@@ -16,8 +16,8 @@
     "lint:docs:fix": "markdownlint-cli2 --fix \"**/*.md\"",
     "lint:data": "prettier --check \"**/*.{json,yaml,yml}\"",
     "lint:data:fix": "prettier --write \"**/*.{json,yaml,yml}\"",
-    "lint:py": "ruff check .",
-    "lint:py:fix": "ruff check . --fix"
+    "lint:py": "uvx --from ruff==0.15.10 ruff check .",
+    "lint:py:fix": "uvx --from ruff==0.15.10 ruff check . --fix"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
