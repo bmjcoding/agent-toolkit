@@ -7,7 +7,6 @@ description: >
 lifecycle: stable
 disable-model-invocation: true
 argument-hint: "[path to SKILL.md, AGENT.md, or directory] [--format json]"
-lifecycle: stable
 ---
 
 # Review Skill / Agent Definition
@@ -35,7 +34,7 @@ If `$ARGUMENTS` resolves to a directory (not a single file):
    | 1 | skills/retro/SKILL.md | PASS | 0 errors | 1 warning | 0 |
    | 2 | agents/planner/AGENT.md | NEEDS WORK | 0 errors | 3 warnings | 2 |
    ```
-4. If **4+ files found** and you have access to the Agent tool → spawn parallel `autoresearch-analyst` agents in review mode, one per file. Each agent runs the full review workflow independently. Merge their handoff results into a combined summary:
+4. If **4+ files found** and you have access to an agent/delegation tool → spawn parallel reviewers, one per file. Each reviewer runs the full review workflow independently. Merge their results into a combined summary:
 
    ```
    ## Batch Review Summary
@@ -46,7 +45,7 @@ If `$ARGUMENTS` resolves to a directory (not a single file):
    | 2 | agents/planner/AGENT.md | NEEDS WORK | 0 errors | 3 warnings | 2 |
    ```
 
-   If the Agent tool is unavailable (e.g., running inside a sub-agent with `disallowedTools: Agent`), fall back to sequential processing regardless of count.
+   If delegation is unavailable, fall back to sequential processing regardless of count.
 
 5. After all reviews complete (parallel or sequential), produce a **Consolidated Required Changes** table that merges all NEEDS WORK findings across files into a single `improve`-compatible table:
 
@@ -165,7 +164,7 @@ For **NEEDS WORK** verdicts, the required changes table uses the same format as 
 
 ### JSON Output Mode (--format json)
 
-Pass `--format json` in `$ARGUMENTS` to receive machine-readable output instead of the default markdown template. JSON mode produces the same review content in a structured envelope suitable for pipeline consumption (e.g., by `autoresearch-analyst` or `improve` orchestration).
+Pass `--format json` in `$ARGUMENTS` to receive machine-readable output instead of the default markdown template. JSON mode produces the same review content in a structured envelope suitable for direct scripting, automation, or downstream tools such as `improve`.
 
 ```json
 {

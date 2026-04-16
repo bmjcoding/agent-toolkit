@@ -5,17 +5,21 @@ description: >
   pipeline. Use when the user wants to debrief, analyze efficiency, or improve a workflow.
 lifecycle: stable
 argument-hint: "[run-type or orchestrator-dir]"
-# version: 4.2.4
 ---
 
 # Retrospective
 
 Run a structured retrospective grounded in actual artifacts. Read everything before analyzing.
+This skill is directly user-invocable; orchestration artifacts are optional inputs, not a
+prerequisite.
 
 Resolve `STATE_ROOT` once at the start of the run for metadata and memory lookups. Prefer,
 in order: `.agents/`, `.claude/`, `.codex/`, `~/.agents/`, `~/.claude/`, `~/.codex/`.
-Use the first existing directory. If none exist and the workflow needs persistent local
-state, create `.agents/` in the current project and use that as `STATE_ROOT`.
+Use the first existing directory.
+
+If none exist, continue without `STATE_ROOT`. Skip optional metadata and memory lookups
+that depend on it, and do not create `.agents/` just to run the retro. This skill's
+required persistence target is `RETRO_ROOT`, not local toolkit runtime state.
 
 Resolve `RETRO_ROOT` once at the start of the run for retro persistence:
 - `RETRO_ROOT="${AGENT_RETRO_DIR:-$HOME/agent-retros}"`
@@ -246,6 +250,7 @@ Common retro mistakes — read before analyzing:
 - **Missing handoffs don't always mean crashes.** The extraction hook may have failed while the agent succeeded. Check git diff for the agent's expected output before declaring it a failure.
 - **Don't confuse user wait time with pipeline inefficiency.** Time spent at approval gates is user latency, not system performance. Track it separately.
 - **"The agent should have known" is usually a spec gap, not an agent gap.** If the agent lacked context, the fix is usually upstream (better prompt, better spec, better context files) not downstream (smarter agent).
+- **`STATE_ROOT` is optional.** If no local toolkit state directory exists, skip metadata-dependent extras such as rule-expiry surfacing instead of creating `.agents/` just to satisfy the retro.
 
 ## Finalization
 

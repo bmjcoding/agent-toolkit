@@ -4,6 +4,8 @@
 
 Read `STATE_ROOT/backlog.md` if it exists. Check whether any previously-deferred items have been resolved by changes in the current scope (file modified, dep removed, endpoint added). Mark resolved items and report them. Flag any unresolved Critical/High items as carry-forward findings in the final report.
 
+If no backlog file exists, skip this phase gracefully and continue. `prod-readiness` may consume existing backlog state, but it should not require the backlog workflow to have been used beforehand.
+
 ## Phase 1: Build Verification
 
 **Fail-fast gate. If it doesn't build, stop.**
@@ -14,10 +16,10 @@ Detect project type and run the appropriate build. Fix build errors up to 2 iter
 
 Run lint and audit in parallel — they are independent:
 
-- **Lint**: project linters with auto-fix, then parallel agents for logging standards (structured logging, correlation IDs), complexity, naming/exports, dependency hygiene/CVEs
+- **Lint**: project linters with auto-fix, then review logging standards (structured logging, correlation IDs), complexity, naming/exports, and dependency hygiene/CVEs. If delegation is available, you may split those checks across parallel specialists; otherwise cover them directly in the current session.
 - **Audit**: all dimensions (correctness, error handling, security, accessibility, type safety, redundancy, over-engineering, simplicity, responsive, mock data, config, API contracts, observability, operational resilience). Report as severity-grouped table.
 
-Wait for BOTH to complete. Fix everything possible in parallel, partitioned by file ownership.
+Wait for BOTH to complete, plus any delegated reviews you chose to start. Fix everything possible in parallel when your runtime supports delegation; otherwise fix them directly in sequence.
 
 ## Phase 3: Test
 
@@ -40,4 +42,4 @@ Re-run tests, linters, and build. Captures anything broken by audit fixes or sim
 
 ## Phase 6: Git Verification
 
-Deterministic scan first (gitleaks/trufflehog if available), then agent scan for secrets, sensitive files, large files, commit quality, branch state. **Secrets are a NO-SHIP condition, not a warning.**
+Deterministic scan first (gitleaks/trufflehog if available), then a second-pass review for secrets, sensitive files, large files, commit quality, and branch state. If delegation is available, that second pass may be done by a specialist; otherwise inspect those dimensions directly in the current session. **Secrets are a NO-SHIP condition, not a warning.**

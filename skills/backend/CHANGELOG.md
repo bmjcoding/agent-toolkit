@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.2.0] - 2026-04-16
+
+### Changed
+
+- Made the skill directly usable without a separate orchestrator by defaulting to local execution, treating specialist agents as optional, and allowing small adjacent cross-domain edits.
+
 ## [4.1.0] - 2026-04-15
 
 ### Changed
@@ -48,7 +54,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/skill/backend-v4.1.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/skill/backend-v4.2.0...HEAD
+[4.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/backend-v4.1.0...skill/backend-v4.2.0
 [4.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/backend-v4.0.0...skill/backend-v4.1.0
 [3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/backend-v2.0.0...skill/backend-v3.0.0
 [2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/backend-v1.1.0...skill/backend-v2.0.0
