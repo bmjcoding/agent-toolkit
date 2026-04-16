@@ -212,6 +212,7 @@ function parseTomlMultilineBasicString(text, key) {
 
 function assertGeneratedFilesExist() {
   const agents = listCanonicalSlugs('agents', 'AGENT.md');
+  const skills = listCanonicalSlugs('skills', 'SKILL.md');
   const workflows = listCanonicalSlugs('workflows', 'WORKFLOW.md');
   const rules = listRuleSlugs();
   const hooks = listDirectoryBackedSlugs('hooks', slug => `${slug}.sh`);
@@ -256,7 +257,7 @@ function assertGeneratedFilesExist() {
   assert(exists(path.join('openai-codex', 'hooks', 'hooks.json')), 'missing OpenAI Codex hooks registry');
   assert(!exists(path.join('github-copilot', 'commands')), 'github-copilot/commands should not exist');
 
-  return { agents, workflows, rules, hooks };
+  return { agents, skills, workflows, rules, hooks };
 }
 
 function assertCodexAgentBodiesMatch(agents) {
@@ -273,7 +274,7 @@ function assertCodexAgentBodiesMatch(agents) {
   }
 }
 
-function assertCatalogEntriesExist(agents, workflows, rules, hooks) {
+function assertCatalogEntriesExist(agents, skills, workflows, rules, hooks) {
   const index = readJson('index.json');
   const artifactKeys = new Set(
     (index.artifacts || []).map(artifact => `${artifact.target_tool}|${artifact.artifact_path}`)
@@ -307,6 +308,21 @@ function assertCatalogEntriesExist(agents, workflows, rules, hooks) {
     assert(
       artifactKeys.has(`github-copilot|github-copilot/prompts/${workflow}.prompt.md`),
       `missing index.json entry for GitHub Copilot prompt ${workflow}`
+    );
+  }
+
+  for (const skill of skills) {
+    assert(
+      artifactKeys.has(`claude-code|skills/${skill}/SKILL.md`),
+      `missing index.json entry for Claude skill ${skill}`
+    );
+    assert(
+      artifactKeys.has(`github-copilot|skills/${skill}/SKILL.md`),
+      `missing index.json entry for GitHub Copilot skill ${skill}`
+    );
+    assert(
+      artifactKeys.has(`openai-codex|skills/${skill}/SKILL.md`),
+      `missing index.json entry for OpenAI Codex skill ${skill}`
     );
   }
 
@@ -422,10 +438,10 @@ function main() {
   runNodeScript('scripts/generate-index.js', ['--check']);
   runNodeScript('scripts/validate-reference-integrity.js');
 
-  const { agents, workflows, rules, hooks } = assertGeneratedFilesExist();
+  const { agents, skills, workflows, rules, hooks } = assertGeneratedFilesExist();
   assert(exists(path.relative(REPO_ROOT, INDEX_PATH)), 'missing generated index.json');
   assertCodexAgentBodiesMatch(agents);
-  assertCatalogEntriesExist(agents, workflows, rules, hooks);
+  assertCatalogEntriesExist(agents, skills, workflows, rules, hooks);
   assertCodexHookInstallContract(hooks);
   assertRetroStorageContract();
 
