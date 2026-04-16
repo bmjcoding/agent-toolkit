@@ -4,7 +4,6 @@ description: >
   Full production readiness check — build, lint, audit, test, simplify, final validation (internal
   phase, not a --validate flag), git verify, and ship verdict. Use when preparing code for
   production or before shipping.
-lifecycle: stable
 disable-model-invocation: true
 argument-hint: "[--dry-run] [--ship [--draft] [--auto-merge]]"
 lifecycle: stable
@@ -17,12 +16,15 @@ Execute all phases below. Scope resolution, autonomy, and `--dry-run` rules are 
 
 Resolve `STATE_ROOT` once at the start of the run. Prefer, in order: `.agents/`,
 `.claude/`, `.codex/`, `~/.agents/`, `~/.claude/`, `~/.codex/`. Use the first existing
-directory. If none exist and the workflow needs persistent local state, create `.agents/`
-in the current project and use that as `STATE_ROOT`.
+directory.
+
+If none exist, continue without `STATE_ROOT`. Create `.agents/` only if the user later
+wants persistent backlog tracking and no existing toolkit state directory is available.
+Do not create toolkit state just because `prod-readiness` ran.
 
 Lock the file list at the start. All phases operate on the same set (plus test files created in Phase 3).
 
-**Hard rule: do not print the Ship Verdict until ALL phases have completed and ALL agent results have returned. No early verdicts.**
+**Hard rule: do not print the Ship Verdict until ALL phases have completed and any delegated review results have returned. No early verdicts.**
 
 Read `references/phases.md` for detailed phase instructions. Summary:
 
@@ -84,11 +86,13 @@ If `--ship` not present, print verdict and stop.
 
 ## Backlog Update
 
-As the final step, write all deferred and unresolved items to `STATE_ROOT/backlog.md`:
+If `STATE_ROOT/backlog.md` already exists, you may update it as the final step with deferred and unresolved items:
 - **Needs Human Decision**: external context required
 - **Agent Actionable**: pure code work
 
 Each entry: severity, file, one-line description, phase that flagged it, date. Merge with existing items.
+
+If no backlog file exists, do not create one just because `prod-readiness` ran. Report the unresolved items in the final output and let the user decide whether to track them via the separate backlog workflow.
 
 ## Gotchas
 
@@ -97,6 +101,7 @@ Each entry: severity, file, one-line description, phase that flagged it, date. M
 - **Bundle size delta requires base branch**: if the base branch build isn't cached, this adds significant time. Skip delta if base build fails and note "no baseline available."
 - **Flaky tests contaminate the verdict**: always separate flaky from real failures. A flaky test is not a NO-SHIP condition.
 - **Secrets scan is absolute**: even a revoked key in a test fixture is a NO-SHIP. The key may be in git history forever.
+- **Backlog is optional runtime state**: `STATE_ROOT/backlog.md` belongs to the broader backlog workflow. Use it when it already exists or the user explicitly wants persistent tracking; otherwise keep unresolved items in the report only.
 - **`--dry-run` scope**: in `--dry-run` mode, auto-fix phases (lint, audit, simplify) report findings only — no writes to source files. Build and final validation still execute normally. `git-ship` is not run even if `--ship` is present.
 
 $ARGUMENTS
