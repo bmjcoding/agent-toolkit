@@ -1,13 +1,15 @@
 # components[].role values: core (required for bundle to function) | optional (nice-to-have) | deprecated (will be removed)
-id: frankenstein-orchestration
-name: Frankenstein Orchestration
-description: The full multi-agent orchestration suite — all 15 agents, 6 skills, 5 commands, and 6 hooks required to run the Frankenstein pipeline end-to-end.
+id: ultra-dev
+name: Ultra Dev
+description: The full multi-agent orchestration suite — all 15 agents, 6 skills, 5 commands, and 6 hooks required to run the Ultra Dev pipeline end-to-end.
 status: stable
 tags:
   - orchestration
   - multi-agent
   - pipeline
   - frankenstein
+aliases:
+  - frankenstein-orchestration
 components:
   - type: agent
     id: frankenstein

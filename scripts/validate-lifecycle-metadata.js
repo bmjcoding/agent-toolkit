@@ -6,11 +6,6 @@ const path = require('path');
 
 const REPO_ROOT = path.resolve(__dirname, '..');
 const VALID_LIFECYCLES = new Set(['stable', 'beta', 'experimental']);
-const DEFAULT_HOOK_LIFECYCLE_BY_TOOL = Object.freeze({
-  'claude-code': 'stable',
-  'github-copilot': 'stable',
-  'openai-codex': 'experimental',
-});
 
 function readText(filePath) {
   return fs.readFileSync(filePath, 'utf8');
@@ -59,33 +54,31 @@ function validateMarkdownDefinitions(dirName, markerPathForEntry, errors) {
   }
 }
 
-function listClaudeHookIds() {
-  return fs.readdirSync(path.join(REPO_ROOT, 'claude-code', 'hooks'), { withFileTypes: true })
-    .filter(entry => entry.isDirectory() && fs.existsSync(path.join(REPO_ROOT, 'claude-code', 'hooks', entry.name, 'CHANGELOG.md')))
-    .map(entry => entry.name)
-    .sort();
+function validateCanonicalHooks(errors) {
+  const hooksDir = path.join(REPO_ROOT, 'hooks');
+  for (const entry of fs.readdirSync(hooksDir, { withFileTypes: true }).filter(item => item.isDirectory()).sort((a, b) => a.name.localeCompare(b.name))) {
+    const filePath = path.join(hooksDir, entry.name, `${entry.name}.sh`);
+    if (!fs.existsSync(filePath)) continue;
+
+    const content = readText(filePath);
+    const match = content.match(/^#\s*lifecycle:\s*(.+)$/m);
+    const lifecycle = match ? match[1].trim().replace(/^['"]|['"]$/g, '').trim().toLowerCase() : null;
+    validateLifecycleValue(lifecycle, relativePath(filePath), errors);
+  }
 }
 
-function listCopilotHookIds() {
-  return fs.readdirSync(path.join(REPO_ROOT, 'github-copilot', 'hooks'), { withFileTypes: true })
-    .filter(entry => entry.isDirectory() && fs.existsSync(path.join(REPO_ROOT, 'github-copilot', 'hooks', entry.name, `${entry.name}.json`)))
-    .map(entry => entry.name)
-    .sort();
-}
+function validateBundleStatuses(errors) {
+  const bundlesDir = path.join(REPO_ROOT, 'bundles');
+  if (!fs.existsSync(bundlesDir)) return;
 
-function listCodexHookIds() {
-  return fs.readdirSync(path.join(REPO_ROOT, 'openai-codex', 'hooks'), { withFileTypes: true })
-    .filter(entry => entry.isDirectory() && fs.existsSync(path.join(REPO_ROOT, 'openai-codex', 'hooks', entry.name, `${entry.name}.sh`)))
-    .map(entry => entry.name)
-    .sort();
-}
+  for (const entry of fs.readdirSync(bundlesDir, { withFileTypes: true }).filter(item => item.isDirectory()).sort((a, b) => a.name.localeCompare(b.name))) {
+    const filePath = path.join(bundlesDir, entry.name, 'bundle.yaml');
+    if (!fs.existsSync(filePath)) continue;
 
-function validateHookLifecycleDefaults(tool, hookIds, errors) {
-  const lifecycle = DEFAULT_HOOK_LIFECYCLE_BY_TOOL[tool] || null;
-  validateLifecycleValue(lifecycle, `derived hook lifecycle (${tool})`, errors);
-
-  if (hookIds.length === 0) {
-    errors.push(`${tool}: no hooks found to validate`);
+    const content = readText(filePath);
+    const match = content.match(/^status:\s*(.+)$/m);
+    const lifecycle = match ? match[1].trim().replace(/^['"]|['"]$/g, '').trim().toLowerCase() : null;
+    validateLifecycleValue(lifecycle, relativePath(filePath), errors);
   }
 }
 
@@ -96,10 +89,8 @@ function main() {
   validateMarkdownDefinitions('skills', name => `${name}/SKILL.md`, errors);
   validateMarkdownDefinitions('workflows', name => `${name}/WORKFLOW.md`, errors);
   validateMarkdownDefinitions('rules', name => `${name}/${name}.md`, errors);
-
-  validateHookLifecycleDefaults('claude-code', listClaudeHookIds(), errors);
-  validateHookLifecycleDefaults('github-copilot', listCopilotHookIds(), errors);
-  validateHookLifecycleDefaults('openai-codex', listCodexHookIds(), errors);
+  validateBundleStatuses(errors);
+  validateCanonicalHooks(errors);
 
   if (errors.length > 0) {
     for (const error of errors) {
@@ -108,7 +99,7 @@ function main() {
     process.exit(1);
   }
 
-  process.stdout.write('Lifecycle metadata is valid for canonical components and derived hook targets.\n');
+  process.stdout.write('Lifecycle metadata is valid for canonical components, canonical bundles, and canonical hooks.\n');
 }
 
 main();

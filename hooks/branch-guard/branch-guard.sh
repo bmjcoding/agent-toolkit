@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# lifecycle: stable
 # PreToolUse hook: block git push to main/master
 set -uo pipefail
 
