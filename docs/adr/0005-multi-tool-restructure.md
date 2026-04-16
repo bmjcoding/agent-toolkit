@@ -17,7 +17,7 @@ ownership model:
 - shared agent bodies should be edited once, not triplicated across tool formats
 - shared workflow bodies should be edited once, not duplicated as Claude commands and Copilot prompts
 - `AGENTS.md` should be the primary shared instruction surface
-- `CLAUDE.md` should exist only as a Claude compatibility shim
+- `CLAUDE.md` should exist only as a one-line Claude compatibility shim
 - GitHub Copilot for VS Code should rely on its supported `.github/*` discovery surfaces
   and not on Claude-specific compatibility paths
 - OpenAI Codex should point directly at root shared skills and consume shared instructions
@@ -37,25 +37,24 @@ ownership model:
 ### 2. Shared instructions are rooted in `AGENTS.md`
 
 - `AGENTS.md` is the canonical shared instruction file for all tools.
-- Root `CLAUDE.md` remains only as a thin compatibility shim that imports `AGENTS.md`
-  and adds Claude-specific runtime notes.
+- Root `CLAUDE.md` remains only as the one-line compatibility shim `@AGENTS.md`.
 
 ### 3. Tool directories contain only tool-native assets or adapters
 
-- `claude-code/` keeps Claude-native agents, commands, hooks, bundles, docs, and install
-  scripts.
-- `github-copilot/` keeps VS Code Copilot-native agents, prompts, instructions, hooks,
-  bundles, and installer assets.
-- `openai-codex/` keeps Codex-native agents, hooks, bundles, config templates, and rule
+- `claude-code/` keeps Claude-native agents, commands, hooks, bundles, generated rule
+  adapters, and install scripts.
+- `github-copilot/` keeps VS Code Copilot-native agents, prompts, generated instruction
+  adapters, hooks, and installer assets.
+- `openai-codex/` keeps Codex-native agents, hooks, config templates, and rule
   composition assets.
 
 No tool directory owns the canonical content of a shared agent body, workflow body,
 shared skill, or shared rule.
 
-### 4. Claude Code consumes root shared content directly
+### 4. Claude Code consumes root skills and generated rule adapters
 
 - `~/.claude/skills` points to repo-root `skills/`.
-- `~/.claude/rules` points to repo-root `rules/`.
+- `~/.claude/rules` points to generated adapters under `claude-code/rules/`.
 
 ### 5. GitHub Copilot for VS Code uses supported discovery surfaces
 

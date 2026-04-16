@@ -44,7 +44,7 @@ Exit code semantics (same as Claude Code):
 | `toolkit-drift-check` | `SubagentStop` | Warn (once per session) when toolkit components are edited without a CHANGELOG.md update |
 | `toolkit-edit-reminder` | `PostToolUse` | Remind agents editing toolkit components to update CHANGELOG.md per KaC 1.1.0 |
 | `inject-context` | `SubagentStart` | Inject orchestrator project-brief and file-ownership constraints into subagents |
-| `extract-handoff` | `SubagentStop` | Extract handoff JSON from agent final message, validate schema, write to .orchestrator/handoffs/ |
+| `extract-handoff` | `SubagentStop` | Extract handoff JSON from agent final message, validate schema, write to session-scoped handoffs (or the flat fallback when no valid session id exists) |
 
 ## Event Mapping from Claude Code
 
