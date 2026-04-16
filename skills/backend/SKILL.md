@@ -1,27 +1,36 @@
 ---
 name: backend
-description: Lightweight backend workflow — implement with convention awareness, security review, and lint. Use when making backend-only changes without needing the full orchestrator pipeline.
+description: Lightweight backend workflow — implement with convention awareness, security review, and lint. Use when making backend-led changes directly or inside a larger workflow.
 lifecycle: stable
 disable-model-invocation: true
-lifecycle: stable
 ---
 
 # Backend Workflow
 
-Implement backend changes with security enforcement. Lighter than the full orchestration pipeline.
-Use this path only when the work stays inside backend scope. If the request crosses
-frontend/infra boundaries, needs planning, or includes commit/ship actions, escalate to
-the full orchestrator instead.
+Implement backend changes with security enforcement. This skill is directly
+user-invocable and does not require a separate orchestrator. Use it as the default path
+for backend-led work: direct execution in the current session first, optional delegation
+second, no shipping automation.
+
+Small adjacent frontend or infra edits are allowed when they are tightly coupled to the
+backend change and remain reviewable in one pass. If the request expands into distinct
+frontend, infra, or release tracks, say so and recommend pairing this skill with the
+matching domain skill or `prod-readiness` rather than refusing the task outright.
 
 ## Process
 
-1. **Implement**: Spawn `backend-engineer` with the concrete task, target files, and any API / schema / data constraints. It reads existing codebase conventions (error envelope, pagination, validation, service layer).
+1. **Scope and implement**:
+   - Read the request, identify the target backend files, and note any adjacent schema, config, or API contract changes that must land with them.
+   - Implement the change directly in the current session, following existing backend conventions (error envelope, pagination, validation, service layer).
+   - If your platform supports delegation and the change is large enough to benefit from it, you may optionally hand the implementation to `backend-engineer`, but direct local execution is the default path.
 
-2. **Review**: When implementation completes, spawn `security-engineer` to review. It runs STRIDE threat modeling, OWASP checks, and dependency evaluation on the changed files.
+2. **Review**:
+   - Run a security review yourself using `owasp-reference`, STRIDE thinking, and dependency awareness on the changed files.
+   - If a `security-engineer` specialist is available, you may use it as a second-pass reviewer, but the skill must remain usable without that agent.
 
-3. **Fix**: If security-engineer reports critical/high findings:
-   - Spawn `backend-engineer` again with the specific findings and remediation instructions
-   - Re-run `security-engineer` to verify (max 1 retry)
+3. **Fix**: If the review reports critical/high findings:
+   - Remediate the findings directly, or optionally hand them to `backend-engineer` if delegation is available
+   - Re-run the relevant review checks once (max 1 retry)
 
 4. **Report**: Present results to the user. Do NOT commit, push, or create PRs.
 
@@ -33,7 +42,7 @@ Present a brief summary: what was implemented, any security findings (severity +
 
 - Security review only covers changed files — pre-existing vulnerabilities in untouched files are not reported.
 - Max 1 retry on the fix loop; unresolved critical findings are surfaced to the user, not silently dropped.
-- Cross-domain requests are out of scope for this lightweight workflow. If the task also changes frontend, infra, release flow, or overall architecture, stop and use the full orchestrator.
+- Cross-domain work is acceptable when backend remains the primary owner and adjacent edits stay small. If the change splits cleanly into separate tracks, call that out and recommend the companion skill instead of blocking the run.
 
 ## Task
 
