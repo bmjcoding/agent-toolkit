@@ -3,7 +3,6 @@ name: owasp-reference
 description: OWASP Top 10, STRIDE threat modeling, and common vulnerability patterns for security review. Use when performing security review on backend code, APIs, or auth flows.
 lifecycle: stable
 user-invocable: false
-lifecycle: stable
 ---
 
 # OWASP & Security Reference

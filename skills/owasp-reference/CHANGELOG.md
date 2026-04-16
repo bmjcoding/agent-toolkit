@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.1.1] - 2026-04-16
+
+### Fixed
+
+- Removed the duplicate `lifecycle` frontmatter key so the definition stays lint-clean while remaining non-user-invocable.
+
 ## [4.1.0] - 2026-04-15
 
 ### Changed
@@ -46,7 +52,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/skill/owasp-reference-v4.1.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/skill/owasp-reference-v4.1.1...HEAD
+[4.1.1]: https://github.com/bmjcoding/agent-toolkit/compare/skill/owasp-reference-v4.1.0...skill/owasp-reference-v4.1.1
 [4.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/owasp-reference-v4.0.0...skill/owasp-reference-v4.1.0
 [3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/owasp-reference-v2.0.0...skill/owasp-reference-v3.0.0
 [2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/owasp-reference-v1.1.0...skill/owasp-reference-v2.0.0
