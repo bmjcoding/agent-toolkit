@@ -28,11 +28,20 @@ Or manually:
 
 ```sh
 export AGENT_TOOLKIT_DIR=/path/to/agent-toolkit
-cp openai-codex/agents/*.toml ~/.codex/agents/
-ln -sfn /path/to/agent-toolkit/openai-codex/hooks/hooks.json ~/.codex/hooks.json
-cp openai-codex/config.toml.template ~/.codex/config.toml
-ln -sfn /path/to/agent-toolkit/skills .agents/skills
+mkdir -p "$HOME/.codex/agents" .agents
+cp openai-codex/agents/*.toml "$HOME/.codex/agents/"
+ln -sfn "$AGENT_TOOLKIT_DIR/openai-codex/hooks/hooks.json" "$HOME/.codex/hooks.json"
+mkdir -p "$HOME/.codex/openai-codex"
+ln -sfn "$AGENT_TOOLKIT_DIR/openai-codex/hooks" "$HOME/.codex/openai-codex/hooks"
+cp openai-codex/config.toml.template "$HOME/.codex/config.toml"
+ln -sfn "$AGENT_TOOLKIT_DIR/skills" .agents/skills
 ```
+
+Prefer the installer when `~/.codex/config.toml` already exists; the installer appends
+the toolkit `[[skills.config]]` blocks instead of replacing the whole file. The
+`.agents/skills` symlink is an optional project-local fallback for Codex skill discovery.
+The `~/.codex/openai-codex/hooks` symlink makes the generated `hooks.json` fallback path
+work even when `AGENT_TOOLKIT_DIR` is not exported in the shell that launches Codex.
 
 ## Shared instructions
 

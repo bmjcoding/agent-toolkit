@@ -337,6 +337,58 @@ function assertCatalogEntriesExist(agents, workflows, rules, hooks) {
   }
 }
 
+function assertCodexHookInstallContract(hooks) {
+  const index = readJson('index.json');
+  const codexRegistry = readJson(path.join('openai-codex', 'hooks', 'hooks.json'));
+
+  for (const hook of hooks) {
+    const registryEntry = (codexRegistry.hooks.PreToolUse || [])
+      .concat(codexRegistry.hooks.PostToolUse || [])
+      .concat(codexRegistry.hooks.UserPromptSubmit || [])
+      .concat(codexRegistry.hooks.Stop || [])
+      .flatMap(group => group.hooks || [])
+      .find(entry => typeof entry.command === 'string' && entry.command.includes(`/openai-codex/hooks/${hook}/${hook}.sh`));
+
+    assert(registryEntry, `missing Codex registry command for ${hook}`);
+    assert(
+      registryEntry.command === `\${AGENT_TOOLKIT_DIR:-$HOME/.codex}/openai-codex/hooks/${hook}/${hook}.sh`,
+      `unexpected Codex registry command path for ${hook}: ${registryEntry.command}`
+    );
+
+    const artifact = (index.artifacts || []).find(item =>
+      item.target_tool === 'openai-codex' &&
+      item.component_kind === 'hook' &&
+      item.component_id === hook
+    );
+
+    assert(artifact, `missing openai-codex hook artifact in catalog for ${hook}`);
+    assert(
+      artifact.install_path === `~/.codex/openai-codex/hooks/${hook}/${hook}.sh`,
+      `unexpected Codex hook install path for ${hook}: ${artifact.install_path}`
+    );
+
+    const companions = artifact.metadata?.companion_artifacts || [];
+    assert(
+      companions.includes('openai-codex/hooks/hooks.json'),
+      `expected hooks.json companion artifact for Codex hook ${hook}`
+    );
+    assert(
+      companions.includes('hooks/_adapter_lib.sh'),
+      `expected hooks/_adapter_lib.sh companion artifact for Codex hook ${hook}`
+    );
+    assert(
+      companions.includes(`hooks/${hook}/${hook}.sh`),
+      `expected canonical root hook companion artifact for Codex hook ${hook}`
+    );
+    if (hook === 'integrity-warn') {
+      assert(
+        companions.includes('openai-codex/scripts/integrity-check.sh'),
+        'expected Codex integrity-check companion artifact for integrity-warn'
+      );
+    }
+  }
+}
+
 function assertRetroStorageContract() {
   const scanRoots = ['agents', 'skills', 'workflows', 'docs', 'scripts', 'claude-code', 'github-copilot', 'openai-codex'];
   const excludes = [
@@ -368,11 +420,13 @@ function main() {
   runNodeScript('scripts/generate-index.js');
   runNodeScript('scripts/generate-index.js', ['--test']);
   runNodeScript('scripts/generate-index.js', ['--check']);
+  runNodeScript('scripts/validate-reference-integrity.js');
 
   const { agents, workflows, rules, hooks } = assertGeneratedFilesExist();
   assert(exists(path.relative(REPO_ROOT, INDEX_PATH)), 'missing generated index.json');
   assertCodexAgentBodiesMatch(agents);
   assertCatalogEntriesExist(agents, workflows, rules, hooks);
+  assertCodexHookInstallContract(hooks);
   assertRetroStorageContract();
 
   process.stdout.write(

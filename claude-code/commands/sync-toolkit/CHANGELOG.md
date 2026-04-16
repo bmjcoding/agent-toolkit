@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.0.1] - 2026-04-15
+
+### Fixed
+
+- Clarified the generated Claude workflow instructions so toolkit path resolution now
+  explicitly prefers `AGENT_TOOLKIT_DIR`, keeps `TOOLKIT_PATH` as a compatibility alias,
+  and avoids implying any machine-specific checkout path.
+
 ## [4.0.0] - 2026-04-13
 
 ### Removed
@@ -45,7 +53,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Protected-path skip list for `~/.claude/settings.json`, `~/.claude/CLAUDE.md`, and `~/.claude/hooks/` contents
 - Per-component commit strategy: one commit per component, routed through release-engineer per the frankenstein Ship phase rule
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/workflow/sync-toolkit-v3.0.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/workflow/sync-toolkit-v4.0.1...HEAD
+[4.0.1]: https://github.com/bmjcoding/agent-toolkit/compare/workflow/sync-toolkit-v4.0.0...workflow/sync-toolkit-v4.0.1
+[4.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/workflow/sync-toolkit-v3.0.0...workflow/sync-toolkit-v4.0.0
 [3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/workflow/sync-toolkit-v2.0.0...workflow/sync-toolkit-v3.0.0
 [2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/workflow/sync-toolkit-v1.0.1...workflow/sync-toolkit-v2.0.0
 [1.0.1]: https://github.com/bmjcoding/agent-toolkit/compare/workflow/sync-toolkit-v1.0.0...workflow/sync-toolkit-v1.0.1
