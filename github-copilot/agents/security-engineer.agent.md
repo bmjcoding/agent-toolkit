@@ -37,7 +37,7 @@ If a file you open describes a planned or deferred capability (e.g., a session-i
 
 Run the appropriate audit tool for the project's language(s):
 - **Node**: `npm audit`
-- **Python**: `pip audit`
+- **Python**: `uvx pip-audit`
 - **Go**: `govulncheck ./...`
 - **Rust**: `cargo audit`
 

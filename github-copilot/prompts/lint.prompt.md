@@ -37,7 +37,7 @@ Run each with auto-fix enabled. Collect unfixable errors for the report.
 
 **Agent D -- Dependency hygiene and vulnerabilities**
 - Unused deps, dev/prod misplacement, duplicates
-- `npm audit` / `pip audit` for known CVEs. Auto-fix with `npm audit fix` or dep upgrade where non-breaking.
+- `npm audit` / `uvx pip-audit` for known CVEs. Auto-fix with `npm audit fix` or dep upgrade where non-breaking.
 
 ## Phase 4: Auto-fix
 

@@ -7,9 +7,13 @@ const path = require('path');
 
 const REPO_ROOT = path.resolve(__dirname, '..');
 const OUTPUT_FILE = path.join(REPO_ROOT, 'index.json');
-const RUNTIME_METADATA_FILE = path.join(REPO_ROOT, 'tools', 'catalog-metadata.json');
 const RAW_BASE_URL = 'https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/';
 const VALID_LIFECYCLES = new Set(['stable', 'beta', 'experimental']);
+const DEFAULT_HOOK_LIFECYCLE_BY_TOOL = Object.freeze({
+  'claude-code': 'stable',
+  'github-copilot': 'stable',
+  'openai-codex': 'experimental',
+});
 
 function readFileSafe(filePath) {
   try {
@@ -21,14 +25,6 @@ function readFileSafe(filePath) {
 
 function exists(filePath) {
   return fs.existsSync(filePath);
-}
-
-function readJsonSafe(filePath) {
-  try {
-    return JSON.parse(fs.readFileSync(filePath, 'utf8'));
-  } catch {
-    return null;
-  }
 }
 
 function relativePath(filePath) {
@@ -182,26 +178,18 @@ function parseFrontmatter(block) {
   return result;
 }
 
-function readRuntimeCatalogMetadata() {
-  const metadata = readJsonSafe(RUNTIME_METADATA_FILE);
-  return metadata && typeof metadata === 'object' ? metadata : { hooks: {} };
-}
-
-function readHookRuntimeMetadata(runtimeMetadata, targetTool, hookId) {
-  const metadata = runtimeMetadata.hooks?.[targetTool]?.[hookId];
-  if (!metadata || typeof metadata !== 'object') {
-    throw new Error(`missing hook catalog metadata for ${targetTool} hook ${hookId} in ${relativePath(RUNTIME_METADATA_FILE)}`);
+function readHookRuntimeMetadata(targetTool, hookId) {
+  const lifecycle = DEFAULT_HOOK_LIFECYCLE_BY_TOOL[targetTool];
+  if (!lifecycle) {
+    throw new Error(`missing derived hook lifecycle for ${targetTool} hook ${hookId}`);
   }
-
   return {
-    lifecycle: requireLifecycle(metadata.lifecycle, {
+    lifecycle: requireLifecycle(lifecycle, {
       componentKind: 'hook',
       componentId: hookId,
-      sourcePath: `${relativePath(RUNTIME_METADATA_FILE)} (${targetTool})`,
+      sourcePath: `derived hook lifecycle defaults (${targetTool})`,
     }),
-    lifecycleNotes: typeof metadata.lifecycle_notes === 'string' && metadata.lifecycle_notes.trim()
-      ? metadata.lifecycle_notes.trim()
-      : null,
+    lifecycleNotes: null,
   };
 }
 
@@ -707,7 +695,6 @@ function buildCatalog() {
     ...readBundles('github-copilot'),
   ];
   const bundleMembership = buildBundleMembershipMap(bundles);
-  const runtimeMetadata = readRuntimeCatalogMetadata();
 
   for (const agent of canonicalAgents) {
     for (const adapterPath of agent.adapters) {
@@ -871,7 +858,7 @@ function buildCatalog() {
     const artifactPath = `hooks/${id}/${id}.sh`;
     if (!exists(path.join(REPO_ROOT, artifactPath))) continue;
 
-    const hookMetadata = readHookRuntimeMetadata(runtimeMetadata, 'claude-code', id);
+    const hookMetadata = readHookRuntimeMetadata('claude-code', id);
     const installPath = installPathForArtifact('claude-code', 'hook', id);
     catalog.artifacts.push(createArtifactRecord({
       componentId: id,
@@ -902,7 +889,7 @@ function buildCatalog() {
     const shellPath = `github-copilot/hooks/${id}/${id}.sh`;
     if (!exists(path.join(REPO_ROOT, shellPath))) continue;
 
-    const hookMetadata = readHookRuntimeMetadata(runtimeMetadata, 'github-copilot', id);
+    const hookMetadata = readHookRuntimeMetadata('github-copilot', id);
     const installPath = installPathForArtifact('github-copilot', 'hook', id);
     catalog.artifacts.push(createArtifactRecord({
       componentId: id,
@@ -941,7 +928,7 @@ function buildCatalog() {
     const artifactPath = `openai-codex/hooks/${id}/${id}.sh`;
     if (!exists(path.join(REPO_ROOT, artifactPath))) continue;
 
-    const hookMetadata = readHookRuntimeMetadata(runtimeMetadata, 'openai-codex', id);
+    const hookMetadata = readHookRuntimeMetadata('openai-codex', id);
     const installPath = `~/.codex/hooks/${id}.sh`;
     catalog.artifacts.push(createArtifactRecord({
       componentId: id,

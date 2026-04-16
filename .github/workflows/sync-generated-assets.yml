@@ -23,7 +23,6 @@ on:
       - "scripts/validate-component-changelogs.js"
       - "scripts/validate-lifecycle-metadata.js"
       - "skills/review-skill/scripts/lint-definition.py"
-      - "tools/catalog-metadata.json"
       - ".github/workflows/sync-generated-assets.yml"
   pull_request:
     paths:
@@ -47,7 +46,6 @@ on:
       - "scripts/validate-component-changelogs.js"
       - "scripts/validate-lifecycle-metadata.js"
       - "skills/review-skill/scripts/lint-definition.py"
-      - "tools/catalog-metadata.json"
       - ".github/workflows/sync-generated-assets.yml"
 
 concurrency:
@@ -62,12 +60,12 @@ jobs:
 
     steps:
       - name: Check Out Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
       - name: Set Up Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 22
 
@@ -114,10 +112,10 @@ jobs:
 
     steps:
       - name: Check Out Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set Up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.12"
 
@@ -136,10 +134,10 @@ jobs:
 
     steps:
       - name: Check Out Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set Up Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 22
 
@@ -178,12 +176,12 @@ jobs:
 
     steps:
       - name: Check Out Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
       - name: Set Up Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 22
 

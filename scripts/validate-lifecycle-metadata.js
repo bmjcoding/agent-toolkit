@@ -6,7 +6,11 @@ const path = require('path');
 
 const REPO_ROOT = path.resolve(__dirname, '..');
 const VALID_LIFECYCLES = new Set(['stable', 'beta', 'experimental']);
-const HOOK_METADATA_PATH = path.join(REPO_ROOT, 'tools', 'catalog-metadata.json');
+const DEFAULT_HOOK_LIFECYCLE_BY_TOOL = Object.freeze({
+  'claude-code': 'stable',
+  'github-copilot': 'stable',
+  'openai-codex': 'experimental',
+});
 
 function readText(filePath) {
   return fs.readFileSync(filePath, 'utf8');
@@ -55,10 +59,6 @@ function validateMarkdownDefinitions(dirName, markerPathForEntry, errors) {
   }
 }
 
-function readHookMetadata() {
-  return JSON.parse(readText(HOOK_METADATA_PATH));
-}
-
 function listClaudeHookIds() {
   return fs.readdirSync(path.join(REPO_ROOT, 'claude-code', 'hooks'), { withFileTypes: true })
     .filter(entry => entry.isDirectory() && fs.existsSync(path.join(REPO_ROOT, 'claude-code', 'hooks', entry.name, 'CHANGELOG.md')))
@@ -80,22 +80,12 @@ function listCodexHookIds() {
     .sort();
 }
 
-function validateHookMetadata(tool, expectedHookIds, metadata, errors) {
-  const toolMetadata = metadata.hooks?.[tool];
-  if (!toolMetadata || typeof toolMetadata !== 'object') {
-    errors.push(`${relativePath(HOOK_METADATA_PATH)}: missing hooks.${tool} metadata block`);
-    return;
-  }
+function validateHookLifecycleDefaults(tool, hookIds, errors) {
+  const lifecycle = DEFAULT_HOOK_LIFECYCLE_BY_TOOL[tool] || null;
+  validateLifecycleValue(lifecycle, `derived hook lifecycle (${tool})`, errors);
 
-  for (const hookId of expectedHookIds) {
-    const lifecycle = toolMetadata[hookId]?.lifecycle || null;
-    validateLifecycleValue(lifecycle, `${relativePath(HOOK_METADATA_PATH)} (${tool}/${hookId})`, errors);
-  }
-
-  for (const hookId of Object.keys(toolMetadata).sort()) {
-    if (!expectedHookIds.includes(hookId)) {
-      errors.push(`${relativePath(HOOK_METADATA_PATH)} (${tool}/${hookId}): metadata exists for an unknown hook`);
-    }
+  if (hookIds.length === 0) {
+    errors.push(`${tool}: no hooks found to validate`);
   }
 }
 
@@ -107,10 +97,9 @@ function main() {
   validateMarkdownDefinitions('workflows', name => `${name}/WORKFLOW.md`, errors);
   validateMarkdownDefinitions('rules', name => `${name}/${name}.md`, errors);
 
-  const hookMetadata = readHookMetadata();
-  validateHookMetadata('claude-code', listClaudeHookIds(), hookMetadata, errors);
-  validateHookMetadata('github-copilot', listCopilotHookIds(), hookMetadata, errors);
-  validateHookMetadata('openai-codex', listCodexHookIds(), hookMetadata, errors);
+  validateHookLifecycleDefaults('claude-code', listClaudeHookIds(), errors);
+  validateHookLifecycleDefaults('github-copilot', listCopilotHookIds(), errors);
+  validateHookLifecycleDefaults('openai-codex', listCodexHookIds(), errors);
 
   if (errors.length > 0) {
     for (const error of errors) {
@@ -119,7 +108,7 @@ function main() {
     process.exit(1);
   }
 
-  process.stdout.write('Lifecycle metadata is valid for canonical components and hooks.\n');
+  process.stdout.write('Lifecycle metadata is valid for canonical components and derived hook targets.\n');
 }
 
 main();

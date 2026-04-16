@@ -74,25 +74,24 @@ Install the Node-based lint tooling with:
 npm ci
 ```
 
-Install Ruff in a local virtualenv with:
+Run Ruff via `uvx` with the repo-pinned version:
 
 ```sh
-python3 -m venv .venv
-.venv/bin/pip install -r requirements-dev.txt
+uvx --from ruff==0.15.10 ruff check .
 ```
 
 Run the repo linters with:
 
 ```sh
 npm run lint
-.venv/bin/ruff check .
+npm run lint:py
 ```
 
 Auto-fix what can be fixed with:
 
 ```sh
 npm run lint:fix
-.venv/bin/ruff check . --fix
+npm run lint:py:fix
 ```
 
 The Node entrypoint covers:
@@ -101,8 +100,8 @@ The Node entrypoint covers:
 - `markdownlint-cli2` for Markdown docs and instruction files
 - `prettier --check` for JSON and YAML
 
-Ruff is configured separately for the Python utilities and helper scripts.
-Python dev dependencies live in `requirements-dev.txt`.
+Ruff is configured in `pyproject.toml` and invoked through the pinned `uvx` command in
+`package.json`.
 
 ## Install
 

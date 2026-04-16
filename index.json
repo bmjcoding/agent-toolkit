@@ -430,7 +430,7 @@
       "install_path": "~/.claude/agents/security-engineer.md",
       "install_command": "mkdir -p \"$HOME/.claude/agents\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/security-engineer.md\" -o \"$HOME/.claude/agents/security-engineer.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/security-engineer.md",
-      "checksum_sha256": "1cdad122150121d28ce96efc7398838969b4c7210ed919706dc06215a4fbce3c",
+      "checksum_sha256": "607b20026f611b9eeb9b3467960ee9647e389d53b0bb61df35fa41145d587430",
       "bundle_membership": [
         {
           "bundle_id": "frankenstein-orchestration",
@@ -1125,7 +1125,7 @@
       "install_path": "~/.claude/commands/lint/lint.md",
       "install_command": "mkdir -p \"$HOME/.claude/commands/lint\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/commands/lint/lint.md\" -o \"$HOME/.claude/commands/lint/lint.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/commands/lint/lint.md",
-      "checksum_sha256": "370b4a9ff90e38319f76f0dbc6c5c4343d179f886d6cee3173c20177829020d9",
+      "checksum_sha256": "701d99e6e84c7672dbd39e3e11f97497723ce6ae48cb7e6eb7fab89c4694ea19",
       "bundle_membership": [
         {
           "bundle_id": "code-quality",
@@ -2087,7 +2087,7 @@
       "install_path": ".github/agents/security-engineer.agent.md",
       "install_command": "mkdir -p \".github/agents\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/security-engineer.agent.md\" -o \".github/agents/security-engineer.agent.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/security-engineer.agent.md",
-      "checksum_sha256": "10b7d392dbae6ccfea26ac8daab36b5060050b146e77bebe704f45146b22be79",
+      "checksum_sha256": "6011145a55c3917ca5e04f0cf8e29b6723d8b6ef680704435a4f7202c379161e",
       "bundle_membership": [],
       "metadata": {
         "model_tier": "frontier",
@@ -2224,7 +2224,7 @@
       "install_path": ".github/prompts/lint.prompt.md",
       "install_command": "mkdir -p \".github/prompts\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/prompts/lint.prompt.md\" -o \".github/prompts/lint.prompt.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/prompts/lint.prompt.md",
-      "checksum_sha256": "890cfade6f1ef9bb372d9aee6e0be20bb66b040ad66854c935ee793e502abfad",
+      "checksum_sha256": "fc19137c6acee94cafa90b8ea208698568804532e5e37b35c2b011e4aefc37cc",
       "bundle_membership": [],
       "metadata": {
         "argument_hint": "[paths...] [--dry-run]",
@@ -2854,7 +2854,7 @@
       "install_path": "~/.codex/agents/security-engineer.toml",
       "install_command": "mkdir -p \"$HOME/.codex/agents\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/security-engineer.toml\" -o \"$HOME/.codex/agents/security-engineer.toml\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/security-engineer.toml",
-      "checksum_sha256": "c592c5f7158c29ee645754edc3fb1cc3ba95b5baa1c479cc184e41facb98538a",
+      "checksum_sha256": "0d3f0c3bc80c3874f203315f4ec9af218b54a7678a421aeb0e0751ee74b60a5a",
       "bundle_membership": [],
       "metadata": {
         "model_tier": "frontier",
