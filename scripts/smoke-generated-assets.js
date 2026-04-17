@@ -26,6 +26,14 @@ function readText(relPath) {
   return fs.readFileSync(path.join(REPO_ROOT, relPath), 'utf8');
 }
 
+function findArtifact(index, { targetTool, componentKind, componentId }) {
+  return (index.artifacts || []).find(artifact =>
+    artifact.target_tool === targetTool &&
+    artifact.component_kind === componentKind &&
+    artifact.component_id === componentId
+  );
+}
+
 function listCanonicalSlugs(rootDir, markerFile) {
   return fs.readdirSync(path.join(REPO_ROOT, rootDir), { withFileTypes: true })
     .filter(entry => entry.isDirectory())
@@ -405,6 +413,84 @@ function assertCodexHookInstallContract(hooks) {
   }
 }
 
+function assertInstallCommandContracts(hooks) {
+  const index = readJson('index.json');
+
+  for (const hook of hooks) {
+    const claudeArtifact = findArtifact(index, {
+      targetTool: 'claude-code',
+      componentKind: 'hook',
+      componentId: hook,
+    });
+    assert(claudeArtifact, `missing Claude hook artifact in catalog for ${hook}`);
+    assert(
+      claudeArtifact.install_command.includes(`chmod +x "$HOME/.claude/hooks/${hook}/${hook}.sh"`),
+      `expected Claude hook install command to chmod ${hook}.sh`
+    );
+
+    const copilotArtifact = findArtifact(index, {
+      targetTool: 'github-copilot',
+      componentKind: 'hook',
+      componentId: hook,
+    });
+    assert(copilotArtifact, `missing GitHub Copilot hook artifact in catalog for ${hook}`);
+    assert(
+      copilotArtifact.install_command.includes(`curl -fsSL "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/${hook}/${hook}.json" -o ".github/hooks/${hook}.json"`),
+      `expected GitHub Copilot hook install command to download ${hook}.json`
+    );
+    assert(
+      copilotArtifact.install_command.includes(`curl -fsSL "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/${hook}/${hook}.sh" -o ".github/hooks/${hook}.sh"`),
+      `expected GitHub Copilot hook install command to download ${hook}.sh`
+    );
+    assert(
+      copilotArtifact.install_command.includes(`chmod +x ".github/hooks/${hook}.sh"`),
+      `expected GitHub Copilot hook install command to chmod ${hook}.sh`
+    );
+    assert(
+      !copilotArtifact.install_command.includes(`chmod +x ".github/hooks/${hook}.json"`),
+      `expected GitHub Copilot hook install command to skip chmod for ${hook}.json`
+    );
+    assert(
+      !copilotArtifact.install_command.includes('# register'),
+      `expected GitHub Copilot hook install command to omit inline comments for ${hook}`
+    );
+
+    const codexArtifact = findArtifact(index, {
+      targetTool: 'openai-codex',
+      componentKind: 'hook',
+      componentId: hook,
+    });
+    assert(codexArtifact, `missing OpenAI Codex hook artifact in catalog for ${hook}`);
+    assert(
+      codexArtifact.install_command.includes(`chmod +x "$HOME/.codex/openai-codex/hooks/${hook}/${hook}.sh"`),
+      `expected Codex hook install command to chmod the primary hook shell for ${hook}`
+    );
+    assert(
+      codexArtifact.install_command.includes('chmod +x "$HOME/.codex/hooks/_adapter_lib.sh"'),
+      `expected Codex hook install command to chmod the shared adapter library for ${hook}`
+    );
+    assert(
+      codexArtifact.install_command.includes(`chmod +x "$HOME/.codex/hooks/${hook}/${hook}.sh"`),
+      `expected Codex hook install command to chmod the shared canonical hook shell for ${hook}`
+    );
+    assert(
+      !codexArtifact.install_command.includes('chmod +x "$HOME/.codex/hooks.json"'),
+      `expected Codex hook install command to skip chmod for hooks.json on ${hook}`
+    );
+  }
+
+  const nonShellArtifact = findArtifact(index, {
+    targetTool: 'github-copilot',
+    componentKind: 'rule',
+    componentId: 'logging',
+  });
+  assert(nonShellArtifact, 'missing GitHub Copilot logging rule artifact in catalog');
+  assert(
+    !nonShellArtifact.install_command.includes('chmod +x '),
+    'expected non-shell artifact install command to skip chmod +x'
+  );
+}
+
 function assertRetroStorageContract() {
   const scanRoots = ['agents', 'skills', 'workflows', 'docs', 'scripts', 'claude-code', 'github-copilot', 'openai-codex'];
   const excludes = [
@@ -443,6 +529,7 @@ function main() {
   assertCodexAgentBodiesMatch(agents);
   assertCatalogEntriesExist(agents, skills, workflows, rules, hooks);
   assertCodexHookInstallContract(hooks);
+  assertInstallCommandContracts(hooks);
   assertRetroStorageContract();
 
   process.stdout.write(
