@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.1.3] - 2026-04-17
+
 ### Fixed
 
 - `scripts/install.sh` now repairs executable bits on generated Codex hook adapters and
@@ -84,7 +86,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `scripts/install.sh` hooks target corrected to `~/.codex/hooks.json` (parity gap #6 Medium resolved).
 - Group-level `description` field removed from `hooks.json` (parity gap #7 Low resolved).
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/openai-codex-v4.1.2...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/openai-codex-v4.1.3...HEAD
+[4.1.3]: https://github.com/bmjcoding/agent-toolkit/compare/openai-codex-v4.1.2...openai-codex-v4.1.3
 [4.1.2]: https://github.com/bmjcoding/agent-toolkit/compare/openai-codex-v4.1.1...openai-codex-v4.1.2
 [4.1.1]: https://github.com/bmjcoding/agent-toolkit/compare/openai-codex-v4.1.0...openai-codex-v4.1.1
 [4.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/openai-codex-v4.0.0...openai-codex-v4.1.0
