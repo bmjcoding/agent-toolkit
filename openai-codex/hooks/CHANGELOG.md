@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Generated Codex hook adapters now preserve executable mode during adapter sync, and
+  the install docs call out the one-time permission repair path for older checkouts.
+
 ## [3.1.1] - 2026-04-15
 
 ### Fixed

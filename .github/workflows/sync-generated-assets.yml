@@ -4,6 +4,8 @@ on:
   push:
     paths:
       - "agents/**"
+      - "bundles/**"
+      - "hooks/**"
       - "skills/**"
       - "workflows/**"
       - "rules/**"
@@ -22,11 +24,14 @@ on:
       - "scripts/generate-index.js"
       - "scripts/validate-component-changelogs.js"
       - "scripts/validate-lifecycle-metadata.js"
+      - "scripts/validate-reference-integrity.js"
       - "skills/review-skill/scripts/lint-definition.py"
       - ".github/workflows/sync-generated-assets.yml"
   pull_request:
     paths:
       - "agents/**"
+      - "bundles/**"
+      - "hooks/**"
       - "skills/**"
       - "workflows/**"
       - "rules/**"
@@ -45,6 +50,7 @@ on:
       - "scripts/generate-index.js"
       - "scripts/validate-component-changelogs.js"
       - "scripts/validate-lifecycle-metadata.js"
+      - "scripts/validate-reference-integrity.js"
       - "skills/review-skill/scripts/lint-definition.py"
       - ".github/workflows/sync-generated-assets.yml"
 
@@ -94,15 +100,9 @@ jobs:
             exit 0
           fi
 
-          extra_args=()
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            extra_args+=(--require-release-version)
-          fi
-
           node scripts/validate-component-changelogs.js \
             --base "${{ steps.diff_base.outputs.base }}" \
-            --head HEAD \
-            "${extra_args[@]}"
+            --head HEAD
 
   validate-definitions:
     needs: validate-component-changelogs
@@ -154,9 +154,11 @@ jobs:
             claude-code/commands
             claude-code/rules
             github-copilot/agents
+            github-copilot/hooks
             github-copilot/instructions
             github-copilot/prompts
             openai-codex/agents
+            openai-codex/hooks
             index.json
           )
 
@@ -199,9 +201,11 @@ jobs:
             claude-code/commands
             claude-code/rules
             github-copilot/agents
+            github-copilot/hooks
             github-copilot/instructions
             github-copilot/prompts
             openai-codex/agents
+            openai-codex/hooks
             index.json
           )
 

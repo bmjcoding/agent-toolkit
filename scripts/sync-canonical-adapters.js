@@ -72,12 +72,32 @@ function read(filePath) {
   return fs.readFileSync(filePath, 'utf8');
 }
 
+function desiredModeForPath(filePath) {
+  return filePath.endsWith('.sh') ? 0o755 : null;
+}
+
+function ensureDesiredMode(filePath) {
+  const desiredMode = desiredModeForPath(filePath);
+  if (desiredMode === null || !fs.existsSync(filePath)) {
+    return false;
+  }
+
+  const currentMode = fs.statSync(filePath).mode & 0o777;
+  if (currentMode === desiredMode) {
+    return false;
+  }
+
+  fs.chmodSync(filePath, desiredMode);
+  return true;
+}
+
 function writeIfChanged(filePath, content) {
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
   if (fs.existsSync(filePath) && fs.readFileSync(filePath, 'utf8') === content) {
-    return false;
+    return ensureDesiredMode(filePath);
   }
   fs.writeFileSync(filePath, content);
+  ensureDesiredMode(filePath);
   return true;
 }
 

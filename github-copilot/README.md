@@ -34,7 +34,7 @@ ln -sfn "${TOOLKIT}/github-copilot/instructions" .github/instructions
 ln -sfn "${TOOLKIT}/github-copilot/prompts"      .github/prompts
 ```
 
-For hooks, prefer `github-copilot/scripts/install.sh`. Copilot expects a flat
+For hooks, prefer `bash github-copilot/scripts/install.sh`. Copilot expects a flat
 `.github/hooks/*.json` discovery surface, while the repo now stores each hook under
 `github-copilot/hooks/<slug>/`.
 
