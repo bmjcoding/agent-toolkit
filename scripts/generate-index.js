@@ -678,7 +678,31 @@ function installPathForArtifact(targetTool, componentKind, componentId) {
   return null;
 }
 
-function buildInstallCommand({ targetTool, componentKind, componentId, artifactPath, installPath, companionArtifacts = [] }) {
+function shellPathForInstall(downloadPath) {
+  return downloadPath.startsWith('~/') ? `$HOME/${downloadPath.slice(2)}` : downloadPath;
+}
+
+function buildDownloadCommands(download, createdDirectories) {
+  const directory = path.posix.dirname(download.path);
+  const shellDirectory = shellPathForInstall(directory);
+  const shellPath = shellPathForInstall(download.path);
+  const commands = [];
+
+  if (!createdDirectories.has(directory)) {
+    commands.push(`mkdir -p "${shellDirectory}"`);
+    createdDirectories.add(directory);
+  }
+
+  commands.push(`curl -fsSL "${download.url}" -o "${shellPath}"`);
+
+  if (download.path.endsWith('.sh')) {
+    commands.push(`chmod +x "${shellPath}"`);
+  }
+
+  return commands;
+}
+
+function buildInstallCommand({ artifactPath, installPath, companionArtifacts = [] }) {
   if (!installPath) return null;
 
   const downloads = [
@@ -692,18 +716,7 @@ function buildInstallCommand({ targetTool, componentKind, componentId, artifactP
   const createdDirectories = new Set();
   const commands = [];
   for (const download of downloads) {
-    const directory = path.posix.dirname(download.path);
-    const shellDirectory = directory.startsWith('~/') ? `$HOME/${directory.slice(2)}` : directory;
-    const shellPath = download.path.startsWith('~/') ? `$HOME/${download.path.slice(2)}` : download.path;
-    if (!createdDirectories.has(directory)) {
-      commands.push(`mkdir -p "${shellDirectory}"`);
-      createdDirectories.add(directory);
-    }
-    commands.push(`curl -fsSL "${download.url}" -o "${shellPath}"`);
-  }
-
-  if (targetTool === 'github-copilot' && componentKind === 'hook') {
-    commands.push(`# register ${componentId} through the paired .json hook definition`);
+    commands.push(...buildDownloadCommands(download, createdDirectories));
   }
 
   return commands.join(' && ');
@@ -1057,6 +1070,29 @@ function assert(condition, message) {
   if (!condition) throw new Error(message);
 }
 
+function countOccurrences(value, fragment) {
+  if (!fragment) return 0;
+
+  let count = 0;
+  let offset = 0;
+  while (offset < value.length) {
+    const index = value.indexOf(fragment, offset);
+    if (index === -1) break;
+    count += 1;
+    offset = index + fragment.length;
+  }
+
+  return count;
+}
+
+function findCatalogArtifact(catalog, { targetTool, componentKind, componentId }) {
+  return catalog.artifacts.find(entry =>
+    entry.target_tool === targetTool &&
+    entry.component_kind === componentKind &&
+    entry.component_id === componentId
+  );
+}
+
 function runTests() {
   const lintWorkflowVersion = readLatestReleasedVersion(path.join(REPO_ROOT, 'workflows', 'lint', 'CHANGELOG.md'));
   assert(/^\d+\.\d+\.\d+$/.test(lintWorkflowVersion || ''), 'expected latest lint workflow version to parse as semver');
@@ -1079,6 +1115,111 @@ function runTests() {
   assert(Array.isArray(catalog.artifacts) && catalog.artifacts.length > 0, 'expected catalog to contain artifacts');
   assert(catalog.artifacts.some(entry => entry.component_id === 'planner' && entry.target_tool === 'openai-codex'), 'expected planner codex artifact in catalog');
   assert(catalog.artifacts.some(entry => entry.component_id === 'logging' && entry.target_tool === 'github-copilot'), 'expected github-copilot logging rule artifact in catalog');
+
+  const claudeHookArtifact = findCatalogArtifact(catalog, {
+    targetTool: 'claude-code',
+    componentKind: 'hook',
+    componentId: 'branch-guard',
+  });
+  assert(claudeHookArtifact, 'expected Claude hook artifact in catalog for branch-guard');
+  assert(
+    claudeHookArtifact.install_command.includes('curl -fsSL "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/branch-guard/branch-guard.sh" -o "$HOME/.claude/hooks/branch-guard/branch-guard.sh"'),
+    'expected Claude hook install command to download the hook shell'
+  );
+  assert(
+    claudeHookArtifact.install_command.includes('chmod +x "$HOME/.claude/hooks/branch-guard/branch-guard.sh"'),
+    'expected Claude hook install command to chmod the installed hook shell'
+  );
+
+  const copilotHookArtifact = findCatalogArtifact(catalog, {
+    targetTool: 'github-copilot',
+    componentKind: 'hook',
+    componentId: 'branch-guard',
+  });
+  assert(copilotHookArtifact, 'expected GitHub Copilot hook artifact in catalog for branch-guard');
+  assert(
+    copilotHookArtifact.install_command.includes('curl -fsSL "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/branch-guard/branch-guard.json" -o ".github/hooks/branch-guard.json"'),
+    'expected GitHub Copilot hook install command to download the .json manifest'
+  );
+  assert(
+    copilotHookArtifact.install_command.includes('curl -fsSL "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/branch-guard/branch-guard.sh" -o ".github/hooks/branch-guard.sh"'),
+    'expected GitHub Copilot hook install command to download the shell companion'
+  );
+  assert(
+    copilotHookArtifact.install_command.includes('chmod +x ".github/hooks/branch-guard.sh"'),
+    'expected GitHub Copilot hook install command to chmod the shell companion'
+  );
+  assert(
+    !copilotHookArtifact.install_command.includes('chmod +x ".github/hooks/branch-guard.json"'),
+    'expected GitHub Copilot hook install command to skip chmod for the .json manifest'
+  );
+  assert(
+    !copilotHookArtifact.install_command.includes('# register'),
+    'expected GitHub Copilot hook install command to omit inline comments'
+  );
+
+  const codexHookArtifact = findCatalogArtifact(catalog, {
+    targetTool: 'openai-codex',
+    componentKind: 'hook',
+    componentId: 'integrity-warn',
+  });
+  assert(codexHookArtifact, 'expected OpenAI Codex hook artifact in catalog for integrity-warn');
+  assert(
+    codexHookArtifact.install_command.includes('curl -fsSL "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/integrity-warn/integrity-warn.sh" -o "$HOME/.codex/openai-codex/hooks/integrity-warn/integrity-warn.sh"'),
+    'expected Codex hook install command to download the primary hook shell'
+  );
+  assert(
+    codexHookArtifact.install_command.includes('curl -fsSL "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/hooks.json" -o "$HOME/.codex/hooks.json"'),
+    'expected Codex hook install command to download hooks.json'
+  );
+  assert(
+    codexHookArtifact.install_command.includes('curl -fsSL "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/_adapter_lib.sh" -o "$HOME/.codex/hooks/_adapter_lib.sh"'),
+    'expected Codex hook install command to download the shared adapter library'
+  );
+  assert(
+    codexHookArtifact.install_command.includes('curl -fsSL "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/integrity-warn/integrity-warn.sh" -o "$HOME/.codex/hooks/integrity-warn/integrity-warn.sh"'),
+    'expected Codex hook install command to download the shared canonical hook shell'
+  );
+  assert(
+    codexHookArtifact.install_command.includes('curl -fsSL "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/scripts/integrity-check.sh" -o "$HOME/.codex/openai-codex/scripts/integrity-check.sh"'),
+    'expected Codex hook install command to download the integrity-check companion'
+  );
+  assert(
+    codexHookArtifact.install_command.includes('chmod +x "$HOME/.codex/openai-codex/hooks/integrity-warn/integrity-warn.sh"'),
+    'expected Codex hook install command to chmod the primary hook shell'
+  );
+  assert(
+    codexHookArtifact.install_command.includes('chmod +x "$HOME/.codex/hooks/_adapter_lib.sh"'),
+    'expected Codex hook install command to chmod the shared adapter library'
+  );
+  assert(
+    codexHookArtifact.install_command.includes('chmod +x "$HOME/.codex/hooks/integrity-warn/integrity-warn.sh"'),
+    'expected Codex hook install command to chmod the shared canonical hook shell'
+  );
+  assert(
+    codexHookArtifact.install_command.includes('chmod +x "$HOME/.codex/openai-codex/scripts/integrity-check.sh"'),
+    'expected Codex hook install command to chmod the integrity-check companion'
+  );
+  assert(
+    !codexHookArtifact.install_command.includes('chmod +x "$HOME/.codex/hooks.json"'),
+    'expected Codex hook install command to skip chmod for hooks.json'
+  );
+  assert(
+    countOccurrences(codexHookArtifact.install_command, 'chmod +x ') === 4,
+    'expected Codex integrity-warn hook install command to chmod every downloaded shell exactly once'
+  );
+
+  const nonShellArtifact = findCatalogArtifact(catalog, {
+    targetTool: 'github-copilot',
+    componentKind: 'rule',
+    componentId: 'logging',
+  });
+  assert(nonShellArtifact, 'expected GitHub Copilot logging rule artifact in catalog');
+  assert(
+    !nonShellArtifact.install_command.includes('chmod +x '),
+    'expected non-shell artifact install command to skip chmod +x'
+  );
+
   assert(
     catalog.artifacts.some(
       entry => entry.component_id === 'lint'
