@@ -26,6 +26,10 @@ function readText(relPath) {
   return fs.readFileSync(path.join(REPO_ROOT, relPath), 'utf8');
 }
 
+function isExecutable(relPath) {
+  return (fs.statSync(path.join(REPO_ROOT, relPath)).mode & 0o111) !== 0;
+}
+
 function findArtifact(index, { targetTool, componentKind, componentId }) {
   return (index.artifacts || []).find(artifact =>
     artifact.target_tool === targetTool &&
@@ -260,10 +264,14 @@ function assertGeneratedFilesExist() {
     assert(exists(path.join('github-copilot', 'hooks', hook, `${hook}.json`)), `missing GitHub Copilot hook manifest for ${hook}`);
     assert(exists(path.join('github-copilot', 'hooks', hook, `${hook}.sh`)), `missing GitHub Copilot hook adapter for ${hook}`);
     assert(exists(path.join('openai-codex', 'hooks', hook, `${hook}.sh`)), `missing OpenAI Codex hook adapter for ${hook}`);
+    assert(isExecutable(path.join('github-copilot', 'hooks', hook, `${hook}.sh`)), `expected GitHub Copilot hook adapter to be executable for ${hook}`);
+    assert(isExecutable(path.join('openai-codex', 'hooks', hook, `${hook}.sh`)), `expected OpenAI Codex hook adapter to be executable for ${hook}`);
+    assert(isExecutable(path.join('hooks', hook, `${hook}.sh`)), `expected canonical hook shell to be executable for ${hook}`);
   }
 
   assert(exists(path.join('openai-codex', 'hooks', 'hooks.json')), 'missing OpenAI Codex hooks registry');
   assert(!exists(path.join('github-copilot', 'commands')), 'github-copilot/commands should not exist');
+  assert(isExecutable(path.join('github-copilot', 'scripts', 'install.sh')), 'expected GitHub Copilot installer to be executable');
 
   return { agents, skills, workflows, rules, hooks };
 }

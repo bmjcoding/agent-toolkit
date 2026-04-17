@@ -107,7 +107,8 @@ These rules apply to all auto-fix workflows:
 
 ### Pre-push Gate
 
-Secrets scanning before `git commit` and `git push` is enforced by the pre-push hook.
+Secrets scanning before `git commit` and `git push` is enforced by the pre-push hook,
+and CI re-runs the repository secret scan on pull requests plus protected-branch pushes.
 Before pushing, also run lint on changed files. If lint finds unfixable issues, warn the
 user before pushing.
 

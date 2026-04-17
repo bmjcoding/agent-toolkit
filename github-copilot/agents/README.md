@@ -11,7 +11,7 @@ a subset of frontmatter fields. Files here are the VS Code variant.
 ## Agent Discovery Path
 
 VS Code Copilot reads custom agents from `.github/agents/<name>.agent.md`. Files in this
-directory are NOT auto-discovered. Run `github-copilot/scripts/install.sh` to symlink
+directory are NOT auto-discovered. Run `bash github-copilot/scripts/install.sh` to symlink
 them into `.github/agents/`.
 
 ## Frontmatter Field Reference

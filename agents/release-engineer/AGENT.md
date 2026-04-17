@@ -67,7 +67,8 @@ touched changelog in scope:
 6. Stage the resulting `CHANGELOG.md` files alongside all other changes.
 
 PR-bound runs must not leave touched component changes sitting under a non-empty
-`## [Unreleased]` section. CI validates this on PR open/reopen. If no changelog skill is
+`## [Unreleased]` section when the work is actually being released. Routine PRs may keep
+in-flight notes under `## [Unreleased]` until the release cut. If no changelog skill is
 available or the repo has no component changelogs, skip this step silently.
 
 ## Step 3: Structure Commits

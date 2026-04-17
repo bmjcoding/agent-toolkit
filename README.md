@@ -141,16 +141,16 @@ ln -sfn "$TOOLKIT/github-copilot/instructions" .github/instructions
 ln -sfn "$TOOLKIT/github-copilot/prompts"      .github/prompts
 ```
 
-For hooks, prefer `./github-copilot/scripts/install.sh --target /path/to/project`. The
+For hooks, prefer `bash github-copilot/scripts/install.sh --target /path/to/project`. The
 installer flattens the checked-in hook manifests into the `.github/hooks/*.json` shape
 that Copilot expects at runtime.
 
 Or use:
 
 ```sh
-./github-copilot/scripts/install.sh --target /path/to/project
-./github-copilot/scripts/install.sh --target /path/to/project --dry-run
-./github-copilot/scripts/install.sh --target /path/to/project --check
+bash github-copilot/scripts/install.sh --target /path/to/project
+bash github-copilot/scripts/install.sh --target /path/to/project --dry-run
+bash github-copilot/scripts/install.sh --target /path/to/project --check
 ```
 
 ### OpenAI Codex
@@ -174,7 +174,9 @@ Use the installer instead of the manual `cp` flow if you already have a populate
 `~/.codex/config.toml`; the installer appends skill entries and preserves existing
 settings. The `.agents/skills` symlink is an optional project-local discovery fallback.
 The `~/.codex/openai-codex/hooks` symlink preserves the generated Codex hook fallback
-path when `AGENT_TOOLKIT_DIR` is not exported into the Codex runtime shell.
+path when `AGENT_TOOLKIT_DIR` is not exported into the Codex runtime shell. If your
+checkout predates the executable-bit repair for generated hook adapters, run
+`bash openai-codex/scripts/install.sh` once to repair hook shell permissions in place.
 
 ## Versioning
 
@@ -220,8 +222,10 @@ Editing a canonical rule under `rules/<slug>/<slug>.md` regenerates:
 Editing shared skills, indexed hook assets, or canonical bundle manifests also refreshes
 `index.json`.
 
-Pull requests fail if generated adapters or `index.json` are stale. Pushes to branches
-auto-commit the regenerated outputs back to the branch when needed.
+Pull requests fail if generated adapters, generated hook surfaces, or `index.json` are
+stale. Pushes to branches auto-commit the regenerated outputs back to the branch when
+needed. CI also re-runs the repository secret scan so contributors are not relying only
+on locally installed pre-push hooks.
 
 See [AGENTS.md](AGENTS.md), [CONTRIBUTING.md](CONTRIBUTING.md), and [docs/adr/](docs/adr/)
 for the detailed repo conventions.
