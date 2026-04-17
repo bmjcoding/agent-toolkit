@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.3.0] - 2026-04-17
+
 ### Changed
 
 - Step 2 now distinguishes routine PRs from actual release cuts: contributors may keep
@@ -102,7 +104,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/release-engineer-v5.2.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/release-engineer-v5.3.0...HEAD
+[5.3.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/release-engineer-v5.2.0...agent/release-engineer-v5.3.0
 [5.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/release-engineer-v5.1.0...agent/release-engineer-v5.2.0
 [5.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/release-engineer-v5.0.0...agent/release-engineer-v5.1.0
 [5.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/agent/release-engineer-v5.0.0
