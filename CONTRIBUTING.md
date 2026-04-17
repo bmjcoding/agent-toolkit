@@ -37,9 +37,10 @@ agent-toolkit/
   `node scripts/generate-index.js` after editing those canonical definitions.
 - Smoke-test the full generation flow with `node scripts/smoke-generated-assets.js`.
 - CI also re-runs both generators when canonical `agents/`, `workflows/`, or `rules/`
-  files change, and when indexed shared assets such as skills, hooks, or Claude bundles
+  files change, and when indexed shared assets such as skills, root hooks, or root bundles
   change.
-- Pull requests fail if generated agent/workflow/rule surfaces or `index.json` are stale.
+- Pull requests fail if generated agent/workflow/rule surfaces, generated hook adapters,
+  or `index.json` are stale.
 - Pushes to branches auto-commit regenerated tool surfaces and `index.json` back to the
   branch when needed.
 
@@ -50,6 +51,9 @@ Use [Conventional Commits](https://www.conventionalcommits.org/):
 
 Common scopes: `skills`, `rules`, `claude-code`, `github-copilot`, `openai-codex`,
 `docs`, `chore`.
+
+Commits must be GPG-signed. The repository's branch protections expect signed commits,
+so verify your signing key is configured before opening the pull request.
 
 ## Component versioning
 
@@ -74,7 +78,7 @@ Test installer changes with `--dry-run` and `--check` before merging:
 ```bash
 ./claude-code/scripts/install.sh --dry-run
 ./claude-code/scripts/install.sh --check
-./github-copilot/scripts/install.sh --target /tmp/example --dry-run
+bash github-copilot/scripts/install.sh --target /tmp/example --dry-run
 ./openai-codex/scripts/install.sh --dry-run
 ```
 
@@ -87,6 +91,8 @@ npm ci
 npm run lint
 npm run lint:py
 ```
+
+CI also runs the repository secret scan on pull requests and protected-branch pushes.
 
 If you want auto-fixes where available, run:
 
