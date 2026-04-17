@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Step 2 now distinguishes routine PRs from actual release cuts: contributors may keep
+  in-flight notes under `## [Unreleased]` until release time instead of promoting every
+  PR into a dated version section just to satisfy CI.
+
 ## [5.2.0] - 2026-04-16
 
 ### Changed

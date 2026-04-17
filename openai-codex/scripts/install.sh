@@ -135,6 +135,34 @@ run_or_dry() {
   fi
 }
 
+hook_shells_are_executable() {
+  local path
+  for path in "${HOOKS_SRC}"/*/*.sh "${REPO_DIR}"/hooks/*/*.sh; do
+    [[ -f "${path}" ]] || continue
+    if [[ ! -x "${path}" ]]; then
+      printf '  [DIFF]       hook shell not executable: %s\n' "${path}" >&2
+      return 1
+    fi
+  done
+
+  return 0
+}
+
+repair_hook_shell_permissions() {
+  local repaired=0
+  local path
+  for path in "${HOOKS_SRC}"/*/*.sh "${REPO_DIR}"/hooks/*/*.sh; do
+    [[ -f "${path}" ]] || continue
+    if [[ ! -x "${path}" ]]; then
+      chmod +x "${path}"
+      repaired=1
+      printf '  repaired:    chmod +x %s\n' "${path}"
+    fi
+  done
+
+  [[ "${repaired}" -eq 1 ]]
+}
+
 # ---------------------------------------------------------------------------
 # Print header
 # ---------------------------------------------------------------------------
@@ -227,6 +255,11 @@ if [[ "$CHECK_MODE" == "true" ]]; then
     else
       miss "hooks adapter tree not found: ${HOOKS_TREE_DEST}"
       all_ok=false
+    fi
+    if ! hook_shells_are_executable; then
+      all_ok=false
+    else
+      ok "hook shell adapters are executable"
     fi
     echo ""
   fi
@@ -430,6 +463,10 @@ else
       else
         printf '  installed:   hooks adapter tree -> %s\n' "${after}"
       fi
+    fi
+
+    if ! repair_hook_shell_permissions; then
+      printf '  unchanged:   hook shell permissions\n'
     fi
   fi
 

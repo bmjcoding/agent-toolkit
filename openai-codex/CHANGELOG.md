@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- `scripts/install.sh` now repairs executable bits on generated Codex hook adapters and
+  canonical hook shells after wiring the symlinked hook tree, so the documented install
+  flows do not leave Codex with non-runnable hook commands.
+
 ## [4.1.2] - 2026-04-15
 
 ### Changed

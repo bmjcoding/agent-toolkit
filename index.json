@@ -364,7 +364,7 @@
       "install_path": "~/.claude/agents/release-engineer.md",
       "install_command": "mkdir -p \"$HOME/.claude/agents\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/release-engineer.md\" -o \"$HOME/.claude/agents/release-engineer.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/release-engineer.md",
-      "checksum_sha256": "c6d68a4f0a9b5163b2022e4ef3796144379955f773b3039aa6053b0c697c650b",
+      "checksum_sha256": "6ae047773dfbe2ddc8cdc2f2c24c8ec1db1a6b4f251501cfc57c22644836ac89",
       "bundle_membership": [
         {
           "bundle_id": "ultra-dev",
@@ -2074,7 +2074,7 @@
       "install_path": ".github/agents/release-engineer.agent.md",
       "install_command": "mkdir -p \".github/agents\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/release-engineer.agent.md\" -o \".github/agents/release-engineer.agent.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/release-engineer.agent.md",
-      "checksum_sha256": "ab93fa9b4fb3ca8ead82594c9c55840388e0706cbb90330c16e916c871fe391c",
+      "checksum_sha256": "1601f8b02b753f92186677923b9ac299e4da6b51569fe73954df2e9a02e7a392",
       "bundle_membership": [],
       "metadata": {
         "model_tier": "balanced",
@@ -3069,7 +3069,7 @@
       "install_path": "~/.codex/agents/release-engineer.toml",
       "install_command": "mkdir -p \"$HOME/.codex/agents\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/release-engineer.toml\" -o \"$HOME/.codex/agents/release-engineer.toml\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/release-engineer.toml",
-      "checksum_sha256": "9990c2ee06983d7713bf6d9d71fa5b2a4f6c5523cc4676257911a61b99710435",
+      "checksum_sha256": "0cb6fb0b645c556325ceb48ed3cbbab1798f99993e8b443012a3ace1051ff8c3",
       "bundle_membership": [],
       "metadata": {
         "model_tier": "balanced",
