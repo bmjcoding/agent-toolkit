@@ -21,6 +21,13 @@ const HOOK_SPECS = {
     codexMatcher: 'Bash',
     codexStatusMessage: 'Validating changelog entry...',
   },
+  'dispatch-validate': {
+    adapterKind: 'direct',
+    copilotEvent: 'PreToolUse',
+    codexEvent: 'PreToolUse',
+    codexMatcher: '.*',
+    codexStatusMessage: 'Validating dispatch prompt...',
+  },
   'extract-handoff': {
     adapterKind: 'handoff',
     copilotEvent: 'SubagentStop',
@@ -42,6 +49,13 @@ const HOOK_SPECS = {
     codexMatcher: 'Bash',
     codexStatusMessage: 'Running integrity check...',
   },
+  'post-agent-audit': {
+    adapterKind: 'direct',
+    copilotEvent: 'SubagentStop',
+    codexEvent: 'Stop',
+    codexMatcher: '.*',
+    codexStatusMessage: 'Auditing agent scope...',
+  },
   'pre-push-secrets': {
     adapterKind: 'command-filter',
     commandPredicate: 'is_git_commit_or_push_command',
@@ -49,6 +63,13 @@ const HOOK_SPECS = {
     codexEvent: 'PreToolUse',
     codexMatcher: 'Bash',
     codexStatusMessage: 'Scanning for secrets before push...',
+  },
+  'printf-lint': {
+    adapterKind: 'direct',
+    copilotEvent: 'PostToolUse',
+    codexEvent: 'PostToolUse',
+    codexMatcher: '.*',
+    codexStatusMessage: 'Linting printf safety...',
   },
   'protect-config': {
     adapterKind: 'protect-config',
@@ -61,10 +82,13 @@ const HOOK_SPECS = {
 const HOOK_ORDER = [
   'branch-guard',
   'changelog-check',
+  'dispatch-validate',
   'extract-handoff',
   'inject-context',
   'integrity-warn',
+  'post-agent-audit',
   'pre-push-secrets',
+  'printf-lint',
   'protect-config',
 ];
 
