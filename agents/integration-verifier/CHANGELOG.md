@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.0] - 2026-04-27
+
+### Changed
+
+- Replaced the inline "Pre-existing error classification" prose with a reference to `~/.claude/scripts/classify-compile-errors.py`. The script walks handoff `files_written` lists to bucket compiler diagnostics into introduced / pre-existing / unclassified, returning structured JSON the agent surfaces in handoff `notes`.
+- Replaced the `Untrusted Data Boundary` invariants block with a reference to `rules/untrusted-data-boundary/`.
+
 ## [2.1.0] - 2026-04-15
 
 ### Added

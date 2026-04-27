@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.0] - 2026-04-27
+
+### Changed
+
+- Replaced the inline `Printf/accumulation end-to-end check (REC-14)` block with a one-line reference to `~/.claude/scripts/lint-printf-newlines.sh`. The script catches both `printf '%b'` injection surfaces and `printf '%s'` paired with literal-`\n` accumulators class-of-error programmatically. The same check now also runs as a `printf-lint` PostToolUse hook on every Edit/Write of `*.sh` files.
+- Replaced the `Untrusted Data Boundary` invariants block with a reference to `rules/untrusted-data-boundary/`.
+
 ## [2.1.0] - 2026-04-15
 
 ### Changed

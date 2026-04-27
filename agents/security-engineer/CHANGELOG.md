@@ -7,10 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.0] - 2026-04-27
+
 ### Changed
 
 - Replaced Python dependency-audit guidance with `uvx pip-audit` so the agent matches
   the repo's `uv`-first tooling guidance.
+- Replaced the duplicated `Finding Discipline` section with a reference to `rules/finding-discipline/`. Security-specific note about OWASP/STRIDE non-applicability remains.
+- Replaced the `Untrusted Data Boundary` invariants block with a reference to `rules/untrusted-data-boundary/`. Per-agent threat vectors (compromised package READMEs, commit-message injection) remain.
 
 ## [2.1.0] - 2026-04-15
 
