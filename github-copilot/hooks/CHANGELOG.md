@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Generated Copilot adapters for three new canonical hooks: `dispatch-validate/` (PreToolUse, validates Agent dispatch prompts), `post-agent-audit/` (SubagentStop, audits returning subagent scope), and `printf-lint/` (PostToolUse on Edit/Write of `*.sh`, runs printf-newlines linter). Each adapter delegates directly to the canonical root hook script via `run_root_hook`.
+
 ## [3.1.2] - 2026-04-17
 
 ### Fixed
