@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.2.0] - 2026-04-27
+
+### Added
+
+- New `checks/monochromatic.sh` check counts distinct non-gray Tailwind color families and flags when more than the configured limit (default 3) are present in scope. Encapsulates the gray-family allowlist (`gray|zinc|stone|neutral|slate`) and the per-file family limit so monochromatic discipline has one update site rather than parallel prose in `design-architect` and `frontend-engineer`.
+
 ## [4.1.0] - 2026-04-15
 
 ### Changed
