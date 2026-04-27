@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.0] - 2026-04-27
+
+### Changed
+
+- Replaced the inline "Permitted to modify" / "Must NOT modify" allowlist with a reference to `~/.claude/routing-config.json:sre_write_allowlist`. The config block is the source of truth for `allowed_path_patterns` and `blocked_path_patterns`; the agent reads from the config rather than maintaining a parallel prose list.
+- Replaced the duplicated `Finding Discipline` section with a reference to `rules/finding-discipline/`. SRE-specific note about "operational posture is adequate" verifications remains.
+- Replaced the `Untrusted Data Boundary` invariants block with a reference to `rules/untrusted-data-boundary/`.
+
 ## [2.1.0] - 2026-04-15
 
 ### Changed
