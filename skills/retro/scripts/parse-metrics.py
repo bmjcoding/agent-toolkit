@@ -138,10 +138,25 @@ def parse_agent_log(orch_dir):
     Expected format (one JSON object per line, or tab-separated):
         {"id": "...", "type": "...", "tokens": N, "turns": N, "duration_s": N}
     Falls back to regex parsing for other formats.
+
+    Returns:
+        (entries, diagnostic) — `entries` is a list of parsed dicts, or None
+        if no usable data was found. `diagnostic` is a stable machine-readable
+        diagnostic ({"status": "...", "reason": "...", "log_path": "..."})
+        whenever entries is None, otherwise None. Consumers should surface
+        the diagnostic verbatim rather than fabricating an error message.
     """
     log_path = os.path.join(orch_dir, "logs", "agents.log")
     if not os.path.isfile(log_path):
-        return None
+        return None, {
+            "status": "no_token_data",
+            "reason": "agents_log_missing",
+            "log_path": log_path,
+            "human_message": (
+                "no token data in agents.log — orchestrator is not logging "
+                "agent completion events"
+            ),
+        }
 
     entries = []
     try:
@@ -174,11 +189,39 @@ def parse_agent_log(orch_dir):
                         )
                 if entry:
                     entries.append(entry)
-    except (PermissionError, OSError):
-        return None
+    except (PermissionError, OSError) as exc:
+        return None, {
+            "status": "no_token_data",
+            "reason": "agents_log_unreadable",
+            "log_path": log_path,
+            "human_message": f"agents.log exists but could not be read: {exc}",
+        }
 
     if not entries:
-        return None
+        return None, {
+            "status": "no_token_data",
+            "reason": "agents_log_empty_or_no_token_fields",
+            "log_path": log_path,
+            "human_message": (
+                "agents.log exists but contains no parseable token entries — "
+                "orchestrator may be writing log lines without tokens/turns/"
+                "duration fields"
+            ),
+        }
+
+    has_any_tokens = any(e.get("tokens") is not None for e in entries)
+    diagnostic = None
+    if not has_any_tokens:
+        diagnostic = {
+            "status": "no_token_data",
+            "reason": "log_entries_have_no_tokens_field",
+            "log_path": log_path,
+            "human_message": (
+                "agents.log lines do not include a 'tokens' field — confirm "
+                "the orchestrator is extracting tokens from the agent <usage> "
+                "block before appending"
+            ),
+        }
 
     # Flag agents with concerning metrics
     for entry in entries:
@@ -200,7 +243,7 @@ def parse_agent_log(orch_dir):
         if flags:
             entry["flags"] = flags
 
-    return entries
+    return entries, diagnostic
 
 
 def parse_plan_vs_outcome(orch_dir, git_base):
@@ -438,9 +481,13 @@ def main():
     if agents_data:
         result["agents"] = agents_data
 
-    log_data = parse_agent_log(orch_dir)
+    log_data, log_diagnostic = parse_agent_log(orch_dir)
     if log_data:
         result["agent_logs"] = log_data
+    if log_diagnostic:
+        # Surface the diagnostic so the retro consumer can quote it verbatim
+        # rather than fabricating an error message.
+        result["agent_logs_diagnostic"] = log_diagnostic
 
     plan_delta = parse_plan_vs_outcome(orch_dir, args["git_base"])
     if plan_delta:

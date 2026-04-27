@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.3.0] - 2026-04-27
+
+### Changed
+
+- `scripts/parse-metrics.py` now returns `(entries, diagnostic)` from `parse_agent_log()` and surfaces a stable `agent_logs_diagnostic` (with `status`, `reason`, `log_path`, `human_message`) at the top level of the output JSON whenever token data is unreadable. Retro consumers surface the `human_message` verbatim instead of fabricating an exception. Replaces a "tell the agent how to phrase the error" guardrail in autoresearch-analyst with a script-emitted diagnostic — the source of truth lives where the data is read.
+
 ## [5.2.0] - 2026-04-16
 
 ### Changed
