@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Generated Codex adapters for three new canonical hooks: `dispatch-validate/` (PreToolUse, matcher `.*`), `post-agent-audit/` (Stop, matcher `.*`), and `printf-lint/` (PostToolUse, matcher `.*`). Each adapter delegates directly to the canonical root hook script. `hooks.json` registry updated with the corresponding entries.
+
 ## [3.1.2] - 2026-04-17
 
 ### Fixed
