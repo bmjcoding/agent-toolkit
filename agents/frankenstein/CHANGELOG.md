@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.2.0] - 2026-04-27
+
+### Changed
+
+- Stripped every REC-tagged workaround block (REC-11, REC-12, REC-13, REC-14, REC-16, REC-18) and replaced each with a reference to a script or to a config block in `~/.claude/routing-config.json`. Removed the per-incident references (ST-7, ST-8, CLAUD-002 / ST-001, 2026-04-12 collision narrative) and the "Retrospective Notes" table.
+- Phase 0 `Preflight checks` now invokes `~/.claude/scripts/preflight-check.sh` (consolidates HEAD-SHA capture, stale-toolkit-plan warning, git-repo check, WIP audit). HEAD-SHA drift checks at Phase 2 and Phase 5a now invoke `~/.claude/scripts/drift-check.sh`.
+- Phase 1 plan validation invokes `~/.claude/scripts/validate-plan.py` (replaces inline `jq .` and prose key-list).
+- Phase 2 `Diff-size guard for targeted-edit subtasks` now invokes `~/.claude/scripts/check-diff-budget.sh`.
+- Phase 4 step 2 backlog seeding (~150 lines of inline Bash + Python heredoc) extracted to `~/.claude/scripts/seed-backlog.py`.
+- Phase 6a no longer carries the inline 4-step CHANGELOG promotion workflow; the dispatch prompt delegates to `release-engineer`, which loads the canonical `changelog` skill.
+- The "Mechanical Agent Model Override" example list and "Fast-tier role roster" table moved to `~/.claude/routing-config.json`. The cross-tool model tier mapping also reads from `model_aliases` in that file.
+- Security-engineer fast-path mode addendum and schema-inventory grep-scope addendum moved to `~/.claude/routing-config.json` so they update once across all dispatchers.
+- Classifier-outage workaround text moved to `~/.claude/routing-config.json:classifier_outage.dispatch_prompt_addendum`. The agent body retains only the "what to do when three consecutive blocks happen" decision logic.
+- Replaced the `Untrusted Data Boundary` invariants block with a reference to `rules/untrusted-data-boundary/`.
+
 ## [5.1.2] - 2026-04-15
 
 ### Changed
