@@ -22,6 +22,16 @@
         ]
       },
       {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${AGENT_TOOLKIT_DIR:-$HOME/.codex}/openai-codex/hooks/dispatch-validate/dispatch-validate.sh",
+            "statusMessage": "Validating dispatch prompt..."
+          }
+        ]
+      },
+      {
         "matcher": "Bash",
         "hooks": [
           {
@@ -52,6 +62,16 @@
             "statusMessage": "Running integrity check..."
           }
         ]
+      },
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${AGENT_TOOLKIT_DIR:-$HOME/.codex}/openai-codex/hooks/printf-lint/printf-lint.sh",
+            "statusMessage": "Linting printf safety..."
+          }
+        ]
       }
     ],
     "UserPromptSubmit": [
@@ -74,6 +94,16 @@
             "type": "command",
             "command": "${AGENT_TOOLKIT_DIR:-$HOME/.codex}/openai-codex/hooks/extract-handoff/extract-handoff.sh",
             "statusMessage": "Extracting handoff JSON..."
+          }
+        ]
+      },
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${AGENT_TOOLKIT_DIR:-$HOME/.codex}/openai-codex/hooks/post-agent-audit/post-agent-audit.sh",
+            "statusMessage": "Auditing agent scope..."
           }
         ]
       }
