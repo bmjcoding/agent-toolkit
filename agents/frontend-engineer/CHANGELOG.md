@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.0] - 2026-04-27
+
+### Changed
+
+- Replaced the hardcoded "anti-convergence ban" list (`rounded-md`, `rounded-sm`, `shadow-md`, `shadow-lg`, `shadow-xl`, `shadow-2xl`, arbitrary hex, missing `dark:` counterparts) in two places with references to the `~/.claude/skills/design-lint/checks/` scripts (`border-radius.sh`, `shadow-weight.sh`, `hex-colors.sh`, `dark-mode-pairs.sh`, `monochromatic.sh`). The check scripts are the source of truth and update automatically when Tailwind changes; the agent no longer maintains a parallel list that drifts.
+- Replaced the `Untrusted Data Boundary` invariants block with a reference to `rules/untrusted-data-boundary/`.
+
 ## [2.1.0] - 2026-04-15
 
 ### Added

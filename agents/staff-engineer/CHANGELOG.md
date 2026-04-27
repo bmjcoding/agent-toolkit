@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.2.0] - 2026-04-27
+
+### Changed
+
+- Removed the duplicated `Security & Hardening` baseline (pinned image tags, non-root containers, no hardcoded secrets, masked CI secrets) and replaced with a reference to the project `AGENTS.md` Security Rules section, which is the canonical source.
+- Replaced the `Untrusted Data Boundary` invariants block with a reference to `rules/untrusted-data-boundary/`.
+
 ## [5.1.0] - 2026-04-15
 
 ### Added
