@@ -1,7 +1,7 @@
 # components[].role values: core (required for bundle to function) | optional (nice-to-have) | deprecated (will be removed)
 id: self-improvement
 name: Self-Improvement
-description: Aggregates retro, improve, review-skill, and changelog skills with the autoresearch-analyst agent for continuous workflow reflection and improvement.
+description: Aggregates retro, improve, definition-review, and changelog skills with the autoresearch-analyst agent for continuous workflow reflection and improvement.
 status: stable
 tags:
   - improvement
@@ -16,7 +16,7 @@ components:
     id: improve
     role: core
   - type: skill
-    id: review-skill
+    id: definition-review
     role: core
   - type: skill
     id: changelog

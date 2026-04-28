@@ -1,5 +1,5 @@
 # Codex CLI project configuration template
-# Version: Codex CLI v0.120.0
+# Generated from canonical skills under skills/<category>/.../<slug>/.
 #
 # Usage:
 #   Copy this file to .codex/config.toml in a trusted project repo.
@@ -10,85 +10,80 @@
 # Core settings
 # ---------------------------------------------------------------------------
 
-# Default model for all sessions (override per-agent in ~/.codex/agents/<n>.toml)
 model = "gpt-5.4"
-
-# Sandbox mode controls filesystem and network access.
-# Values: "workspace-write" | "read-only" | "danger-full-access"
 sandbox_mode = "workspace-write"
-
-# Approval policy for tool calls.
-# Values: "on-request" | "untrusted" | "never"
-# "on-request"  — prompts for approval on tool calls that modify state (recommended)
-# "untrusted"   — approves read-only; prompts for writes/deletes
-# "never"       — approves all tool calls without prompting (use with caution)
 approval_policy = "on-request"
 
 # ---------------------------------------------------------------------------
 # Skills configuration
 #
 # NOTE: skills.config[].path points to the SKILL.md file inside the skill
-# directory, not the directory itself.
-#
-# Codex discovers skills from (in order):
-#   1. paths listed in [[skills.config]] entries below
-#   2. .agents/skills/ at the repo root
-#   3. $HOME/.agents/skills/
-#   4. /etc/codex/skills/
-#   5. bundled skills
-#
+# directory, not the directory itself. Skill files are categorized on disk as
+# skills/<category>/.../<slug>/SKILL.md, but the skill name remains the slug.
 # ---------------------------------------------------------------------------
 
 [[skills.config]]
-path = "${AGENT_TOOLKIT_DIR}/skills/backend/SKILL.md"
+path = "${AGENT_TOOLKIT_DIR}/skills/delivery/changelog/SKILL.md"
 enabled = true
 
 [[skills.config]]
-path = "${AGENT_TOOLKIT_DIR}/skills/changelog/SKILL.md"
+path = "${AGENT_TOOLKIT_DIR}/skills/delivery/git-ship/SKILL.md"
 enabled = true
 
 [[skills.config]]
-path = "${AGENT_TOOLKIT_DIR}/skills/design-authority/SKILL.md"
+path = "${AGENT_TOOLKIT_DIR}/skills/delivery/prod-readiness/SKILL.md"
 enabled = true
 
 [[skills.config]]
-path = "${AGENT_TOOLKIT_DIR}/skills/design-lint/SKILL.md"
+path = "${AGENT_TOOLKIT_DIR}/skills/design/design-authority/SKILL.md"
 enabled = true
 
 [[skills.config]]
-path = "${AGENT_TOOLKIT_DIR}/skills/frontend/SKILL.md"
+path = "${AGENT_TOOLKIT_DIR}/skills/design/design-lint/SKILL.md"
 enabled = true
 
 [[skills.config]]
-path = "${AGENT_TOOLKIT_DIR}/skills/git-ship/SKILL.md"
+path = "${AGENT_TOOLKIT_DIR}/skills/development/backend/SKILL.md"
 enabled = true
 
 [[skills.config]]
-path = "${AGENT_TOOLKIT_DIR}/skills/improve/SKILL.md"
+path = "${AGENT_TOOLKIT_DIR}/skills/development/frontend/SKILL.md"
 enabled = true
 
 [[skills.config]]
-path = "${AGENT_TOOLKIT_DIR}/skills/infra/SKILL.md"
+path = "${AGENT_TOOLKIT_DIR}/skills/development/infra/SKILL.md"
 enabled = true
 
 [[skills.config]]
-path = "${AGENT_TOOLKIT_DIR}/skills/observability-patterns/SKILL.md"
+path = "${AGENT_TOOLKIT_DIR}/skills/reference/observability-patterns/SKILL.md"
 enabled = true
 
 [[skills.config]]
-path = "${AGENT_TOOLKIT_DIR}/skills/owasp-reference/SKILL.md"
+path = "${AGENT_TOOLKIT_DIR}/skills/reference/owasp-reference/SKILL.md"
 enabled = true
 
 [[skills.config]]
-path = "${AGENT_TOOLKIT_DIR}/skills/prod-readiness/SKILL.md"
+path = "${AGENT_TOOLKIT_DIR}/skills/self-improvement/definition-review/SKILL.md"
 enabled = true
 
 [[skills.config]]
-path = "${AGENT_TOOLKIT_DIR}/skills/retro/SKILL.md"
+path = "${AGENT_TOOLKIT_DIR}/skills/self-improvement/full-cycle/SKILL.md"
 enabled = true
 
 [[skills.config]]
-path = "${AGENT_TOOLKIT_DIR}/skills/review-skill/SKILL.md"
+path = "${AGENT_TOOLKIT_DIR}/skills/self-improvement/improve/SKILL.md"
+enabled = true
+
+[[skills.config]]
+path = "${AGENT_TOOLKIT_DIR}/skills/self-improvement/on-demand/SKILL.md"
+enabled = true
+
+[[skills.config]]
+path = "${AGENT_TOOLKIT_DIR}/skills/self-improvement/recon/SKILL.md"
+enabled = true
+
+[[skills.config]]
+path = "${AGENT_TOOLKIT_DIR}/skills/self-improvement/retro/SKILL.md"
 enabled = true
 
 # ---------------------------------------------------------------------------

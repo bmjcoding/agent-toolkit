@@ -34,7 +34,7 @@ A new `remove` subcommand is added to the improve skill. It requires explicit on
 
 ### 3. Cross-session retrospective batch (D2.2) and periodic analyst reminder (D2.3)
 
-`skills/retro/scripts/meta-retro-batch.py` aggregates the most recent N (default 10) retro JSON files from `~/agent-retros/sessions/` (or `$AGENT_RETRO_DIR/sessions/`). It reads canonical session retros first, then tolerates legacy corpus locations for historical continuity. It reports five signal categories: recurring unresolved findings, severity-category skew, low-signal P2 noise, `frankenstein_lines` size trajectory, and cross-session recommendation persistence. The script uses only Python stdlib.
+`skills/self-improvement/retro/scripts/meta-retro-batch.py` aggregates the most recent N (default 10) retro JSON files from `~/agent-retros/sessions/` (or `$AGENT_RETRO_DIR/sessions/`). It reads canonical session retros first, then tolerates legacy corpus locations for historical continuity. It reports five signal categories: recurring unresolved findings, severity-category skew, low-signal P2 noise, `frankenstein_lines` size trajectory, and cross-session recommendation persistence. The script uses only Python stdlib.
 
 The retro skill gains a lightweight date-check at the start of the recommendations section: if more than 30 days have passed since the last standalone `autoresearch-analyst` retro, a META-001 reminder bullet is prepended to the output.
 
@@ -42,7 +42,7 @@ The retro skill gains a lightweight date-check at the start of the recommendatio
 
 **D3**: 32 audit findings across 11 agents are resolved. The highest-priority changes remove project-specific identifiers (function names, file paths, enum values from the ALT Central project) and consolidate duplicate rule content. Agents fixed: planner, backend-engineer, quality-engineer, site-reliability-engineer, security-engineer, plan-reviewer, autoresearch-analyst, frontend-engineer, design-architect, doc-writer, integration-verifier, and release-gate.
 
-**P4**: The four-bullet untrusted-data prelude and instruction sandwich is extracted to a shared reference file at `skills/improve/references/security-preamble.md`. Each of the 11 agents that previously contained the verbatim block now includes a pointer to that file instead. This factoring reduces the corpus by approximately 200 lines.
+**P4**: The four-bullet untrusted-data prelude and instruction sandwich is extracted to a shared reference file at `skills/self-improvement/improve/references/security-preamble.md`. Each of the 11 agents that previously contained the verbatim block now includes a pointer to that file instead. This factoring reduces the corpus by approximately 200 lines.
 
 ## Consequences
 
@@ -55,7 +55,7 @@ The retro skill gains a lightweight date-check at the start of the recommendatio
 
 ### Neutral
 
-- Each of the 11 agents that adopted the shared preamble now has a sub-file dependency on `skills/improve/references/security-preamble.md`. If that file is moved or renamed, all 11 agents need updating.
+- Each of the 11 agents that adopted the shared preamble now has a sub-file dependency on `skills/self-improvement/improve/references/security-preamble.md`. If that file is moved or renamed, all 11 agents need updating.
 - The meta-retro-batch script requires at least 10 retro JSON files before it produces output; early runs produce a "not enough runs yet" message.
 - `~/.claude/metadata/` is a new global state directory outside the toolkit repo. It is not version-controlled by default and must be backed up separately if portability across machines is needed.
 
@@ -79,5 +79,5 @@ The retro skill gains a lightweight date-check at the start of the recommendatio
 - D2 design decisions: `.orchestrator/sessions/20260414T073313/context/d2-design-decisions.md`
 - Verbosity audit: `.orchestrator/sessions/20260413T215203/context/spike-agent-verbosity-audit.md`
 - Rule expiry schema: `~/.claude/metadata/rule-expiry.json`
-- Shared preamble: `skills/improve/references/security-preamble.md`
-- Meta-retro script: `skills/retro/scripts/meta-retro-batch.py`
+- Shared preamble: `skills/self-improvement/improve/references/security-preamble.md`
+- Meta-retro script: `skills/self-improvement/retro/scripts/meta-retro-batch.py`

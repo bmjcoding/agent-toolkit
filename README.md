@@ -16,7 +16,7 @@ agent-toolkit/
     adr/                  # Repo-wide architecture decisions
   agents/                 # Canonical shared agent instruction bodies
   hooks/                  # Canonical shared hook logic
-  skills/                 # Canonical shared skills
+  skills/                 # Canonical shared skills, categorized as skills/<category>/.../<slug>/
   rules/                  # Canonical shared rules
   workflows/              # Canonical shared workflow definitions
   bundles/                # Canonical shared bundle manifests
@@ -111,6 +111,11 @@ Ruff is configured in `pyproject.toml` and invoked through the pinned `uvx` comm
 
 Claude Code loads tool-native surfaces from `~/.claude/`. Shared skills stay canonical at
 repo root, while rules are exposed through generated adapters under `claude-code/rules/`.
+This repository also includes repo-local contribution helpers under `.claude/`:
+`contribution-assistant` and its `contribution-changelog` skill. The repo-local
+`.claude/skills/definition-review` and `.claude/skills/improve` entries are symlinks to the
+canonical shared skills, so contributors can use the assistant without first installing
+the whole toolkit globally.
 
 ```bash
 TOOLKIT=$(pwd)
@@ -169,7 +174,8 @@ cp openai-codex/config.toml.template "$HOME/.codex/config.toml"
 ln -sfn "$AGENT_TOOLKIT_DIR/skills" .agents/skills
 ```
 
-The config template points directly at `${AGENT_TOOLKIT_DIR}/skills/<slug>/SKILL.md`.
+The config template points directly at
+`${AGENT_TOOLKIT_DIR}/skills/<category>/.../<slug>/SKILL.md`.
 Use the installer instead of the manual `cp` flow if you already have a populated
 `~/.codex/config.toml`; the installer appends skill entries and preserves existing
 settings. The `.agents/skills` symlink is an optional project-local discovery fallback.
@@ -194,10 +200,16 @@ All components use SemVer and Keep a Changelog 1.1.0.
 ## Contributing
 
 Add shared agents under `agents/<slug>/`, shared workflows under `workflows/<slug>/`,
-shared skills under `skills/<slug>/`, and shared rules under `rules/<slug>/`. Add
-tool-specific adapters only when a runtime requires a different format or discovery
-surface, then regenerate them with `node scripts/sync-canonical-adapters.js` when
-applicable.
+shared skills under `skills/<category>/.../<slug>/`, and shared rules under `rules/<slug>/`.
+Skill category directories are discovered recursively; do not hardcode the current
+category set in scripts or docs. Add tool-specific adapters only when a runtime requires
+a different format or discovery surface, then regenerate them with
+`node scripts/sync-canonical-adapters.js` when applicable.
+
+Before opening a contribution PR, use `.claude/agents/contribution-assistant.md` or run
+`npm run check` directly. Toolkit changelogs use one-and-done versioned entries: every
+touched component gets a bumped `## [X.Y.Z] - YYYY-MM-DD` section, not an `[Unreleased]`
+entry.
 
 When canonical shared content changes, CI also re-runs adapter sync and catalog
 generation. For example, editing `agents/frankenstein/AGENT.md` regenerates:

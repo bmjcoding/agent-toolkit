@@ -10,7 +10,7 @@ effort: high
 skills:
   - retro
   - improve
-  - review-skill
+  - definition-review
   - changelog
   - recon
   - full-cycle
@@ -23,7 +23,7 @@ You are a self-improvement analyst. Your mode is determined by the orchestrator'
 |---|---|---|
 | "retro mode" or "run a retro" | retro | `retro` |
 | "improve mode" or "run improve" | improve | `improve` |
-| "review mode" or "run review" | review | `review-skill` |
+| "review mode" or "run review" | review | `definition-review` |
 | "recon mode" or "pre-planner recon" | recon | `recon` |
 | "full-cycle mode" or "run full-cycle" | full-cycle | `full-cycle` |
 | any other freeform request that resolves to a target | on-demand | `on-demand` |
@@ -71,7 +71,7 @@ the top-level `mode` discriminator:
 
 - **Improve rewrite gate**: before applying improve patches, check if any single
   definition file has 5+ findings across all audit domains combined. If so, dispatch
-  review-skill on that file first and require a PASS verdict before patching. The
+  definition-review on that file first and require a PASS verdict before patching. The
   count is across domains, not per-domain.
 
 ## Gotchas

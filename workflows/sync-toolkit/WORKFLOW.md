@@ -2,7 +2,7 @@
 name: sync-toolkit
 description: "Detect changed toolkit components, regenerate adapters, update CHANGELOG entries and versions, then commit per-component and open a PR."
 lifecycle: stable
-argument-hint: "[--dry-run] [--no-pr] [--component TYPE/NAME]"
+argument-hint: "[--dry-run] [--no-pr] [--component TYPE/NAME|skills/CATEGORY/.../NAME]"
 adapters:
   - claude-code/commands/sync-toolkit/sync-toolkit.md
   - github-copilot/prompts/sync-toolkit.prompt.md
@@ -23,7 +23,7 @@ $ARGUMENTS is the literal string the user typed after invoking this prompt.
 - **No args** — sync all changed components, generate CHANGELOGs, commit each component separately, open PR
 - **`--dry-run`** — report what would change; do not write files, commit, or push
 - **`--no-pr`** — commit locally but do not push or open a PR
-- **`--component TYPE/NAME`** — scope to one component (e.g., `skills/changelog`, `agents/frankenstein`, `workflows/lint`)
+- **`--component TYPE/NAME`** — scope to one component (e.g., `skills/delivery/changelog`, `skills/platform/security/secret-scan`, `agents/frankenstein`, `workflows/lint`)
 
 Scope resolution and `--dry-run` rules are defined in AGENTS.md.
 
@@ -35,7 +35,7 @@ compatibility alias, otherwise the current git repo root reported by
 
 Run: `git -C $TOOLKIT status --porcelain`
 
-Group modified/added files by component directory (the `TYPE/NAME` portion of each path, e.g., `agents/frankenstein`, `workflows/lint`, `skills/design-lint`). Canonical shared components live under `agents/`, `workflows/`, `skills/`, and `rules/`. Tool-local adapters and runtime assets live under the tool directories and should be grouped under their own tool-specific component path.
+Group modified/added files by component directory. Canonical skills use `skills/CATEGORY/.../NAME` (for example `skills/design/design-lint`); category names are open-ended and discovered from the filesystem. Agents, workflows, and rules use `TYPE/NAME` (for example `agents/frankenstein`, `workflows/lint`, `rules/logging`). Tool-local adapters and runtime assets live under the tool directories and should be grouped under their own tool-specific component path.
 
 If `--component` is given, filter to that component only.
 
@@ -43,7 +43,7 @@ If no changes detected, print "No toolkit changes detected. Nothing to sync." an
 
 ## Phase 1: Group and diff
 
-For each changed component, produce a human-readable diff summary: what sections were added, removed, or changed. Identify the SemVer bump level per `skills/changelog/SKILL.md` bump table (PATCH / MINOR / MAJOR).
+For each changed component, produce a human-readable diff summary: what sections were added, removed, or changed. Identify the SemVer bump level per the `changelog` skill bump table (PATCH / MINOR / MAJOR).
 
 If `--dry-run`: output a table of components, their changed file count, and the proposed bump level, then stop.
 
@@ -61,7 +61,7 @@ For each changed component, spawn one subagent to:
 5. Update the version comment in the component's definition file (`SKILL.md`, agent `.md`, command `.md`, hook `.sh`) to match the new version
 6. Update comparison links at the bottom of `CHANGELOG.md`
 
-**AGENT INSTRUCTION (mandatory for every spawned subagent)**: Generate user-facing summaries, not commit-log dumps. Do not write "Updated SKILL.md lines 40-55". Do write "Enforced OKLCH-only color notation for all utility classes". Aggregate related changes into a single entry. If an entry you are about to write names a file path, a line number, or a git hash, discard it and replace it with the user-facing outcome of that change. Follow `skills/changelog/SKILL.md` rules.
+**AGENT INSTRUCTION (mandatory for every spawned subagent)**: Generate user-facing summaries, not commit-log dumps. Do not write "Updated SKILL.md lines 40-55". Do write "Enforced OKLCH-only color notation for all utility classes". Aggregate related changes into a single entry. If an entry you are about to write names a file path, a line number, or a git hash, discard it and replace it with the user-facing outcome of that change. Follow the `changelog` skill rules.
 
 Run all component agents in parallel.
 

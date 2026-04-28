@@ -25,7 +25,8 @@ on:
       - "scripts/validate-component-changelogs.js"
       - "scripts/validate-lifecycle-metadata.js"
       - "scripts/validate-reference-integrity.js"
-      - "skills/review-skill/scripts/lint-definition.py"
+      - "scripts/lint-definition.py"
+      - "skills/**/definition-review/scripts/lint-definition.py"
       - ".github/workflows/sync-generated-assets.yml"
   pull_request:
     paths:
@@ -51,7 +52,8 @@ on:
       - "scripts/validate-component-changelogs.js"
       - "scripts/validate-lifecycle-metadata.js"
       - "scripts/validate-reference-integrity.js"
-      - "skills/review-skill/scripts/lint-definition.py"
+      - "scripts/lint-definition.py"
+      - "skills/**/definition-review/scripts/lint-definition.py"
       - ".github/workflows/sync-generated-assets.yml"
 
 concurrency:
@@ -102,7 +104,8 @@ jobs:
 
           node scripts/validate-component-changelogs.js \
             --base "${{ steps.diff_base.outputs.base }}" \
-            --head HEAD
+            --head HEAD \
+            --require-release-version
 
   validate-definitions:
     needs: validate-component-changelogs
@@ -120,10 +123,10 @@ jobs:
           python-version: "3.12"
 
       - name: Lint Canonical Skill Definitions
-        run: python3 skills/review-skill/scripts/lint-definition.py skills
+        run: python3 scripts/lint-definition.py skills
 
       - name: Lint Canonical Agent Definitions
-        run: python3 skills/review-skill/scripts/lint-definition.py agents
+        run: python3 scripts/lint-definition.py agents
 
   validate-generated-assets:
     if: github.event_name == 'pull_request'
@@ -158,7 +161,10 @@ jobs:
             github-copilot/instructions
             github-copilot/prompts
             openai-codex/agents
+            openai-codex/config.toml.template
             openai-codex/hooks
+            rules/README.md
+            skills/README.md
             index.json
           )
 
@@ -224,9 +230,11 @@ jobs:
             claude-code/commands
             claude-code/rules
             github-copilot/agents
+            github-copilot/hooks
             github-copilot/instructions
             github-copilot/prompts
             openai-codex/agents
+            openai-codex/hooks
             index.json
           )
 

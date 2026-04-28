@@ -49,7 +49,7 @@ Skip this pillar if no UI files (`.tsx`, `.css`) in the diff.
 
 Follow the routing table in the design-authority skill to load specific reference files relevant to what changed. Do not load the entire `references/` directory — load only the files that correspond to the component types and concerns present in the diff.
 
-1. **Monochromatic discipline**: Predominantly grayscale with accent used sparingly. Run `skills/design-lint/checks/monochromatic.sh <changed-ui-files>` from the toolkit checkout to count distinct non-gray Tailwind color families and flag when the limit is exceeded. The check encapsulates the gray-family allowlist (gray/zinc/stone/neutral/slate) and the per-file family limit so this rule has one update site rather than parallel prose.
+1. **Monochromatic discipline**: Predominantly grayscale with accent used sparingly. Locate the `design-lint` skill directory, then run `checks/monochromatic.sh <changed-ui-files>` to count distinct non-gray Tailwind color families and flag when the limit is exceeded. The check encapsulates the gray-family allowlist (gray/zinc/stone/neutral/slate) and the per-file family limit so this rule has one update site rather than parallel prose.
 2. **Visual coherence**: Does this feel like part of the same app?
 3. **Density appropriateness**: Right density mode (marketing=spacious, platform=compact)?
 4. **Anti-convergence**: Does this look like generic AI-generated UI or designed for this project?

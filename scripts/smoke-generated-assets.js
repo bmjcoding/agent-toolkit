@@ -46,6 +46,51 @@ function listCanonicalSlugs(rootDir, markerFile) {
     .sort();
 }
 
+function extractFrontmatterBlock(content) {
+  const lines = content.split('\n');
+  if (lines.length < 2 || lines[0].trimEnd() !== '---') return '';
+
+  const closingIndex = lines.slice(1).findIndex(line => line.trimEnd() === '---');
+  if (closingIndex === -1) return '';
+
+  return lines.slice(1, closingIndex + 1).join('\n');
+}
+
+function extractFrontmatterField(frontmatter, fieldName, fallback = '') {
+  const match = frontmatter.match(new RegExp(`^${fieldName}:\\s*(.+)$`, 'm'));
+  if (!match) return fallback;
+  return match[1].trim().replace(/^['"]|['"]$/g, '');
+}
+
+function listSkillEntries() {
+  const skillsDir = path.join(REPO_ROOT, 'skills');
+  const results = [];
+  const seen = new Set();
+
+  function visit(absDir) {
+    const skillPath = path.join(absDir, 'SKILL.md');
+    if (fs.existsSync(skillPath)) {
+      const relPath = path.relative(REPO_ROOT, skillPath).split(path.sep).join('/');
+      const relDir = path.posix.dirname(relPath);
+      const parts = relDir.split('/').slice(1);
+      const frontmatter = extractFrontmatterBlock(readText(relPath));
+      const id = extractFrontmatterField(frontmatter, 'name', parts[parts.length - 1]);
+      if (seen.has(id)) throw new Error(`duplicate skill id in smoke scan: ${id}`);
+      seen.add(id);
+      results.push({ id, sourcePath: relPath });
+      return;
+    }
+
+    for (const entry of fs.readdirSync(absDir, { withFileTypes: true }).filter(item => item.isDirectory()).sort((a, b) => a.name.localeCompare(b.name))) {
+      if (entry.name.startsWith('.')) continue;
+      visit(path.join(absDir, entry.name));
+    }
+  }
+
+  visit(skillsDir);
+  return results.sort((a, b) => a.id.localeCompare(b.id));
+}
+
 function listRuleSlugs() {
   return fs.readdirSync(path.join(REPO_ROOT, 'rules'), { withFileTypes: true })
     .filter(entry => entry.isDirectory())
@@ -224,7 +269,7 @@ function parseTomlMultilineBasicString(text, key) {
 
 function assertGeneratedFilesExist() {
   const agents = listCanonicalSlugs('agents', 'AGENT.md');
-  const skills = listCanonicalSlugs('skills', 'SKILL.md');
+  const skills = listSkillEntries();
   const workflows = listCanonicalSlugs('workflows', 'WORKFLOW.md');
   const rules = listRuleSlugs();
   const hooks = listDirectoryBackedSlugs('hooks', slug => `${slug}.sh`);
@@ -329,16 +374,16 @@ function assertCatalogEntriesExist(agents, skills, workflows, rules, hooks) {
 
   for (const skill of skills) {
     assert(
-      artifactKeys.has(`claude-code|skills/${skill}/SKILL.md`),
-      `missing index.json entry for Claude skill ${skill}`
+      artifactKeys.has(`claude-code|${skill.sourcePath}`),
+      `missing index.json entry for Claude skill ${skill.id}`
     );
     assert(
-      artifactKeys.has(`github-copilot|skills/${skill}/SKILL.md`),
-      `missing index.json entry for GitHub Copilot skill ${skill}`
+      artifactKeys.has(`github-copilot|${skill.sourcePath}`),
+      `missing index.json entry for GitHub Copilot skill ${skill.id}`
     );
     assert(
-      artifactKeys.has(`openai-codex|skills/${skill}/SKILL.md`),
-      `missing index.json entry for OpenAI Codex skill ${skill}`
+      artifactKeys.has(`openai-codex|${skill.sourcePath}`),
+      `missing index.json entry for OpenAI Codex skill ${skill.id}`
     );
   }
 
@@ -543,6 +588,43 @@ function assertRetroStorageContract() {
   assert(overrideMatches.length > 0, 'expected AGENT_RETRO_DIR contract to appear in source docs/scripts');
 }
 
+function assertGeneratedInventoryContracts(skills, rules, hooks) {
+  const codexConfig = readText(path.join('openai-codex', 'config.toml.template'));
+  const skillsReadme = readText(path.join('skills', 'README.md'));
+  const rulesReadme = readText(path.join('rules', 'README.md'));
+  const copilotInstaller = readText(path.join('github-copilot', 'scripts', 'install.sh'));
+
+  for (const skill of skills) {
+    assert(
+      codexConfig.includes(`\${AGENT_TOOLKIT_DIR}/${skill.sourcePath}`),
+      `missing Codex skills.config entry for ${skill.id}`
+    );
+    assert(
+      skillsReadme.includes(`\`${skill.id}\``),
+      `missing skills/README.md inventory entry for ${skill.id}`
+    );
+  }
+
+  for (const rule of rules) {
+    assert(
+      rulesReadme.includes(`\`${rule}\``),
+      `missing rules/README.md inventory entry for ${rule}`
+    );
+  }
+
+  assert(
+    copilotInstaller.includes('find "${REPO_DIR}/github-copilot/hooks"'),
+    'expected GitHub Copilot installer to discover hook manifests dynamically'
+  );
+
+  for (const hook of hooks) {
+    assert(
+      exists(path.join('github-copilot', 'hooks', hook, `${hook}.json`)),
+      `missing generated GitHub Copilot hook manifest for ${hook}`
+    );
+  }
+}
+
 function main() {
   runNodeScript('scripts/sync-canonical-adapters.js');
   runNodeScript('scripts/generate-index.js');
@@ -557,9 +639,10 @@ function main() {
   assertCodexHookInstallContract(hooks);
   assertInstallCommandContracts(hooks);
   assertRetroStorageContract();
+  assertGeneratedInventoryContracts(skills, rules, hooks);
 
   process.stdout.write(
-    `Smoke test passed: ${agents.length} canonical agents, ${workflows.length} canonical workflows, ${rules.length} canonical rules, ${hooks.length} canonical hooks, and index.json are all generated.\n`
+    `Smoke test passed: ${agents.length} canonical agents, ${skills.length} canonical skills, ${workflows.length} canonical workflows, ${rules.length} canonical rules, ${hooks.length} canonical hooks, and index.json are all generated.\n`
   );
 }
 

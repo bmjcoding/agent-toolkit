@@ -6,7 +6,44 @@ Per-component changelogs live in each component's own `CHANGELOG.md`.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [4.11.0] - 2026-04-28
+
+### Added
+
+- Added `hooks/registry.json` as the shared hook metadata source for generated
+  Copilot and Codex adapters.
+- Added repo-level `sync`, `smoke`, `check`, `validate:lifecycle`, and
+  `validate:definitions` npm scripts plus a `scripts/lint-definition.py`
+  wrapper so common contributor checks have stable entrypoints.
+- Added a repo-local Claude `contribution-assistant` agent and
+  `contribution-changelog` skill for org contributors preparing toolkit pull
+  requests.
+- Exposed the canonical `definition-review` and `improve` skills through repo-local
+  `.claude/skills/` symlinks so the contribution assistant is self-contained.
+
+### Changed
+
+- Migrated shared skills to the categorized `skills/<category>/.../<slug>/`
+  layout and regenerated the distribution catalog, Codex config template, and
+  skill README from recursive skill discovery so future categories do not need
+  generator changes.
+- Made generated inventory checks verify categorized skill coverage, generated
+  rule and skill README coverage, Codex config coverage, and dynamic Copilot
+  hook manifest discovery.
+- Updated install, integrity, changelog, and component validation helpers to
+  understand categorized skill paths while retaining legacy flat-path fallbacks
+  where migration safety matters.
+- Mapped deleted legacy flat skill paths to the repository changelog during
+  component validation so category migrations do not invent subcomponent
+  changelog paths.
+- Updated component changelog validation and local `npm run check` so touched
+  components must add versioned changelog sections directly and `[Unreleased]`
+  sections are rejected for toolkit contributions.
+- Documented contributor category taxonomy and a changelog ownership decision
+  table for org-wide contribution onboarding.
+- Renamed the shared definition quality workflow to `definition-review` across
+  canonical skills, agents, bundles, generated adapters, CI paths, and
+  repo-local Claude skill links.
 
 ## [4.10.0] - 2026-04-28
 
@@ -23,7 +60,6 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
   from the canonical definitions.
 - Codex install now symlinks canonical root hooks and orchestrator helper scripts so
   generated hooks can resolve shared runtime logic without Claude-local paths.
-
 
 ## [4.9.0] - 2026-04-27
 
@@ -151,7 +187,7 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 - `index.json` artifacts now expose normalized `lifecycle` and `availability` metadata,
   include OpenAI Codex hook entries, validate hook runtime metadata from
   `tools/catalog-metadata.json`, and fail generation when either field is missing.
-- GitHub Actions now runs the `skills/review-skill/scripts/lint-definition.py`
+- GitHub Actions now runs the `skills/definition-review/scripts/lint-definition.py`
   deterministic schema checks for canonical `skills/**` and `agents/**` before the
   generated-asset validation/sync jobs, so malformed definitions fail CI before
   adapter sync proceeds.
@@ -433,7 +469,7 @@ No action required for users who install via symlinks (`./claude-code/scripts/in
 3. Re-run the install script: `./claude-code/scripts/install.sh`.
 4. Verify: `./claude-code/scripts/install.sh --check`.
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/v4.10.0...HEAD
+[4.11.0]: https://github.com/bmjcoding/agent-toolkit/compare/v4.10.0...v4.11.0
 [4.10.0]: https://github.com/bmjcoding/agent-toolkit/compare/v4.9.0...v4.10.0
 [4.7.0]: https://github.com/bmjcoding/agent-toolkit/compare/v4.6.1...v4.7.0
 [4.6.1]: https://github.com/bmjcoding/agent-toolkit/compare/v4.6.0...v4.6.1

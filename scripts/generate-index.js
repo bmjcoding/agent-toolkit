@@ -405,33 +405,55 @@ function readCanonicalWorkflows() {
 function readSharedSkills() {
   const skillsDir = path.join(REPO_ROOT, 'skills');
   const results = [];
+  const seen = new Set();
 
-  for (const entry of fs.readdirSync(skillsDir, { withFileTypes: true }).filter(dirent => dirent.isDirectory()).sort((a, b) => a.name.localeCompare(b.name))) {
-    const id = entry.name;
-    const skillPath = path.join(skillsDir, id, 'SKILL.md');
-    const content = readFileSafe(skillPath);
-    if (!content) continue;
+  function visit(dirPath) {
+    const skillPath = path.join(dirPath, 'SKILL.md');
+    if (exists(skillPath)) {
+      const content = readFileSafe(skillPath);
+      if (!content) return;
 
-    const frontmatter = parseFrontmatter(extractFrontmatterBlock(content));
-    results.push({
-      id,
-      description: frontmatter.description || '',
-      lifecycle: requireLifecycle(frontmatter.lifecycle, {
-        componentKind: 'skill',
-        componentId: id,
-        sourcePath: skillPath,
-      }),
-      version: readLatestReleasedVersion(path.join(skillsDir, id, 'CHANGELOG.md')),
-      sourcePath: relativePath(skillPath),
-      metadata: {
-        dependencies: Array.isArray(frontmatter.dependencies)
-          ? frontmatter.dependencies
-          : [],
-      },
-    });
+      const relPath = relativePath(skillPath);
+      const relDir = path.posix.dirname(relPath);
+      const pathParts = relDir.split('/').slice(1);
+      const category = pathParts.length > 1 ? pathParts.slice(0, -1).join('/') : 'uncategorized';
+      const fallbackId = pathParts[pathParts.length - 1];
+      const frontmatter = parseFrontmatter(extractFrontmatterBlock(content));
+      const id = frontmatter.name || fallbackId;
+
+      if (seen.has(id)) {
+        throw new Error(`duplicate shared skill id '${id}' while scanning skills/`);
+      }
+      seen.add(id);
+
+      results.push({
+        id,
+        description: frontmatter.description || '',
+        lifecycle: requireLifecycle(frontmatter.lifecycle, {
+          componentKind: 'skill',
+          componentId: id,
+          sourcePath: skillPath,
+        }),
+        version: readLatestReleasedVersion(path.join(REPO_ROOT, relDir, 'CHANGELOG.md')),
+        sourcePath: relPath,
+        metadata: {
+          category,
+          dependencies: Array.isArray(frontmatter.dependencies)
+            ? frontmatter.dependencies
+            : [],
+        },
+      });
+      return;
+    }
+
+    for (const entry of fs.readdirSync(dirPath, { withFileTypes: true }).filter(dirent => dirent.isDirectory()).sort((a, b) => a.name.localeCompare(b.name))) {
+      if (entry.name.startsWith('.')) continue;
+      visit(path.join(dirPath, entry.name));
+    }
   }
 
-  return results;
+  visit(skillsDir);
+  return results.sort((a, b) => a.id.localeCompare(b.id));
 }
 
 function readRootRules() {
@@ -663,7 +685,6 @@ function installPathForArtifact(targetTool, componentKind, componentId) {
     if (componentKind === 'command') return `~/.claude/commands/${componentId}/${componentId}.md`;
     if (componentKind === 'bundle') return `~/.claude/bundles/${componentId}/bundle.yaml`;
     if (componentKind === 'hook') return `~/.claude/hooks/${componentId}/${componentId}.sh`;
-    if (componentKind === 'skill') return `~/.claude/skills/${componentId}/SKILL.md`;
     if (componentKind === 'rule') return `~/.claude/rules/${componentId}/${componentId}.md`;
   }
 
@@ -672,15 +693,21 @@ function installPathForArtifact(targetTool, componentKind, componentId) {
     if (componentKind === 'command') return `.github/prompts/${componentId}.prompt.md`;
     if (componentKind === 'bundle') return `.github/bundles/${componentId}/bundle.yaml`;
     if (componentKind === 'hook') return `.github/hooks/${componentId}.json`;
-    if (componentKind === 'skill') return `skills/${componentId}/SKILL.md`;
     if (componentKind === 'rule') return `.github/instructions/${componentId}.instructions.md`;
   }
 
   if (targetTool === 'openai-codex') {
     if (componentKind === 'agent') return `~/.codex/agents/${componentId}.toml`;
-    if (componentKind === 'skill') return `.agents/skills/${componentId}/SKILL.md`;
   }
 
+  return null;
+}
+
+function installPathForSkill(targetTool, skill) {
+  const skillTreePath = skill.sourcePath;
+  if (targetTool === 'claude-code') return `~/.claude/${skillTreePath}`;
+  if (targetTool === 'github-copilot') return skillTreePath;
+  if (targetTool === 'openai-codex') return skillTreePath.replace(/^skills\//, '.agents/skills/');
   return null;
 }
 
@@ -855,7 +882,7 @@ function buildCatalog() {
 
   for (const skill of sharedSkills) {
     for (const targetTool of ['claude-code', 'github-copilot', 'openai-codex']) {
-      const installPath = installPathForArtifact(targetTool, 'skill', skill.id);
+      const installPath = installPathForSkill(targetTool, skill);
       catalog.artifacts.push(createArtifactRecord({
         componentId: skill.id,
         componentKind: 'skill',
@@ -1263,9 +1290,10 @@ function runTests() {
       entry => entry.component_id === 'backend'
         && entry.component_kind === 'skill'
         && entry.target_tool === 'github-copilot'
-        && entry.artifact_path === 'skills/backend/SKILL.md'
+        && entry.artifact_path.endsWith('/backend/SKILL.md')
+        && entry.metadata?.category
     ),
-    'expected github-copilot skill artifacts to resolve to the canonical root skill path'
+    'expected github-copilot skill artifacts to resolve to the categorized canonical skill path'
   );
   assert(
     catalog.artifacts.some(

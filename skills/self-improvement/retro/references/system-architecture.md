@@ -1,0 +1,127 @@
+# Self-Improvement System Architecture
+
+Diagram: `references/system-overview.svg` (or render `references/system-overview.mmd`)
+
+## Components
+
+### Skills (user-invocable workflows)
+
+| Skill | Purpose | Inputs | Outputs |
+|---|---|---|---|
+| `retro` | Post-run diagnosis | Git history, conversation, orchestrator artifacts | Retro markdown + JSON summary + trend data → `~/agent-retros/` |
+| `improve` | Apply retro recommendations | Retro output (from conversation or file) | File edits + improve outcome JSON → `~/agent-retros/` |
+| `definition-review` | Pre-merge quality gate | Skill/agent definition path | PASS / NEEDS WORK / REWRITE verdict |
+| `git-ship` | Git shipping (commit, PR, merge, cleanup) | Git state + $ARGUMENTS | Commits, PR, branch cleanup |
+| `prod-readiness` | Production readiness pipeline | Changed files | Build/lint/audit/test/verify + ship verdict |
+
+### Workflows (lightweight, stateless)
+
+| Workflow | Purpose |
+|---|---|
+| `lint` | Auto-fix linting and standards compliance |
+| `audit` | 14-dimension code quality audit |
+| `test` | Write tests to cover gaps, >=80% coverage |
+| `git-verify` | Secrets scan, sensitive files, commit quality |
+| `backlog` | View/manage deferred findings |
+
+### Agents (dispatched by orchestrators)
+
+| Agent | Dispatched by | Model recommendation |
+|---|---|---|
+| planner | orchestrator | opus (reasoning-heavy) |
+| plan-reviewer | orchestrator | sonnet |
+| frontend-engineer | orchestrator | opus (design system awareness) |
+| backend-engineer | orchestrator | opus |
+| staff-engineer | orchestrator | sonnet for data/config tasks |
+| integration-verifier | orchestrator | haiku for structural, opus for cross-QA |
+| quality-engineer | orchestrator | opus for remediation |
+| security-engineer | orchestrator | opus (threat modeling) |
+| site-reliability-engineer | orchestrator | opus |
+| design-architect | orchestrator | opus (judgment-heavy) |
+| release-gate | orchestrator | opus |
+| doc-writer | orchestrator | sonnet |
+| release-engineer | orchestrator | sonnet |
+
+### Scripts
+
+| Script | Lives in | Purpose |
+|---|---|---|
+| `parse-metrics.py` | retro | Parse orchestrator artifacts → structured JSON |
+| `verify-claims.py` | retro | Verify retro claims (file paths, agent IDs, SHAs, severities) |
+| `validate.py` | retro | Validate saved retro summary JSON against the v5.0 contract |
+| `retro-history.py` | retro | Save/list/trends for retro history with --subject filtering |
+| `lint-definition.py` | definition-review | 12 structural + 12 quality checks on skill/agent definitions |
+
+### Persistence
+
+All retro data lives at `~/agent-retros/` by default (override with `AGENT_RETRO_DIR`). This root is global and cross-project:
+
+```
+~/agent-retros/
+├── history.jsonl
+├── sessions/
+│   └── YYYY-MM/<session-id>/
+│       ├── YYYYMMDDTHHMMSS.md
+│       └── YYYYMMDDTHHMMSS.json
+├── skill-reviews/
+│   └── <skill>/YYYY-MM/
+├── agent-reviews/
+│   └── <agent>/YYYY-MM/
+└── meta/
+```
+
+### Changelogs
+
+Maintained by `improve` on version bumps:
+
+| Type | Location |
+|---|---|
+| Skills | `skills/{category}/{name}/CHANGELOG.md` (per-skill) |
+| Agents | `agents/{name}/CHANGELOG.md` (per-component) |
+| Workflows | `workflows/{name}/CHANGELOG.md` (per-component) |
+| Hooks | `claude-code/hooks/{name}/CHANGELOG.md` (per-component) |
+| Rules | `rules/{name}/CHANGELOG.md` (per-component) |
+
+## Flow
+
+### The feedback loop
+
+```
+Run task → retro (diagnosis) → improve (treatment) → next run
+                                                          ↓
+                                              retro (did treatment work?)
+```
+
+1. **Any workflow completes** (The orchestrator auto-prompts for retro; other workflows: user invokes)
+2. **`retro`** analyzes artifacts, identifies root causes, produces recommendations with file paths
+3. **`retro` saves** full markdown + summary JSON + appends to history.jsonl (with subject, project, run_type)
+4. **`retro` checks trends** — filters history by subject, flags regressions, notes if prior retro's improve was run
+5. **`retro` prompts** "Want me to run improve?"
+6. **`improve`** applies fixes with accept/revert verification, saves patterns to memory, records diffs
+7. **`improve` saves** outcome JSON + appends to history.jsonl
+8. **Next run** — retro compares: did the same root causes recur? Were accepted changes effective?
+
+### Pre-merge gate (for LOB contribution repos)
+
+```
+PR submitted → lint-definition.py --strict (CI) → definition-review (semantic) → merge or reject
+```
+
+- `lint-definition.py --strict` runs in CI — fails on any error or warning
+- `definition-review` runs semantic review → PASS / NEEDS WORK / REWRITE
+- NEEDS WORK output feeds directly into `improve` (same table format)
+
+### Cross-references
+
+| From | To | Mechanism |
+|---|---|---|
+| retro → improve | Recommendations table in conversation | improve parses section 3.7 from conversation context |
+| retro → validate.py | Script invocation | Resilient path: tries repo checkout, `.agents/`, `.claude/`, `.codex/`, then user-global installs |
+| improve → lint-definition.py | Script invocation | Resilient path: tries repo checkout, `.agents/`, `.claude/`, `.codex/`, then user-global installs |
+| retro → retro-history.py | Script invocation | Resilient path: tries repo checkout, `.agents/`, `.claude/`, `.codex/`, then user-global installs |
+| improve → retro-history.py | Script invocation | Resilient path: tries repo checkout, `.agents/`, `.claude/`, `.codex/`, then user-global installs |
+| definition-review → improve | NEEDS WORK output table | Same format as retro recommendations |
+| improve → definition-review | Rewrite threshold | 5+ findings on same file → recommend definition-review |
+| orchestrator → autoresearch-analyst (retro mode) | Agent dispatch | Phase 7a, isolated context, preloaded retro + improve skills |
+| orchestrator → autoresearch-analyst (improve mode) | Agent dispatch | Phase 7c, after user approves, isolated context |
+| retro (single-agent) → definition-review | Recommendation | "Rewrite signal" in single-agent-deep-dive.md |

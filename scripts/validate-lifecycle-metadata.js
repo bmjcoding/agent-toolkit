@@ -54,6 +54,26 @@ function validateMarkdownDefinitions(dirName, markerPathForEntry, errors) {
   }
 }
 
+function validateSkillDefinitions(errors) {
+  const skillsDir = path.join(REPO_ROOT, 'skills');
+
+  function visit(dirPath) {
+    const skillPath = path.join(dirPath, 'SKILL.md');
+    if (fs.existsSync(skillPath)) {
+      const frontmatter = extractFrontmatter(skillPath);
+      validateLifecycleValue(parseLifecycle(frontmatter), relativePath(skillPath), errors);
+      return;
+    }
+
+    for (const entry of fs.readdirSync(dirPath, { withFileTypes: true }).filter(item => item.isDirectory()).sort((a, b) => a.name.localeCompare(b.name))) {
+      if (entry.name.startsWith('.')) continue;
+      visit(path.join(dirPath, entry.name));
+    }
+  }
+
+  visit(skillsDir);
+}
+
 function validateCanonicalHooks(errors) {
   const hooksDir = path.join(REPO_ROOT, 'hooks');
   for (const entry of fs.readdirSync(hooksDir, { withFileTypes: true }).filter(item => item.isDirectory()).sort((a, b) => a.name.localeCompare(b.name))) {
@@ -86,7 +106,7 @@ function main() {
   const errors = [];
 
   validateMarkdownDefinitions('agents', name => `${name}/AGENT.md`, errors);
-  validateMarkdownDefinitions('skills', name => `${name}/SKILL.md`, errors);
+  validateSkillDefinitions(errors);
   validateMarkdownDefinitions('workflows', name => `${name}/WORKFLOW.md`, errors);
   validateMarkdownDefinitions('rules', name => `${name}/${name}.md`, errors);
   validateBundleStatuses(errors);

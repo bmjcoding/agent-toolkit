@@ -63,7 +63,7 @@ components:
     id: improve
     role: core
   - type: skill
-    id: review-skill
+    id: definition-review
     role: core
   - type: skill
     id: prod-readiness

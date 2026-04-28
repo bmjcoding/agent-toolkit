@@ -5,7 +5,12 @@ All notable changes to this component will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.2.0] - 2026-04-28
+
+### Changed
+
+- Updated skill changelog slug derivation to recognize categorized
+  `skills/<category>/<slug>/CHANGELOG.md` paths.
 
 ## [1.1.1] - 2026-04-16
 
@@ -27,7 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Root hook tag derivation now recognizes `hooks/<slug>/CHANGELOG.md` as `hook/<slug>` for the emerging shared hook namespace.
 - Historical release continuity remains in the prior tool-local changelog until the dedicated changelog-ownership migration phase moves fully to root `hooks/`.
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/hook/changelog-check-v1.1.1...HEAD
+[1.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/hook/changelog-check-v1.1.1...hook/changelog-check-v1.2.0
 [1.1.1]: https://github.com/bmjcoding/agent-toolkit/compare/hook/changelog-check-v1.1.0...hook/changelog-check-v1.1.1
 [1.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/hook/changelog-check-v1.0.0...hook/changelog-check-v1.1.0
 [1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/hook/changelog-check-v1.0.0

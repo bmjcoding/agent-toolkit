@@ -1,68 +1,67 @@
 # skills/
 
-Shared skill definitions — the single source of truth for universal skill content used
-across the toolkit's AI surfaces. Tool-specific directories may wrap or reference these
-skills, but the canonical content lives here.
+Shared skill definitions. Root `skills/` is the single source of truth for universal skill content used across the toolkit.
 
-## Skill Format
+## Layout
 
-Each skill lives in its own subdirectory with a required `SKILL.md` and optional supporting files:
+Skills are categorized on disk, while the frontmatter `name` remains the stable skill id:
 
-```
+```text
 skills/
-  <slug>/
-    SKILL.md          # Skill definition (frontmatter + instructions)
-    CHANGELOG.md      # Per-skill version history
-    evals/
-      evals.json      # Eval test cases
-    references/
-      *.md            # Reference documents loaded on demand
-    scripts/
-      *.py            # Helper scripts invoked by the skill
+  <category>/
+    ...
+      <slug>/
+        SKILL.md
+        CHANGELOG.md
+        references/
+        scripts/
+        evals/
 ```
 
-Frontmatter fields:
+Category directories are open-ended and discovered recursively. Adding, renaming, or splitting categories should not require generator changes as long as each skill directory contains `SKILL.md` and `CHANGELOG.md`.
 
-```yaml
----
-name: kebab-case-slug
-description: One-sentence description. Use when ...
-metadata:
-  version: X.Y.Z
----
-```
+Flat `skills/<slug>/` paths are treated as a legacy migration fallback only.
 
 ## Skills
 
-| Skill | Version | Description |
-|-------|---------|-------------|
-| `backend` | 1.1.0 | Lightweight backend workflow — implement with convention awareness, security review, and lint. |
-| `changelog` | 3.0.0 | Canonical CHANGELOG.md standard: Keep a Changelog 1.1.0 + SemVer, required header, version sections, categories, per-component tags, comparison links, bump table. |
-| `design-authority` | 1.1.0 | Design system guidance for generating and modifying frontend components. Provides token references, canonical patterns, and anti-convergence rules. |
-| `design-lint` | 1.1.0 | Deterministic design system linting checks. Defines grep/regex patterns run by the design-linter agent for Tailwind CSS/React components. |
-| `frontend` | 1.1.0 | Lightweight frontend workflow — implement with design system enforcement, review, and lint. |
-| `git-ship` | 1.1.0 | Git shipping workflow — commit, push, open PRs, enable auto-merge, and clean up worktrees. |
-| `improve` | 1.2.0 | Apply retro recommendations with automated verification. Supports `--validate` for accept/revert confirmation. |
-| `infra` | 1.1.0 | Lightweight infrastructure workflow — implement with SRE review for operational readiness. |
-| `observability-patterns` | 1.1.0 | Structured logging, health checks, metrics, and runbook patterns for SRE review and remediation. |
-| `owasp-reference` | 1.1.0 | OWASP Top 10, STRIDE threat modeling, and common vulnerability patterns for security review. |
-| `prod-readiness` | 1.1.0 | Full production readiness check — build, lint, audit, test, simplify, final validation, git verify, and ship verdict. |
-| `retro` | 1.1.0 | Run a retrospective on any completed run — single agent, subagent, skill, or orchestration pipeline. |
-| `review-skill` | 1.1.0 | Review a skill or agent definition for quality and correctness. Produces PASS / NEEDS WORK / REWRITE verdict. |
+| Category | Skill | Version | Lifecycle | Description |
+|---|---|---|---|---|
+| delivery | `changelog` | 6.4.0 | stable | Canonical CHANGELOG.md standard: Keep a Changelog 1.1.0 + SemVer, required header, version sections, categories, per-component tags, comparison links, bump table. Use when creating or editing any CHANGELOG.md in the toolkit. |
+| delivery | `git-ship` | 4.1.1 | stable | Git shipping workflow — commit, push, open PRs, enable auto-merge, and clean up worktrees. Use when the user wants to ship code, open a PR, merge, or clean up branches. |
+| delivery | `prod-readiness` | 4.2.0 | stable | Full production readiness check — build, lint, audit, test, simplify, final validation (internal phase, not a --validate flag), git verify, and ship verdict. Use when preparing code for production or before shipping. |
+| design | `design-authority` | 4.1.0 | stable | Design system guidance for generating and modifying frontend components. Provides token references, canonical patterns, and anti-convergence rules. Use when creating or editing React/Tailwind UI code. |
+| design | `design-lint` | 4.2.0 | stable | Deterministic design system linting checks. Use when reviewing Tailwind CSS/React components for structural violations. Defines grep/regex patterns run by the design-linter agent. |
+| development | `backend` | 4.3.0 | stable | Lightweight backend workflow — implement with convention awareness, security review, and lint. Use when making backend-led changes directly or inside a larger workflow. |
+| development | `frontend` | 4.3.0 | stable | Lightweight frontend workflow — implement with design system enforcement, review, and lint. Use when making frontend-led changes directly or inside a larger workflow. |
+| development | `infra` | 4.3.0 | stable | Lightweight infrastructure workflow — implement with SRE review for operational readiness. Use when making config, Docker, CI/CD, or infra-led changes directly or inside a larger workflow. |
+| reference | `observability-patterns` | 4.1.2 | stable | Structured logging, health checks, metrics, and runbook patterns for SRE review and remediation. Use when reviewing services for operational readiness or remediating observability gaps. |
+| reference | `owasp-reference` | 4.1.1 | stable | OWASP Top 10, STRIDE threat modeling, and common vulnerability patterns for security review. Use when performing security review on backend code, APIs, or auth flows. |
+| self-improvement | `definition-review` | 6.0.0 | stable | Review a skill or agent definition for quality and correctness. Use when evaluating a contribution before merging, after writing a new skill, or when a skill underperforms. Supports batch review of directories with parallel dispatch. |
+| self-improvement | `full-cycle` | 1.1.0 | stable | Use when `autoresearch-analyst` runs full-cycle mode. Applies retro recommendations, validates modified definitions with definition-review, and stops on convergence, max iterations, REWRITE verdict, or zero progress. |
+| self-improvement | `improve` | 4.6.0 | stable | Apply retro recommendations with automated verification. Use after `retro` or anytime you want to improve a skill/agent. Supports --validate for autonomous improve-then-review validation cycles. |
+| self-improvement | `on-demand` | 1.1.0 | stable | Use when `autoresearch-analyst` receives an ad-hoc skill or agent review request. Resolves targets, extracts user concerns, runs definition-review, and conditionally drives improve. |
+| self-improvement | `recon` | 1.1.0 | stable | Use when `autoresearch-analyst` runs recon mode before planning, especially for multi-repo toolkit pipelines. Reports branch, hook, working-tree, changelog, and planner-critical operational facts. |
+| self-improvement | `retro` | 5.4.0 | stable | Run a retrospective on any completed run — single agent, subagent, skill, or orchestration pipeline. Use when the user wants to debrief, analyze efficiency, or improve a workflow. |
+
+## Category Taxonomy
+
+- Categories are navigation, not identity. The stable skill id is the `name` frontmatter field.
+- Reuse an existing category when the new skill fits a contributor-facing domain already present.
+- Create a new category when the skill would otherwise make an existing category ambiguous, or when two or more related skills need a clearer home.
+- Nested categories are allowed for scale, for example `skills/platform/security/<slug>/`.
+- Use kebab-case category names. Do not encode lifecycle, target tool, owner, or release status in the category path.
 
 ## Tag Format
 
-```
+```text
 skill/<slug>-v<major>.<minor>.<patch>
 ```
 
-Example: `skill/retro-v1.1.0`
+The tag slug is the skill `name`, not the category path.
 
-## Adding a Skill
+## Adding A Skill
 
-1. Create `skills/<slug>/SKILL.md` following the schema above.
-2. Create `skills/<slug>/CHANGELOG.md` with the initial version entry.
-3. Add an entry to the table in this README.
-4. Refresh any tool-specific wrappers or install assets that reference the shared skill.
-5. If the skill is referenced from canonical agents or workflows, regenerate adapters with
-   `node scripts/sync-canonical-adapters.js`.
+1. Create `skills/<category>/.../<slug>/SKILL.md` with matching `name: <slug>` frontmatter.
+2. Create `skills/<category>/.../<slug>/CHANGELOG.md` with the initial version entry.
+3. Run `npm run sync` to refresh adapters, catalog inputs, and generated inventories.
+4. Run `npm run check` before opening a pull request.
