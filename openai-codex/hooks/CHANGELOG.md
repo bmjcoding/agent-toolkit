@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Generated Codex adapters for three new canonical hooks: `dispatch-validate/` (PreToolUse, matcher `.*`), `post-agent-audit/` (Stop, matcher `.*`), and `printf-lint/` (PostToolUse, matcher `.*`). Each adapter delegates directly to the canonical root hook script. `hooks.json` registry updated with the corresponding entries.
+- Generated Codex adapter for `git-signing-preflight/` (PreToolUse, matcher `Bash`). Verifies signing key availability before `git commit -S` / `git tag -s` runs. Delegates to the canonical root hook script. `hooks.json` registry updated.
+
+### Changed
+
+- `post-agent-audit` adapter now also validates the returning agent's handoff JSON against the schema via `validate-handoff.py`. Violations are recorded in the audit JSON the orchestrator inspects.
 
 ## [3.1.2] - 2026-04-17
 
