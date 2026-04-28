@@ -35,6 +35,13 @@ const HOOK_SPECS = {
     codexMatcher: '.*',
     codexStatusMessage: 'Extracting handoff JSON...',
   },
+  'git-signing-preflight': {
+    adapterKind: 'direct',
+    copilotEvent: 'PreToolUse',
+    codexEvent: 'PreToolUse',
+    codexMatcher: 'Bash',
+    codexStatusMessage: 'Pre-flighting git signing keys...',
+  },
   'inject-context': {
     adapterKind: 'direct',
     copilotEvent: 'SubagentStart',
@@ -84,6 +91,7 @@ const HOOK_ORDER = [
   'changelog-check',
   'dispatch-validate',
   'extract-handoff',
+  'git-signing-preflight',
   'inject-context',
   'integrity-warn',
   'post-agent-audit',

@@ -36,6 +36,16 @@
         "hooks": [
           {
             "type": "command",
+            "command": "${AGENT_TOOLKIT_DIR:-$HOME/.codex}/openai-codex/hooks/git-signing-preflight/git-signing-preflight.sh",
+            "statusMessage": "Pre-flighting git signing keys..."
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
             "command": "${AGENT_TOOLKIT_DIR:-$HOME/.codex}/openai-codex/hooks/pre-push-secrets/pre-push-secrets.sh",
             "statusMessage": "Scanning for secrets before push..."
           }

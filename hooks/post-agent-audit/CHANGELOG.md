@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Handoff schema validation: hook now invokes `~/.claude/scripts/validate-handoff.py`
+  on the returning agent's handoff JSON. Violations (invalid `severity` enum,
+  invalid `status` enum, wrong `files_written` type, malformed `agent_id`) are
+  recorded under `handoff_schema_violations` in the audit JSON the orchestrator
+  inspects. This eliminates the post-completion handoff rejection class that
+  previously cost 6+ rejection-and-retry cycles across the prior 10 retros.
+
 ## [1.0.0] - 2026-04-27
 
 ### Added
