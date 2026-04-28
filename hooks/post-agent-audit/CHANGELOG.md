@@ -31,6 +31,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   stopping). When out-of-scope writes are detected, stashes them as a named patch and
   records an audit JSON under `.orchestrator/sessions/$SID/`. Non-blocking by design —
   the orchestrator decides how to react.
-
-[1.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/hook/post-agent-audit-v1.0.0...hook/post-agent-audit-v1.1.0
-[1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/hook/post-agent-audit-v1.0.0

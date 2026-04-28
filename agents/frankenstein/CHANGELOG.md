@@ -73,7 +73,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Moved the canonical agent definition and changelog to `agents/frankenstein/`; Claude, Copilot, and Codex files are now tool-specific adapters generated from the shared source.
 - Updated comparison links to use the shared `agent/frankenstein` tag namespace for this root canonical component.
-- Phase 6a no longer promotes `[Unreleased]` CHANGELOG entries inline; promotion is now fully delegated to release-engineer (via `/changelog release`) so the promote, commit, tag, and push steps happen atomically in one place.
+- Phase 6a no longer promotes temporary unreleased CHANGELOG entries inline; promotion
+  is now fully delegated to release-engineer (via `/changelog release`) so the promote,
+  commit, tag, and push steps happen atomically in one place.
 
 ### Removed
 
@@ -165,11 +167,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Phase 6a pre-stage version-bump step: before staging, release-engineer inspects CHANGELOG.md files in plan scope for non-empty `[Unreleased]` sections and promotes them to versioned headers using the SemVer bump table from the `/changelog` skill (MINOR for Added/Changed, PATCH for Fixed/Security, MAJOR for Removed/breaking — MAJOR requires one-line user confirmation). Sets CHANGELOG_PROMOTED=true to prevent double-write during Step 2 changelog generation. Multi-repo aware: scoped to the current repo root via `git rev-parse --show-toplevel`, runs per-repo when the pipeline spans multiple repos.
+- Phase 6a pre-stage version-bump step: before staging, release-engineer inspects
+  CHANGELOG.md files in plan scope for non-empty temporary unreleased sections and
+  promotes them to versioned headers using the SemVer bump table from the `/changelog`
+  skill (MINOR for Added/Changed, PATCH for Fixed/Security, MAJOR for Removed/breaking;
+  MAJOR requires one-line user confirmation). Sets CHANGELOG_PROMOTED=true to prevent
+  double-write during Step 2 changelog generation. Multi-repo aware: scoped to the
+  current repo root via `git rev-parse --show-toplevel`, runs per-repo when the pipeline
+  spans multiple repos.
 
 ### Fixed
 
-- Comparison link footer corrected for v1.12.0: `[Unreleased]` pointer updated from `frankenstein-v1.11.0...HEAD` to `frankenstein-v1.12.0...HEAD`; missing `[1.12.0]` link definition added.
+- Comparison link footer corrected for v1.12.0: the unreleased pointer was updated from
+  `frankenstein-v1.11.0...HEAD` to `frankenstein-v1.12.0...HEAD`; missing `[1.12.0]`
+  link definition added.
 
 ## [1.12.0] - 2026-04-12
 
@@ -301,33 +312,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Initial release
-
-[5.4.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v5.3.0...agent/frankenstein-v5.4.0
-[5.3.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v5.2.0...agent/frankenstein-v5.3.0
-[5.1.2]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v5.1.1...agent/frankenstein-v5.1.2
-[5.1.1]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v5.1.0...agent/frankenstein-v5.1.1
-[5.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v5.0.0...agent/frankenstein-v5.1.0
-[5.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/agent/frankenstein-v5.0.0
-[4.5.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v4.4.0...agent/frankenstein-v4.5.0
-[4.4.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v4.3.1...agent/frankenstein-v4.4.0
-[4.3.1]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v4.3.0...agent/frankenstein-v4.3.1
-[4.3.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v4.2.0...agent/frankenstein-v4.3.0
-[4.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v4.1.0...agent/frankenstein-v4.2.0
-[4.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v4.0.0...agent/frankenstein-v4.1.0
-[4.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v3.0.0...agent/frankenstein-v4.0.0
-[3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v2.0.0...agent/frankenstein-v3.0.0
-[2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v1.13.0...agent/frankenstein-v2.0.0
-[1.13.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v1.12.0...agent/frankenstein-v1.13.0
-[1.12.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v1.11.0...agent/frankenstein-v1.12.0
-[1.11.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v1.10.0...agent/frankenstein-v1.11.0
-[1.10.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v1.9.0...agent/frankenstein-v1.10.0
-[1.9.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v1.8.0...agent/frankenstein-v1.9.0
-[1.8.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v1.7.0...agent/frankenstein-v1.8.0
-[1.7.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v1.6.0...agent/frankenstein-v1.7.0
-[1.6.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v1.5.0...agent/frankenstein-v1.6.0
-[1.5.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v1.4.0...agent/frankenstein-v1.5.0
-[1.4.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v1.3.0...agent/frankenstein-v1.4.0
-[1.3.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v1.2.0...agent/frankenstein-v1.3.0
-[1.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v1.1.0...agent/frankenstein-v1.2.0
-[1.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v1.0.0...agent/frankenstein-v1.1.0
-[1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/agent/frankenstein-v1.0.0

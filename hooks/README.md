@@ -7,6 +7,12 @@ Tool directories keep the runtime-specific adapter surfaces they need:
 - `github-copilot/hooks/` for VS Code Copilot manifests plus any payload adapters
 - `openai-codex/hooks/hooks.json` for the Codex registry plus any payload adapters
 
+## Contribution Entry Point
+
+Before opening a pull request that touches hooks, run the repo-local Claude contribution
+assistant at `.claude/agents/contribution-assistant.md`. It checks the changed hook,
+updates versioned changelogs, regenerates adapters, and runs the local gate.
+
 ## Layout
 
 Each logical hook lives under:

@@ -163,6 +163,7 @@ function nearestAncestorChangelog(relPath) {
 function mappedChangelog(relPath) {
   const explicitMappings = [
     [/^(?:README\.md|CONTRIBUTING\.md|AGENTS\.md|CLAUDE\.md|package(?:-lock)?\.json)$/, () => 'CHANGELOG.md'],
+    [/^(?:agents|skills|rules|workflows|hooks|bundles|claude-code|github-copilot|openai-codex)\/README\.md$/, () => 'CHANGELOG.md'],
     [/^(?:\.claude|\.github|docs|scripts)\//, () => 'CHANGELOG.md'],
     [/^agents\/([^/]+)\//, match => `agents/${match[1]}/CHANGELOG.md`],
     [/^skills\//, () => skillChangelog(relPath)],
@@ -263,6 +264,10 @@ function hasUnreleasedMarker(markdown) {
   return /^(?:## \[Unreleased\]|\[Unreleased\]:)/m.test(markdown);
 }
 
+function hasTagBackedVersionFooter(markdown) {
+  return /^\[(?:Unreleased|[0-9]+\.[0-9]+\.[0-9]+)\]:\s+https?:\/\/.+(?:\/compare\/|\/tree\/|\/releases\/tag\/)/m.test(markdown);
+}
+
 function hasVersionHeader(markdown) {
   return /^## \[[0-9]+\.[0-9]+\.[0-9]+\] - [0-9]{4}-[0-9]{2}-[0-9]{2}( \[YANKED\])?$/m.test(markdown);
 }
@@ -348,6 +353,13 @@ function main() {
           releaseFailures.push({
             changelog,
             reason: 'remove ## [Unreleased] sections and [Unreleased] footer links; add a versioned ## [X.Y.Z] - YYYY-MM-DD section for this contribution',
+          });
+        }
+
+        if (hasTagBackedVersionFooter(headContent)) {
+          releaseFailures.push({
+            changelog,
+            reason: 'remove tag-backed version footer links; changelog versions must remain portable to Bitbucket Data Center',
           });
         }
 

@@ -57,11 +57,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Initial release
-
-[4.3.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/infra-v4.2.0...skill/infra-v4.3.0
-[4.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/infra-v4.1.0...skill/infra-v4.2.0
-[4.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/infra-v4.0.0...skill/infra-v4.1.0
-[3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/infra-v2.0.0...skill/infra-v3.0.0
-[2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/infra-v1.1.0...skill/infra-v2.0.0
-[1.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/infra-v1.0.0...skill/infra-v1.1.0
-[1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/skill/infra-v1.0.0

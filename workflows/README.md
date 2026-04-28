@@ -2,6 +2,13 @@
 
 Canonical shared workflow definitions.
 
+## Contribution Entry Point
+
+Before opening a pull request that touches workflows, run the repo-local Claude
+contribution assistant at `.claude/agents/contribution-assistant.md`. It checks the
+changed workflow, updates versioned changelogs, regenerates adapters, and runs the local
+gate.
+
 ## Ownership
 
 - Root `workflows/` is the canonical editing surface for shared workflow semantics.

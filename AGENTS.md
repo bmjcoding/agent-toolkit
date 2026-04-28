@@ -18,6 +18,8 @@ Directory layout:
 
 ```text
 agent-toolkit/
+  .claude/       # Repo-local Claude contribution assistant and supporting skills
+  .github/       # GitHub CI, templates, and ownership metadata
   docs/
     adr/           # Repo-wide architecture decisions
   agents/          # Canonical shared agent instruction bodies
@@ -26,6 +28,7 @@ agent-toolkit/
   rules/           # Canonical shared rules
   workflows/       # Canonical shared workflow definitions
   bundles/         # Canonical shared bundle manifests
+  scripts/         # Repo maintenance, validation, generation, and smoke scripts
   claude-code/     # Claude-native agents, commands, hook docs, bundles, generated rule adapters, scripts
   github-copilot/  # VS Code Copilot-native agents, prompts, instructions, hooks, scripts
   openai-codex/    # Codex-native agents, hooks, config templates, rule build assets
@@ -45,9 +48,9 @@ agent-toolkit/
 - `CLAUDE.md` is a one-line Claude compatibility shim, not the canonical shared
   instruction source.
 - Tool directories should contain tool-native runtime assets or generated adapters only.
-- Shared skills are tagged as `skill/<slug>-v<major>.<minor>.<patch>`.
-- Shared rules are tagged as `rule/<slug>-v<major>.<minor>.<patch>`.
-- Shared hooks are tagged as `hook/<slug>-v<major>.<minor>.<patch>`.
+- Shared component versions live in their component `CHANGELOG.md` section headers.
+- Release tags and tag-backed comparison links are not required; keep changelog policy
+  portable to Bitbucket Data Center.
 
 ---
 

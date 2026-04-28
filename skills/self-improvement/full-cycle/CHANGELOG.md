@@ -29,6 +29,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   contract (converged / max_iterations / rewrite_verdict / no_progress), the
   single-outcome-file rule, and the handoff schema. Extracted from
   `autoresearch-analyst.md` so the workflow has a single update site.
-
-[1.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/full-cycle-v1.0.0...skill/full-cycle-v1.1.0
-[1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/skill/full-cycle-v1.0.0

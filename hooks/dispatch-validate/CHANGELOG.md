@@ -21,6 +21,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   missing retro suppression on non-retro dispatches, and missing mode words on
   autoresearch-analyst targets. Delegates to `~/.claude/scripts/dispatch-validator.py`
   so the rule has one update site. Denies the dispatch on P0/P1 findings.
-
-[1.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/hook/dispatch-validate-v1.0.0...hook/dispatch-validate-v1.1.0
-[1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/hook/dispatch-validate-v1.0.0

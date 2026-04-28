@@ -51,9 +51,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Initial release
-
-[4.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/extract-handoff-v3.0.0...claude-code/extract-handoff-v4.1.0
-[3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/extract-handoff-v2.0.0...claude-code/extract-handoff-v3.0.0
-[2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/extract-handoff-v1.1.0...claude-code/extract-handoff-v2.0.0
-[1.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/extract-handoff-v1.0.0...claude-code/extract-handoff-v1.1.0
-[1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/claude-code/extract-handoff-v1.0.0

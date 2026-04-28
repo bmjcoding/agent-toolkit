@@ -2,6 +2,12 @@
 
 Shared rule definitions — the single source of truth for rule content used across the toolkit's supported AI surfaces.
 
+## Contribution Entry Point
+
+Before opening a pull request that touches rules, run the repo-local Claude contribution
+assistant at `.claude/agents/contribution-assistant.md`. It checks the changed component,
+updates versioned changelogs, regenerates adapters, and runs the local gate.
+
 ## Ownership
 
 - Root `rules/` is canonical.
@@ -29,8 +35,7 @@ rules/
 | `python` | stable | Use uv for dependency management — never pip install directly. |
 | `untrusted-data-boundary` | stable | Untrusted Data Boundary |
 
-## Tag Format
+## Versioning
 
-```text
-rule/<slug>-v<major>.<minor>.<patch>
-```
+Rule versions live in each rule's `CHANGELOG.md` section headers. This repository does
+not require release tags for rule versions.

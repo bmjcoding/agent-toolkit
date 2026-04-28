@@ -524,6 +524,13 @@ function renderSkillsReadme(skills) {
     '',
     'Shared skill definitions. Root `skills/` is the single source of truth for universal skill content used across the toolkit.',
     '',
+    '## Contribution Entry Point',
+    '',
+    'Before opening a pull request that touches skills, run the repo-local Claude contribution',
+    'assistant at `.claude/agents/contribution-assistant.md`. It runs `definition-review` on',
+    'changed definitions, updates versioned changelogs, regenerates generated assets, and runs',
+    'the local gate.',
+    '',
     '## Layout',
     '',
     'Skills are categorized on disk, while the frontmatter `name` remains the stable skill id:',
@@ -563,13 +570,11 @@ function renderSkillsReadme(skills) {
   lines.push('- Nested categories are allowed for scale, for example `skills/platform/security/<slug>/`.');
   lines.push('- Use kebab-case category names. Do not encode lifecycle, target tool, owner, or release status in the category path.');
   lines.push('');
-  lines.push('## Tag Format');
+  lines.push('## Versioning');
   lines.push('');
-  lines.push('```text');
-  lines.push('skill/<slug>-v<major>.<minor>.<patch>');
-  lines.push('```');
-  lines.push('');
-  lines.push('The tag slug is the skill `name`, not the category path.');
+  lines.push('Skill versions live in each skill\'s `CHANGELOG.md` section headers. The stable skill id');
+  lines.push('is the `name` frontmatter field, not the category path, and this repository does not');
+  lines.push('require release tags for skill versions.');
   lines.push('');
   lines.push('## Adding A Skill');
   lines.push('');
@@ -587,6 +592,12 @@ function renderRulesReadme(rules) {
     '# rules/',
     '',
     'Shared rule definitions — the single source of truth for rule content used across the toolkit\'s supported AI surfaces.',
+    '',
+    '## Contribution Entry Point',
+    '',
+    'Before opening a pull request that touches rules, run the repo-local Claude contribution',
+    'assistant at `.claude/agents/contribution-assistant.md`. It checks the changed component,',
+    'updates versioned changelogs, regenerates adapters, and runs the local gate.',
     '',
     '## Ownership',
     '',
@@ -615,11 +626,10 @@ function renderRulesReadme(rules) {
   }
 
   lines.push('');
-  lines.push('## Tag Format');
+  lines.push('## Versioning');
   lines.push('');
-  lines.push('```text');
-  lines.push('rule/<slug>-v<major>.<minor>.<patch>');
-  lines.push('```');
+  lines.push('Rule versions live in each rule\'s `CHANGELOG.md` section headers. This repository does');
+  lines.push('not require release tags for rule versions.');
   lines.push('');
 
   return lines.join('\n');

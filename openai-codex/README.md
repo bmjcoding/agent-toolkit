@@ -5,6 +5,13 @@ agent wrappers, hook registry assets, configuration templates, and Codex-specifi
 composition assets. Canonical agent bodies, workflow bodies, skills, rules, and shared
 hook logic live at the repo root.
 
+## Contribution Entry Point
+
+Before opening a pull request that touches Codex-specific assets, run the repo-local
+Claude contribution assistant at `.claude/agents/contribution-assistant.md`. It checks the
+changed component, updates versioned changelogs, regenerates adapters, and runs the local
+gate.
+
 ## Subdirectory layout
 
 ```text
@@ -79,10 +86,8 @@ The checked-in Codex surface currently consists of agents, hooks, the config tem
 and rule build assets. Use the root `index.json` catalog for machine-readable artifact
 metadata.
 
-## Tag format
+## Versioning
 
-Tool-specific Codex assets use:
-
-```text
-openai-codex/<slug>-v<major>.<minor>.<patch>
-```
+Codex adapter versions are read from the canonical component changelog they mirror.
+Codex-only runtime assets keep their own `CHANGELOG.md` files. This repository does not
+require release tags or tag-backed comparison links.

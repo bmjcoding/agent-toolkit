@@ -104,17 +104,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Initial release
-
-[6.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/definition-review-v5.5.0...skill/definition-review-v6.0.0
-[5.5.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/definition-review-v5.4.0...skill/definition-review-v5.5.0
-[5.4.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/definition-review-v5.3.0...skill/definition-review-v5.4.0
-[5.3.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/definition-review-v5.2.0...skill/definition-review-v5.3.0
-[5.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/definition-review-v5.1.1...skill/definition-review-v5.2.0
-[5.1.1]: https://github.com/bmjcoding/agent-toolkit/compare/skill/definition-review-v5.1.0...skill/definition-review-v5.1.1
-[5.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/definition-review-v5.0.0...skill/definition-review-v5.1.0
-[5.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/definition-review-v4.0.0...skill/definition-review-v5.0.0
-[4.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/definition-review-v3.0.0...skill/definition-review-v4.0.0
-[3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/definition-review-v2.0.0...skill/definition-review-v3.0.0
-[2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/definition-review-v1.1.0...skill/definition-review-v2.0.0
-[1.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/definition-review-v1.0.0...skill/definition-review-v1.1.0
-[1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/skill/definition-review-v1.0.0

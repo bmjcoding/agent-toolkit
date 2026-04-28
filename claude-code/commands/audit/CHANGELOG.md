@@ -30,7 +30,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Initial release
-
-[3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/workflow/audit-v2.0.0...workflow/audit-v3.0.0
-[2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/workflow/audit-v1.0.0...workflow/audit-v2.0.0
-[1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/workflow/audit-v1.0.0

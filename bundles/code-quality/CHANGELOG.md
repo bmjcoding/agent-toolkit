@@ -16,6 +16,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Initial release as `bundle.yaml` (replacing the prior `manifest.json` bundle definition removed in toolkit v4.0.0).
-
-[1.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/code-quality-v1.0.0...bundle/code-quality-v1.1.0
-[1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/claude-code/code-quality-v1.0.0

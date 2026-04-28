@@ -28,6 +28,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   registration, working-tree state, branch status, changelog versions) and the
   recon-mode handoff schema. Extracted from `autoresearch-analyst.md` so the workflow
   has a single update site instead of being inlined in the agent body.
-
-[1.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/recon-v1.0.0...skill/recon-v1.1.0
-[1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/skill/recon-v1.0.0

@@ -21,5 +21,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   (openpgp format) based on `git config gpg.format`.
 - Denies with structured guidance pointing at the unlock step or a one-time
   bypass via `git -c <key>=false ...`.
-
-[1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/hook/git-signing-preflight-v1.0.0

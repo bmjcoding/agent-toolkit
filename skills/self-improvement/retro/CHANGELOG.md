@@ -171,22 +171,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Initial release
-
-[5.4.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/retro-v5.2.0...skill/retro-v5.4.0
-[5.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/retro-v5.1.2...skill/retro-v5.2.0
-[5.1.2]: https://github.com/bmjcoding/agent-toolkit/compare/skill/retro-v5.1.1...skill/retro-v5.1.2
-[5.1.1]: https://github.com/bmjcoding/agent-toolkit/compare/skill/retro-v5.1.0...skill/retro-v5.1.1
-[5.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/retro-v5.0.0...skill/retro-v5.1.0
-[5.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/retro-v4.2.4...skill/retro-v5.0.0
-[4.2.4]: https://github.com/bmjcoding/agent-toolkit/compare/skill/retro-v4.2.3...skill/retro-v4.2.4
-[4.2.3]: https://github.com/bmjcoding/agent-toolkit/compare/skill/retro-v4.2.2...skill/retro-v4.2.3
-[4.2.2]: https://github.com/bmjcoding/agent-toolkit/compare/skill/retro-v4.2.1...skill/retro-v4.2.2
-[4.2.1]: https://github.com/bmjcoding/agent-toolkit/compare/skill/retro-v4.2.0...skill/retro-v4.2.1
-[4.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/retro-v4.1.0...skill/retro-v4.2.0
-[4.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/retro-v4.0.1...skill/retro-v4.1.0
-[4.0.1]: https://github.com/bmjcoding/agent-toolkit/compare/skill/retro-v4.0.0...skill/retro-v4.0.1
-[4.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/retro-v3.0.0...skill/retro-v4.0.0
-[3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/retro-v2.0.0...skill/retro-v3.0.0
-[2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/retro-v1.1.0...skill/retro-v2.0.0
-[1.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/retro-v1.0.0...skill/retro-v1.1.0
-[1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/skill/retro-v1.0.0

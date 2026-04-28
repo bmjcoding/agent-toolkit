@@ -2,6 +2,12 @@
 
 Canonical shared agent instruction bodies.
 
+## Contribution Entry Point
+
+Before opening a pull request that touches agents, run the repo-local Claude contribution
+assistant at `.claude/agents/contribution-assistant.md`. It reviews the changed
+definitions, updates versioned changelogs, regenerates adapters, and runs the local gate.
+
 ## Ownership
 
 - Root `agents/` is the canonical editing surface for shared agent semantics.

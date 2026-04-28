@@ -144,18 +144,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Initial release
-
-[4.6.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/improve-v4.5.0...skill/improve-v4.6.0
-[4.5.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/improve-v4.4.1...skill/improve-v4.5.0
-[4.4.1]: https://github.com/bmjcoding/agent-toolkit/compare/skill/improve-v4.4.0...skill/improve-v4.4.1
-[4.4.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/improve-v4.3.1...skill/improve-v4.4.0
-[4.3.1]: https://github.com/bmjcoding/agent-toolkit/compare/skill/improve-v4.3.0...skill/improve-v4.3.1
-[4.3.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/improve-v4.2.1...skill/improve-v4.3.0
-[4.2.1]: https://github.com/bmjcoding/agent-toolkit/compare/skill/improve-v4.2.0...skill/improve-v4.2.1
-[4.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/improve-v4.1.0...skill/improve-v4.2.0
-[4.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/improve-v4.0.0...skill/improve-v4.1.0
-[3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/improve-v2.0.0...skill/improve-v3.0.0
-[2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/improve-v1.2.0...skill/improve-v2.0.0
-[1.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/improve-v1.1.0...skill/improve-v1.2.0
-[1.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/improve-v1.0.0...skill/improve-v1.1.0
-[1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/skill/improve-v1.0.0

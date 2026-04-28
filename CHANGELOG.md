@@ -6,6 +6,21 @@ Per-component changelogs live in each component's own `CHANGELOG.md`.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.12.0] - 2026-04-28
+
+### Added
+
+- Added near-top contribution-assistant entrypoints to root and top-level
+  directory README files.
+- Added a lightweight Claude contribution asset validation check to local and CI
+  validation.
+
+### Changed
+
+- Removed tag-backed changelog footer links across component changelogs and
+  updated changelog policy, validation, and release guidance for Bitbucket Data
+  Center portability.
+
 ## [4.11.0] - 2026-04-28
 
 ### Added
@@ -37,7 +52,7 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
   component validation so category migrations do not invent subcomponent
   changelog paths.
 - Updated component changelog validation and local `npm run check` so touched
-  components must add versioned changelog sections directly and `[Unreleased]`
+  components must add versioned changelog sections directly and unreleased staging
   sections are rejected for toolkit contributions.
 - Documented contributor category taxonomy and a changelog ownership decision
   table for org-wide contribution onboarding.
@@ -194,9 +209,9 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 - Added a component-specific CI changelog gate. Pull requests and pushes that modify a
   monitored component surface now fail unless the associated `CHANGELOG.md` for that
   exact component is updated in the same diff.
-- Pull requests now require touched component changelogs to promote PR-scoped notes out
-  of `## [Unreleased]` into a new dated versioned section, so version bumps happen
-  before review instead of waiting for merge.
+- Pull requests now require touched component changelogs to promote PR-scoped notes into
+  a new dated versioned section, so version bumps happen before review instead of
+  waiting for merge.
 - Fixed the component-changelog CI gate on first pushes to new branches by fetching the
   repository default branch before computing the fallback diff base.
 - Normalized the remaining workflow, rule, Claude command, and Claude hook changelog
@@ -209,8 +224,8 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
   their root definitions so generated adapters and the distribution catalog read
   maturity from one source of truth while tool-local support remains a separate
   availability concern.
-- Release-engineer and the changelog skill now treat `## [Unreleased]` as branch-local
-  scratch space only: PR-bound work is expected to be promoted into the next versioned
+- Release-engineer and the changelog skill now treat branch-local scratch notes as
+  temporary only: PR-bound work is expected to be promoted into the next versioned
   section before the PR is opened.
 
 ## [4.2.1] - 2026-04-15
@@ -468,20 +483,3 @@ No action required for users who install via symlinks (`./claude-code/scripts/in
 2. Remove stale symlinks: `rm ~/.claude/{agents,commands,docs,hooks,rules,skills}`.
 3. Re-run the install script: `./claude-code/scripts/install.sh`.
 4. Verify: `./claude-code/scripts/install.sh --check`.
-
-[4.11.0]: https://github.com/bmjcoding/agent-toolkit/compare/v4.10.0...v4.11.0
-[4.10.0]: https://github.com/bmjcoding/agent-toolkit/compare/v4.9.0...v4.10.0
-[4.7.0]: https://github.com/bmjcoding/agent-toolkit/compare/v4.6.1...v4.7.0
-[4.6.1]: https://github.com/bmjcoding/agent-toolkit/compare/v4.6.0...v4.6.1
-[4.6.0]: https://github.com/bmjcoding/agent-toolkit/compare/v4.5.0...v4.6.0
-[4.5.0]: https://github.com/bmjcoding/agent-toolkit/compare/v4.4.0...v4.5.0
-[4.4.0]: https://github.com/bmjcoding/agent-toolkit/compare/v4.3.0...v4.4.0
-[4.3.0]: https://github.com/bmjcoding/agent-toolkit/compare/v4.2.1...v4.3.0
-[4.2.1]: https://github.com/bmjcoding/agent-toolkit/compare/v4.2.0...v4.2.1
-[4.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/v4.1.0...v4.2.0
-[4.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/v4.0.0...v4.1.0
-[4.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/v3.2.0...v4.0.0
-[3.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/v3.1.0...v3.2.0
-[3.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/v3.0.0...v3.1.0
-[3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/v2.0.0...v3.0.0
-[2.0.0]: https://github.com/bmjcoding/agent-toolkit/releases/tag/v2.0.0
