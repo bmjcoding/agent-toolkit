@@ -8,6 +8,27 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [4.9.0] - 2026-04-27
+
+### Added
+
+- New shared rule `rules/untrusted-data-boundary/` consolidates the four input-classification invariants previously duplicated across every agent definition. Each agent now references the rule and keeps only its role-specific safety items.
+- New shared rule `rules/finding-discipline/` consolidates the `findings[]` vs `notes` vs `findings_resolved[]` routing guidance previously duplicated between security-engineer and site-reliability-engineer.
+- New skills `skills/recon/`, `skills/full-cycle/`, `skills/on-demand/` carry workflow content that previously lived inline in `autoresearch-analyst`. The agent now routes to the loaded skill by mode keyword.
+- New design-lint check `skills/design-lint/checks/monochromatic.sh` enforces the non-gray Tailwind family limit programmatically. Replaces inline prose in design-architect and frontend-engineer.
+- New hooks (registered in `~/.claude/settings.json`):
+  - `hooks/dispatch-validate/` — PreToolUse on Agent dispatches; runs `dispatch-validator.py` to block forbidden retro combinations, missing retro-suppression lines, and missing mode words.
+  - `hooks/post-agent-audit/` — SubagentStop; runs `post-agent-audit.sh` to detect out-of-scope file modifications and truncation symptoms, stashing out-of-scope writes for review.
+  - `hooks/printf-lint/` — PostToolUse on Edit/Write of `*.sh`; runs `lint-printf-newlines.sh`.
+- New SessionStart hook entry validates `~/.claude/routing-config.json` against the schema.
+
+### Changed
+
+- Extracted ~150 lines of inline backlog-seeding Python from `frankenstein.md` into `~/.claude/scripts/seed-backlog.py`.
+- Updated `skills/retro/scripts/parse-metrics.py` to emit a stable `agent_logs_diagnostic` (with `status`, `reason`, `human_message`) when token data is unreadable. Retro consumers surface the `human_message` verbatim instead of fabricating an exception text.
+- Frankenstein's pre-flight, drift-check, plan-validate, diff-budget, model-tier, security-review, schema-inventory, and classifier-outage blocks all moved to script references or `~/.claude/routing-config.json` entries. Total reduction: 803 → 486 lines (~40%).
+- `autoresearch-analyst` collapsed from 279 → 142 lines by routing modes through the new skills.
+
 ## [4.8.0] - 2026-04-16
 
 ### Changed

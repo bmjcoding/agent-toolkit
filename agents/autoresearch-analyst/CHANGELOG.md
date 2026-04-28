@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [6.2.0] - 2026-04-27
+
+### Changed
+
+- Collapsed the six per-mode workflow blocks into the new `recon`, `full-cycle`, and `on-demand` skills (retro / improve / review-skill already existed). The agent body now routes by mode keyword and defers to the loaded skill, dropping ~150 lines of duplicated workflow prose.
+- Replaced the `Untrusted Data Boundary` invariants block with a reference to `rules/untrusted-data-boundary/`. Role-specific safety rules and the instruction sandwich remain.
+- Removed the hardcoded "20-files / maxTurns=80" improve batch threshold; agents now call `~/.claude/scripts/dispatch-budget.py` which derives the per-agent ceiling from live inputs.
+- Replaced the multi-domain consolidation prose with a reference to `~/.claude/scripts/consolidate-findings.py`.
+- The dispatch-shape gotchas (forbidden retro combination, missing retro suppression, missing mode word) now point at `~/.claude/scripts/dispatch-validator.py`. The same checks run automatically as a `dispatch-validate` PreToolUse hook.
+- The "metrics section guardrail" now surfaces the stable `agent_logs_diagnostic` from `parse-metrics.py` verbatim instead of describing how to fabricate the message.
+
 ## [6.1.0] - 2026-04-15
 
 ### Added

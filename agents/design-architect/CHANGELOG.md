@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.0] - 2026-04-27
+
+### Changed
+
+- Replaced the inline Tailwind gray-family allowlist in Pillar C with a reference to `~/.claude/skills/design-lint/checks/monochromatic.sh`. The check is the source of truth for the allowed gray families and the per-file family limit; agents reading the design-architect definition no longer need to maintain a parallel list.
+- Replaced the `Untrusted Data Boundary` invariants block with a reference to `rules/untrusted-data-boundary/`.
+
 ## [2.1.0] - 2026-04-15
 
 ### Changed
