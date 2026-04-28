@@ -139,19 +139,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Initial release
-
-[6.3.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/autoresearch-analyst-v6.2.1...agent/autoresearch-analyst-v6.3.0
-[6.2.1]: https://github.com/bmjcoding/agent-toolkit/compare/agent/autoresearch-analyst-v6.2.0...agent/autoresearch-analyst-v6.2.1
-[6.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/autoresearch-analyst-v6.0.0...agent/autoresearch-analyst-v6.1.0
-[6.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/agent/autoresearch-analyst-v6.0.0
-[5.1.1]: https://github.com/bmjcoding/agent-toolkit/compare/agent/autoresearch-analyst-v5.1.0...agent/autoresearch-analyst-v5.1.1
-[5.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/autoresearch-analyst-v5.0.1...agent/autoresearch-analyst-v5.1.0
-[5.0.1]: https://github.com/bmjcoding/agent-toolkit/compare/agent/autoresearch-analyst-v5.0.0...agent/autoresearch-analyst-v5.0.1
-[5.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/autoresearch-analyst-v4.1.1...agent/autoresearch-analyst-v5.0.0
-[4.1.1]: https://github.com/bmjcoding/agent-toolkit/compare/agent/autoresearch-analyst-v4.1.0...agent/autoresearch-analyst-v4.1.1
-[4.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/autoresearch-analyst-v4.0.0...agent/autoresearch-analyst-v4.1.0
-[4.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/autoresearch-analyst-v3.0.0...agent/autoresearch-analyst-v4.0.0
-[3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/autoresearch-analyst-v2.0.0...agent/autoresearch-analyst-v3.0.0
-[2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/autoresearch-analyst-v1.5.0...agent/autoresearch-analyst-v2.0.0
-[1.5.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/autoresearch-analyst-v1.4.3...agent/autoresearch-analyst-v1.5.0
-[1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/agent/autoresearch-analyst-v1.0.0

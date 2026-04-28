@@ -2,6 +2,13 @@
 
 Shared skill definitions. Root `skills/` is the single source of truth for universal skill content used across the toolkit.
 
+## Contribution Entry Point
+
+Before opening a pull request that touches skills, run the repo-local Claude contribution
+assistant at `.claude/agents/contribution-assistant.md`. It runs `definition-review` on
+changed definitions, updates versioned changelogs, regenerates generated assets, and runs
+the local gate.
+
 ## Layout
 
 Skills are categorized on disk, while the frontmatter `name` remains the stable skill id:
@@ -26,7 +33,7 @@ Flat `skills/<slug>/` paths are treated as a legacy migration fallback only.
 
 | Category | Skill | Version | Lifecycle | Description |
 |---|---|---|---|---|
-| delivery | `changelog` | 6.4.0 | stable | Canonical CHANGELOG.md standard: Keep a Changelog 1.1.0 + SemVer, required header, version sections, categories, per-component tags, comparison links, bump table. Use when creating or editing any CHANGELOG.md in the toolkit. |
+| delivery | `changelog` | 7.0.0 | stable | Canonical CHANGELOG.md standard: Keep a Changelog 1.1.0 + SemVer, required header, version sections, categories, version footers, bump table. Use when creating or editing any CHANGELOG.md in the toolkit. |
 | delivery | `git-ship` | 4.1.1 | stable | Git shipping workflow — commit, push, open PRs, enable auto-merge, and clean up worktrees. Use when the user wants to ship code, open a PR, merge, or clean up branches. |
 | delivery | `prod-readiness` | 4.2.0 | stable | Full production readiness check — build, lint, audit, test, simplify, final validation (internal phase, not a --validate flag), git verify, and ship verdict. Use when preparing code for production or before shipping. |
 | design | `design-authority` | 4.1.0 | stable | Design system guidance for generating and modifying frontend components. Provides token references, canonical patterns, and anti-convergence rules. Use when creating or editing React/Tailwind UI code. |
@@ -51,13 +58,11 @@ Flat `skills/<slug>/` paths are treated as a legacy migration fallback only.
 - Nested categories are allowed for scale, for example `skills/platform/security/<slug>/`.
 - Use kebab-case category names. Do not encode lifecycle, target tool, owner, or release status in the category path.
 
-## Tag Format
+## Versioning
 
-```text
-skill/<slug>-v<major>.<minor>.<patch>
-```
-
-The tag slug is the skill `name`, not the category path.
+Skill versions live in each skill's `CHANGELOG.md` section headers. The stable skill id
+is the `name` frontmatter field, not the category path, and this repository does not
+require release tags for skill versions.
 
 ## Adding A Skill
 

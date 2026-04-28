@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - "agents/**"
+      - ".claude/**"
       - "bundles/**"
       - "hooks/**"
       - "skills/**"
@@ -18,6 +19,7 @@ on:
       - "github-copilot/prompts/**"
       - "github-copilot/hooks/**"
       - "scripts/smoke-generated-assets.js"
+      - "scripts/validate-claude-assets.js"
       - "openai-codex/agents/**"
       - "openai-codex/hooks/**"
       - "scripts/sync-canonical-adapters.js"
@@ -31,6 +33,7 @@ on:
   pull_request:
     paths:
       - "agents/**"
+      - ".claude/**"
       - "bundles/**"
       - "hooks/**"
       - "skills/**"
@@ -45,6 +48,7 @@ on:
       - "github-copilot/prompts/**"
       - "github-copilot/hooks/**"
       - "scripts/smoke-generated-assets.js"
+      - "scripts/validate-claude-assets.js"
       - "openai-codex/agents/**"
       - "openai-codex/hooks/**"
       - "scripts/sync-canonical-adapters.js"
@@ -147,6 +151,9 @@ jobs:
       - name: Validate Lifecycle Metadata
         run: node scripts/validate-lifecycle-metadata.js
 
+      - name: Validate Claude Contribution Assets
+        run: node scripts/validate-claude-assets.js
+
       - name: Run Generator Smoke Test
         run: node scripts/smoke-generated-assets.js
 
@@ -195,6 +202,9 @@ jobs:
 
       - name: Validate Lifecycle Metadata
         run: node scripts/validate-lifecycle-metadata.js
+
+      - name: Validate Claude Contribution Assets
+        run: node scripts/validate-claude-assets.js
 
       - name: Run Generator Smoke Test
         run: node scripts/smoke-generated-assets.js

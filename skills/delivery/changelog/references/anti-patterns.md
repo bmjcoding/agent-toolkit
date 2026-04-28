@@ -10,19 +10,16 @@ this file when linting a CHANGELOG or authoring automated entry generation.
 |---|---|---|
 | `## X.Y.Z` without brackets | Formatting | Breaks tooling that parses `## [x.y.z]` format |
 | Non-ISO dates (e.g., `04/05/26`) | Formatting | Ambiguous and unacceptable |
-| No `## [Unreleased]` section | Formatting | Forces readers to diff branches to see in-progress work |
-| Missing comparison links | Formatting | Breaks changelog-as-navigation; diffs are one click away |
-| Footer link uses `releases/tag/` when no GitHub Release object exists | Formatting | URL 404s; use `tree/{slug}-v{version}` as the always-valid default |
+| No `## [Unreleased]` section when using branch-local release workflow | Formatting | Forces readers to diff branches to see in-progress work |
+| Tag-backed comparison links | Formatting | Not portable to Bitbucket Data Center; omit version link footers unless a non-tag-backed URL scheme exists |
 | Version gaps (1.0.0 to 1.3.0 without 1.1.0 and 1.2.0) | Formatting | Implies undocumented changes; reconstruct or renumber |
 | Commit-log dumps (`git log`) | Process | Noise; conflates internal churn with user-facing change |
-| Using a future or guessed release date | Process | Date must be the actual tag-push date in ISO 8601; placeholders like `YYYY-MM-DD` left in published CHANGELOGs are invalid |
-| Compare link references a tag that does not exist in the repo | Process | Link 404s silently; verify every tag in the link footer exists with `git tag -l "{slug}-v*"` before publishing |
-| Using a lightweight or unsigned tag for a released version | Process | Provenance cannot be verified and `--follow-tags` will not carry lightweight tags; use signed annotated tags via `git tag -s -m "{tag}" "{tag}"` |
-| Hardcoding a GitHub compare URL in a project hosted on GitLab or Bitbucket | Process | URL will 404; use the correct platform template from `references/platform-urls.md` |
-| Using a monolithic repo tag (`v1.2.0`) in a monorepo with per-component changelogs | Process | Implies a single release covering all components; use per-component tags (`{slug}-v{version}`) |
+| Using a future or guessed release date | Process | Date must be the actual release-section date in ISO 8601; placeholders like `YYYY-MM-DD` left in published CHANGELOGs are invalid |
+| Hardcoding a GitHub compare URL in a project hosted on Bitbucket | Process | URL will 404; omit footers until the target host has a stable non-tag-backed URL |
+| Using repository-level version assumptions for component changes | Process | Implies a single release covering all components; bump only touched component changelogs |
 | Lumping unrelated changes | Semantic | One bullet = one idea; avoid "and also fixed X" entries |
 | `## [1.0.1] - 2025-04-11 [YANKED]` without explanation | Semantic | Yanked releases must explain why in the section body |
-| Version comment in definition file not updated after renumbering | Semantic | Leaves definition file reporting a version that does not match the CHANGELOG — see `references/migration.md` → Version Renumbering |
+| Version comment in definition file not updated after renumbering | Semantic | Leaves definition file reporting a version that does not match the CHANGELOG |
 | Omitting `### Deprecated` entries when features are deprecated | Semantic | Violates KaC bad-practices; users cannot anticipate removals — see https://keepachangelog.com/en/1.1.0/#bad-practices |
 | Tagging a pre-release as a stable version (e.g., `1.0.0-rc.1` shipped as `1.0.0`) | Semantic | Hides stability status from consumers. Use SemVer pre-release identifiers (-alpha, -beta, -rc.N) and document them under `[Unreleased]` until promoting to stable. See [KaC bad practices](https://keepachangelog.com/en/1.1.0/#bad-practices). |
 
@@ -69,5 +66,4 @@ Rules:
 - The section body **must** include a brief explanation of why the release was yanked
   and, if applicable, which version to use instead.
 - Do not delete the section — the entry must remain in the changelog for auditability.
-- Update the comparison link at the bottom of the file as normal; yanking does not
-  affect link structure.
+- Do not add tag-backed comparison links for yanked releases.

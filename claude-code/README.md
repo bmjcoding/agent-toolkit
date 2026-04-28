@@ -4,6 +4,13 @@ This directory contains **Claude Code-specific adapters and runtime assets** —
 that exist because Claude Code requires native YAML frontmatter, slash-command files, hook
 event wiring, and install surfaces that differ from other tools.
 
+## Contribution Entry Point
+
+Before opening a pull request that touches Claude-specific assets, run the repo-local
+Claude contribution assistant at `.claude/agents/contribution-assistant.md`. It checks the
+changed component, updates versioned changelogs, regenerates adapters, and runs the local
+gate.
+
 ## Subdirectory Layout
 
 ```
@@ -68,23 +75,8 @@ redirects for the old Claude-owned hook path.
 - **Rule** (`<name>.md`): Generated Claude-facing adapter for the canonical root
   `rules/<name>/<name>.md` body.
 
-## Tag Format
+## Versioning
 
-Shared Claude adapters use the canonical tag lineage of the root component they mirror:
-
-```text
-agent/<slug>-v<major>.<minor>.<patch>
-workflow/<slug>-v<major>.<minor>.<patch>
-```
-
-Examples: `agent/frankenstein-v3.1.0`, `workflow/backlog-v5.0.0`
-
-Claude-only runtime assets keep the `claude-code/` namespace:
-
-```text
-claude-code/<slug>-v<major>.<minor>.<patch>
-```
-
-Example: `claude-code/branch-guard-v3.0.0`
-
-Use `claude-code/*` only for tool-native surfaces such as hooks and bundles.
+Claude adapter versions are read from the canonical component changelog they mirror.
+Claude-only runtime assets keep their own `CHANGELOG.md` files. This repository does not
+require release tags or tag-backed comparison links.

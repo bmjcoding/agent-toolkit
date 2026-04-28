@@ -60,10 +60,7 @@ touched changelog in scope:
    skill's SemVer bump rules and leave behind a fresh empty `## [Unreleased]`.
 4. If this run is only recording branch-local work and will NOT open a PR yet, append
    under `## [Unreleased]` instead of promoting.
-5. For every promoted changelog, derive the expected release tag using the changelog
-   skill's rules. Component changelogs use namespaced tags such as
-   `agent/release-engineer-vX.Y.Z`; the repository-root `CHANGELOG.md` is the one
-   exception and uses bare `vX.Y.Z`.
+5. Remove any tag-backed version link footers from touched changelogs.
 6. Stage the resulting `CHANGELOG.md` files alongside all other changes.
 
 PR-bound runs must not leave touched component changes sitting under a non-empty
@@ -83,11 +80,6 @@ available or the repo has no component changelogs, skip this step silently.
    - **Compilation ordering takes precedence over the 10-commit limit.** Batch within a logical tier (e.g., all type-layer commits as one, all service-layer commits as one), but never merge commits across compilation tiers just to reduce count.
    - If >10 logical commits after applying tier batching, batch related small changes within the same tier to stay under 10
    - Commit body explains WHY, not just WHAT
-   - If a commit contains a promoted `CHANGELOG.md`, create the matching release tag(s)
-     immediately after the commit succeeds: `git tag -s -m '<tag>' '<tag>' HEAD`
-   - Release tags must be signed annotated tags. Never create lightweight tags.
-   - If tag signing fails, stop with `status: needs_human` and report the signing-agent
-     failure. Do not fall back to unsigned tags.
    - **Pre-commit hook failures**: If `git commit` fails due to a hook: (1) read the error output, (2) fix the issue if auto-fixable (lint error, formatting), (3) re-stage and retry once. If still failing after one retry, set `status: needs_human` in the handoff and stop — do not loop.
 
 ## Step 4: Write PR Description
@@ -107,8 +99,10 @@ file (`package.json`, `pyproject.toml`, `VERSION`, etc.).
 1. Find version file: `package.json`, `pyproject.toml`, `Cargo.toml`, `version.txt`, or `VERSION`
 2. Determine bump type: breaking → major, feat → minor, fix/docs/refactor → patch
 3. Bump version in manifest, commit: `chore: bump version to <new>`
-4. Create signed annotated git tag: `git tag -s -m "v<new_version>" "v<new_version>"`
-5. Optionally create GitHub release: `gh release create v<new_version> --notes-file .orchestrator/sessions/$SID/context/pr-description.md`
+4. Do not create a release tag. This toolkit keeps version history in changelog section
+   headers for Bitbucket Data Center portability.
+5. Optionally create a host-native release only if the target repository supports a
+   non-tag release object.
 
 Skip this step unless the orchestrator explicitly requests versioning.
 
@@ -120,7 +114,7 @@ Skip this step unless the orchestrator explicitly requests versioning.
    - `ruff.toml` or `pyproject.toml` with `[tool.ruff]` → `ruff check <files>`
    - No linter config found → skip and note "no linter config found" in the PR description
    If lint finds unfixable issues, note them in the PR description as known issues — do not block the push, but warn.
-2. `git push -u origin <branch> --follow-tags`
+2. `git push -u origin <branch>`
 3. `gh pr create --base "${DEFAULT_BRANCH:-main}" --body "$(cat .orchestrator/sessions/$SID/context/pr-description.md)"`
 4. Include ship flags (--draft, --auto-merge) from the task prompt
 5. If push fails, diagnose and report
@@ -134,7 +128,6 @@ Skip this step unless the orchestrator explicitly requests versioning.
 
 - **Push fails with branch protection**: The remote may require PR reviews or status checks before pushing. If `git push` is rejected, report the protection rule — don't try to bypass it.
 - **`gh` not authenticated**: If `gh pr create` fails with auth errors, report it and provide the PR description so the user can create it manually. Don't retry.
-- **`git tag -s` fails**: The signing key or agent is unavailable. Request an unrestricted shell if the environment is sandboxed, or stop with `status: needs_human`. Do not create unsigned replacement tags.
 - **Version file not found**: If the task requests versioning but no version file exists in the standard locations, skip versioning and note it in the handoff — don't create a version file from scratch.
 - **Commit ordering matters**: If you commit a file that imports from a not-yet-committed file, the repo won't compile at that commit. Always commit foundations (types, schemas) before consumers.
 - **Large diffs**: If `git diff --stat` shows >50 files, batch commits by subtask group rather than individual file-level granularity to stay under 10 commits.

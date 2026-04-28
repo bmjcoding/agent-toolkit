@@ -9,7 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Tag-presence enforcement: the pre-push hook now verifies that any `## [X.Y.Z]` header newly promoted from `[Unreleased]` in this push has a corresponding per-component git tag (`<slug>-vX.Y.Z`). Push is blocked until the tag exists, preventing version headers from landing without an accompanying tag.
+- Tag-presence enforcement: the pre-push hook now verifies that any `## [X.Y.Z]` header
+  newly promoted from temporary unreleased staging in this push has a corresponding
+  per-component git tag (`<slug>-vX.Y.Z`). Push is blocked until the tag exists,
+  preventing version headers from landing without an accompanying tag.
 
 ### Changed
 
@@ -39,16 +42,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Format validation — verify touched CHANGELOG.md has a valid KaC header (## [X.Y.Z] - YYYY-MM-DD or ## [Unreleased]) in addition to the existing presence check
+- Format validation — verify touched CHANGELOG.md has a valid Keep a Changelog header in addition to the existing presence check
 
 ## [1.0.0] - 2026-04-11
 
 ### Added
 
 - Initial release
-
-[4.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/changelog-check-v3.0.0...claude-code/changelog-check-v4.1.0
-[3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/changelog-check-v2.0.0...claude-code/changelog-check-v3.0.0
-[2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/changelog-check-v1.1.0...claude-code/changelog-check-v2.0.0
-[1.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/claude-code/changelog-check-v1.0.0...claude-code/changelog-check-v1.1.0
-[1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/claude-code/changelog-check-v1.0.0

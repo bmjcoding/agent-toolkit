@@ -91,12 +91,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Initial release
-
-[2.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/backend-engineer-v2.0.0...agent/backend-engineer-v2.1.0
-[2.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/agent/backend-engineer-v2.0.0
-[1.3.1]: https://github.com/bmjcoding/agent-toolkit/compare/agent/backend-engineer-v1.3.0...agent/backend-engineer-v1.3.1
-[1.3.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/backend-engineer-v1.2.0...agent/backend-engineer-v1.3.0
-[3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/backend-engineer-v2.0.0...agent/backend-engineer-v3.0.0
-[1.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/backend-engineer-v1.1.0...agent/backend-engineer-v1.2.0
-[1.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/backend-engineer-v1.0.0...agent/backend-engineer-v1.1.0
-[1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/agent/backend-engineer-v1.0.0

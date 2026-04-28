@@ -48,9 +48,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Initial release
-
-[4.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/design-authority-v4.0.0...skill/design-authority-v4.1.0
-[3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/design-authority-v2.0.0...skill/design-authority-v3.0.0
-[2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/design-authority-v1.1.0...skill/design-authority-v2.0.0
-[1.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/design-authority-v1.0.0...skill/design-authority-v1.1.0
-[1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/skill/design-authority-v1.0.0

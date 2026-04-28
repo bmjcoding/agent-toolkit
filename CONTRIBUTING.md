@@ -71,16 +71,8 @@ so verify your signing key is configured before opening the pull request.
 
 ## Component versioning
 
-Each component owns its own `CHANGELOG.md`.
-
-- Shared skills: `skill/<slug>-v<version>`
-- Shared rules: `rule/<slug>-v<version>`
-- Shared agents: `agent/<slug>-v<version>`
-- Shared workflows: `workflow/<slug>-v<version>`
-- Tool-specific assets:
-  - `claude-code/<slug>-v<version>`
-  - `github-copilot/<slug>-v<version>`
-  - `openai-codex/<slug>-v<version>`
+Each component owns its own `CHANGELOG.md`. Versions live in changelog section headers,
+for example `## [1.2.3] - 2026-04-28`; release tags are not required.
 
 Root skill and root rule changelogs are canonical. Tool-specific changelogs should describe
 adapter/runtime changes only.

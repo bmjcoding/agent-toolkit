@@ -8,10 +8,19 @@ for **Claude Code**, **GitHub Copilot for VS Code**, and **OpenAI Codex**.
 `AGENTS.md` is the primary shared instruction source across tools. Root `CLAUDE.md` is a
 one-line Claude compatibility shim whose content is exactly `@AGENTS.md`.
 
+## Contribution Entry Point
+
+Before opening a pull request, run the repo-local Claude contribution assistant at
+`.claude/agents/contribution-assistant.md`. It standardizes changed components, updates
+versioned changelogs, regenerates generated assets, and runs the local checks that mirror
+CI. If Claude is unavailable, run `npm run check` directly before committing.
+
 ## Repository layout
 
 ```text
 agent-toolkit/
+  .claude/               # Repo-local Claude contribution assistant and supporting skills
+  .github/               # GitHub CI, templates, and ownership metadata
   docs/
     adr/                  # Repo-wide architecture decisions
   agents/                 # Canonical shared agent instruction bodies
@@ -20,6 +29,7 @@ agent-toolkit/
   rules/                  # Canonical shared rules
   workflows/              # Canonical shared workflow definitions
   bundles/                # Canonical shared bundle manifests
+  scripts/                # Repo maintenance, validation, generation, and smoke scripts
   claude-code/            # Claude-native agents, commands, hook docs, generated rule adapters, scripts
   github-copilot/         # VS Code Copilot-native agents, prompts, instructions, hooks, scripts
   openai-codex/           # Codex-native agents, hooks, config templates, rule build assets
@@ -45,9 +55,8 @@ agent-toolkit/
 - Canonical root `rules/` content is adapted into:
   - `claude-code/rules/`
   - `github-copilot/instructions/`
-- Shared skills and shared rules are versioned once only at the root:
-  - `skill/<slug>-vX.Y.Z`
-  - `rule/<slug>-vX.Y.Z`
+- Shared skills and shared rules are versioned once only in their canonical root
+  changelogs.
 
 ## Distribution Catalog
 
@@ -188,14 +197,9 @@ checkout predates the executable-bit repair for generated hook adapters, run
 
 All components use SemVer and Keep a Changelog 1.1.0.
 
-- Shared agents: `agent/<slug>-v<version>`
-- Shared skills: `skill/<slug>-v<version>`
-- Shared rules: `rule/<slug>-v<version>`
-- Shared workflows: `workflow/<slug>-v<version>`
-- Tool-specific assets:
-  - `claude-code/<slug>-v<version>`
-  - `github-copilot/<slug>-v<version>`
-  - `openai-codex/<slug>-v<version>`
+Versions live in each component's `CHANGELOG.md` section headers, for example
+`## [1.2.3] - 2026-04-28`. This repository does not require release tags or tag-backed
+comparison links; that keeps the changelog policy portable to Bitbucket Data Center.
 
 ## Contributing
 

@@ -22,6 +22,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Catches both `printf '%b'` (escape-interpreting injection surface) and `printf '%s'`
   paired with literal-`\n` accumulators class-of-error. Non-blocking; raises
   visibility without reverting the edit.
-
-[1.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/hook/printf-lint-v1.0.0...hook/printf-lint-v1.1.0
-[1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/hook/printf-lint-v1.0.0

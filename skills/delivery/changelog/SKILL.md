@@ -2,7 +2,7 @@
 name: changelog
 description: >
   Canonical CHANGELOG.md standard: Keep a Changelog 1.1.0 + SemVer, required header,
-  version sections, categories, per-component tags, comparison links, bump table. Use
+  version sections, categories, version footers, bump table. Use
   when creating or editing any CHANGELOG.md in the toolkit.
 lifecycle: stable
 disable-model-invocation: true
@@ -22,8 +22,7 @@ task at hand.
 |---|---|
 | Fixing format or writing a new entry | Required Header Block, Version Section Format, Change Categories, Gotchas |
 | Appending under `[Unreleased]` | Change Categories, `changelog append <category> <message>`, Gotchas |
-| Cutting a release | Comparison Links, `[Unreleased]` Workflow, Release Subcommand, Failure Recovery |
-| Adapting footer URLs for a non-GitHub host | Comparison Links, `references/platform-urls.md` |
+| Cutting a release | Version Link Footers, `[Unreleased]` Workflow, Release Subcommand |
 
 Do not load the release sections for a simple entry edit.
 
@@ -72,57 +71,39 @@ Use these categories in this exact order. Omit empty categories.
 
 Each entry is a Markdown list item (`- `). One idea per bullet. Use a verb-prefixed one-liner.
 
-## Per-Component Tag Format
+## Version Ownership
 
-This toolkit is a monorepo. Each component has its own version and VCS tag. **Do not use
-repo-wide (`vX.Y.Z`) tags** — they imply a single release that covers all components,
-which is incorrect.
-
-Canonical tag format: `<namespace>/<slug>-v{version}`
-
-| Component path                         | Tag slug         | Example tag                        |
-|----------------------------------------|------------------|------------------------------------|
-| `agents/frankenstein/`                 | `agent/frankenstein` | `agent/frankenstein-v1.5.0`     |
-| `skills/delivery/changelog/`           | `skill/changelog` | `skill/changelog-v3.0.0`           |
-| `workflows/sync-toolkit/`              | `workflow/sync-toolkit` | `workflow/sync-toolkit-v1.0.0` |
-| `claude-code/hooks/branch-guard/`     | `branch-guard`   | `claude-code/branch-guard-v1.0.0`  |
-| `rules/docker/`                        | `rule/docker`    | `rule/docker-v1.0.0`               |
+This toolkit is a monorepo. Each component has its own `CHANGELOG.md` and its own SemVer
+sequence. Versions live in section headers such as `## [X.Y.Z] - YYYY-MM-DD`.
 
 Rules:
-- The slug segment is the component's directory name, not its category (the `{name}` segment in `skills/{category}/{name}/`).
-- Use exactly one namespace separator slash between the component family and slug, as in `skill/changelog`. The slug segment itself may include hyphens but should not include additional slashes, `@`, or spaces.
-- Shared components use canonical namespaces: `agent/`, `skill/`, `workflow/`, and `rule/`.
-- Tool-specific namespaces such as `claude-code/`, `github-copilot/`, and `openai-codex/` are reserved for genuinely tool-native assets that do not mirror a canonical shared component.
-- All tags are lowercase.
-- `CHANGELOG.md` at the repository root is the one allowed repo-wide exception: it uses bare `vX.Y.Z` tags because it tracks the repository release rather than an independently-versioned component.
-- Release tags must be annotated and signed. Use `git tag -s -m "{tag}" "{tag}"`; lightweight tags (`git tag "{tag}"`) and unsigned annotated tags are non-conformant.
+- Do **not** require git tags for changelog versions.
+- Do **not** add tag-backed GitHub, GitLab, or Bitbucket comparison URLs.
+- A component's latest released version is the first version section in its changelog.
+- Root `CHANGELOG.md` tracks repository-level changes. Component changelogs track only
+  their component.
 
-## Comparison Links
+## Version Link Footers
 
-Place reference-style link definitions at the **bottom** of the file. Template for
-GitHub (default platform for this toolkit):
+Keep a Changelog allows reference-style version link footers, but this repository must be
+portable to Bitbucket Data Center. Until a non-tag-backed URL scheme exists for the target
+host, omit version link footers entirely.
+
+Allowed:
 
 ```markdown
-[Unreleased]: {BASE_URL}/compare/{slug}-v{latest}...HEAD
-[X.Y.Z]: {BASE_URL}/compare/{slug}-v{prev}...{slug}-v{X.Y.Z}
-[1.0.0]: {BASE_URL}/tree/{slug}-v1.0.0
+## [1.2.3] - 2026-04-28
 ```
 
-Rules:
-- `[Unreleased]` compares the latest released tag for this component to `HEAD`.
-- Each released version compares to its predecessor using per-component tags.
-- The oldest release uses a tag-view URL — `tree/{slug}-v{version}` is the always-valid
-  default on GitHub (every pushed tag auto-creates a `tree/` view; `releases/tag/` only
-  works if a GitHub Release object exists).
-- If no VCS tag has been pushed yet for this component, omit link definitions and
-  document with: `<!-- No tags pushed yet for this component — compare links omitted until first tag -->`
+Rejected:
 
-**Platform-specific URL templates** (GitLab, Bitbucket Cloud, Bitbucket Datacenter) →
-see `references/platform-urls.md`.
+```markdown
+[1.2.3]: https://github.com/org/repo/compare/skill/example-v1.2.2...skill/example-v1.2.3
+[1.0.0]: https://github.com/org/repo/tree/skill/example-v1.0.0
+```
 
-Run `scripts/detect-platform.sh` to auto-detect the platform from `git remote`. Override
-by creating `.changelog-platform.yml` at the repo root: `platform: gitlab` (or `github`,
-`bitbucket-cloud`, `bitbucket-datacenter`).
+If a future host provides stable non-tag comparison URLs, add reference-style footers at
+the bottom of the file. Do not use release tags as the URL source.
 
 ## [Unreleased] Workflow
 
@@ -135,31 +116,15 @@ When preparing a PR that changes a component:
 1. Promote the touched component's non-empty `## [Unreleased]` section to
    `## [X.Y.Z] - YYYY-MM-DD`.
 2. Insert a fresh empty `## [Unreleased]` above the new versioned section.
-3. Update the comparison links so `[Unreleased]` points at the new version and the new
-   version points at the previous one.
+3. Do not add tag-backed comparison links.
 4. Continue editing the versioned section for that PR instead of adding new PR-scoped
    bullets back under `## [Unreleased]`.
 
-When cutting a tagged release:
+When cutting a release:
 
 1. Rename `## [Unreleased]` to `## [X.Y.Z] - YYYY-MM-DD`.
-2. Update the comparison link footer with the new version.
-3. Update the `[Unreleased]` link to compare the new tag to `HEAD`.
-4. Add a fresh empty `## [Unreleased]` above the newly named section.
-
-**Atomic ordering at tag creation** — edit, commit, tag, push together:
-
-```bash
-git commit -m "chore: prepare {tag}"
-git tag -s -m "{tag}" "{tag}"
-git push origin HEAD --follow-tags
-```
-
-Where `{tag}` is `{slug}-v{X.Y.Z}` for component changelogs, or `v{X.Y.Z}` for a
-repository-root `CHANGELOG.md`.
-
-Do not update the CHANGELOG after the tag is pushed — the rename and tag push must be
-atomic.
+2. Add a fresh empty `## [Unreleased]` above the newly named section.
+3. Commit the changelog update with the component changes.
 
 **Monorepo scope:** only the component whose files changed gets its CHANGELOG updated
 and its version bumped. Other components' `[Unreleased]` sections are unaffected by an
@@ -174,13 +139,9 @@ been promoted out of `## [Unreleased]`.
 
 ### `changelog release [<component-slug>]`
 
-Performs the full promote-and-tag cycle. Without an argument, operates on every
-component whose `## [Unreleased]` section is non-empty. With a slug, operates on that
-component only.
-
-**Atomicity has two levels:**
-- **Per-component:** the commit + tag + push triple for a single component is atomic. If the tag fails after the commit, reset the commit and retry; if the push fails after the tag, delete the local tag and retry. Do not leave a component in a partially-released state.
-- **Across components:** there is no cross-component rollback by design. Each component's triple is independent. If component B fails, component A's already-pushed tag is not reverted — partial success means earlier components are live. See [Failure Recovery](#failure-recovery) below.
+Promotes non-empty `## [Unreleased]` sections into dated version sections. Without an
+argument, operates on every component whose `## [Unreleased]` section is non-empty. With
+a slug, operates on that component only.
 
 1. Read `CHANGELOG.md`. Abort if `## [Unreleased]` is empty.
 2. Compute bump from category headers (highest level wins):
@@ -188,55 +149,12 @@ component only.
      `### Fixed` / `### Deprecated` → PATCH.
 3. Prompt for confirmation on MAJOR bumps. Auto-derive for MINOR/PATCH.
 4. Promote: rename `## [Unreleased]` → `## [X.Y.Z] - YYYY-MM-DD`; insert fresh empty
-   `## [Unreleased]` above; update footer comparison links; write file.
-5. Execute the atomic triple:
+   `## [Unreleased]` above; remove tag-backed version footers; write file.
 
-```bash
-git commit -m "chore: release {slug}-v{X.Y.Z}"
-git tag -s -m "{slug}-v{X.Y.Z}" "{slug}-v{X.Y.Z}"
-git push origin HEAD --follow-tags
-```
-
-**Slug derivation:** strip the `CHANGELOG.md` filename, strip type-directory and skill
-category segments (`skills/<category>/`, `agents/`, `commands/`, `hooks/`, `rules/`,
-`bundles/`), prepend the component namespace.
-
-| CHANGELOG.md path                                   | Slug                           | Example tag                           |
-|-----------------------------------------------------|--------------------------------|---------------------------------------|
-| `agents/release-engineer/CHANGELOG.md`             | `agent/release-engineer`       | `agent/release-engineer-v2.0.0`       |
-| `skills/delivery/changelog/CHANGELOG.md`           | `skill/changelog`              | `skill/changelog-v7.0.0`              |
-| `workflows/sync-toolkit/CHANGELOG.md`              | `workflow/sync-toolkit`        | `workflow/sync-toolkit-v1.0.0`        |
-| `claude-code/hooks/changelog-check/CHANGELOG.md`   | `claude-code/changelog-check`  | `claude-code/changelog-check-v3.0.0`  |
-| `rules/docker/CHANGELOG.md`                        | `rule/docker`                  | `rule/docker-v4.0.0`                  |
-
-**Multi-component:** each component gets its own commit, tag, and push triple processed
-in alphabetical path order. A failure on component B does not roll back component A's
-already-pushed tag.
-
-**First-release edge case:** for the first release of a component (no prior `{slug}-v` tag
-exists), the comparison footer link uses the `tree/` form per the Comparison Links section
-(see the sentinel comment in that section for the no-tags-yet case).
+Do not create or push release tags.
 
 **Single-component example:** `changelog release changelog-check` processes only
 `claude-code/hooks/changelog-check/CHANGELOG.md`.
-
-### Failure Recovery
-
-#### If the per-component triple fails mid-sequence
-
-| State | Recovery |
-|-------|----------|
-| Promoted file but no commit | `git checkout -- <path>/CHANGELOG.md` to revert, then re-run `changelog release <slug>` |
-| Commit created but signed tag missing | `git tag -s -m "{tag}" "{tag}" HEAD && git push origin HEAD --follow-tags` |
-| Commit + signed tag created but push failed | `git push origin HEAD --follow-tags` (the tag already exists locally) |
-
-#### If a multi-component release partially failed
-
-1. Check which components shipped: `git tag -l '{tool}/*-v*'` and `git log --oneline -5`.
-2. **Components that shipped:** do nothing — they are live.
-3. **Components with a commit but no tag:** create and push the tag (see table above).
-4. **Components with a promoted CHANGELOG but no commit:** revert via `git checkout -- <path>/CHANGELOG.md` and re-run `changelog release <slug>`.
-5. **Components not yet touched:** re-run `changelog release` with just the unprocessed slugs.
 
 ### `changelog append <category> <message>`
 
@@ -274,7 +192,7 @@ changelog per subdirectory.
 
 **Aggregated changelogs at the category root are forbidden.** Do not create or write to
 `agents/CHANGELOG.md`, `skills/CHANGELOG.md`, etc. Each component is
-versioned independently using the per-component tag format.
+versioned independently through its own version sections.
 
 ## Gotchas
 
@@ -286,28 +204,22 @@ commit-log-versus-changelog rules.
 - Missing `## [Unreleased]` forces readers to diff branches to see in-progress work.
 - Do NOT dump commit logs (`git log`) or file paths into entries — summarize the
   user-facing outcome. The Keep a Changelog spec explicitly prohibits commit-log dumps.
-- Compare links must reference tags that exist in the repo — verify with
-  `git tag -l "{slug}-v*"` before publishing.
-- Compare links must reference signed annotated tags, not lightweight placeholders.
-- Hardcoding a GitHub compare URL in a GitLab or Bitbucket project — the URL will 404.
-  Use `scripts/detect-platform.sh` + the correct template from `references/platform-urls.md`.
+- Do not add tag-backed compare links. They do not survive the Bitbucket Data Center
+  migration target.
+- If version footers are reintroduced later, they must use a non-tag-backed URL scheme
+  supported by the target host.
 
 ## Further Reading
 
 | Topic | File |
 |-------|------|
-| Platform URL formats (GitHub, GitLab, Bitbucket Cloud, Bitbucket Datacenter) | `references/platform-urls.md` |
 | Anti-patterns table, commit-log-vs-changelog rules, yanked releases | `references/anti-patterns.md` |
-| Migrating from monolithic tags; version renumbering procedure | `references/migration.md` |
 | Drift-prevention hooks; commit classification for automated entries | `references/enforcement.md` |
 
 ## Scripts
 
 | Script | Purpose |
 |--------|---------|
-| `scripts/detect-platform.sh` | Detect repo platform (github / gitlab / bitbucket-cloud / bitbucket-datacenter) from `git remote` and `.changelog-platform.yml`. |
-| `scripts/backfill-changelog-tags.sh` | Backfill per-component git tags from a CHANGELOG.md during migration from monolithic tag format. |
-
-Both scripts support `--help`.
+| None | This skill no longer requires helper scripts for tag or platform URL management. |
 
 $ARGUMENTS

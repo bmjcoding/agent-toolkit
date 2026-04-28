@@ -5,6 +5,14 @@ All notable changes to this component will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.5.0] - 2026-04-28
+
+### Changed
+
+- Removed release-tag creation and `--follow-tags` push guidance from the release
+  workflow so changelog versions remain tag-free and Bitbucket Data Center
+  portable.
+
 ## [5.4.0] - 2026-04-27
 
 ### Changed
@@ -16,8 +24,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Step 2 now distinguishes routine PRs from actual release cuts: contributors may keep
-  in-flight notes under `## [Unreleased]` until release time instead of promoting every
-  PR into a dated version section just to satisfy CI.
+  in-flight notes in temporary branch-local changelog space until release time instead
+  of promoting every PR into a dated version section just to satisfy CI.
 
 ## [5.2.0] - 2026-04-16
 
@@ -32,9 +40,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Declared canonical `lifecycle` metadata in the shared root definition so the distribution catalog can publish maturity separately from per-tool availability for this agent.
 - Release-engineer now treats PR-bound changelog promotion as part of Step 2: touched
-  components must be moved out of `## [Unreleased]` into a versioned section before the
-  PR is opened, while branch-local work can still accumulate under `## [Unreleased]`
-  until that promotion point.
+  components must be moved into a versioned section before the PR is opened, while
+  branch-local work can still accumulate in temporary changelog space until that
+  promotion point.
 
 - Resolved default-branch handling across PR-description, lint, and publish steps and
   clarified that publish-phase-only runs must not perform version bumps.
@@ -49,7 +57,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Moved the canonical agent definition and changelog to `agents/release-engineer/`; Claude, Copilot, and Codex files are now tool-specific adapters generated from the shared source.
 - Updated comparison links to use the shared `agent/release-engineer` tag namespace for this root canonical component.
-- Step 2.4 now calls `/changelog release` to atomically promote `[Unreleased]` entries, create the versioned commit, apply the per-component tag, and push — replacing the previous multi-step inline sequence.
+- Step 2.4 now calls `/changelog release` to atomically promote temporary unreleased
+  entries, create the versioned commit, apply the per-component tag, and push, replacing
+  the previous multi-step inline sequence.
 
 ### Added
 
@@ -107,15 +117,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Initial release
-
-[5.3.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/release-engineer-v5.2.0...agent/release-engineer-v5.3.0
-[5.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/release-engineer-v5.1.0...agent/release-engineer-v5.2.0
-[5.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/release-engineer-v5.0.0...agent/release-engineer-v5.1.0
-[5.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/agent/release-engineer-v5.0.0
-[4.0.1]: https://github.com/bmjcoding/agent-toolkit/compare/agent/release-engineer-v4.0.0...agent/release-engineer-v4.0.1
-[4.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/release-engineer-v3.0.0...agent/release-engineer-v4.0.0
-[3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/release-engineer-v2.0.0...agent/release-engineer-v3.0.0
-[2.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/release-engineer-v1.3.0...agent/release-engineer-v2.0.0
-[1.3.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/release-engineer-v1.2.0...agent/release-engineer-v1.3.0
-[1.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/release-engineer-v1.0.0...agent/release-engineer-v1.1.0
-[1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/agent/release-engineer-v1.0.0

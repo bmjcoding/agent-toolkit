@@ -32,7 +32,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   to improve when warranted. Carries the iteration termination contract, the
   external-references handoff field, and the never-auto-rewrite rule. Extracted from
   `autoresearch-analyst.md` so the workflow has a single update site.
-
-[1.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/on-demand-v1.0.1...skill/on-demand-v1.1.0
-[1.0.1]: https://github.com/bmjcoding/agent-toolkit/compare/skill/on-demand-v1.0.0...skill/on-demand-v1.0.1
-[1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/skill/on-demand-v1.0.0

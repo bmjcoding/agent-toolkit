@@ -4,48 +4,6 @@
 # Blocks git push if CHANGELOG.md was not modified in any commit being pushed.
 # This enforces the changelog-first workflow: run the /changelog skill before shipping.
 
-# changelog_slug PATH — derive "{tool}/{component}" slug from a CHANGELOG.md path.
-# Strips the filename and type-directory/category segments.
-# Returns empty string for root CHANGELOG.md (root uses bare vX.Y.Z tags).
-# e.g. skills/delivery/changelog/CHANGELOG.md -> skill/changelog
-changelog_slug() {
-  local dir="${1%/CHANGELOG.md}"
-  [ "$dir" = "$1" ] || [ "$dir" = "CHANGELOG.md" ] && echo "" && return
-  local tool="${dir%%/*}" component="${dir##*/}" middle="${dir#*/}"
-  case "$tool:$middle" in
-    skills:*)
-      if [[ "$dir" == "skills/"* ]]; then
-        echo "skill/${component}"
-        return
-      fi
-      ;;
-    rules:*)
-      if [[ "$dir" == "rules/"* && "$middle" != */* ]]; then
-        echo "rule/${component}"
-        return
-      fi
-      ;;
-    hooks:*)
-      if [[ "$dir" == "hooks/"* && "$middle" != */* ]]; then
-        echo "hook/${component}"
-        return
-      fi
-      ;;
-  esac
-  case "$middle" in
-    skills/*|agents/*|commands/*|hooks/*|rules/*|bundles/*)
-      echo "${tool}/${component}" ;;
-    *)
-      echo "$dir" ;;
-  esac
-}
-
-tag_has_signature() {
-  local tag_name="$1"
-  git cat-file -p "refs/tags/${tag_name}" 2>/dev/null \
-    | grep -Eq '^-----BEGIN [A-Z0-9 ]*SIGNATURE-----$'
-}
-
 # Get the remote and URL
 remote="$1"
 url="$2"
@@ -94,16 +52,14 @@ while read local_ref local_sha remote_ref remote_sha; do
   fi
 
   # Format validation: each modified CHANGELOG.md must contain at least one
-  # valid Keep a Changelog 1.1.0 version header.
+  # versioned Keep a Changelog 1.1.0 release header.
   # Valid headers:
-  #   ## [Unreleased]
   #   ## [X.Y.Z] - YYYY-MM-DD
   # Rejected (old bracketless format):
   #   ## X.Y.Z
   #   ## X.Y.Z - YYYY-MM-DD
   while IFS= read -r changelog_path; do
-    # Accept:  ## [Unreleased]
-    #          ## [X.Y.Z] - YYYY-MM-DD
+    # Accept:  ## [X.Y.Z] - YYYY-MM-DD
     #          ## [X.Y.Z] - YYYY-MM-DD [YANKED]
     # Reject:  ## [X.Y.Z]  (missing date on a released version)
     show_output=$(git show "${local_sha}:${changelog_path}" 2>/dev/null)
@@ -111,11 +67,22 @@ while read local_ref local_sha remote_ref remote_sha; do
       echo "WARNING: could not read ${changelog_path} at ${local_sha} — skipping format validation (shallow clone?)" >&2
       continue
     fi
-    if ! printf '%s\n' "$show_output" | grep -qE '^## (\[Unreleased\]|\[[0-9]+\.[0-9]+\.[0-9]+\] - [0-9]{4}-[0-9]{2}-[0-9]{2})'; then
+    if printf '%s\n' "$show_output" | grep -qE '^(## \[Unreleased\]|\[Unreleased\]:)'; then
+      echo ""
+      echo "WARNING: CHANGELOG.md contains an [Unreleased] marker."
+      echo ""
+      echo "   Add a versioned ## [X.Y.Z] - YYYY-MM-DD section for this contribution instead."
+      echo "   File: $changelog_path"
+      echo ""
+      echo "   To bypass: git push --no-verify"
+      echo ""
+      exit 1
+    fi
+    if ! printf '%s\n' "$show_output" | grep -qE '^## \[[0-9]+\.[0-9]+\.[0-9]+\] - [0-9]{4}-[0-9]{2}-[0-9]{2}'; then
       echo ""
       echo "WARNING: CHANGELOG.md does not contain a valid Keep a Changelog header."
       echo ""
-      echo "   Expected format: ## [X.Y.Z] - YYYY-MM-DD or ## [Unreleased]"
+      echo "   Expected format: ## [X.Y.Z] - YYYY-MM-DD"
       echo "   File: $changelog_path"
       echo ""
       echo "   Run the /changelog skill to convert to Keep a Changelog 1.1.0 format."
@@ -124,71 +91,19 @@ while read local_ref local_sha remote_ref remote_sha; do
       echo ""
       exit 1
     fi
+    if printf '%s\n' "$show_output" | grep -qE '^\[(Unreleased|[0-9]+\.[0-9]+\.[0-9]+)\]: https?://.*/(compare|tree|releases/tag)/'; then
+      echo ""
+      echo "WARNING: CHANGELOG.md contains tag-backed version footer links."
+      echo ""
+      echo "   Remove tag-backed version footers; toolkit changelogs must stay portable to Bitbucket Data Center."
+      echo "   File: $changelog_path"
+      echo ""
+      echo "   To bypass: git push --no-verify"
+      echo ""
+      exit 1
+    fi
   done < <(printf '%s\n' "$diff_output" | grep 'CHANGELOG.md')
 
-  # Tag check: every NEW ## [X.Y.Z] header in this push must have a matching
-  # signed annotated tag. Lightweight or unsigned tags are rejected.
-  while IFS= read -r changelog_path; do
-    slug=$(changelog_slug "$changelog_path")
-    ver_pattern='^## \[[0-9]+\.[0-9]+\.[0-9]+\] - [0-9]{4}-[0-9]{2}-[0-9]{2}'
-    ver_extract='s/^## \[([0-9]+\.[0-9]+\.[0-9]+)\].*/\1/'
-    local_show=$(git show "${local_sha}:${changelog_path}" 2>/dev/null)
-    if [ -z "$local_show" ]; then
-      echo "WARNING: could not read ${changelog_path} at ${local_sha} — skipping tag-presence check (shallow clone?)" >&2
-      continue
-    fi
-    new_headers=$(printf '%s\n' "$local_show" | grep -E "$ver_pattern" | sed -E "$ver_extract")
-    [ -z "$new_headers" ] && continue
-    if [ "$remote_sha" = "0000000000000000000000000000000000000000" ]; then
-      existing_headers=""
-    else
-      remote_show=$(git show "${remote_sha}:${changelog_path}" 2>/dev/null)
-      if [ -z "$remote_show" ]; then
-        echo "WARNING: could not read ${changelog_path} at ${remote_sha} — treating all versions as new (shallow clone?)" >&2
-        existing_headers=""
-      else
-        existing_headers=$(printf '%s\n' "$remote_show" | grep -E "$ver_pattern" | sed -E "$ver_extract")
-      fi
-    fi
-    while IFS= read -r version; do
-      [ -z "$version" ] && continue
-      printf '%s\n' "$existing_headers" | grep -qxF "$version" && continue
-      [ -n "$slug" ] && expected_tag="${slug}-v${version}" || expected_tag="v${version}"
-      if ! git tag -l "$expected_tag" | grep -qxF "$expected_tag"; then
-        echo ""
-        echo "ERROR: Promoted CHANGELOG entry [${version}] in ${changelog_path%/CHANGELOG.md} has no matching signed annotated tag ${expected_tag}."
-        echo ""
-        echo "   Run: git tag -s -m '${expected_tag}' '${expected_tag}'"
-        echo "   Then: git push origin HEAD --follow-tags"
-        echo ""
-        echo "   To bypass: git push --no-verify"
-        echo ""
-        exit 1
-      fi
-      if [[ "$(git cat-file -t "refs/tags/${expected_tag}" 2>/dev/null || true)" != "tag" ]]; then
-        echo ""
-        echo "ERROR: Release tag ${expected_tag} is lightweight. Promoted CHANGELOG entries require signed annotated tags."
-        echo ""
-        echo "   Delete and recreate it as: git tag -d '${expected_tag}' && git tag -s -m '${expected_tag}' '${expected_tag}'"
-        echo "   Then push with: git push origin HEAD --follow-tags"
-        echo ""
-        echo "   To bypass: git push --no-verify"
-        echo ""
-        exit 1
-      fi
-      if ! tag_has_signature "$expected_tag"; then
-        echo ""
-        echo "ERROR: Release tag ${expected_tag} is annotated but unsigned. Promoted CHANGELOG entries require signed annotated tags."
-        echo ""
-        echo "   Recreate it as: git tag -d '${expected_tag}' && git tag -s -m '${expected_tag}' '${expected_tag}'"
-        echo "   Then push with: git push origin HEAD --follow-tags"
-        echo ""
-        echo "   To bypass: git push --no-verify"
-        echo ""
-        exit 1
-      fi
-    done <<< "$new_headers"
-  done < <(printf '%s\n' "$diff_output" | grep 'CHANGELOG.md')
 done
 
 exit 0
