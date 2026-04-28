@@ -3,7 +3,8 @@
     "PreToolUse": [
       {
         "type": "command",
-        "command": "bash \"$AGENT_TOOLKIT_DIR/github-copilot/hooks/changelog-check/changelog-check.sh\""
+        "command": "bash \"${AGENT_TOOLKIT_DIR:-${TOOLKIT_PATH:-$PWD}}/github-copilot/hooks/changelog-check/changelog-check.sh\"",
+        "timeoutMs": 10000
       }
     ]
   }

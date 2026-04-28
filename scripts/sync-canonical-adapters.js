@@ -13,6 +13,7 @@ const HOOK_SPECS = {
     codexEvent: 'PreToolUse',
     codexMatcher: 'Bash',
     codexStatusMessage: 'Checking branch guard...',
+    timeoutMs: 3000,
   },
   'changelog-check': {
     adapterKind: 'changelog-check',
@@ -20,6 +21,7 @@ const HOOK_SPECS = {
     codexEvent: 'PreToolUse',
     codexMatcher: 'Bash',
     codexStatusMessage: 'Validating changelog entry...',
+    timeoutMs: 10000,
   },
   'dispatch-validate': {
     adapterKind: 'direct',
@@ -27,6 +29,7 @@ const HOOK_SPECS = {
     codexEvent: 'PreToolUse',
     codexMatcher: '.*',
     codexStatusMessage: 'Validating dispatch prompt...',
+    timeoutMs: 3000,
   },
   'extract-handoff': {
     adapterKind: 'handoff',
@@ -34,6 +37,7 @@ const HOOK_SPECS = {
     codexEvent: 'Stop',
     codexMatcher: '.*',
     codexStatusMessage: 'Extracting handoff JSON...',
+    timeoutMs: 5000,
   },
   'git-signing-preflight': {
     adapterKind: 'direct',
@@ -41,6 +45,7 @@ const HOOK_SPECS = {
     codexEvent: 'PreToolUse',
     codexMatcher: 'Bash',
     codexStatusMessage: 'Pre-flighting git signing keys...',
+    timeoutMs: 5000,
   },
   'inject-context': {
     adapterKind: 'direct',
@@ -48,6 +53,7 @@ const HOOK_SPECS = {
     codexEvent: 'UserPromptSubmit',
     codexMatcher: '.*',
     codexStatusMessage: 'Injecting session context...',
+    timeoutMs: 3000,
   },
   'integrity-warn': {
     adapterKind: 'integrity-warn',
@@ -55,6 +61,7 @@ const HOOK_SPECS = {
     codexEvent: 'PostToolUse',
     codexMatcher: 'Bash',
     codexStatusMessage: 'Running integrity check...',
+    timeoutMs: 10000,
   },
   'post-agent-audit': {
     adapterKind: 'direct',
@@ -62,6 +69,7 @@ const HOOK_SPECS = {
     codexEvent: 'Stop',
     codexMatcher: '.*',
     codexStatusMessage: 'Auditing agent scope...',
+    timeoutMs: 5000,
   },
   'pre-push-secrets': {
     adapterKind: 'command-filter',
@@ -70,6 +78,7 @@ const HOOK_SPECS = {
     codexEvent: 'PreToolUse',
     codexMatcher: 'Bash',
     codexStatusMessage: 'Scanning for secrets before push...',
+    timeoutMs: 30000,
   },
   'printf-lint': {
     adapterKind: 'direct',
@@ -77,6 +86,7 @@ const HOOK_SPECS = {
     codexEvent: 'PostToolUse',
     codexMatcher: '.*',
     codexStatusMessage: 'Linting printf safety...',
+    timeoutMs: 5000,
   },
   'protect-config': {
     adapterKind: 'protect-config',
@@ -84,6 +94,7 @@ const HOOK_SPECS = {
     codexEvent: 'PreToolUse',
     codexMatcher: 'Bash',
     codexStatusMessage: 'Checking config protection...',
+    timeoutMs: 3000,
   },
 };
 const HOOK_ORDER = [
@@ -226,8 +237,12 @@ function parseClaudeAgentConfig(frontmatter) {
   const model = normalizeFrontmatterValue(extractField(/^model:\s*(.+)$/m, frontmatter, 'inherit'));
   const toolsRaw = extractField(/^tools:\s*(.+)$/m, frontmatter, '');
   const skills = parseYamlList(frontmatter, 'skills');
+  const disallowedToolsRaw = extractField(/^disallowedTools:\s*(.+)$/m, frontmatter, '');
+  const maxTurnsRaw = normalizeFrontmatterValue(extractField(/^maxTurns:\s*(.+)$/m, frontmatter, ''));
+  const effort = normalizeFrontmatterValue(extractField(/^effort:\s*(.+)$/m, frontmatter, 'medium'));
 
   const tools = splitTopLevelCommaList(toolsRaw);
+  const disallowedTools = splitTopLevelCommaList(disallowedToolsRaw);
   const agentTool = tools.find(tool => /^Agent\(/.test(tool));
   const childAgents = agentTool
     ? agentTool
@@ -259,6 +274,9 @@ function parseClaudeAgentConfig(frontmatter) {
     capabilities,
     skills,
     childAgents,
+    disallowedTools,
+    maxTurns: Number.parseInt(maxTurnsRaw, 10) || null,
+    effort,
   };
 }
 
@@ -272,6 +290,20 @@ function getCodexModelForTier(modelTier) {
   if (modelTier === 'balanced') return 'gpt-5.3-codex';
   if (modelTier === 'fast') return 'gpt-5.3-codex-spark';
   return 'gpt-5.4';
+}
+
+function normalizeCodexReasoningEffort(effort) {
+  if (effort === 'max') return 'xhigh';
+  if (['low', 'medium', 'high', 'xhigh'].includes(effort)) return effort;
+  return 'medium';
+}
+
+function deriveCodexSandboxMode(capabilities, disallowedTools) {
+  const canWrite = capabilities.includes('write') || capabilities.includes('edit');
+  const canDelegate = capabilities.includes('delegate');
+  if (canWrite || canDelegate) return 'workspace-write';
+  if (disallowedTools.includes('Write') || disallowedTools.includes('Edit')) return 'read-only';
+  return 'workspace-write';
 }
 
 function renderCanonicalMarkdown({ name, description, lifecycle, adapterPaths, body, kind, modelTier, capabilities, subagents, skills, argumentHint }) {
@@ -356,10 +388,22 @@ function renderCopilotMarkdown({ name, description, body, modelTier, capabilitie
   return lines.join('\n');
 }
 
-function renderCodexToml({ name, description, body, sourcePath, modelTier }) {
+function renderCodexToml({
+  name,
+  description,
+  body,
+  sourcePath,
+  modelTier,
+  capabilities,
+  disallowedTools,
+  maxTurns,
+  effort,
+}) {
   const escapedBody = body.trim()
     .replace(/\\/g, '\\\\')
     .replace(/"""/g, '\\"""');
+  const sandboxMode = deriveCodexSandboxMode(capabilities, disallowedTools);
+  const reasoningEffort = normalizeCodexReasoningEffort(effort);
 
   return [
     `# Generated from ${sourcePath}`,
@@ -367,6 +411,10 @@ function renderCodexToml({ name, description, body, sourcePath, modelTier }) {
     `name        = ${JSON.stringify(name)}`,
     `description = ${JSON.stringify(description)}`,
     `model       = ${JSON.stringify(getCodexModelForTier(modelTier))}`,
+    `model_reasoning_effort = ${JSON.stringify(reasoningEffort)}`,
+    `sandbox_mode = ${JSON.stringify(sandboxMode)}`,
+    'approval_policy = "on-request"',
+    ...(maxTurns ? [`num_turns = ${maxTurns}`] : []),
     '',
     'developer_instructions = """',
     escapedBody,
@@ -469,12 +517,14 @@ function listCanonicalHookSlugs() {
 }
 
 function renderCopilotHookManifest({ slug, event }) {
+  const spec = HOOK_SPECS[slug];
   return JSON.stringify({
     hooks: {
       [event]: [
         {
           type: 'command',
-          command: `bash "$AGENT_TOOLKIT_DIR/github-copilot/hooks/${slug}/${slug}.sh"`,
+          command: `bash "\${AGENT_TOOLKIT_DIR:-\${TOOLKIT_PATH:-$PWD}}/github-copilot/hooks/${slug}/${slug}.sh"`,
+          timeoutMs: spec.timeoutMs,
         },
       ],
     },
@@ -597,6 +647,7 @@ function renderCodexHooksJson(slugs) {
           type: 'command',
           command: `\${AGENT_TOOLKIT_DIR:-$HOME/.codex}/openai-codex/hooks/${slug}/${slug}.sh`,
           statusMessage: spec.codexStatusMessage,
+          timeoutMs: spec.timeoutMs,
         },
       ],
     });
@@ -736,6 +787,9 @@ function syncAgents() {
     const skills = existingCanonical && existingCanonical.skills.length > 0
       ? existingCanonical.skills
       : claudeConfig.skills;
+    const disallowedTools = claudeConfig.disallowedTools;
+    const maxTurns = claudeConfig.maxTurns;
+    const effort = claudeConfig.effort;
 
     writeIfChanged(
       canonicalPath,
@@ -782,6 +836,10 @@ function syncAgents() {
         body: canonicalBody,
         sourcePath: `agents/${name}/AGENT.md`,
         modelTier,
+        capabilities,
+        disallowedTools,
+        maxTurns,
+        effort,
       })
     );
   }

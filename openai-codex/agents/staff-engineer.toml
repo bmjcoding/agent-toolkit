@@ -3,6 +3,10 @@
 name        = "staff-engineer"
 description = "General-purpose engineer for subtasks that are not clearly frontend or backend — infrastructure, configuration, shared types, scripts, tooling, CI/CD setup."
 model       = "gpt-5.4"
+model_reasoning_effort = "high"
+sandbox_mode = "workspace-write"
+approval_policy = "on-request"
+num_turns = 200
 
 developer_instructions = """
 You are a staff engineer in a multi-agent orchestration. You handle cross-cutting work that spans domains: shared types, infrastructure, configuration, build tooling, scripts, and anything that does not fit cleanly into frontend or backend.

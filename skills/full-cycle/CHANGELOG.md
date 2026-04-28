@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-04-28
+
+### Added
+
+- Added gotchas for no-progress improve passes, REWRITE verdict termination, and
+  updating the original outcome JSON in place.
+
+### Changed
+
+- Clarified the trigger description and renamed the handoff section to the shared
+  `Output Format` convention.
+
+
 ## [1.0.0] - 2026-04-27
 
 ### Added
@@ -17,5 +30,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   single-outcome-file rule, and the handoff schema. Extracted from
   `autoresearch-analyst.md` so the workflow has a single update site.
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/skill/full-cycle-v1.0.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/skill/full-cycle-v1.1.0...HEAD
+[1.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/full-cycle-v1.0.0...skill/full-cycle-v1.1.0
 [1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/skill/full-cycle-v1.0.0

@@ -8,9 +8,9 @@
 #   2. missing_retro_suppression  — non-retro dispatch missing the suppression line
 #   3. mode_word_missing          — autoresearch dispatch with no recognised mode
 #
-# The validation logic lives in ~/.claude/scripts/dispatch-validator.py so the
-# rule has one update site. This hook script just shapes the input and decides
-# whether to deny.
+# The validation logic lives in scripts/orchestrator/dispatch-validator.py so
+# the rule has one update site across Claude, Codex, and Copilot adapters. This
+# hook script just shapes the input and decides whether to deny.
 #
 # Hook payload (PreToolUse on Agent): the JSON includes tool_input with the
 # subagent_type and prompt. We extract both and pass to the validator.
@@ -37,12 +37,11 @@ if [ -z "$TARGET" ] || [ -z "$PROMPT" ]; then
   exit 0
 fi
 
-VALIDATOR="${HOME}/.claude/scripts/dispatch-validator.py"
-if [ ! -x "$VALIDATOR" ]; then
-  # Validator missing — log a notice but do not block.
+VALIDATOR=$(resolve_toolkit_file "scripts/orchestrator/dispatch-validator.py" || true)
+if [ ! -f "$VALIDATOR" ]; then
   echo "$(date -Iseconds) dispatch-validate: validator script missing at $VALIDATOR" \
     >> .orchestrator/logs/agents.log 2>/dev/null || true
-  exit 0
+  emit_deny "Dispatch validation is unavailable because scripts/orchestrator/dispatch-validator.py is missing. Set AGENT_TOOLKIT_DIR to the toolkit checkout or install the helper script."
 fi
 
 # Run the validator.

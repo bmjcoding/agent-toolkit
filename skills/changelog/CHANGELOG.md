@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [6.3.1] - 2026-04-28
+
+### Fixed
+
+- Removed duplicate `lifecycle` frontmatter from the skill definition so definition
+  lint can treat duplicate keys as a hard error.
+
+
 ## [6.3.0] - 2026-04-16
 
 ### Changed
@@ -121,7 +129,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial changelog skill defining Keep a Changelog 1.1.0 + SemVer standard for all toolkit components
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/skill/changelog-v6.3.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/skill/changelog-v6.3.1...HEAD
+[6.3.1]: https://github.com/bmjcoding/agent-toolkit/compare/skill/changelog-v6.3.0...skill/changelog-v6.3.1
 [6.3.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/changelog-v6.2.0...skill/changelog-v6.3.0
 [6.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/changelog-v6.1.0...skill/changelog-v6.2.0
 [6.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/changelog-v6.0.0...skill/changelog-v6.1.0

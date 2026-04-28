@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.3.0] - 2026-04-28
+
+### Added
+
+- Added toolkit-root resolution guidance so orchestration helper scripts and routing
+  config are loaded from `AGENT_TOOLKIT_DIR`, `TOOLKIT_PATH`, or the active checkout.
+
+### Changed
+
+- Changed helper-script, routing-config, backlog, drift-check, structural-check, and
+  resume guidance to reference repo-owned `scripts/orchestrator/` assets instead of
+  Claude-local paths, and compacted several verbose orchestration sections.
+- Reclassified the orchestrator model tier from frontier to balanced for the generated
+  tool adapters.
+
+
 ## [5.2.0] - 2026-04-27
 
 ### Changed
@@ -283,7 +299,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v5.1.2...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v5.3.0...HEAD
+[5.3.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v5.2.0...agent/frankenstein-v5.3.0
 [5.1.2]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v5.1.1...agent/frankenstein-v5.1.2
 [5.1.1]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v5.1.0...agent/frankenstein-v5.1.1
 [5.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/frankenstein-v5.0.0...agent/frankenstein-v5.1.0

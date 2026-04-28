@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-04-28
+
+### Changed
+
+- Resolves `lint-printf-newlines.sh` through toolkit helper paths instead of a
+  Claude-local script path, and reports a hook failure when the helper is missing.
+
+
 ## [1.0.0] - 2026-04-27
 
 ### Added
@@ -18,5 +26,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   paired with literal-`\n` accumulators class-of-error. Non-blocking; raises
   visibility without reverting the edit.
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/hook/printf-lint-v1.0.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/hook/printf-lint-v1.1.0...HEAD
+[1.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/hook/printf-lint-v1.0.0...hook/printf-lint-v1.1.0
 [1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/hook/printf-lint-v1.0.0

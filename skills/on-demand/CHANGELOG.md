@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-04-28
+
+### Changed
+
+- Clarified the skill trigger description and renamed the final handoff section to the
+  shared `Output Format` convention.
+
+
 ## [1.0.0] - 2026-04-27
 
 ### Added
@@ -18,5 +26,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   external-references handoff field, and the never-auto-rewrite rule. Extracted from
   `autoresearch-analyst.md` so the workflow has a single update site.
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/skill/on-demand-v1.0.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/skill/on-demand-v1.0.1...HEAD
+[1.0.1]: https://github.com/bmjcoding/agent-toolkit/compare/skill/on-demand-v1.0.0...skill/on-demand-v1.0.1
 [1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/skill/on-demand-v1.0.0

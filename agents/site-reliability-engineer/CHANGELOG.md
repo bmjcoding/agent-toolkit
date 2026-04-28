@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.1] - 2026-04-28
+
+### Changed
+
+- Updated SRE write-scope guidance to read allowlist and blocklist patterns from the
+  toolkit-owned `scripts/orchestrator/routing-config.json`.
+
+
 ## [2.2.0] - 2026-04-27
 
 ### Changed
@@ -99,7 +107,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/site-reliability-engineer-v2.1.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/site-reliability-engineer-v2.2.1...HEAD
+[2.2.1]: https://github.com/bmjcoding/agent-toolkit/compare/agent/site-reliability-engineer-v2.2.0...agent/site-reliability-engineer-v2.2.1
 [2.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/site-reliability-engineer-v2.0.0...agent/site-reliability-engineer-v2.1.0
 [2.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/agent/site-reliability-engineer-v2.0.0
 [1.4.2]: https://github.com/bmjcoding/agent-toolkit/compare/agent/site-reliability-engineer-v1.4.1...agent/site-reliability-engineer-v1.4.2

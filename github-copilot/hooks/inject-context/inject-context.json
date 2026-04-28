@@ -3,7 +3,8 @@
     "SubagentStart": [
       {
         "type": "command",
-        "command": "bash \"$AGENT_TOOLKIT_DIR/github-copilot/hooks/inject-context/inject-context.sh\""
+        "command": "bash \"${AGENT_TOOLKIT_DIR:-${TOOLKIT_PATH:-$PWD}}/github-copilot/hooks/inject-context/inject-context.sh\"",
+        "timeoutMs": 3000
       }
     ]
   }

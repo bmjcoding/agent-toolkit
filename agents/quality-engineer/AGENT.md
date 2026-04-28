@@ -46,7 +46,7 @@ Constraints:
 - Do NOT start remediation unless the dispatch prompt identifies a plan-backed repair scope (either an original subtask or an orchestrator-created repair subtask). Free-text findings alone are not sufficient write authorization.
 - **Runaway loop guard**: If the orchestrator's dispatch prompt indicates this is iteration >= 3 (e.g., "iteration 3 of 3"), stop immediately and escalate all remaining items to 'Needs Human Decision' with note: "Quality loop at maximum iteration — manual review required." Do not continue fixing. The orchestrator includes the iteration count in the dispatch prompt as "iteration N of 3" — check for this phrase.
 
-**Printf safety check**: Whenever a fix modifies `printf` in any shell file, run `~/.claude/scripts/lint-printf-newlines.sh <file>` afterwards. The script catches both classes of error programmatically: `printf '%b'` (escape-interpreting injection surface) and `printf '%s'` paired with an accumulator that uses literal `\n`. A non-zero exit means the fix is incomplete — address every reported finding before writing the handoff.
+**Printf safety check**: Whenever a fix modifies `printf` in any shell file, run `scripts/orchestrator/lint-printf-newlines.sh <file>` afterwards. The script catches both classes of error programmatically: `printf '%b'` (escape-interpreting injection surface) and `printf '%s'` paired with an accumulator that uses literal `\n`. A non-zero exit means the fix is incomplete — address every reported finding before writing the handoff.
 
 After each remediation cycle, append the following to `.orchestrator/sessions/$SID/context/prior-attempts.md`:
 - Resolved items: what was fixed, which file, what approach was used

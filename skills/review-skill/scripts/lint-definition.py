@@ -39,6 +39,7 @@ Checks:
     S10  Name matches directory name
     S11  Lifecycle is present and one of stable, beta, experimental
     S12  Skill dependencies use the supported typed format
+    S13  No duplicate frontmatter keys
 
   Quality (warnings, errors in --strict):
     Q01  Description under 250 chars (truncation threshold in skill listing)
@@ -260,6 +261,12 @@ def lint_file(filepath, file_type=None, base=None):
     raw_fm = content[3:content.find("---", 3)]
     if re.search(r"<[^>]+>", raw_fm):
         error("S06", "Frontmatter contains XML angle brackets — forbidden")
+
+    # S13: Duplicate frontmatter keys
+    keys = re.findall(r"(?m)^([\w-]+)\s*:", raw_fm)
+    duplicate_keys = sorted({key for key in keys if keys.count(key) > 1})
+    if duplicate_keys:
+        error("S13", f"Duplicate frontmatter keys: {', '.join(duplicate_keys)}")
 
     # S07: Body line count (skills)
     body_lines = body.split("\n")

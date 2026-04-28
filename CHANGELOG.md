@@ -8,6 +8,23 @@ This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [4.10.0] - 2026-04-28
+
+### Added
+
+- Added repo-owned orchestrator helper scripts for dispatch validation, plan and
+  handoff validation, session preflight, drift checks, structural group checks,
+  targeted diff budgets, backlog seeding, ADR numbering, and model-routing config.
+
+### Changed
+
+- Generated adapter and catalog tooling now publish hook runtime helpers, canonical
+  root-hook companions, hook timeout metadata, and Codex agent execution metadata
+  from the canonical definitions.
+- Codex install now symlinks canonical root hooks and orchestrator helper scripts so
+  generated hooks can resolve shared runtime logic without Claude-local paths.
+
+
 ## [4.9.0] - 2026-04-27
 
 ### Added
@@ -416,7 +433,8 @@ No action required for users who install via symlinks (`./claude-code/scripts/in
 3. Re-run the install script: `./claude-code/scripts/install.sh`.
 4. Verify: `./claude-code/scripts/install.sh --check`.
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/v4.7.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/v4.10.0...HEAD
+[4.10.0]: https://github.com/bmjcoding/agent-toolkit/compare/v4.9.0...v4.10.0
 [4.7.0]: https://github.com/bmjcoding/agent-toolkit/compare/v4.6.1...v4.7.0
 [4.6.1]: https://github.com/bmjcoding/agent-toolkit/compare/v4.6.0...v4.6.1
 [4.6.0]: https://github.com/bmjcoding/agent-toolkit/compare/v4.5.0...v4.6.0

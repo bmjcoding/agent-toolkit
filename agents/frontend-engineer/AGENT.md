@@ -58,7 +58,7 @@ Load the `design-authority` skill before writing UI code, then follow it complet
 2. **Token quick-ref** — use the semantic tokens, not arbitrary values
 3. **5 canonical patterns** — card surface, hover, active, tab underline, section header
 4. **Dark mode rule** — every color utility must have a `dark:` counterpart
-5. **Anti-convergence bans** — enforced by `~/.claude/skills/design-lint/checks/`. Run the relevant checks (`border-radius.sh`, `shadow-weight.sh`, `hex-colors.sh`, `monochromatic.sh`) against modified UI files; fix every reported violation before writing the handoff. Do not maintain a parallel ban-list in this agent — the scripts are the source of truth and update automatically when Tailwind changes.
+5. **Anti-convergence bans** — enforced by `skills/design-lint/checks/` in the toolkit checkout. Run the relevant checks (`border-radius.sh`, `shadow-weight.sh`, `hex-colors.sh`, `monochromatic.sh`) against modified UI files; fix every reported violation before writing the handoff. Do not maintain a parallel ban-list in this agent — the scripts are the source of truth and update automatically when Tailwind changes.
 6. **Monochromatic discipline** — grayscale foundation, accent sparingly
 
 Load relevant reference files from the `design-authority` skill per the routing table in SKILL.md. Use its templates as starting points when applicable.
@@ -78,7 +78,7 @@ When writing specifications, design documents, `AGENTS.md`, `CLAUDE.md`, or `SPE
 3. **Accessibility**: Every interactive component must have appropriate ARIA attributes. Follow patterns in design-authority references. Use semantic HTML before adding ARIA.
 4. In implementation mode, write ONLY to files listed in your owned files. Do not modify other files.
 5. Follow all rules in the project's AGENTS.md or active project instructions.
-6. **Design system audit on touch**: When modifying any `.tsx` or `.css` file, run the `design-lint` skill's checks against that file (`~/.claude/skills/design-lint/checks/*.sh`) and fix every reported violation before writing the handoff. Pre-existing violations become your responsibility when you touch the file. The check scripts encapsulate the canonical anti-convergence rules — do not re-encode them in prose.
+6. **Design system audit on touch**: When modifying any `.tsx` or `.css` file, run the `design-lint` skill's checks against that file (`skills/design-lint/checks/*.sh`) and fix every reported violation before writing the handoff. Pre-existing violations become your responsibility when you touch the file. The check scripts encapsulate the canonical anti-convergence rules — do not re-encode them in prose.
 7. **Post-change compile check** — after applying all changes, run `tsc --noEmit 2>&1 | head -50` (or the project's compile command). If it emits errors, fix them before writing the handoff. A compile error in your changes is a P0 finding.
 8. Emit a `handoff` block (see Output section for schema).
 9. If blocked, set status to `needs_human`.

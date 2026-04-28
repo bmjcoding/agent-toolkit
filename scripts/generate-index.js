@@ -9,6 +9,12 @@ const REPO_ROOT = path.resolve(__dirname, '..');
 const OUTPUT_FILE = path.join(REPO_ROOT, 'index.json');
 const RAW_BASE_URL = 'https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/';
 const VALID_LIFECYCLES = new Set(['stable', 'beta', 'experimental']);
+const HOOK_RUNTIME_HELPERS = [
+  'hooks/_adapter_lib.sh',
+  'scripts/orchestrator/dispatch-validator.py',
+  'scripts/orchestrator/validate-handoff.py',
+  'scripts/orchestrator/lint-printf-newlines.sh',
+];
 
 function readFileSafe(filePath) {
   try {
@@ -722,6 +728,13 @@ function buildInstallCommand({ artifactPath, installPath, companionArtifacts = [
   return commands.join(' && ');
 }
 
+function companionDownloads(paths, installRoot) {
+  return paths.map(relPath => ({
+    url: downloadUrlFor(relPath),
+    path: `${installRoot}/${relPath}`,
+  }));
+}
+
 function membershipFor(bundleMembership, targetTool, componentKind, componentId) {
   return bundleMembership.get(`${targetTool}|${componentKind}|${componentId}`) || [];
 }
@@ -964,9 +977,12 @@ function buildCatalog() {
         componentId: id,
         artifactPath,
         installPath,
+        companionArtifacts: companionDownloads(HOOK_RUNTIME_HELPERS, '$HOME/.claude'),
       }),
       bundleMembership: membershipFor(bundleMembership, 'claude-code', 'hook', id),
-      metadata: {},
+      metadata: {
+        companion_artifacts: HOOK_RUNTIME_HELPERS,
+      },
     }));
   }
 
@@ -1000,11 +1016,16 @@ function buildCatalog() {
             url: downloadUrlFor(shellPath),
             path: `.github/hooks/${id}.sh`,
           },
+          ...companionDownloads(HOOK_RUNTIME_HELPERS, '.'),
+          {
+            url: downloadUrlFor(`hooks/${id}/${id}.sh`),
+            path: `hooks/${id}/${id}.sh`,
+          },
         ],
       }),
       bundleMembership: membershipFor(bundleMembership, 'github-copilot', 'hook', id),
       metadata: {
-        companion_artifacts: [shellPath],
+        companion_artifacts: [shellPath, ...HOOK_RUNTIME_HELPERS, `hooks/${id}/${id}.sh`],
       },
     }));
   }
@@ -1023,10 +1044,7 @@ function buildCatalog() {
         url: downloadUrlFor(codexHooksRegistry),
         path: '~/.codex/hooks.json',
       },
-      {
-        url: downloadUrlFor('hooks/_adapter_lib.sh'),
-        path: '~/.codex/hooks/_adapter_lib.sh',
-      },
+      ...companionDownloads(HOOK_RUNTIME_HELPERS, '~/.codex'),
       {
         url: downloadUrlFor(`hooks/${id}/${id}.sh`),
         path: `~/.codex/hooks/${id}/${id}.sh`,
@@ -1130,6 +1148,10 @@ function runTests() {
     claudeHookArtifact.install_command.includes('chmod +x "$HOME/.claude/hooks/branch-guard/branch-guard.sh"'),
     'expected Claude hook install command to chmod the installed hook shell'
   );
+  assert(
+    claudeHookArtifact.install_command.includes('curl -fsSL "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/_adapter_lib.sh" -o "$HOME/.claude/hooks/_adapter_lib.sh"'),
+    'expected Claude hook install command to download the shared adapter library'
+  );
 
   const copilotHookArtifact = findCatalogArtifact(catalog, {
     targetTool: 'github-copilot',
@@ -1148,6 +1170,10 @@ function runTests() {
   assert(
     copilotHookArtifact.install_command.includes('chmod +x ".github/hooks/branch-guard.sh"'),
     'expected GitHub Copilot hook install command to chmod the shell companion'
+  );
+  assert(
+    copilotHookArtifact.install_command.includes('curl -fsSL "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/branch-guard/branch-guard.sh" -o "hooks/branch-guard/branch-guard.sh"'),
+    'expected GitHub Copilot hook install command to download the canonical root hook'
   );
   assert(
     !copilotHookArtifact.install_command.includes('chmod +x ".github/hooks/branch-guard.json"'),
@@ -1205,7 +1231,7 @@ function runTests() {
     'expected Codex hook install command to skip chmod for hooks.json'
   );
   assert(
-    countOccurrences(codexHookArtifact.install_command, 'chmod +x ') === 4,
+    countOccurrences(codexHookArtifact.install_command, 'chmod +x ') === 5,
     'expected Codex integrity-warn hook install command to chmod every downloaded shell exactly once'
   );
 

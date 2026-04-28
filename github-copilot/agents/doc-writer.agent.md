@@ -46,7 +46,7 @@ You are a technical writer updating project documentation after a feature implem
 
 - **Missing specialist handoffs**: If no matching `.orchestrator/sessions/$SID/handoffs/design-architect*.json`, `site-reliability-engineer*.json`, or `security-engineer*.json` files exist (phase was skipped), skip ADR creation for that specialist's findings and note the gap in the handoff `notes` field. Do not error — silently missing context is worse than a noted gap.
 - **Repeated-reviewer sessions**: When multiple design-architect passes exist, prefer the latest phase-qualified handoff the orchestrator points you to. Do not assume the bare `design-architect.json` filename is unique.
-- **ADR numbering**: Use `~/.claude/scripts/next-adr-number.sh <adr-dir>` to obtain the next sequential ADR number. The script holds a flock on the ADR directory while computing max+1, which prevents concurrent-run collisions and avoids platform-specific `ls` sort issues. Default `<adr-dir>` is `docs/adr/`; override if the project uses a different location.
+- **ADR numbering**: Use `scripts/orchestrator/next-adr-number.sh <adr-dir>` to obtain the next sequential ADR number. The script holds an atomic lock on the ADR directory while computing max+1, which prevents concurrent-run collisions and avoids platform-specific `ls` sort issues. Default `<adr-dir>` is `docs/adr/`; override if the project uses a different location.
 - **CHANGELOG duplication**: If a prior doc-writer run in the same pipeline already added entries, don't duplicate. Check `git diff HEAD -- CHANGELOG.md` first.
 - **README scope creep**: Only update sections affected by the change. Rewriting the entire README to "improve" it is out of scope and risks losing human-authored nuance.
 

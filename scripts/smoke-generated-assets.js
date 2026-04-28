@@ -386,6 +386,10 @@ function assertCodexHookInstallContract(hooks) {
       registryEntry.command === `\${AGENT_TOOLKIT_DIR:-$HOME/.codex}/openai-codex/hooks/${hook}/${hook}.sh`,
       `unexpected Codex registry command path for ${hook}: ${registryEntry.command}`
     );
+    assert(
+      typeof registryEntry.timeoutMs === 'number' && registryEntry.timeoutMs > 0,
+      `expected Codex registry timeoutMs for ${hook}`
+    );
 
     const artifact = (index.artifacts || []).find(item =>
       item.target_tool === 'openai-codex' &&
@@ -407,6 +411,12 @@ function assertCodexHookInstallContract(hooks) {
     assert(
       companions.includes('hooks/_adapter_lib.sh'),
       `expected hooks/_adapter_lib.sh companion artifact for Codex hook ${hook}`
+    );
+    assert(
+      companions.includes('scripts/orchestrator/dispatch-validator.py') &&
+      companions.includes('scripts/orchestrator/validate-handoff.py') &&
+      companions.includes('scripts/orchestrator/lint-printf-newlines.sh'),
+      `expected orchestrator hook helper companion artifacts for Codex hook ${hook}`
     );
     assert(
       companions.includes(`hooks/${hook}/${hook}.sh`),
@@ -435,6 +445,10 @@ function assertInstallCommandContracts(hooks) {
       claudeArtifact.install_command.includes(`chmod +x "$HOME/.claude/hooks/${hook}/${hook}.sh"`),
       `expected Claude hook install command to chmod ${hook}.sh`
     );
+    assert(
+      claudeArtifact.install_command.includes('curl -fsSL "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/_adapter_lib.sh" -o "$HOME/.claude/hooks/_adapter_lib.sh"'),
+      `expected Claude hook install command to download shared adapter library for ${hook}`
+    );
 
     const copilotArtifact = findArtifact(index, {
       targetTool: 'github-copilot',
@@ -453,6 +467,10 @@ function assertInstallCommandContracts(hooks) {
     assert(
       copilotArtifact.install_command.includes(`chmod +x ".github/hooks/${hook}.sh"`),
       `expected GitHub Copilot hook install command to chmod ${hook}.sh`
+    );
+    assert(
+      copilotArtifact.install_command.includes(`curl -fsSL "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/${hook}/${hook}.sh" -o "hooks/${hook}/${hook}.sh"`),
+      `expected GitHub Copilot hook install command to download canonical root hook for ${hook}`
     );
     assert(
       !copilotArtifact.install_command.includes(`chmod +x ".github/hooks/${hook}.json"`),

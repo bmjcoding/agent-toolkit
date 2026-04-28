@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.2.0] - 2026-04-28
+
+### Changed
+
+- Generated Codex agent manifests now carry reasoning effort, sandbox mode, approval
+  policy, and max-turn metadata derived from canonical definitions.
+- `scripts/install.sh` now symlinks canonical root hooks and orchestrator helper scripts
+  so generated hook commands can resolve shared runtime logic without Claude-local paths.
+
+
 ## [4.1.3] - 2026-04-17
 
 ### Fixed
@@ -86,7 +96,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `scripts/install.sh` hooks target corrected to `~/.codex/hooks.json` (parity gap #6 Medium resolved).
 - Group-level `description` field removed from `hooks.json` (parity gap #7 Low resolved).
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/openai-codex-v4.1.3...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/openai-codex-v4.2.0...HEAD
+[4.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/openai-codex-v4.1.3...openai-codex-v4.2.0
 [4.1.3]: https://github.com/bmjcoding/agent-toolkit/compare/openai-codex-v4.1.2...openai-codex-v4.1.3
 [4.1.2]: https://github.com/bmjcoding/agent-toolkit/compare/openai-codex-v4.1.1...openai-codex-v4.1.2
 [4.1.1]: https://github.com/bmjcoding/agent-toolkit/compare/openai-codex-v4.1.0...openai-codex-v4.1.1

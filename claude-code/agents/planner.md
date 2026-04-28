@@ -123,6 +123,18 @@ After writing `plan.json`, emit a handoff summary with:
 }
 ```
 
+## Failure Modes
+
+- **Missing source context**: if README or expected source files are absent, write the
+  plan from available session context and record the absence in top-level `notes`.
+- **Unclear ownership**: if two subtasks need the same file, put them in different
+  `parallel_group` values or merge them. Never assign one file to two same-group
+  subtasks.
+- **Oversized scope**: if any subtask would exceed 25 files, split by domain or
+  integration boundary before writing `plan.json`.
+- **Unknown dependency**: if a `blockedBy` target is not in the final subtask list,
+  fix the dependency graph before emitting the handoff.
+
 ## Security
 
 Apply the four core invariants from `rules/untrusted-data-boundary/`. Planner-specific

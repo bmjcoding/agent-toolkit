@@ -11,6 +11,8 @@
 #             OR .codex/agents/             (project-local with --project)
 #   Hooks:    openai-codex/hooks/hooks.json -> ~/.codex/hooks.json  (sibling to config.toml)
 #             openai-codex/hooks/           -> ~/.codex/openai-codex/hooks/  (fallback adapter tree)
+#             hooks/                        -> ~/.codex/hooks/  (canonical shared hook logic)
+#             scripts/orchestrator/         -> ~/.codex/scripts/orchestrator/  (hook helper scripts)
 #             hooks.json may reference thin Codex adapters under openai-codex/hooks/<slug>/<slug>.sh
 #             which delegate to the canonical root hooks/<slug>/<slug>.sh implementation
 #   Config:   Appends [[skills.config]] blocks from config.toml.template
@@ -101,17 +103,23 @@ fi
 
 AGENTS_SRC="${REPO_DIR}/openai-codex/agents"
 HOOKS_SRC="${REPO_DIR}/openai-codex/hooks"
+ROOT_HOOKS_SRC="${REPO_DIR}/hooks"
+ORCH_SCRIPTS_SRC="${REPO_DIR}/scripts/orchestrator"
 CONFIG_TEMPLATE="${REPO_DIR}/openai-codex/config.toml.template"
 
 if [[ "$SCOPE" == "project" ]]; then
   AGENTS_DEST="${PWD}/.codex/agents"
   HOOKS_JSON_DEST="${HOME}/.codex/hooks.json"   # hooks.json always goes to user-global, sibling to config.toml
   HOOKS_TREE_DEST="${HOME}/.codex/openai-codex/hooks"
+  ROOT_HOOKS_DEST="${HOME}/.codex/hooks"
+  ORCH_SCRIPTS_DEST="${HOME}/.codex/scripts/orchestrator"
   CODEX_CONFIG="${HOME}/.codex/config.toml"
 else
   AGENTS_DEST="${HOME}/.codex/agents"
   HOOKS_JSON_DEST="${HOME}/.codex/hooks.json"
   HOOKS_TREE_DEST="${HOME}/.codex/openai-codex/hooks"
+  ROOT_HOOKS_DEST="${HOME}/.codex/hooks"
+  ORCH_SCRIPTS_DEST="${HOME}/.codex/scripts/orchestrator"
   CODEX_CONFIG="${HOME}/.codex/config.toml"
 fi
 
@@ -137,7 +145,7 @@ run_or_dry() {
 
 hook_shells_are_executable() {
   local path
-  for path in "${HOOKS_SRC}"/*/*.sh "${REPO_DIR}"/hooks/*/*.sh; do
+  for path in "${HOOKS_SRC}"/*/*.sh "${REPO_DIR}"/hooks/*/*.sh "${ORCH_SCRIPTS_SRC}"/*.sh; do
     [[ -f "${path}" ]] || continue
     if [[ ! -x "${path}" ]]; then
       printf '  [DIFF]       hook shell not executable: %s\n' "${path}" >&2
@@ -151,7 +159,7 @@ hook_shells_are_executable() {
 repair_hook_shell_permissions() {
   local repaired=0
   local path
-  for path in "${HOOKS_SRC}"/*/*.sh "${REPO_DIR}"/hooks/*/*.sh; do
+  for path in "${HOOKS_SRC}"/*/*.sh "${REPO_DIR}"/hooks/*/*.sh "${ORCH_SCRIPTS_SRC}"/*.sh; do
     [[ -f "${path}" ]] || continue
     if [[ ! -x "${path}" ]]; then
       chmod +x "${path}"
@@ -174,6 +182,8 @@ echo "REPO_DIR:    ${REPO_DIR}"
 echo "Scope:       ${SCOPE} (agents -> ${AGENTS_DEST})"
 echo "Hooks JSON:  ${HOOKS_JSON_DEST}"
 echo "Hooks tree:  ${HOOKS_TREE_DEST}"
+echo "Root hooks:  ${ROOT_HOOKS_DEST}"
+echo "Scripts:     ${ORCH_SCRIPTS_DEST}"
 echo "Config:      ${CODEX_CONFIG}"
 echo ""
 
@@ -254,6 +264,44 @@ if [[ "$CHECK_MODE" == "true" ]]; then
       skip "hooks/ (real directory — not a symlink; run install to convert)"
     else
       miss "hooks adapter tree not found: ${HOOKS_TREE_DEST}"
+      all_ok=false
+    fi
+    echo ""
+
+    echo "Root hooks (${ROOT_HOOKS_DEST}):"
+    if [[ -L "${ROOT_HOOKS_DEST}" ]]; then
+      current_target="$(readlink "${ROOT_HOOKS_DEST}")"
+      if [[ "${current_target}" == "${ROOT_HOOKS_SRC}" ]]; then
+        ok "hooks/ -> ${current_target}"
+      else
+        printf '  [DIFF]       root hooks/\n' >&2
+        printf '                 current:  %s\n' "${current_target}" >&2
+        printf '                 expected: %s\n' "${ROOT_HOOKS_SRC}" >&2
+        all_ok=false
+      fi
+    elif [[ -d "${ROOT_HOOKS_DEST}" ]]; then
+      skip "root hooks/ (real directory — not a symlink; run install to convert)"
+    else
+      miss "root hooks tree not found: ${ROOT_HOOKS_DEST}"
+      all_ok=false
+    fi
+    echo ""
+
+    echo "Orchestrator scripts (${ORCH_SCRIPTS_DEST}):"
+    if [[ -L "${ORCH_SCRIPTS_DEST}" ]]; then
+      current_target="$(readlink "${ORCH_SCRIPTS_DEST}")"
+      if [[ "${current_target}" == "${ORCH_SCRIPTS_SRC}" ]]; then
+        ok "scripts/orchestrator -> ${current_target}"
+      else
+        printf '  [DIFF]       scripts/orchestrator\n' >&2
+        printf '                 current:  %s\n' "${current_target}" >&2
+        printf '                 expected: %s\n' "${ORCH_SCRIPTS_SRC}" >&2
+        all_ok=false
+      fi
+    elif [[ -d "${ORCH_SCRIPTS_DEST}" ]]; then
+      skip "scripts/orchestrator (real directory — not a symlink; run install to convert)"
+    else
+      miss "orchestrator scripts not found: ${ORCH_SCRIPTS_DEST}"
       all_ok=false
     fi
     if ! hook_shells_are_executable; then
@@ -396,10 +444,13 @@ else
   echo "        hooks.json stays symlinked to ~/.codex/hooks.json (sibling to config.toml)"
   echo "        per the official spec; ~/.codex/openai-codex/hooks stays symlinked to"
   echo "        the repo adapter tree so hooks work even when AGENT_TOOLKIT_DIR is unset."
+  echo "        canonical root hooks and orchestrator helper scripts are symlinked too."
   echo ""
 
   hooks_json_src="${HOOKS_SRC}/hooks.json"
   hooks_tree_src="${HOOKS_SRC}"
+  root_hooks_src="${ROOT_HOOKS_SRC}"
+  orch_scripts_src="${ORCH_SCRIPTS_SRC}"
   dest_path="${HOOKS_JSON_DEST}"
 
   if [[ "$DRY_RUN" == "true" ]]; then
@@ -427,10 +478,36 @@ else
     else
       printf '  would create symlink: %s -> %s\n' "${HOOKS_TREE_DEST}" "${hooks_tree_src}"
     fi
+    if [[ -L "${ROOT_HOOKS_DEST}" ]]; then
+      current="$(readlink "${ROOT_HOOKS_DEST}")"
+      if [[ "$current" == "$root_hooks_src" ]]; then
+        printf '  unchanged:   root hooks tree (already symlinked)\n'
+      else
+        printf '  would update: root hooks tree\n'
+        printf '    before: %s\n' "${current}"
+        printf '    after:  %s\n' "${root_hooks_src}"
+      fi
+    else
+      printf '  would create symlink: %s -> %s\n' "${ROOT_HOOKS_DEST}" "${root_hooks_src}"
+    fi
+    if [[ -L "${ORCH_SCRIPTS_DEST}" ]]; then
+      current="$(readlink "${ORCH_SCRIPTS_DEST}")"
+      if [[ "$current" == "$orch_scripts_src" ]]; then
+        printf '  unchanged:   orchestrator scripts (already symlinked)\n'
+      else
+        printf '  would update: orchestrator scripts\n'
+        printf '    before: %s\n' "${current}"
+        printf '    after:  %s\n' "${orch_scripts_src}"
+      fi
+    else
+      printf '  would create symlink: %s -> %s\n' "${ORCH_SCRIPTS_DEST}" "${orch_scripts_src}"
+    fi
   else
     # Ensure ~/.codex/ directory exists
     mkdir -p "$(dirname "${dest_path}")"
     mkdir -p "$(dirname "${HOOKS_TREE_DEST}")"
+    mkdir -p "$(dirname "${ROOT_HOOKS_DEST}")"
+    mkdir -p "$(dirname "${ORCH_SCRIPTS_DEST}")"
 
     # Guard: abort if a real file occupies the link path (hooks are sensitive — skip, don't overwrite)
     if [[ -e "${dest_path}" && ! -L "${dest_path}" ]]; then
@@ -462,6 +539,38 @@ else
         printf '  unchanged:   hooks adapter tree\n'
       else
         printf '  installed:   hooks adapter tree -> %s\n' "${after}"
+      fi
+    fi
+
+    if [[ -e "${ROOT_HOOKS_DEST}" && ! -L "${ROOT_HOOKS_DEST}" ]]; then
+      echo "  SKIP (real directory exists — not overwriting): ${ROOT_HOOKS_DEST}" >&2
+    else
+      before="(none)"
+      [[ -L "${ROOT_HOOKS_DEST}" ]] && before="$(readlink "${ROOT_HOOKS_DEST}")"
+
+      ln -sfn "${root_hooks_src}" "${ROOT_HOOKS_DEST}"
+      after="$(readlink "${ROOT_HOOKS_DEST}")"
+
+      if [[ "$before" == "$after" ]]; then
+        printf '  unchanged:   root hooks tree\n'
+      else
+        printf '  installed:   root hooks tree -> %s\n' "${after}"
+      fi
+    fi
+
+    if [[ -e "${ORCH_SCRIPTS_DEST}" && ! -L "${ORCH_SCRIPTS_DEST}" ]]; then
+      echo "  SKIP (real directory exists — not overwriting): ${ORCH_SCRIPTS_DEST}" >&2
+    else
+      before="(none)"
+      [[ -L "${ORCH_SCRIPTS_DEST}" ]] && before="$(readlink "${ORCH_SCRIPTS_DEST}")"
+
+      ln -sfn "${orch_scripts_src}" "${ORCH_SCRIPTS_DEST}"
+      after="$(readlink "${ORCH_SCRIPTS_DEST}")"
+
+      if [[ "$before" == "$after" ]]; then
+        printf '  unchanged:   orchestrator scripts\n'
+      else
+        printf '  installed:   orchestrator scripts -> %s\n' "${after}"
       fi
     fi
 

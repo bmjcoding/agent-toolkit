@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.2.0] - 2026-04-28
+
 ### Added
 
 - Generated Codex adapters for three new canonical hooks: `dispatch-validate/` (PreToolUse, matcher `.*`), `post-agent-audit/` (Stop, matcher `.*`), and `printf-lint/` (PostToolUse, matcher `.*`). Each adapter delegates directly to the canonical root hook script. `hooks.json` registry updated with the corresponding entries.
@@ -15,6 +17,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - `post-agent-audit` adapter now also validates the returning agent's handoff JSON against the schema via `validate-handoff.py`. Violations are recorded in the audit JSON the orchestrator inspects.
+- The generated `hooks.json` registry now includes explicit `timeoutMs` values for
+  every hook command.
+
 
 ## [3.1.2] - 2026-04-17
 
@@ -45,7 +50,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - BREAKING: `hooks.json` completely rewritten to match the official Codex hooks format. The previous flat structure `{matcher, script, description}` was non-functional; the file now uses a nested `hooks` key with event-keyed arrays of matcher-group objects containing `{type: command, command: ...}` handlers. Parity gap #1 Codex (CRITICAL) resolved.
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/openai-codex-hooks-v3.1.2...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/openai-codex-hooks-v3.2.0...HEAD
+[3.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/openai-codex-hooks-v3.1.2...openai-codex-hooks-v3.2.0
 [3.1.2]: https://github.com/bmjcoding/agent-toolkit/compare/openai-codex-hooks-v3.1.1...openai-codex-hooks-v3.1.2
 [3.1.1]: https://github.com/bmjcoding/agent-toolkit/compare/openai-codex-hooks-v3.1.0...openai-codex-hooks-v3.1.1
 [3.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/openai-codex-hooks-v3.0.0...openai-codex-hooks-v3.1.0

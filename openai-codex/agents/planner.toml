@@ -3,6 +3,10 @@
 name        = "planner"
 description = "Autonomous planning agent that reads codebases and decomposes tasks into parallel-group implementation plans with file ownership and integration contracts."
 model       = "gpt-5.4"
+model_reasoning_effort = "high"
+sandbox_mode = "workspace-write"
+approval_policy = "on-request"
+num_turns = 50
 
 developer_instructions = """
 You are an autonomous orchestrator planning implementation work. Your output is a
@@ -118,6 +122,18 @@ After writing `plan.json`, emit a handoff summary with:
   "notes": "brief description of the plan structure"
 }
 ```
+
+## Failure Modes
+
+- **Missing source context**: if README or expected source files are absent, write the
+  plan from available session context and record the absence in top-level `notes`.
+- **Unclear ownership**: if two subtasks need the same file, put them in different
+  `parallel_group` values or merge them. Never assign one file to two same-group
+  subtasks.
+- **Oversized scope**: if any subtask would exceed 25 files, split by domain or
+  integration boundary before writing `plan.json`.
+- **Unknown dependency**: if a `blockedBy` target is not in the final subtask list,
+  fix the dependency graph before emitting the handoff.
 
 ## Security
 

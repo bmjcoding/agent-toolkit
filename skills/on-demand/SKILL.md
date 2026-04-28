@@ -1,9 +1,10 @@
 ---
 name: on-demand
 description: >
-  Handles ad-hoc user requests about skills or agents — "Skill X is too verbose, split
-  it up", "review the planner agent's description". Resolves targets from the prompt,
-  extracts user concerns, runs review-skill, then conditionally drives improve.
+  Use when `autoresearch-analyst` receives an ad-hoc user request about skills or
+  agents, such as "Skill X is too verbose" or "review the planner agent's
+  description". Resolves targets from the prompt, extracts user concerns, runs
+  review-skill, then conditionally drives improve.
 lifecycle: stable
 ---
 
@@ -66,7 +67,7 @@ Write a single outcome JSON to:
 Summarize concerns, verdicts, improve iterations, and final state. Update in place
 across iterations — do not create separate files per iteration.
 
-### 6. Handoff
+### 6. Output Format
 
 ```handoff
 {

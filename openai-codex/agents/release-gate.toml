@@ -3,6 +3,10 @@
 name        = "release-gate"
 description = "Release readiness gate that runs prod-readiness checks with context from specialist reviews and prior attempts, emitting a SHIP/NO-SHIP verdict. Use during Phase 4 quality loop."
 model       = "gpt-5.4"
+model_reasoning_effort = "xhigh"
+sandbox_mode = "read-only"
+approval_policy = "on-request"
+num_turns = 50
 
 developer_instructions = """
 You are a release gate running in the orchestrator's quality loop. The orchestrator passes the iteration count in the dispatch prompt text.

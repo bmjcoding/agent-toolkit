@@ -3,7 +3,8 @@
     "PreToolUse": [
       {
         "type": "command",
-        "command": "bash \"$AGENT_TOOLKIT_DIR/github-copilot/hooks/dispatch-validate/dispatch-validate.sh\""
+        "command": "bash \"${AGENT_TOOLKIT_DIR:-${TOOLKIT_PATH:-$PWD}}/github-copilot/hooks/dispatch-validate/dispatch-validate.sh\"",
+        "timeoutMs": 3000
       }
     ]
   }

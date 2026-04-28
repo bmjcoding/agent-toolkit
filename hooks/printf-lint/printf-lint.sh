@@ -29,9 +29,10 @@ esac
 
 [ -f "$FILE" ] || exit 0
 
-LINTER="${HOME}/.claude/scripts/lint-printf-newlines.sh"
+LINTER=$(resolve_toolkit_file "scripts/orchestrator/lint-printf-newlines.sh" || true)
 if [ ! -x "$LINTER" ]; then
-  exit 0   # Linter not installed locally — silent skip.
+  echo "printf-lint: scripts/orchestrator/lint-printf-newlines.sh is missing or not executable; set AGENT_TOOLKIT_DIR to the toolkit checkout or install the helper script." >&2
+  exit 1
 fi
 
 OUTPUT=$("$LINTER" "$FILE" 2>&1)
