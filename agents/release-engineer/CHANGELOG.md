@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.4.0] - 2026-04-27
+
+### Changed
+
+- Replaced the `Untrusted Data Boundary` invariants block with a reference to `rules/untrusted-data-boundary/`. Release-specific safety rules (commit-message untrusted-content, branch-name sanitisation, etc.) remain.
+
 ## [5.3.0] - 2026-04-17
 
 ### Changed

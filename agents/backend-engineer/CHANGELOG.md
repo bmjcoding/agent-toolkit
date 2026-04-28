@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.0] - 2026-04-27
+
+### Changed
+
+- Stripped project-specific `Fixture Creation Rules` items referencing `VALID_PREFIXES`, `resetStorageService()`, and `apps/backend/tests/setup.ts` — these belonged in a project's own `AGENTS.md`, not the shared agent definition. The general "no symlinks in fixture directories" rule is preserved. Treated as MINOR rather than MAJOR because the removed content was project-specific examples that did not belong in a framework-agnostic agent; the agent's behavioural contract with consumers is unchanged.
+- Stripped the framework-specific `Hono/OpenAPI Patterns` section (`c.req.valid('json')` etc.) for the same reason. The general guidance "use the project's existing validation approach for all inputs" already covers framework-agnostic intent.
+- Replaced the `Untrusted Data Boundary` invariants block with a reference to `rules/untrusted-data-boundary/`.
+
 ## [2.1.0] - 2026-04-15
 
 ### Added
