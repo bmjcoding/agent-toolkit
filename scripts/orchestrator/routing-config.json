@@ -1,0 +1,73 @@
+{
+  "$schema": "https://example.invalid/agent-toolkit/orchestrator-routing-config.schema.json",
+  "model_aliases": {
+    "frontier": {
+      "claude-code": "opus",
+      "github-copilot": "Claude Opus 4.6",
+      "openai-codex": "gpt-5.4"
+    },
+    "balanced": {
+      "claude-code": "sonnet",
+      "github-copilot": "Claude Sonnet 4.5",
+      "openai-codex": "gpt-5.3-codex"
+    },
+    "fast": {
+      "claude-code": "haiku",
+      "github-copilot": "Claude Haiku 4.5",
+      "openai-codex": "gpt-5.3-codex-spark"
+    }
+  },
+  "fast_tier_roles": [
+    "explore-skill",
+    "rules-backfill",
+    "integration-repair",
+    "doc-writer",
+    "quality-fix-targeted",
+    "subtask-repair",
+    "post-validation",
+    "explorer-paths",
+    "explorer-schema",
+    "explorer-specs",
+    "release-engineer-6a",
+    "release-engineer-6b",
+    "release-engineer-resume",
+    "changelog-backfill",
+    "integration-verifier-structural",
+    "explorer-component-imports",
+    "backlog-closeout",
+    "staff-engineer-config-rename",
+    "frontend-engineer-import-rename"
+  ],
+  "sre_write_allowlist": {
+    "allowed_path_patterns": [
+      "config/**",
+      "configs/**",
+      "observability/**",
+      "monitoring/**",
+      "scripts/**",
+      "runbooks/**",
+      ".orchestrator/**"
+    ],
+    "blocked_path_patterns": [
+      "app/**",
+      "pages/**",
+      "routes/**",
+      "src/**/routes/**",
+      "src/**/controllers/**",
+      "src/**/services/**",
+      "components/**"
+    ]
+  },
+  "security_review_modes": {
+    "fast_path": {
+      "eligibility": "No new web endpoints, auth flows, package dependencies, or user-facing data processing.",
+      "dispatch_prompt_addendum": "Fast-path mode: this changeset has no runtime code surface. Scope the review to secrets-in-content, shell-injection patterns, and dependency metadata. Skip full STRIDE/OWASP threat modeling unless you discover runtime exposure."
+    }
+  },
+  "schema_inventory_grep_scope": {
+    "dispatch_prompt_addendum": "For schema or rename inventories, search source, docs, config, and scripts explicitly: rg -n '<token>' . --glob '*.md' --glob '*.json' --glob '*.toml' --glob '*.yaml' --glob '*.yml' --glob '*.js' --glob '*.ts' --glob '*.tsx' --glob '*.py' --glob '*.sh'. Confirm README.md and changelogs were checked."
+  },
+  "classifier_outage": {
+    "dispatch_prompt_addendum": "If Write/Edit is blocked by a transient classifier error while editing Markdown definition files under agents/, skills/, or workflows/, use safe shell-based patch application in your own workspace only. Continue to respect owned_files and emit files_written accurately."
+  }
+}

@@ -5,6 +5,20 @@ set -uo pipefail
 
 AGENT_TOOLKIT_REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")/.." && pwd -P)"
 
+resolve_toolkit_file() {
+  local relative_path="$1"
+  local base
+
+  for base in "${AGENT_TOOLKIT_DIR:-}" "${TOOLKIT_PATH:-}" "${AGENT_TOOLKIT_REPO_DIR}"; do
+    if [[ -n "${base}" && -e "${base}/${relative_path}" ]]; then
+      printf '%s/%s\n' "${base}" "${relative_path}"
+      return 0
+    fi
+  done
+
+  return 1
+}
+
 hook_script_path() {
   local hook="$1"
   printf '%s/hooks/%s/%s.sh\n' "${AGENT_TOOLKIT_REPO_DIR}" "${hook}" "${hook}"

@@ -1,7 +1,8 @@
 ---
 name: recon
 description: >
-  Pre-planner repository reconnaissance for multi-repo toolkit pipelines. Reports
+  Use when `autoresearch-analyst` is dispatched in recon mode for pre-planner
+  repository reconnaissance, especially multi-repo toolkit pipelines. Reports
   branch status, hook registration, working-tree state, changelog versions, and
   any other operational facts the planner needs before producing plan.json.
 lifecycle: stable
@@ -41,7 +42,7 @@ When dispatched for multi-repo pipelines, the recon output **must** confirm all 
 
 If any item cannot be confirmed, list it as an explicit gap. Do not guess.
 
-## Handoff
+## Output Format
 
 ```handoff
 {
@@ -52,3 +53,12 @@ If any item cannot be confirmed, list it as an explicit gap. Do not guess.
   "report_file": ".orchestrator/sessions/$SID/context/autoresearch-recon.md"
 }
 ```
+
+## Gotchas
+
+- **No repo path in prompt**: report the missing path as a gap instead of guessing
+  from the current working directory.
+- **Unavailable remote**: if `origin/main` cannot be resolved, fall back to
+  `git status -b` and list branch comparison as an explicit gap.
+- **Checklist gaps are data**: do not route to on-demand review just because a target
+  component name appears in the prompt; recon only reports operational facts.

@@ -1,9 +1,10 @@
 ---
 name: full-cycle
 description: >
-  Autonomous improve → validate loop. Applies retro recommendations via the improve
-  skill, then validates each modified definition with review-skill, iterating until
-  convergence, max iterations, REWRITE verdict, or zero-progress termination.
+  Use when `autoresearch-analyst` is dispatched in full-cycle mode to run the
+  autonomous improve → validate loop. Applies retro recommendations via improve,
+  then validates each modified definition with review-skill until convergence,
+  max iterations, REWRITE verdict, or zero-progress termination.
 lifecycle: stable
 ---
 
@@ -52,7 +53,7 @@ One improve run = one outcome file. The initial improve pass creates it; validat
 iterations update it with a `validation` field. Do not create additional outcome files
 per iteration.
 
-## Handoff
+## Output Format
 
 ```handoff
 {
@@ -88,3 +89,12 @@ per iteration.
 
 Never exceed `max_iterations`. Each iteration must make forward progress — if an
 iteration accepts 0 changes, stop immediately rather than burning remaining budget.
+
+## Gotchas
+
+- **No modified definitions**: if improve applies only patterns or skips every fix,
+  stop with `stopped_reason: "no_progress"` and do not run review-skill.
+- **REWRITE verdict**: stop immediately and report the file; do not attempt a patch
+  pass against a definition that review-skill says needs a rewrite.
+- **Outcome drift**: update the original outcome JSON in place so callers have one
+  durable status file to read after the loop.

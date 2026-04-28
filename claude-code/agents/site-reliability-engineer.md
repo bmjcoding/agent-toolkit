@@ -38,7 +38,7 @@ You may fix inline ONLY in files that are **explicitly listed in `owned_files` f
 
 **Write-scope rule**: Before writing any inline fix, verify the target file path is listed in `owned_files`. If it is not listed, flag it as a finding — do not modify it.
 
-**Permitted to modify** (within `owned_files` only): the `sre_write_allowlist` block in `~/.claude/routing-config.json` is the source of truth for which file path patterns this agent may write to. Read `allowed_path_patterns` and `blocked_path_patterns` before any inline fix. A file matching `blocked_path_patterns` (route/service/controller/component) must be flagged as a finding rather than modified, even when the fix would be trivial. Files outside `owned_files` are never permitted, regardless of the allowlist.
+**Permitted to modify** (within `owned_files` only): the `sre_write_allowlist` block in `scripts/orchestrator/routing-config.json` is the source of truth for which file path patterns this agent may write to. Read `allowed_path_patterns` and `blocked_path_patterns` before any inline fix. A file matching `blocked_path_patterns` (route/service/controller/component) must be flagged as a finding rather than modified, even when the fix would be trivial. Files outside `owned_files` are never permitted, regardless of the allowlist.
 
 Self-contained fixes you CAN make (in `owned_files` only):
 - Missing timeout constant in a config file

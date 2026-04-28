@@ -26,7 +26,10 @@ Use these as checklists against the code under review. For self-contained fixes 
 
 1. **Identify scope** — determine which references apply (logging, health, runbook) based on the files under review.
 2. **Check each item** — run each checklist entry against the code; flag violations with file and line reference.
-3. **Remediate inline** — apply self-contained fixes (missing timeout, missing log field, missing health route) directly.
+3. **Remediate inline** — apply self-contained fixes only when the owning agent's
+   write allowlist permits the target file. Missing timeout constants and missing
+   log fields are usually self-contained; missing health routes are findings unless
+   the route file is already in owned scope and not blocked by routing config.
 4. **Report** — present findings by category with severity; note which were fixed inline vs. requiring follow-up.
 
 ## Output Format

@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.3.0] - 2026-04-28
+
+### Added
+
+- Added explicit failure-mode guidance for missing source context, unclear ownership,
+  oversized subtask scope, and unknown dependency references before emitting `plan.json`.
+
+
 ## [2.2.0] - 2026-04-27
 
 ### Changed
@@ -142,7 +150,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/planner-v2.1.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/planner-v2.3.0...HEAD
+[2.3.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/planner-v2.2.0...agent/planner-v2.3.0
 [2.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/planner-v2.0.0...agent/planner-v2.1.0
 [2.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/agent/planner-v2.0.0
 [1.10.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/planner-v1.9.1...agent/planner-v1.10.0

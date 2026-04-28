@@ -6,7 +6,6 @@ description: >
 lifecycle: stable
 disable-model-invocation: true
 argument-hint: "[pr | merge | cleanup | --draft | --auto-merge | --force]"
-lifecycle: stable
 ---
 
 # Git Ship

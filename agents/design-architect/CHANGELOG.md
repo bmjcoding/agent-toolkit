@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.1] - 2026-04-28
+
+### Changed
+
+- Updated design-lint guidance to run checks from the toolkit checkout path instead
+  of a Claude-local skill installation path.
+
+
 ## [2.2.0] - 2026-04-27
 
 ### Changed
@@ -76,7 +84,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/design-architect-v2.1.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/design-architect-v2.2.1...HEAD
+[2.2.1]: https://github.com/bmjcoding/agent-toolkit/compare/agent/design-architect-v2.2.0...agent/design-architect-v2.2.1
 [2.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/design-architect-v2.0.0...agent/design-architect-v2.1.0
 [2.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/agent/design-architect-v2.0.0
 [1.2.1]: https://github.com/bmjcoding/agent-toolkit/compare/agent/design-architect-v1.2.0...agent/design-architect-v1.2.1

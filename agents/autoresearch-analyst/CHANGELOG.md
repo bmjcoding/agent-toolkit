@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [6.2.1] - 2026-04-28
+
+### Changed
+
+- Updated dispatch validation, improve batch sizing, and multi-domain finding
+  consolidation guidance to call toolkit-owned `scripts/orchestrator/` helpers
+  from the active checkout instead of Claude-local script paths.
+
+
 ## [6.2.0] - 2026-04-27
 
 ### Changed
@@ -127,7 +136,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/autoresearch-analyst-v6.1.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/autoresearch-analyst-v6.2.1...HEAD
+[6.2.1]: https://github.com/bmjcoding/agent-toolkit/compare/agent/autoresearch-analyst-v6.2.0...agent/autoresearch-analyst-v6.2.1
 [6.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/autoresearch-analyst-v6.0.0...agent/autoresearch-analyst-v6.1.0
 [6.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/agent/autoresearch-analyst-v6.0.0
 [5.1.1]: https://github.com/bmjcoding/agent-toolkit/compare/agent/autoresearch-analyst-v5.1.0...agent/autoresearch-analyst-v5.1.1

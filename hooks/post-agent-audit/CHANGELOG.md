@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-04-28
+
 ### Added
 
 - Handoff schema validation: hook now invokes `~/.claude/scripts/validate-handoff.py`
@@ -15,6 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   recorded under `handoff_schema_violations` in the audit JSON the orchestrator
   inspects. This eliminates the post-completion handoff rejection class that
   previously cost 6+ rejection-and-retry cycles across the prior 10 retros.
+
+### Changed
+
+- Resolves `validate-handoff.py` through toolkit helper paths instead of a
+  Claude-local script path, and records a schema violation when the helper is missing.
+
 
 ## [1.0.0] - 2026-04-27
 
@@ -27,5 +35,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   records an audit JSON under `.orchestrator/sessions/$SID/`. Non-blocking by design —
   the orchestrator decides how to react.
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/hook/post-agent-audit-v1.0.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/hook/post-agent-audit-v1.1.0...HEAD
+[1.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/hook/post-agent-audit-v1.0.0...hook/post-agent-audit-v1.1.0
 [1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/hook/post-agent-audit-v1.0.0

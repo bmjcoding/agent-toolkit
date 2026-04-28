@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-04-28
+
+### Added
+
+- Added gotchas for missing repo paths, unavailable remotes, and treating checklist
+  gaps as recon data rather than routing them to on-demand review.
+
+### Changed
+
+- Clarified the recon-mode trigger description and renamed the handoff section to the
+  shared `Output Format` convention.
+
+
 ## [1.0.0] - 2026-04-27
 
 ### Added
@@ -17,5 +30,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   recon-mode handoff schema. Extracted from `autoresearch-analyst.md` so the workflow
   has a single update site instead of being inlined in the agent body.
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/skill/recon-v1.0.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/skill/recon-v1.1.0...HEAD
+[1.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/recon-v1.0.0...skill/recon-v1.1.0
 [1.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/skill/recon-v1.0.0

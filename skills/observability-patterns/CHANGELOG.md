@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.1.2] - 2026-04-28
+
+### Changed
+
+- Constrained inline remediation guidance so observability fixes respect the owning
+  agent's write allowlist and route health-route additions to findings unless already
+  in owned, unblocked scope.
+
+
 ## [4.1.1] - 2026-04-16
 
 ### Fixed
@@ -53,7 +62,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/skill/observability-patterns-v4.1.1...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/skill/observability-patterns-v4.1.2...HEAD
+[4.1.2]: https://github.com/bmjcoding/agent-toolkit/compare/skill/observability-patterns-v4.1.1...skill/observability-patterns-v4.1.2
 [4.1.1]: https://github.com/bmjcoding/agent-toolkit/compare/skill/observability-patterns-v4.1.0...skill/observability-patterns-v4.1.1
 [4.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/observability-patterns-v4.0.0...skill/observability-patterns-v4.1.0
 [3.0.0]: https://github.com/bmjcoding/agent-toolkit/compare/skill/observability-patterns-v2.0.0...skill/observability-patterns-v3.0.0

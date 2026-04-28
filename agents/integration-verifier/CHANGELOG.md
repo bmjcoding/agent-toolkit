@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.1] - 2026-04-28
+
+### Changed
+
+- Updated compiler-diagnostic classification guidance to use the toolkit-owned
+  `scripts/orchestrator/classify-compile-errors.py` helper.
+
+
 ## [2.2.0] - 2026-04-27
 
 ### Changed
@@ -107,7 +115,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/integration-verifier-v2.1.0...HEAD
+[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/integration-verifier-v2.2.1...HEAD
+[2.2.1]: https://github.com/bmjcoding/agent-toolkit/compare/agent/integration-verifier-v2.2.0...agent/integration-verifier-v2.2.1
 [2.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/integration-verifier-v2.0.0...agent/integration-verifier-v2.1.0
 [2.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/agent/integration-verifier-v2.0.0
 [1.4.2]: https://github.com/bmjcoding/agent-toolkit/compare/agent/integration-verifier-v1.4.1...agent/integration-verifier-v1.4.2

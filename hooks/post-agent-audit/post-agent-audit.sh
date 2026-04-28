@@ -5,8 +5,8 @@
 #      owned_files list per plan.json)
 #   2. Truncation symptoms (no handoff JSON written despite the agent stopping)
 #   3. Handoff schema violations (severity enum, status enum, files_written
-#      type, agent_id format) — delegated to validate-handoff.py so the rule
-#      lives in one place.
+#      type, agent_id format) — delegated to scripts/orchestrator/validate-handoff.py
+#      so the rule lives in one place across tool adapters.
 #
 # When out-of-scope writes are detected, the script stashes them as a named
 # patch (so the user can review or recover) and notes the stash in a
@@ -87,9 +87,12 @@ fi
 # ── Validate handoff schema (REC-1 from 2026-04-27 follow-up) ─────────────
 HANDOFF_VIOLATIONS_JSON="null"
 HANDOFF_VALID=true
-VALIDATOR="${HOME}/.claude/scripts/validate-handoff.py"
-if [ "$HANDOFF_PRESENT" = true ] && [ -x "$VALIDATOR" ]; then
-  if VALIDATE_OUT=$(python3 "$VALIDATOR" "$HANDOFF_FILE" 2>/dev/null); then
+VALIDATOR=$(resolve_toolkit_file "scripts/orchestrator/validate-handoff.py" || true)
+if [ "$HANDOFF_PRESENT" = true ]; then
+  if [ ! -f "$VALIDATOR" ]; then
+    HANDOFF_VALID=false
+    HANDOFF_VIOLATIONS_JSON='[{"code":"validator_missing","message":"scripts/orchestrator/validate-handoff.py is missing"}]'
+  elif VALIDATE_OUT=$(python3 "$VALIDATOR" "$HANDOFF_FILE" 2>/dev/null); then
     HANDOFF_VALID=true
   else
     HANDOFF_VALID=false

@@ -7,7 +7,8 @@
           {
             "type": "command",
             "command": "${AGENT_TOOLKIT_DIR:-$HOME/.codex}/openai-codex/hooks/branch-guard/branch-guard.sh",
-            "statusMessage": "Checking branch guard..."
+            "statusMessage": "Checking branch guard...",
+            "timeoutMs": 3000
           }
         ]
       },
@@ -17,7 +18,8 @@
           {
             "type": "command",
             "command": "${AGENT_TOOLKIT_DIR:-$HOME/.codex}/openai-codex/hooks/changelog-check/changelog-check.sh",
-            "statusMessage": "Validating changelog entry..."
+            "statusMessage": "Validating changelog entry...",
+            "timeoutMs": 10000
           }
         ]
       },
@@ -27,7 +29,8 @@
           {
             "type": "command",
             "command": "${AGENT_TOOLKIT_DIR:-$HOME/.codex}/openai-codex/hooks/dispatch-validate/dispatch-validate.sh",
-            "statusMessage": "Validating dispatch prompt..."
+            "statusMessage": "Validating dispatch prompt...",
+            "timeoutMs": 3000
           }
         ]
       },
@@ -37,7 +40,8 @@
           {
             "type": "command",
             "command": "${AGENT_TOOLKIT_DIR:-$HOME/.codex}/openai-codex/hooks/git-signing-preflight/git-signing-preflight.sh",
-            "statusMessage": "Pre-flighting git signing keys..."
+            "statusMessage": "Pre-flighting git signing keys...",
+            "timeoutMs": 5000
           }
         ]
       },
@@ -47,7 +51,8 @@
           {
             "type": "command",
             "command": "${AGENT_TOOLKIT_DIR:-$HOME/.codex}/openai-codex/hooks/pre-push-secrets/pre-push-secrets.sh",
-            "statusMessage": "Scanning for secrets before push..."
+            "statusMessage": "Scanning for secrets before push...",
+            "timeoutMs": 30000
           }
         ]
       },
@@ -57,7 +62,8 @@
           {
             "type": "command",
             "command": "${AGENT_TOOLKIT_DIR:-$HOME/.codex}/openai-codex/hooks/protect-config/protect-config.sh",
-            "statusMessage": "Checking config protection..."
+            "statusMessage": "Checking config protection...",
+            "timeoutMs": 3000
           }
         ]
       }
@@ -69,7 +75,8 @@
           {
             "type": "command",
             "command": "${AGENT_TOOLKIT_DIR:-$HOME/.codex}/openai-codex/hooks/integrity-warn/integrity-warn.sh",
-            "statusMessage": "Running integrity check..."
+            "statusMessage": "Running integrity check...",
+            "timeoutMs": 10000
           }
         ]
       },
@@ -79,7 +86,8 @@
           {
             "type": "command",
             "command": "${AGENT_TOOLKIT_DIR:-$HOME/.codex}/openai-codex/hooks/printf-lint/printf-lint.sh",
-            "statusMessage": "Linting printf safety..."
+            "statusMessage": "Linting printf safety...",
+            "timeoutMs": 5000
           }
         ]
       }
@@ -91,7 +99,8 @@
           {
             "type": "command",
             "command": "${AGENT_TOOLKIT_DIR:-$HOME/.codex}/openai-codex/hooks/inject-context/inject-context.sh",
-            "statusMessage": "Injecting session context..."
+            "statusMessage": "Injecting session context...",
+            "timeoutMs": 3000
           }
         ]
       }
@@ -103,7 +112,8 @@
           {
             "type": "command",
             "command": "${AGENT_TOOLKIT_DIR:-$HOME/.codex}/openai-codex/hooks/extract-handoff/extract-handoff.sh",
-            "statusMessage": "Extracting handoff JSON..."
+            "statusMessage": "Extracting handoff JSON...",
+            "timeoutMs": 5000
           }
         ]
       },
@@ -113,7 +123,8 @@
           {
             "type": "command",
             "command": "${AGENT_TOOLKIT_DIR:-$HOME/.codex}/openai-codex/hooks/post-agent-audit/post-agent-audit.sh",
-            "statusMessage": "Auditing agent scope..."
+            "statusMessage": "Auditing agent scope...",
+            "timeoutMs": 5000
           }
         ]
       }

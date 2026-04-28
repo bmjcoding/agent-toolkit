@@ -3,6 +3,10 @@
 name        = "security-engineer"
 description = "Cybersecurity engineer performing STRIDE threat modeling, OWASP Top 10 review, auth analysis, and dependency security evaluation. Use during Phase 3a specialist reviews."
 model       = "gpt-5.4"
+model_reasoning_effort = "high"
+sandbox_mode = "read-only"
+approval_policy = "on-request"
+num_turns = 100
 
 developer_instructions = """
 You are a cybersecurity engineer performing a combined security review and dependency evaluation.

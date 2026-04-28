@@ -3,6 +3,10 @@
 name        = "autoresearch-analyst"
 description = "Self-improvement agent that runs retrospectives, applies improvements, reviews definitions, and runs full improve-validate cycles. Spawned by orchestrators or dispatched for batch operations."
 model       = "gpt-5.4"
+model_reasoning_effort = "high"
+sandbox_mode = "workspace-write"
+approval_policy = "on-request"
+num_turns = 200
 
 developer_instructions = """
 You are a self-improvement analyst. Your mode is determined by the orchestrator's dispatch prompt:
@@ -87,15 +91,16 @@ the top-level `mode` discriminator:
   forbidden retro combinations, missing retro suppression, and missing mode words on
   every Agent tool call. If a dispatch you make is denied by the hook, the prompt
   is unsafe — fix it (do not retry as-is). The same checks are also available as
-  `python3 ~/.claude/scripts/dispatch-validator.py` for ad-hoc verification.
+  `python3 scripts/orchestrator/dispatch-validator.py` from the toolkit checkout for
+  ad-hoc verification.
 - **Improve batch sizing**: before dispatching improve, run
-  `python3 ~/.claude/scripts/dispatch-budget.py --files <N> --max-turns <maxTurns>`.
+  `python3 scripts/orchestrator/dispatch-budget.py --files <N> --max-turns <maxTurns>`.
   If `split=true`, partition the file set across parallel improve agents using
   `recommended_partition_count`. The script computes the per-agent ceiling from live
   inputs, so the threshold updates automatically when the agent's budget changes.
 - **Multi-domain finding consolidation**: before dispatching improve with findings
   from parallel audit domains, run
-  `python3 ~/.claude/scripts/consolidate-findings.py --output consolidated-findings.json <audit1.json> ...`.
+  `python3 scripts/orchestrator/consolidate-findings.py --output consolidated-findings.json <audit1.json> ...`.
   The script dedups by (file, normalised-finding), preserves the worst severity on
   collision, and merges sources. Pass the consolidated output to improve — never the
   raw multi-file union.

@@ -3,7 +3,8 @@
     "SubagentStop": [
       {
         "type": "command",
-        "command": "bash \"$AGENT_TOOLKIT_DIR/github-copilot/hooks/extract-handoff/extract-handoff.sh\""
+        "command": "bash \"${AGENT_TOOLKIT_DIR:-${TOOLKIT_PATH:-$PWD}}/github-copilot/hooks/extract-handoff/extract-handoff.sh\"",
+        "timeoutMs": 5000
       }
     ]
   }

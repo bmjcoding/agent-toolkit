@@ -3,7 +3,8 @@
     "PreToolUse": [
       {
         "type": "command",
-        "command": "bash \"$AGENT_TOOLKIT_DIR/github-copilot/hooks/protect-config/protect-config.sh\""
+        "command": "bash \"${AGENT_TOOLKIT_DIR:-${TOOLKIT_PATH:-$PWD}}/github-copilot/hooks/protect-config/protect-config.sh\"",
+        "timeoutMs": 3000
       }
     ]
   }
