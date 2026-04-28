@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Generated Copilot adapters for three new canonical hooks: `dispatch-validate/` (PreToolUse, validates Agent dispatch prompts), `post-agent-audit/` (SubagentStop, audits returning subagent scope), and `printf-lint/` (PostToolUse on Edit/Write of `*.sh`, runs printf-newlines linter). Each adapter delegates directly to the canonical root hook script via `run_root_hook`.
+- Generated Copilot adapter for `git-signing-preflight/` (PreToolUse on Bash, verifies SSH/GPG signing key availability before `git commit -S` / `git tag -s` runs). Delegates to the canonical root hook via `run_root_hook`.
+
+### Changed
+
+- `post-agent-audit` adapter now also validates the returning agent's handoff JSON against the schema (severity enum, status enum, files_written type, agent_id format) via `validate-handoff.py`. Violations are recorded in the audit JSON the orchestrator inspects.
 
 ## [3.1.2] - 2026-04-17
 

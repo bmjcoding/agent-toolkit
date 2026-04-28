@@ -4,6 +4,9 @@
 #   1. Out-of-scope file modifications (changes to files NOT in the subagent's
 #      owned_files list per plan.json)
 #   2. Truncation symptoms (no handoff JSON written despite the agent stopping)
+#   3. Handoff schema violations (severity enum, status enum, files_written
+#      type, agent_id format) — delegated to validate-handoff.py so the rule
+#      lives in one place.
 #
 # When out-of-scope writes are detected, the script stashes them as a named
 # patch (so the user can review or recover) and notes the stash in a
@@ -12,7 +15,9 @@
 #
 # This script consolidates the "Truncated agent results" + "Mandatory
 # post-truncation scope audit" guidance from the orchestrator agent body
-# into mechanical enforcement.
+# into mechanical enforcement, and (since 2026-04-27 follow-up) the handoff
+# schema validation that previously cost 6+ rejection-and-retry cycles
+# across the prior 10 retros.
 set -uo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd -P)"
@@ -54,37 +59,61 @@ else
   jq -r --arg ag "$AGENT_ID" '.subtasks[] | select(.agent == $ag) | .owned_files[]?' "$PLAN" 2>/dev/null
 fi | sort -u)
 
-if [ -z "$OWNED" ]; then
-  exit 0   # Agent has no declared scope — skip audit.
-fi
-
 # Get currently-modified files (tracked + untracked).
 MODIFIED=$( {
   git diff --name-only HEAD 2>/dev/null
   git ls-files --others --exclude-standard 2>/dev/null
 } | sort -u)
 
-if [ -z "$MODIFIED" ]; then
-  exit 0
+# Compute set difference: modified - owned = out-of-scope.
+OUT_OF_SCOPE=""
+if [ -n "$OWNED" ] && [ -n "$MODIFIED" ]; then
+  OUT_OF_SCOPE=$(comm -23 <(echo "$MODIFIED") <(echo "$OWNED"))
 fi
 
-# Compute set difference: modified - owned = out-of-scope.
-OUT_OF_SCOPE=$(comm -23 <(echo "$MODIFIED") <(echo "$OWNED"))
-
-# Check for missing handoff (truncation symptom).
+# Locate the handoff file. Use the named alias if present, else any phase-qualified alias.
 HANDOFF_FILE="$HANDOFF_DIR/${AGENT_ID}.json"
 HANDOFF_PRESENT=true
-[ -f "$HANDOFF_FILE" ] || HANDOFF_PRESENT=false
+if [ ! -f "$HANDOFF_FILE" ]; then
+  # Look for phase-qualified alias (e.g., release-engineer-6a.json when AGENT_ID is release-engineer)
+  ALT=$(ls -1t "$HANDOFF_DIR"/${AGENT_ID}-*.json 2>/dev/null | head -1)
+  if [ -n "$ALT" ]; then
+    HANDOFF_FILE="$ALT"
+  else
+    HANDOFF_PRESENT=false
+  fi
+fi
 
-if [ -z "$OUT_OF_SCOPE" ] && [ "$HANDOFF_PRESENT" = true ]; then
-  exit 0   # Clean — agent stayed in scope and wrote a handoff.
+# ── Validate handoff schema (REC-1 from 2026-04-27 follow-up) ─────────────
+HANDOFF_VIOLATIONS_JSON="null"
+HANDOFF_VALID=true
+VALIDATOR="${HOME}/.claude/scripts/validate-handoff.py"
+if [ "$HANDOFF_PRESENT" = true ] && [ -x "$VALIDATOR" ]; then
+  if VALIDATE_OUT=$(python3 "$VALIDATOR" "$HANDOFF_FILE" 2>/dev/null); then
+    HANDOFF_VALID=true
+  else
+    HANDOFF_VALID=false
+    HANDOFF_VIOLATIONS_JSON=$(echo "$VALIDATE_OUT" | jq -c '.violations // []' 2>/dev/null || echo '[]')
+  fi
+fi
+
+# Decide whether to write an audit record. Three conditions trigger one:
+#   a) out-of-scope writes
+#   b) handoff missing (truncation symptom)
+#   c) handoff schema violations
+NEEDS_AUDIT=false
+[ -n "$OUT_OF_SCOPE" ] && NEEDS_AUDIT=true
+[ "$HANDOFF_PRESENT" = false ] && NEEDS_AUDIT=true
+[ "$HANDOFF_VALID" = false ] && NEEDS_AUDIT=true
+
+if [ "$NEEDS_AUDIT" = false ]; then
+  exit 0   # Clean — agent stayed in scope, wrote a handoff, schema valid.
 fi
 
 # Stash out-of-scope files for user review (do not lose work).
 STASH_NAME=""
 if [ -n "$OUT_OF_SCOPE" ]; then
   STASH_NAME="post-agent-audit-${AGENT_ID}-$(date +%s)"
-  # Stash only the out-of-scope files. `git stash push -- <files>` accepts a list.
   echo "$OUT_OF_SCOPE" | xargs git stash push -m "$STASH_NAME" -- 2>/dev/null || true
 fi
 
@@ -96,6 +125,9 @@ jq -n \
   --arg subtask "$SUBTASK_ID" \
   --arg stash "$STASH_NAME" \
   --argjson handoff_present "$HANDOFF_PRESENT" \
+  --argjson handoff_valid "$HANDOFF_VALID" \
+  --argjson handoff_violations "$HANDOFF_VIOLATIONS_JSON" \
+  --arg handoff_path "$HANDOFF_FILE" \
   --arg out_of_scope "$OUT_OF_SCOPE" \
   --arg owned "$OWNED" \
   '{
@@ -103,12 +135,15 @@ jq -n \
      session_id: $sid,
      subtask_id: ($subtask | select(length>0)),
      handoff_present: $handoff_present,
+     handoff_valid: $handoff_valid,
+     handoff_path: ($handoff_path | select(length>0)),
+     handoff_schema_violations: $handoff_violations,
      stash_name: ($stash | select(length>0)),
      out_of_scope_files: ($out_of_scope | split("\n") | map(select(length>0))),
      owned_files: ($owned | split("\n") | map(select(length>0)))
    }' > "$AUDIT_FILE" 2>/dev/null
 
-echo "$(date -Iseconds) post_agent_audit agent=$AGENT_ID handoff_present=$HANDOFF_PRESENT stash=$STASH_NAME" \
+echo "$(date -Iseconds) post_agent_audit agent=$AGENT_ID handoff_present=$HANDOFF_PRESENT handoff_valid=$HANDOFF_VALID stash=$STASH_NAME" \
   >> "$AUDIT_LOG" 2>/dev/null || true
 
 # Do not block — the orchestrator inspects the audit file and decides.
