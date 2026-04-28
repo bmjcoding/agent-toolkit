@@ -1,0 +1,105 @@
+{
+  "hooks": [
+    {
+      "id": "branch-guard",
+      "adapterKind": "command-filter",
+      "commandPredicate": "is_git_commit_or_push_command",
+      "copilotEvent": "PreToolUse",
+      "codexEvent": "PreToolUse",
+      "codexMatcher": "Bash",
+      "codexStatusMessage": "Checking branch guard...",
+      "timeoutMs": 3000
+    },
+    {
+      "id": "changelog-check",
+      "adapterKind": "changelog-check",
+      "copilotEvent": "PreToolUse",
+      "codexEvent": "PreToolUse",
+      "codexMatcher": "Bash",
+      "codexStatusMessage": "Validating changelog entry...",
+      "timeoutMs": 10000
+    },
+    {
+      "id": "dispatch-validate",
+      "adapterKind": "direct",
+      "copilotEvent": "PreToolUse",
+      "codexEvent": "PreToolUse",
+      "codexMatcher": ".*",
+      "codexStatusMessage": "Validating dispatch prompt...",
+      "timeoutMs": 3000
+    },
+    {
+      "id": "extract-handoff",
+      "adapterKind": "handoff",
+      "copilotEvent": "SubagentStop",
+      "codexEvent": "Stop",
+      "codexMatcher": ".*",
+      "codexStatusMessage": "Extracting handoff JSON...",
+      "timeoutMs": 5000
+    },
+    {
+      "id": "git-signing-preflight",
+      "adapterKind": "direct",
+      "copilotEvent": "PreToolUse",
+      "codexEvent": "PreToolUse",
+      "codexMatcher": "Bash",
+      "codexStatusMessage": "Pre-flighting git signing keys...",
+      "timeoutMs": 5000
+    },
+    {
+      "id": "inject-context",
+      "adapterKind": "direct",
+      "copilotEvent": "SubagentStart",
+      "codexEvent": "UserPromptSubmit",
+      "codexMatcher": ".*",
+      "codexStatusMessage": "Injecting session context...",
+      "timeoutMs": 3000
+    },
+    {
+      "id": "integrity-warn",
+      "adapterKind": "integrity-warn",
+      "copilotEvent": "SubagentStop",
+      "codexEvent": "PostToolUse",
+      "codexMatcher": "Bash",
+      "codexStatusMessage": "Running integrity check...",
+      "timeoutMs": 10000
+    },
+    {
+      "id": "post-agent-audit",
+      "adapterKind": "direct",
+      "copilotEvent": "SubagentStop",
+      "codexEvent": "Stop",
+      "codexMatcher": ".*",
+      "codexStatusMessage": "Auditing agent scope...",
+      "timeoutMs": 5000
+    },
+    {
+      "id": "pre-push-secrets",
+      "adapterKind": "command-filter",
+      "commandPredicate": "is_git_commit_or_push_command",
+      "copilotEvent": "PreToolUse",
+      "codexEvent": "PreToolUse",
+      "codexMatcher": "Bash",
+      "codexStatusMessage": "Scanning for secrets before push...",
+      "timeoutMs": 30000
+    },
+    {
+      "id": "printf-lint",
+      "adapterKind": "direct",
+      "copilotEvent": "PostToolUse",
+      "codexEvent": "PostToolUse",
+      "codexMatcher": ".*",
+      "codexStatusMessage": "Linting printf safety...",
+      "timeoutMs": 5000
+    },
+    {
+      "id": "protect-config",
+      "adapterKind": "protect-config",
+      "copilotEvent": "PreToolUse",
+      "codexEvent": "PreToolUse",
+      "codexMatcher": "Bash",
+      "codexStatusMessage": "Checking config protection...",
+      "timeoutMs": 3000
+    }
+  ]
+}

@@ -5,8 +5,6 @@ All notable changes to this component will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
-
 ## [3.2.0] - 2026-04-28
 
 ### Added
@@ -19,7 +17,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `post-agent-audit` adapter now also validates the returning agent's handoff JSON against the schema (severity enum, status enum, files_written type, agent_id format) via `validate-handoff.py`. Violations are recorded in the audit JSON the orchestrator inspects.
 - Generated hook manifests now include explicit `timeoutMs` values and use the
   `AGENT_TOOLKIT_DIR` / `TOOLKIT_PATH` fallback when invoking toolkit hook adapters.
-
 
 ## [3.1.2] - 2026-04-17
 
@@ -51,7 +48,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - 9 hook JSON manifests and 9 shell scripts. Events: PreToolUse (branch-guard, changelog-check, pre-push-secrets, protect-config), PostToolUse (toolkit-edit-reminder), SubagentStart (inject-context), SubagentStop (extract-handoff, integrity-warn, toolkit-drift-check). Parity gap #3 Copilot resolved.
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/github-copilot-hooks-v3.2.0...HEAD
 [3.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/github-copilot-hooks-v3.1.2...github-copilot-hooks-v3.2.0
 [3.1.2]: https://github.com/bmjcoding/agent-toolkit/compare/github-copilot-hooks-v3.1.1...github-copilot-hooks-v3.1.2
 [3.1.1]: https://github.com/bmjcoding/agent-toolkit/compare/github-copilot-hooks-v3.1.0...github-copilot-hooks-v3.1.1

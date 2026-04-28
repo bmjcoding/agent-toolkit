@@ -81,7 +81,7 @@ collect_files() {
   if [ -d "${TOOL_DIR}/skills" ]; then
     while IFS= read -r -d '' f; do
       files+=("$f")
-    done < <(find "${TOOL_DIR}/skills" -maxdepth 2 -name "*.md" ! -name "CHANGELOG.md" -type f -print0 2>/dev/null | sort -z)
+    done < <(find "${TOOL_DIR}/skills" -name "*.md" ! -name "CHANGELOG.md" -type f -print0 2>/dev/null | sort -z)
   fi
 
   # Rules

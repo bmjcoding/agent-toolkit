@@ -65,7 +65,7 @@ shared skill, or shared rule.
 
 ### 6. OpenAI Codex points directly at root shared skills
 
-- `openai-codex/config.toml.template` references `${AGENT_TOOLKIT_DIR}/skills/<slug>/SKILL.md`
+- `openai-codex/config.toml.template` references `${AGENT_TOOLKIT_DIR}/skills/<category>/.../<slug>/SKILL.md`
 - Codex may also consume `.agents/skills -> skills/`
 - `openai-codex/rules/` contains build/composition assets only
 

@@ -362,7 +362,7 @@ Otherwise, if the handoff is present and there are any recommendations (fixes or
 
 > Retro complete — N recommendations (N P0, N P1, N P2).
 > - `improve` — apply recommendations only
-> - `improve --validate` — apply and validate with review-skill (default: 3 iterations)
+> - `improve --validate` — apply and validate with definition-review (default: 3 iterations)
 > - "skip" to continue without applying
 
 **7c. Improve** (only if user approves): Before dispatching, normalize the retro file path in Bash: `RETRO_FILE="${retro_file/#\\~/$HOME}"` — this expands any `~` prefix to the full absolute path. Then null-check: `[[ -z "$RETRO_FILE" ]] && { echo "ERROR: retro_file not in handoff"; exit 1; }`
@@ -374,7 +374,7 @@ Dispatch based on the mode the user already selected in 7b — do NOT re-ask:
 Do NOT run the retro skill after task completion. Stop when the primary task is complete."`
 - **Apply and validate** (user chose `improve --validate`): Use the max_iterations from 7b (default 3). Spawn `autoresearch-analyst` in full-cycle mode: `"Full-cycle mode. Read retro at <RETRO_FILE>. max_iterations=N.
 
-Do NOT run the retro skill after task completion. Stop when the primary task is complete."` The agent applies recommendations then validates with review-skill, iterating up to N times.
+Do NOT run the retro skill after task completion. Stop when the primary task is complete."` The agent applies recommendations then validates with definition-review, iterating up to N times.
 
 Do NOT paste recommendations into the dispatch prompt (that defeats context isolation). The agent reads the file itself.
 

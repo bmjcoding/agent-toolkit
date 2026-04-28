@@ -41,7 +41,7 @@ function parseArgs(argv) {
   if (!args.filesFromStdin && !args.base) {
     throw new Error('Missing required argument: --base <git-ref>');
   }
-  if (args.requireReleaseVersion && !args.base) {
+  if (args.requireReleaseVersion && !args.base && !args.filesFromStdin) {
     throw new Error('Missing required argument for --require-release-version: --base <git-ref>');
   }
 
@@ -54,6 +54,94 @@ function relExists(relPath) {
 
 function normalizePath(relPath) {
   return relPath.replaceAll(path.sep, '/');
+}
+
+let skillChangelogByIdCache = null;
+
+function extractFrontmatterName(markdown) {
+  if (!markdown.startsWith('---')) return null;
+  const end = markdown.indexOf('---', 3);
+  if (end === -1) return null;
+  const match = markdown.slice(3, end).match(/^name:\s*["']?([^"'\n]+)["']?\s*$/m);
+  return match ? match[1].trim() : null;
+}
+
+function currentSkillChangelogsById() {
+  if (skillChangelogByIdCache) return skillChangelogByIdCache;
+
+  const skillsDir = path.join(REPO_ROOT, 'skills');
+  const byId = new Map();
+
+  function visit(absDir) {
+    const skillPath = path.join(absDir, 'SKILL.md');
+    if (fs.existsSync(skillPath)) {
+      const markdown = fs.readFileSync(skillPath, 'utf8');
+      const relDir = normalizePath(path.relative(REPO_ROOT, absDir));
+      const fallbackId = path.posix.basename(relDir);
+      byId.set(extractFrontmatterName(markdown) || fallbackId, `${relDir}/CHANGELOG.md`);
+      return;
+    }
+
+    for (const entry of fs.readdirSync(absDir, { withFileTypes: true })) {
+      if (entry.isDirectory() && !entry.name.startsWith('.')) {
+        visit(path.join(absDir, entry.name));
+      }
+    }
+  }
+
+  if (fs.existsSync(skillsDir)) visit(skillsDir);
+  skillChangelogByIdCache = byId;
+  return byId;
+}
+
+function nearestExistingSkillChangelog(relPath) {
+  let dir = path.posix.dirname(relPath);
+  while (dir && dir !== '.' && dir !== 'skills') {
+    const changelog = `${dir}/CHANGELOG.md`;
+    if (relExists(changelog)) return changelog;
+    const parent = path.posix.dirname(dir);
+    if (parent === dir) break;
+    dir = parent;
+  }
+  return null;
+}
+
+function skillChangelog(relPath) {
+  if (!relPath.startsWith('skills/')) return null;
+
+  const nearest = nearestExistingSkillChangelog(relPath);
+  if (nearest) return nearest;
+
+  const parts = relPath.split('/');
+  if (parts.length === 2) {
+    return 'CHANGELOG.md';
+  }
+
+  const legacySkillId = parts[1];
+  const movedSkillChangelog = currentSkillChangelogsById().get(legacySkillId);
+  if (movedSkillChangelog) return movedSkillChangelog;
+
+  const legacySkillRoot = `skills/${legacySkillId}`;
+  if (!relExists(`${legacySkillRoot}/SKILL.md`) && !relExists(`${legacySkillRoot}/CHANGELOG.md`)) {
+    return 'CHANGELOG.md';
+  }
+
+  const basename = path.posix.basename(relPath);
+  if (basename === 'SKILL.md' || basename === 'CHANGELOG.md') {
+    return `${path.posix.dirname(relPath)}/CHANGELOG.md`;
+  }
+
+  const knownSkillSubdirs = new Set(['assets', 'checks', 'evals', 'references', 'scripts', 'templates']);
+  const subdirIndex = parts.findIndex((part, index) => index >= 2 && knownSkillSubdirs.has(part));
+  if (subdirIndex > 2) {
+    return `${parts.slice(0, subdirIndex).join('/')}/CHANGELOG.md`;
+  }
+
+  if (parts.length >= 3) {
+    return `skills/${parts[1]}/${parts[2]}/CHANGELOG.md`;
+  }
+
+  return `skills/${legacySkillId}/CHANGELOG.md`;
 }
 
 function nearestAncestorChangelog(relPath) {
@@ -74,8 +162,10 @@ function nearestAncestorChangelog(relPath) {
 
 function mappedChangelog(relPath) {
   const explicitMappings = [
+    [/^(?:README\.md|CONTRIBUTING\.md|AGENTS\.md|CLAUDE\.md|package(?:-lock)?\.json)$/, () => 'CHANGELOG.md'],
+    [/^(?:\.claude|\.github|docs|scripts)\//, () => 'CHANGELOG.md'],
     [/^agents\/([^/]+)\//, match => `agents/${match[1]}/CHANGELOG.md`],
-    [/^skills\/([^/]+)\//, match => `skills/${match[1]}/CHANGELOG.md`],
+    [/^skills\//, () => skillChangelog(relPath)],
     [/^workflows\/([^/]+)\//, match => `workflows/${match[1]}/CHANGELOG.md`],
     [/^rules\/([^/]+)\//, match => `rules/${match[1]}/CHANGELOG.md`],
     [/^claude-code\/agents\/([^/]+)\//, match => `agents/${match[1]}/CHANGELOG.md`],
@@ -122,6 +212,14 @@ function gitReadFile(ref, relPath) {
   }
 }
 
+function readWorkingTreeFile(relPath) {
+  try {
+    return fs.readFileSync(path.join(REPO_ROOT, relPath), 'utf8');
+  } catch {
+    return null;
+  }
+}
+
 function gitDiffForPath(baseRef, headRef, relPath) {
   try {
     return execFileSync(
@@ -137,33 +235,72 @@ function gitDiffForPath(baseRef, headRef, relPath) {
   }
 }
 
-function unreleasedSectionHasContent(markdown) {
-  const lines = markdown.split('\n');
-  const start = lines.findIndex(line => line.trim() === '## [Unreleased]');
-  if (start === -1) {
-    throw new Error('missing required ## [Unreleased] section');
+function gitWorkingTreeDiffForPath(relPath) {
+  try {
+    return execFileSync(
+      'git',
+      ['diff', '--unified=0', 'HEAD', '--', relPath],
+      { cwd: REPO_ROOT, encoding: 'utf8' },
+    );
+  } catch (error) {
+    if (error.status === 1 && typeof error.stdout === 'string') {
+      return error.stdout;
+    }
+    throw error;
   }
-
-  for (let i = start + 1; i < lines.length; i += 1) {
-    const trimmed = lines[i].trim();
-    if (/^##\s+/.test(trimmed)) break;
-    if (trimmed !== '') return true;
-  }
-
-  return false;
 }
 
-function hasAddedVersionHeader(baseRef, headRef, relPath) {
-  const diff = gitDiffForPath(baseRef, headRef, relPath);
+function isUntracked(relPath) {
+  const output = execFileSync(
+    'git',
+    ['ls-files', '--others', '--exclude-standard', '--', relPath],
+    { cwd: REPO_ROOT, encoding: 'utf8' },
+  ).trim();
+  return output.split('\n').filter(Boolean).includes(relPath);
+}
+
+function hasUnreleasedMarker(markdown) {
+  return /^(?:## \[Unreleased\]|\[Unreleased\]:)/m.test(markdown);
+}
+
+function hasVersionHeader(markdown) {
+  return /^## \[[0-9]+\.[0-9]+\.[0-9]+\] - [0-9]{4}-[0-9]{2}-[0-9]{2}( \[YANKED\])?$/m.test(markdown);
+}
+
+function addedVersionHeaderFromDiff(diff) {
   return diff
     .split('\n')
     .some(line => /^\+## \[[0-9]+\.[0-9]+\.[0-9]+\] - [0-9]{4}-[0-9]{2}-[0-9]{2}( \[YANKED\])?$/.test(line));
+}
+
+function changelogContent({ head, filesFromStdin, relPath }) {
+  if (filesFromStdin) {
+    return readWorkingTreeFile(relPath);
+  }
+
+  return gitReadFile(head, relPath);
+}
+
+function hasAddedVersionHeader({ base, head, filesFromStdin, relPath }) {
+  if (filesFromStdin) {
+    if (isUntracked(relPath)) {
+      const content = readWorkingTreeFile(relPath);
+      return content !== null && hasVersionHeader(content);
+    }
+    return addedVersionHeaderFromDiff(gitWorkingTreeDiffForPath(relPath));
+  }
+
+  const diff = gitDiffForPath(base, head, relPath);
+  return addedVersionHeaderFromDiff(diff);
 }
 
 function main() {
   const { base, head, filesFromStdin, requireReleaseVersion } = parseArgs(process.argv);
   const files = filesFromStdin ? changedFilesFromStdin() : changedFiles(base, head);
   const changedSet = new Set(files);
+  const changedChangelogs = files
+    .filter(relPath => path.posix.basename(relPath) === 'CHANGELOG.md')
+    .sort();
   const requiredChangelogs = new Map();
 
   for (const relPath of files) {
@@ -178,7 +315,7 @@ function main() {
     requiredChangelogs.get(changelog).push(relPath);
   }
 
-  if (requiredChangelogs.size === 0) {
+  if (requiredChangelogs.size === 0 && (!requireReleaseVersion || changedChangelogs.length === 0)) {
     if (filesFromStdin) {
       console.log('No monitored component files found in the provided file list.');
     } else {
@@ -192,54 +329,50 @@ function main() {
     .sort(([left], [right]) => left.localeCompare(right));
 
   if (missing.length === 0) {
-    if (!requireReleaseVersion) {
-      console.log(`Component changelog validation passed for ${requiredChangelogs.size} component(s).`);
-      return;
-    }
-
     const releaseFailures = [];
-    for (const changelog of requiredChangelogs.keys()) {
-      const headContent = gitReadFile(head, changelog);
-      if (headContent === null) {
-        releaseFailures.push({
-          changelog,
-          reason: `could not read ${changelog} at ${head}`,
-        });
-        continue;
-      }
+    if (requireReleaseVersion) {
+      const changelogsToCheck = [...new Set([...requiredChangelogs.keys(), ...changedChangelogs])].sort();
 
-      try {
-        if (unreleasedSectionHasContent(headContent)) {
+      for (const changelog of changelogsToCheck) {
+        const headContent = changelogContent({ head, filesFromStdin, relPath: changelog });
+        if (headContent === null && requiredChangelogs.has(changelog)) {
           releaseFailures.push({
             changelog,
-            reason: '## [Unreleased] still contains content; promote the PR changes into a versioned release section before opening the PR',
+            reason: `could not read ${changelog}`,
+          });
+          continue;
+        }
+        if (headContent === null) continue;
+
+        if (hasUnreleasedMarker(headContent)) {
+          releaseFailures.push({
+            changelog,
+            reason: 'remove ## [Unreleased] sections and [Unreleased] footer links; add a versioned ## [X.Y.Z] - YYYY-MM-DD section for this contribution',
           });
         }
-      } catch (error) {
-        releaseFailures.push({
-          changelog,
-          reason: error.message,
-        });
+
+        if (requiredChangelogs.has(changelog) && !hasAddedVersionHeader({ base, head, filesFromStdin, relPath: changelog })) {
+          releaseFailures.push({
+            changelog,
+            reason: 'no new versioned header was added in this PR diff; add a ## [X.Y.Z] - YYYY-MM-DD section for the promoted change set',
+          });
+        }
       }
 
-      if (!hasAddedVersionHeader(base, head, changelog)) {
-        releaseFailures.push({
-          changelog,
-          reason: 'no new versioned header was added in this PR diff; add a ## [X.Y.Z] - YYYY-MM-DD section for the promoted change set',
-        });
+      if (releaseFailures.length === 0) {
+        console.log(`Component changelog validation passed for ${requiredChangelogs.size} component(s), including PR release-version enforcement.`);
+        return;
       }
+
+      console.error('PR changelog version enforcement failed for the following component changelogs:');
+      for (const failure of releaseFailures) {
+        console.error(`- ${failure.changelog}: ${failure.reason}`);
+      }
+      process.exit(1);
     }
 
-    if (releaseFailures.length === 0) {
-      console.log(`Component changelog validation passed for ${requiredChangelogs.size} component(s), including PR release-version enforcement.`);
-      return;
-    }
-
-    console.error('PR changelog version enforcement failed for the following component changelogs:');
-    for (const failure of releaseFailures) {
-      console.error(`- ${failure.changelog}: ${failure.reason}`);
-    }
-    process.exit(1);
+    console.log(`Component changelog validation passed for ${requiredChangelogs.size} component(s).`);
+    return;
   }
 
   console.error('Component files changed without updating their associated CHANGELOG.md:');

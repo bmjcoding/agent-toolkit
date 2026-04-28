@@ -5,111 +5,30 @@ const fs = require('fs');
 const path = require('path');
 
 const REPO_ROOT = path.resolve(__dirname, '..');
-const HOOK_SPECS = {
-  'branch-guard': {
-    adapterKind: 'command-filter',
-    commandPredicate: 'is_git_commit_or_push_command',
-    copilotEvent: 'PreToolUse',
-    codexEvent: 'PreToolUse',
-    codexMatcher: 'Bash',
-    codexStatusMessage: 'Checking branch guard...',
-    timeoutMs: 3000,
-  },
-  'changelog-check': {
-    adapterKind: 'changelog-check',
-    copilotEvent: 'PreToolUse',
-    codexEvent: 'PreToolUse',
-    codexMatcher: 'Bash',
-    codexStatusMessage: 'Validating changelog entry...',
-    timeoutMs: 10000,
-  },
-  'dispatch-validate': {
-    adapterKind: 'direct',
-    copilotEvent: 'PreToolUse',
-    codexEvent: 'PreToolUse',
-    codexMatcher: '.*',
-    codexStatusMessage: 'Validating dispatch prompt...',
-    timeoutMs: 3000,
-  },
-  'extract-handoff': {
-    adapterKind: 'handoff',
-    copilotEvent: 'SubagentStop',
-    codexEvent: 'Stop',
-    codexMatcher: '.*',
-    codexStatusMessage: 'Extracting handoff JSON...',
-    timeoutMs: 5000,
-  },
-  'git-signing-preflight': {
-    adapterKind: 'direct',
-    copilotEvent: 'PreToolUse',
-    codexEvent: 'PreToolUse',
-    codexMatcher: 'Bash',
-    codexStatusMessage: 'Pre-flighting git signing keys...',
-    timeoutMs: 5000,
-  },
-  'inject-context': {
-    adapterKind: 'direct',
-    copilotEvent: 'SubagentStart',
-    codexEvent: 'UserPromptSubmit',
-    codexMatcher: '.*',
-    codexStatusMessage: 'Injecting session context...',
-    timeoutMs: 3000,
-  },
-  'integrity-warn': {
-    adapterKind: 'integrity-warn',
-    copilotEvent: 'SubagentStop',
-    codexEvent: 'PostToolUse',
-    codexMatcher: 'Bash',
-    codexStatusMessage: 'Running integrity check...',
-    timeoutMs: 10000,
-  },
-  'post-agent-audit': {
-    adapterKind: 'direct',
-    copilotEvent: 'SubagentStop',
-    codexEvent: 'Stop',
-    codexMatcher: '.*',
-    codexStatusMessage: 'Auditing agent scope...',
-    timeoutMs: 5000,
-  },
-  'pre-push-secrets': {
-    adapterKind: 'command-filter',
-    commandPredicate: 'is_git_commit_or_push_command',
-    copilotEvent: 'PreToolUse',
-    codexEvent: 'PreToolUse',
-    codexMatcher: 'Bash',
-    codexStatusMessage: 'Scanning for secrets before push...',
-    timeoutMs: 30000,
-  },
-  'printf-lint': {
-    adapterKind: 'direct',
-    copilotEvent: 'PostToolUse',
-    codexEvent: 'PostToolUse',
-    codexMatcher: '.*',
-    codexStatusMessage: 'Linting printf safety...',
-    timeoutMs: 5000,
-  },
-  'protect-config': {
-    adapterKind: 'protect-config',
-    copilotEvent: 'PreToolUse',
-    codexEvent: 'PreToolUse',
-    codexMatcher: 'Bash',
-    codexStatusMessage: 'Checking config protection...',
-    timeoutMs: 3000,
-  },
-};
-const HOOK_ORDER = [
-  'branch-guard',
-  'changelog-check',
-  'dispatch-validate',
-  'extract-handoff',
-  'git-signing-preflight',
-  'inject-context',
-  'integrity-warn',
-  'post-agent-audit',
-  'pre-push-secrets',
-  'printf-lint',
-  'protect-config',
-];
+const HOOK_REGISTRY_PATH = path.join(REPO_ROOT, 'hooks', 'registry.json');
+
+function loadHookRegistry() {
+  const registry = JSON.parse(fs.readFileSync(HOOK_REGISTRY_PATH, 'utf8'));
+  const hooks = Array.isArray(registry.hooks) ? registry.hooks : [];
+  const specs = {};
+  const order = [];
+
+  for (const hook of hooks) {
+    if (!hook || typeof hook.id !== 'string' || hook.id.length === 0) {
+      throw new Error(`Invalid hook registry entry in ${HOOK_REGISTRY_PATH}`);
+    }
+    if (specs[hook.id]) {
+      throw new Error(`Duplicate hook registry entry: ${hook.id}`);
+    }
+    order.push(hook.id);
+    specs[hook.id] = { ...hook };
+    delete specs[hook.id].id;
+  }
+
+  return { specs, order };
+}
+
+const { specs: HOOK_SPECS, order: HOOK_ORDER } = loadHookRegistry();
 
 function read(filePath) {
   return fs.readFileSync(filePath, 'utf8');
@@ -206,6 +125,23 @@ function parseYamlList(frontmatter, fieldName) {
     .map(matchLine => normalizeFrontmatterValue(matchLine[1]));
 }
 
+function parseYamlStringField(frontmatter, fieldName, fallback = '') {
+  const scalar = extractField(new RegExp(`^${fieldName}:\\s*(.+)$`, 'm'), frontmatter, null);
+  if (scalar && scalar !== '>' && scalar !== '|') {
+    return normalizeFrontmatterValue(scalar);
+  }
+
+  const block = frontmatter.match(new RegExp(`^${fieldName}:\\s*[>|]\\s*\\n((?:\\s+.+\\n?)*)`, 'm'));
+  if (!block || !block[1].trim()) return fallback;
+
+  return block[1]
+    .split('\n')
+    .map(line => line.trim())
+    .filter(Boolean)
+    .join(' ')
+    .trim();
+}
+
 function normalizeFrontmatterValue(value) {
   const trimmed = value.trim();
   if (trimmed.startsWith('"') && trimmed.endsWith('"')) {
@@ -226,6 +162,75 @@ function listCanonicalNames(rootDir, markerFile) {
     .filter(entry => entry.isDirectory() && fs.existsSync(path.join(REPO_ROOT, rootDir, entry.name, markerFile)))
     .map(entry => entry.name)
     .sort();
+}
+
+function readLatestReleasedVersion(changelogPath) {
+  if (!fs.existsSync(changelogPath)) return null;
+  const changelog = read(changelogPath);
+  const match = changelog.match(/^## \[(?!Unreleased\])([^\]]+)\]/m);
+  return match ? match[1] : null;
+}
+
+function escapeMarkdownTableCell(value) {
+  return String(value || '').replaceAll('|', '\\|').replace(/\s+/g, ' ').trim();
+}
+
+function walkSkillFiles() {
+  const skillsDir = path.join(REPO_ROOT, 'skills');
+  const results = [];
+
+  function visit(dirPath) {
+    const skillPath = path.join(dirPath, 'SKILL.md');
+    if (fs.existsSync(skillPath)) {
+      results.push(skillPath);
+      return;
+    }
+
+    for (const entry of fs.readdirSync(dirPath, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name))) {
+      if (!entry.isDirectory() || entry.name.startsWith('.')) continue;
+      visit(path.join(dirPath, entry.name));
+    }
+  }
+
+  visit(skillsDir);
+  return results;
+}
+
+function listSharedSkillEntries() {
+  const entries = [];
+  const seen = new Set();
+
+  for (const skillPath of walkSkillFiles()) {
+    const relPath = path.relative(REPO_ROOT, skillPath).split(path.sep).join('/');
+    const relDir = path.posix.dirname(relPath);
+    const parts = relDir.split('/').slice(1);
+    const category = parts.length > 1 ? parts.slice(0, -1).join('/') : 'uncategorized';
+    const fallbackId = parts[parts.length - 1];
+    const content = read(skillPath);
+    const frontmatter = splitFrontmatter(content).frontmatter;
+    const id = normalizeFrontmatterValue(extractField(/^name:\s*(.+)$/m, frontmatter, fallbackId));
+    const description = parseYamlStringField(frontmatter, 'description', '');
+    const lifecycle = normalizeFrontmatterValue(extractField(/^lifecycle:\s*(.+)$/m, frontmatter, ''));
+    const dependencies = parseYamlList(frontmatter, 'dependencies');
+
+    if (seen.has(id)) {
+      throw new Error(`Duplicate skill id '${id}' while scanning skills/`);
+    }
+    seen.add(id);
+
+    entries.push({
+      id,
+      category,
+      description,
+      lifecycle,
+      dependencies,
+      sourcePath: relPath,
+      changelogPath: `${relDir}/CHANGELOG.md`,
+      version: readLatestReleasedVersion(path.join(REPO_ROOT, relDir, 'CHANGELOG.md')),
+    });
+  }
+
+  return entries.sort((a, b) => a.category.localeCompare(b.category) || a.id.localeCompare(b.id));
 }
 
 function removePathIfExists(targetPath) {
@@ -462,6 +467,164 @@ function renderCopilotInstructionMarkdown({ description, applyTo, body }) {
   return lines.join('\n');
 }
 
+function renderCodexConfigTemplate(skills) {
+  const lines = [
+    '# Codex CLI project configuration template',
+    '# Generated from canonical skills under skills/<category>/.../<slug>/.',
+    '#',
+    '# Usage:',
+    '#   Copy this file to .codex/config.toml in a trusted project repo.',
+    '#   Global config lives at ~/.codex/config.toml.',
+    '#   Project config is only loaded from trusted repos (codex trust <dir>).',
+    '',
+    '# ---------------------------------------------------------------------------',
+    '# Core settings',
+    '# ---------------------------------------------------------------------------',
+    '',
+    'model = "gpt-5.4"',
+    'sandbox_mode = "workspace-write"',
+    'approval_policy = "on-request"',
+    '',
+    '# ---------------------------------------------------------------------------',
+    '# Skills configuration',
+    '#',
+    '# NOTE: skills.config[].path points to the SKILL.md file inside the skill',
+    '# directory, not the directory itself. Skill files are categorized on disk as',
+    '# skills/<category>/.../<slug>/SKILL.md, but the skill name remains the slug.',
+    '# ---------------------------------------------------------------------------',
+    '',
+  ];
+
+  for (const skill of skills) {
+    lines.push('[[skills.config]]');
+    lines.push(`path = "\${AGENT_TOOLKIT_DIR}/${skill.sourcePath}"`);
+    lines.push('enabled = true');
+    lines.push('');
+  }
+
+  lines.push('# ---------------------------------------------------------------------------');
+  lines.push('# MCP server configuration (optional)');
+  lines.push('# ---------------------------------------------------------------------------');
+  lines.push('# Declare MCP servers as [mcp_servers.<id>] tables.');
+  lines.push('# Each server runs as a subprocess exposing tools to Codex sessions.');
+  lines.push('#');
+  lines.push('# Example:');
+  lines.push('# [mcp_servers.filesystem]');
+  lines.push('# command = "npx"');
+  lines.push('# args = ["-y", "@modelcontextprotocol/server-filesystem", "/tmp"]');
+  lines.push('# env = {}');
+  lines.push('');
+
+  return lines.join('\n');
+}
+
+function renderSkillsReadme(skills) {
+  const lines = [
+    '# skills/',
+    '',
+    'Shared skill definitions. Root `skills/` is the single source of truth for universal skill content used across the toolkit.',
+    '',
+    '## Layout',
+    '',
+    'Skills are categorized on disk, while the frontmatter `name` remains the stable skill id:',
+    '',
+    '```text',
+    'skills/',
+    '  <category>/',
+    '    ...',
+    '      <slug>/',
+    '        SKILL.md',
+    '        CHANGELOG.md',
+    '        references/',
+    '        scripts/',
+    '        evals/',
+    '```',
+    '',
+    'Category directories are open-ended and discovered recursively. Adding, renaming, or splitting categories should not require generator changes as long as each skill directory contains `SKILL.md` and `CHANGELOG.md`.',
+    '',
+    'Flat `skills/<slug>/` paths are treated as a legacy migration fallback only.',
+    '',
+    '## Skills',
+    '',
+    '| Category | Skill | Version | Lifecycle | Description |',
+    '|---|---|---|---|---|',
+  ];
+
+  for (const skill of skills) {
+    lines.push(`| ${escapeMarkdownTableCell(skill.category)} | \`${skill.id}\` | ${escapeMarkdownTableCell(skill.version || 'Unreleased')} | ${escapeMarkdownTableCell(skill.lifecycle)} | ${escapeMarkdownTableCell(skill.description)} |`);
+  }
+
+  lines.push('');
+  lines.push('## Category Taxonomy');
+  lines.push('');
+  lines.push('- Categories are navigation, not identity. The stable skill id is the `name` frontmatter field.');
+  lines.push('- Reuse an existing category when the new skill fits a contributor-facing domain already present.');
+  lines.push('- Create a new category when the skill would otherwise make an existing category ambiguous, or when two or more related skills need a clearer home.');
+  lines.push('- Nested categories are allowed for scale, for example `skills/platform/security/<slug>/`.');
+  lines.push('- Use kebab-case category names. Do not encode lifecycle, target tool, owner, or release status in the category path.');
+  lines.push('');
+  lines.push('## Tag Format');
+  lines.push('');
+  lines.push('```text');
+  lines.push('skill/<slug>-v<major>.<minor>.<patch>');
+  lines.push('```');
+  lines.push('');
+  lines.push('The tag slug is the skill `name`, not the category path.');
+  lines.push('');
+  lines.push('## Adding A Skill');
+  lines.push('');
+  lines.push('1. Create `skills/<category>/.../<slug>/SKILL.md` with matching `name: <slug>` frontmatter.');
+  lines.push('2. Create `skills/<category>/.../<slug>/CHANGELOG.md` with the initial version entry.');
+  lines.push('3. Run `npm run sync` to refresh adapters, catalog inputs, and generated inventories.');
+  lines.push('4. Run `npm run check` before opening a pull request.');
+  lines.push('');
+
+  return lines.join('\n');
+}
+
+function renderRulesReadme(rules) {
+  const lines = [
+    '# rules/',
+    '',
+    'Shared rule definitions — the single source of truth for rule content used across the toolkit\'s supported AI surfaces.',
+    '',
+    '## Ownership',
+    '',
+    '- Root `rules/` is canonical.',
+    '- Claude Code consumes generated adapters under `claude-code/rules/`.',
+    '- GitHub Copilot for VS Code consumes generated adapters under `github-copilot/instructions/`.',
+    '- OpenAI Codex uses them through `openai-codex/rules/build-agents-md.sh` and related composition assets.',
+    '',
+    '## Structure',
+    '',
+    '```text',
+    'rules/',
+    '  <slug>/',
+    '    <slug>.md',
+    '    CHANGELOG.md',
+    '```',
+    '',
+    '## Rules',
+    '',
+    '| Rule | Lifecycle | Description |',
+    '|---|---|---|',
+  ];
+
+  for (const rule of rules) {
+    lines.push(`| \`${rule.id}\` | ${escapeMarkdownTableCell(rule.lifecycle)} | ${escapeMarkdownTableCell(rule.description)} |`);
+  }
+
+  lines.push('');
+  lines.push('## Tag Format');
+  lines.push('');
+  lines.push('```text');
+  lines.push('rule/<slug>-v<major>.<minor>.<patch>');
+  lines.push('```');
+  lines.push('');
+
+  return lines.join('\n');
+}
+
 function deriveRuleDescription(body) {
   const firstLine = body
     .split('\n')
@@ -473,6 +636,7 @@ function deriveRuleDescription(body) {
   }
 
   const normalized = firstLine
+    .replace(/^#{1,6}\s+/, '')
     .replace(/^[-*]\s+/, '')
     .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
     .replace(/`([^`]+)`/g, '$1')
@@ -949,6 +1113,7 @@ function syncRules() {
     if (!names.includes(slug)) removePathIfExists(path.join(copilotInstructionsDir, entry.name));
   }
 
+  const ruleEntries = [];
   for (const name of names) {
     const canonicalPath = path.join(canonicalRulesDir, name, `${name}.md`);
     const claudePath = path.join(claudeRulesDir, name, `${name}.md`);
@@ -980,6 +1145,12 @@ function syncRules() {
 
     const applyTo = explicitApplyTo || (paths.length > 0 ? paths.join(',') : '**/*');
 
+    ruleEntries.push({
+      id: name,
+      lifecycle: normalizeFrontmatterValue(extractField(/^lifecycle:\s*(.+)$/m, parts.frontmatter, '')),
+      description,
+    });
+
     writeIfChanged(
       claudePath,
       canonicalMarkdown.endsWith('\n') ? canonicalMarkdown : `${canonicalMarkdown}\n`
@@ -993,6 +1164,22 @@ function syncRules() {
       })
     );
   }
+
+  writeIfChanged(path.join(REPO_ROOT, 'rules', 'README.md'), renderRulesReadme(ruleEntries));
+}
+
+function syncSkills() {
+  const skills = listSharedSkillEntries();
+
+  writeIfChanged(
+    path.join(REPO_ROOT, 'openai-codex', 'config.toml.template'),
+    renderCodexConfigTemplate(skills)
+  );
+
+  writeIfChanged(
+    path.join(REPO_ROOT, 'skills', 'README.md'),
+    renderSkillsReadme(skills)
+  );
 }
 
 function main() {
@@ -1002,6 +1189,7 @@ function main() {
   if (runAll || modes.has('--agents')) syncAgents();
   if (runAll || modes.has('--workflows')) syncWorkflows();
   if (runAll || modes.has('--rules')) syncRules();
+  if (runAll || modes.has('--skills')) syncSkills();
   if (runAll || modes.has('--hooks')) syncHooks();
 }
 

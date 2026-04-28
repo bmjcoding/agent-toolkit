@@ -28,7 +28,7 @@ agent-toolkit is a monorepo with 47 components (agents, hooks, skills, commands,
 
 **Positive**
 
-- Every footer compare link resolves to a valid URL once historical tags are created via `skills/changelog/scripts/backfill-changelog-tags.sh`.
+- Every footer compare link resolves to a valid URL once historical tags are created via `skills/delivery/changelog/scripts/backfill-changelog-tags.sh`.
 - Tag lineage is independent per component; one component's version history is fully isolated from others.
 - The skill is portable to Bitbucket Datacenter, GitLab, and Bitbucket Cloud without forking.
 - The plain-text `git log` fallback always produces correct output — no silent 404s on unrecognized platforms.
@@ -37,7 +37,7 @@ agent-toolkit is a monorepo with 47 components (agents, hooks, skills, commands,
 
 - Component renames break tag lineage: tags prefixed with the old leaf name become orphaned. A rename procedure exists as documentation but is not yet formalized in a script.
 - The Bitbucket Datacenter web-UI URL template is community-documented. If Atlassian changes the format, all previously generated footer links require regeneration.
-- `skills/changelog/scripts/detect-platform.sh` depends on `git remote` being configured. New repositories without a configured origin fall through to `unknown` and receive the plain-text fallback.
+- `skills/delivery/changelog/scripts/detect-platform.sh` depends on `git remote` being configured. New repositories without a configured origin fall through to `unknown` and receive the plain-text fallback.
 
 ## Alternatives Considered
 

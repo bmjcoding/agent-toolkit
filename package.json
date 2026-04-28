@@ -8,6 +8,12 @@
     "smol-toml": "1.6.1"
   },
   "scripts": {
+    "sync": "node scripts/sync-canonical-adapters.js && node scripts/generate-index.js",
+    "smoke": "node scripts/smoke-generated-assets.js",
+    "check": "npm run lint && npm run lint:py && npm run validate:lifecycle && npm run validate:definitions && npm run validate:changelogs && npm run smoke",
+    "validate:changelogs": "sh -c '{ git diff --name-only --diff-filter=ACMRD HEAD; git ls-files --others --exclude-standard; } | node scripts/validate-component-changelogs.js --files-from-stdin --require-release-version'",
+    "validate:definitions": "python3 scripts/lint-definition.py skills && python3 scripts/lint-definition.py agents",
+    "validate:lifecycle": "node scripts/validate-lifecycle-metadata.js",
     "lint": "npm run lint:js && npm run lint:docs && npm run lint:data",
     "lint:fix": "npm run lint:js:fix && npm run lint:docs:fix && npm run lint:data:fix",
     "lint:js": "eslint .",

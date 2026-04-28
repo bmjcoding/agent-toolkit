@@ -80,15 +80,11 @@ declare -a GITHUB_SYMLINKS=(
   "prompts|${REPO_DIR}/github-copilot/prompts"
 )
 
-declare -a HOOK_MANIFESTS=(
-  "branch-guard|${REPO_DIR}/github-copilot/hooks/branch-guard/branch-guard.json"
-  "changelog-check|${REPO_DIR}/github-copilot/hooks/changelog-check/changelog-check.json"
-  "extract-handoff|${REPO_DIR}/github-copilot/hooks/extract-handoff/extract-handoff.json"
-  "inject-context|${REPO_DIR}/github-copilot/hooks/inject-context/inject-context.json"
-  "integrity-warn|${REPO_DIR}/github-copilot/hooks/integrity-warn/integrity-warn.json"
-  "pre-push-secrets|${REPO_DIR}/github-copilot/hooks/pre-push-secrets/pre-push-secrets.json"
-  "protect-config|${REPO_DIR}/github-copilot/hooks/protect-config/protect-config.json"
-)
+declare -a HOOK_MANIFESTS=()
+while IFS= read -r manifest; do
+  slug="$(basename "$(dirname "$manifest")")"
+  HOOK_MANIFESTS+=("${slug}|${manifest}")
+done < <(find "${REPO_DIR}/github-copilot/hooks" -mindepth 2 -maxdepth 2 -type f -name "*.json" | sort)
 
 print_header() {
   echo ""

@@ -5,7 +5,12 @@ All notable changes to this component will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [6.3.0] - 2026-04-28
+
+### Changed
+
+- Renamed the review-mode skill dependency to `definition-review` across
+  canonical and generated agent definitions.
 
 ## [6.2.1] - 2026-04-28
 
@@ -15,12 +20,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   consolidation guidance to call toolkit-owned `scripts/orchestrator/` helpers
   from the active checkout instead of Claude-local script paths.
 
-
 ## [6.2.0] - 2026-04-27
 
 ### Changed
 
-- Collapsed the six per-mode workflow blocks into the new `recon`, `full-cycle`, and `on-demand` skills (retro / improve / review-skill already existed). The agent body now routes by mode keyword and defers to the loaded skill, dropping ~150 lines of duplicated workflow prose.
+- Collapsed the six per-mode workflow blocks into the new `recon`, `full-cycle`, and `on-demand` skills (retro / improve / definition-review already existed). The agent body now routes by mode keyword and defers to the loaded skill, dropping ~150 lines of duplicated workflow prose.
 - Replaced the `Untrusted Data Boundary` invariants block with a reference to `rules/untrusted-data-boundary/`. Role-specific safety rules and the instruction sandwich remain.
 - Removed the hardcoded "20-files / maxTurns=80" improve batch threshold; agents now call `~/.claude/scripts/dispatch-budget.py` which derives the per-agent ceiling from live inputs.
 - Replaced the multi-domain consolidation prose with a reference to `~/.claude/scripts/consolidate-findings.py`.
@@ -83,7 +87,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- BREAKING: Review mode handoff `results[].required_changes` type changed from integer (count) to array of objects `{what, where, why, priority, type}` to match review-skill JSON output schema (D1-1). Consumers must read `required_changes.length` to obtain the count.
+- BREAKING: Review mode handoff `results[].required_changes` type changed from integer (count) to array of objects `{what, where, why, priority, type}` to match definition-review JSON output schema (D1-1). Consumers must read `required_changes.length` to obtain the count.
 - Full-cycle mode handoff `review_results[].required_changes` updated to the same array-of-objects shape for consistency with the review mode handoff.
 - Improve mode handoff: added `file_diffs` field (array of `{file, unified_diff_truncated}` objects) matching improve/SKILL.md step 7 schema (D1-3).
 
@@ -124,7 +128,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- `on-demand` mode: fallback workflow for freeform user requests (e.g., "the changelog skill is too verbose, split it up"). Resolves target from the prompt, runs review-skill inline, then iterates with improve when the verdict is NEEDS WORK. Preserves explicit mode keywords as fast paths.
+- `on-demand` mode: fallback workflow for freeform user requests (e.g., "the changelog skill is too verbose, split it up"). Resolves target from the prompt, runs definition-review inline, then iterates with improve when the verdict is NEEDS WORK. Preserves explicit mode keywords as fast paths.
 
 ### Changed
 
@@ -136,7 +140,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/agent/autoresearch-analyst-v6.2.1...HEAD
+[6.3.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/autoresearch-analyst-v6.2.1...agent/autoresearch-analyst-v6.3.0
 [6.2.1]: https://github.com/bmjcoding/agent-toolkit/compare/agent/autoresearch-analyst-v6.2.0...agent/autoresearch-analyst-v6.2.1
 [6.1.0]: https://github.com/bmjcoding/agent-toolkit/compare/agent/autoresearch-analyst-v6.0.0...agent/autoresearch-analyst-v6.1.0
 [6.0.0]: https://github.com/bmjcoding/agent-toolkit/tree/agent/autoresearch-analyst-v6.0.0

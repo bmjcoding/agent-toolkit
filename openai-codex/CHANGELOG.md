@@ -5,7 +5,14 @@ All notable changes to this component will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [4.3.0] - 2026-04-28
+
+### Changed
+
+- Regenerated the Codex config template from recursive canonical skill discovery
+  so shared skills are referenced through `skills/<category>/.../<slug>/SKILL.md`.
+- Updated Codex integrity checks and documentation to account for categorized
+  shared skill paths and shared model-tier names.
 
 ## [4.2.0] - 2026-04-28
 
@@ -15,7 +22,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   policy, and max-turn metadata derived from canonical definitions.
 - `scripts/install.sh` now symlinks canonical root hooks and orchestrator helper scripts
   so generated hook commands can resolve shared runtime logic without Claude-local paths.
-
 
 ## [4.1.3] - 2026-04-17
 
@@ -61,7 +67,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- BREAKING: `autoresearch-analyst.toml` review mode handoff `results[].required_changes` type changed from integer (count) to array of objects `{what, where, why, priority, type}` to match review-skill JSON output schema (D1-1). Consumers must read `required_changes.length` to obtain the count.
+- BREAKING: `autoresearch-analyst.toml` review mode handoff `results[].required_changes` type changed from integer (count) to array of objects `{what, where, why, priority, type}` to match definition-review JSON output schema (D1-1). Consumers must read `required_changes.length` to obtain the count.
 - BREAKING: `autoresearch-analyst.toml` full-cycle mode handoff `review_results[].required_changes` updated to the same array-of-objects shape for consistency with the review mode handoff.
 - `autoresearch-analyst.toml` improve mode handoff: added `file_diffs` field (array of `{file, unified_diff_truncated}` objects) matching improve/SKILL.md step 7 schema (D1-3).
 
@@ -96,7 +102,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `scripts/install.sh` hooks target corrected to `~/.codex/hooks.json` (parity gap #6 Medium resolved).
 - Group-level `description` field removed from `hooks.json` (parity gap #7 Low resolved).
 
-[Unreleased]: https://github.com/bmjcoding/agent-toolkit/compare/openai-codex-v4.2.0...HEAD
+[4.3.0]: https://github.com/bmjcoding/agent-toolkit/compare/openai-codex-v4.2.0...openai-codex-v4.3.0
 [4.2.0]: https://github.com/bmjcoding/agent-toolkit/compare/openai-codex-v4.1.3...openai-codex-v4.2.0
 [4.1.3]: https://github.com/bmjcoding/agent-toolkit/compare/openai-codex-v4.1.2...openai-codex-v4.1.3
 [4.1.2]: https://github.com/bmjcoding/agent-toolkit/compare/openai-codex-v4.1.1...openai-codex-v4.1.2

@@ -52,11 +52,11 @@ import bridge is needed.
 
 Codex adapters use the shared tier map below when generating `openai-codex/agents/*.toml`:
 
-| Claude tier | Codex model |
+| Shared tier | Codex model |
 |-------------|-------------|
-| `inherit` / `opus` | `gpt-5.4` |
-| `sonnet` | `gpt-5.3-codex` |
-| `haiku` | `gpt-5.3-codex-spark` |
+| `frontier` | `gpt-5.4` |
+| `balanced` | `gpt-5.3-codex` |
+| `fast` | `gpt-5.3-codex-spark` |
 
 ## Shared skills
 
@@ -64,7 +64,7 @@ Codex adapters use the shared tier map below when generating `openai-codex/agent
 
 ```toml
 [[skills.config]]
-path = "${AGENT_TOOLKIT_DIR}/skills/<slug>/SKILL.md"
+path = "${AGENT_TOOLKIT_DIR}/skills/<category>/.../<slug>/SKILL.md"
 enabled = true
 ```
 

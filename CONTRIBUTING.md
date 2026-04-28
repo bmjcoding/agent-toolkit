@@ -5,7 +5,7 @@
 ```text
 agent-toolkit/
   agents/          # Canonical shared agent instruction bodies
-  skills/          # Canonical shared skills
+  skills/          # Canonical shared skills, categorized as skills/<category>/.../<slug>/
   rules/           # Canonical shared rules
   workflows/       # Canonical shared workflow definitions
   claude-code/     # Claude-native assets
@@ -44,6 +44,20 @@ agent-toolkit/
 - Pushes to branches auto-commit regenerated tool surfaces and `index.json` back to the
   branch when needed.
 
+## Contribution assistant
+
+Claude contributors can use the repo-local `.claude/agents/contribution-assistant.md`
+agent. It reviews changed definitions, applies the toolkit-specific changelog policy,
+regenerates generated assets, and runs local validation before a pull request.
+
+The companion `.claude/skills/contribution-changelog/SKILL.md` skill is intentionally
+toolkit-specific: contribution PRs add a versioned changelog section immediately instead
+of staging entries under `[Unreleased]`.
+
+The repo-local `.claude/skills/definition-review` and `.claude/skills/improve` entries are
+symlinks to the canonical shared skills under `skills/self-improvement/`, so the
+assistant does not require a prior global `~/.claude/skills` install.
+
 ## Commit style
 
 Use [Conventional Commits](https://www.conventionalcommits.org/):
@@ -71,6 +85,22 @@ Each component owns its own `CHANGELOG.md`.
 Root skill and root rule changelogs are canonical. Tool-specific changelogs should describe
 adapter/runtime changes only.
 
+### Which changelog?
+
+| If you change... | Update... |
+|---|---|
+| `agents/<name>/...` | `agents/<name>/CHANGELOG.md` |
+| `skills/<category>/.../<name>/...` | that skill's `CHANGELOG.md` |
+| `rules/<name>/...` | `rules/<name>/CHANGELOG.md` |
+| `workflows/<name>/...` | `workflows/<name>/CHANGELOG.md` |
+| `hooks/<name>/...` | `hooks/<name>/CHANGELOG.md` |
+| generated adapters only | the canonical source component changelog |
+| generator, CI, install, catalog, or contributor policy | root `CHANGELOG.md` |
+
+Do not use `[Unreleased]` for toolkit contributions. Add a new top version section
+(`## [X.Y.Z] - YYYY-MM-DD`) to every touched component changelog and bump SemVer in the
+same pull request.
+
 ## Install scripts
 
 Test installer changes with `--dry-run` and `--check` before merging:
@@ -88,8 +118,8 @@ Before opening a pull request, run:
 
 ```sh
 npm ci
-npm run lint
-npm run lint:py
+npm run check
+git diff --check
 ```
 
 CI also runs the repository secret scan on pull requests and protected-branch pushes.

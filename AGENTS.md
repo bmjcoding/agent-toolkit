@@ -22,7 +22,7 @@ agent-toolkit/
     adr/           # Repo-wide architecture decisions
   agents/          # Canonical shared agent instruction bodies
   hooks/           # Canonical shared hook logic (target ownership model; see ADR-0009)
-  skills/          # Canonical shared skills
+  skills/          # Canonical shared skills, categorized as skills/<category>/.../<slug>/
   rules/           # Canonical shared rules
   workflows/       # Canonical shared workflow definitions
   bundles/         # Canonical shared bundle manifests

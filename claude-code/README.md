@@ -23,7 +23,7 @@ Canonical agents live at repo-root `agents/`. Canonical workflows live at repo-r
 Canonical shared hook logic now also lives at repo-root `hooks/`. `claude-code/rules/`
 is generated from the canonical root rules by `node scripts/sync-canonical-adapters.js`.
 Changelog helper scripts such as platform detection and historical tag backfill live
-canonically under `skills/changelog/scripts/`, not under `claude-code/scripts/`.
+inside the categorized `changelog` skill directory, not under `claude-code/scripts/`.
 
 ## Install (Symlinks)
 

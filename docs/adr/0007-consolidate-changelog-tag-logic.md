@@ -16,7 +16,7 @@ shared root skill tree.
 
 ### 1. Single canonical owner
 
-Root `skills/changelog/SKILL.md` is the sole owner of:
+Root `skills/delivery/changelog/SKILL.md` is the sole owner of:
 
 - changelog structure and formatting rules
 - SemVer bump guidance
