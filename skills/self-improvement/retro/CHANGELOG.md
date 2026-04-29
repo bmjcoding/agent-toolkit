@@ -5,6 +5,24 @@ All notable changes to this component will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.6.0] - 2026-04-28
+
+### Changed
+
+- Replaced Claude-specific argument metadata and placeholder usage with a portable
+  `## Inputs` section for run types, subjects, artifact paths, and empty-input
+  behavior.
+- Updated the self-improvement architecture reference to describe `git-ship`
+  input generically instead of through `$ARGUMENTS`.
+
+## [5.5.0] - 2026-04-28
+
+### Changed
+
+- Added `RETRO_SKILL_DIR` resolution based on Claude's active skill directory
+  substitution and reused it for retro helper script lookups before falling back to
+  local shared-skill discovery.
+
 ## [5.4.0] - 2026-04-28
 
 ### Changed

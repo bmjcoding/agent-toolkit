@@ -6,12 +6,30 @@ description: >
   autonomous improve-then-review validation cycles.
 lifecycle: stable
 disable-model-invocation: true
-argument-hint: "remove [rec-id] | [retro-output or recommendation] [--validate] [--skip-validation]"
 ---
 
 # Improve
 
 Apply changes to skill/agent definitions, verify each one, accept or revert. Each change gets fixed-budget verification (max 3 checks, eval capped at 2 min) and a binary accept/reject gate — no partial acceptance, no retrying failed changes.
+
+## Inputs
+
+Accepts one recommendation source or maintenance subcommand:
+
+```text
+<retro-output | recommendation table | path-to-retro.md> [--validate] [--skip-validation] [--max-iterations N]
+remove <rec-id>
+```
+
+- A retro markdown path is read directly and must exist.
+- Inline retro output or a recommendation table may be parsed from the current
+  conversation.
+- Empty input falls back to the current conversation, then the most recent retro on
+  disk.
+- `--validate` runs the post-improvement validation loop.
+- `--skip-validation` suppresses progressive-disclosure pauses and applies all
+  recommendations in one uninterrupted pass.
+- `remove <rec-id>` runs only the rule-removal subcommand.
 
 Resolve `STATE_ROOT` once at the start of the run. Prefer, in order: `.agents/`,
 `.claude/`, `.codex/`, `~/.agents/`, `~/.claude/`, `~/.codex/`. Use the first existing
@@ -28,12 +46,22 @@ Resolve `RETRO_ROOT` once at the start of the run for retro reads and writes:
 - Treat legacy retro roots, resolved `STATE_ROOT` retro dirs, and flat subject directories as compatibility read locations only
 - Do not invent a project-local retro write root without an explicit override
 
+Resolve `IMPROVE_SKILL_DIR` once at the start of the run for sibling helper lookups.
+Claude Code replaces `${CLAUDE_SKILL_DIR}` with this skill's installed directory; other
+tools should fall back to local discovery:
+```bash
+IMPROVE_SKILL_DIR='${CLAUDE_SKILL_DIR}'
+if [ ! -d "$IMPROVE_SKILL_DIR" ]; then
+  IMPROVE_SKILL_DIR=$(dirname "$(find skills .agents/skills .claude/skills .codex/skills ~/.agents/skills ~/.claude/skills ~/.codex/skills -path "*/improve/SKILL.md" 2>/dev/null | head -1)")
+fi
+```
+
 ## Workflow
 
 ### 1. Parse Recommendations
 
 Locate the retro's recommendations table from one of these sources (in priority order):
-1. **`$ARGUMENTS`** — if a file path is passed, read it
+1. **Invocation input** — if a file path is passed, read it
 2. **Current conversation** — search backward for section "3.7 Recommendations" or a table with columns What/Where/Why/Priority/Type. Extract the table rows.
 3. **Most recent retro on disk** — recursively scan `~/agent-retros/` (or `$AGENT_RETRO_DIR`) for retro markdown files, find the newest `.md` file by timestamp in the filename, and read its section 3.7. If no canonical retro exists, fall back to legacy retro roots and resolved `STATE_ROOT` retro dirs, including flat subject directories. This handles context compaction and fresh-session invocation across the type-scoped retro directory layout.
 4. If none of the above produce recommendations, ask the user to provide the retro output or run `retro` first.
@@ -70,11 +98,10 @@ Before editing, record the file's current line count by counting the lines in th
 
 **Structural validation** (always run):
 ```bash
-# Try the repo wrapper, then categorized project-local installs, then user-global installs
-LINTER=$(find scripts -maxdepth 1 -name "lint-definition.py" 2>/dev/null | head -1)
-[ -z "$LINTER" ] && LINTER=$(find skills -path "*/definition-review/scripts/lint-definition.py" 2>/dev/null | head -1)
-[ -z "$LINTER" ] && LINTER=$(find .agents/skills .claude/skills .codex/skills -path "*/definition-review/scripts/lint-definition.py" 2>/dev/null | head -1)
-[ -z "$LINTER" ] && LINTER=$(find ~/.agents/skills ~/.claude/skills ~/.codex/skills -path "*/definition-review/scripts/lint-definition.py" 2>/dev/null | head -1)
+LINTER=""
+[ -n "${IMPROVE_SKILL_DIR:-}" ] && [ -f "$IMPROVE_SKILL_DIR/../definition-review/scripts/lint-definition.py" ] && LINTER="$IMPROVE_SKILL_DIR/../definition-review/scripts/lint-definition.py"
+[ -n "$LINTER" ] || LINTER=$(find scripts -maxdepth 1 -name "lint-definition.py" 2>/dev/null | head -1)
+[ -n "$LINTER" ] || LINTER=$(find skills .agents/skills .claude/skills .codex/skills ~/.agents/skills ~/.claude/skills ~/.codex/skills -path "*/definition-review/scripts/lint-definition.py" 2>/dev/null | head -1)
 python3 "${LINTER:-lint-definition.py}" TARGET_FILE --format json
 ```
 If the linter is not found, warn "lint-definition.py not found — skipping structural validation" and proceed without it. Do not fail the change because the linter is missing. Any S-code error = structural failure. Q-code warnings are informational unless they are new regressions introduced by the edit.
@@ -194,12 +221,12 @@ End with:
 After all changes are applied and changelogged, run a final lint pass on every modified file:
 
 ```bash
-LINTER=$(find scripts -maxdepth 1 -name "lint-definition.py" 2>/dev/null | head -1)
-[ -z "$LINTER" ] && LINTER=$(find skills -path "*/definition-review/scripts/lint-definition.py" 2>/dev/null | head -1)
-[ -z "$LINTER" ] && LINTER=$(find .agents/skills .claude/skills .codex/skills -path "*/definition-review/scripts/lint-definition.py" 2>/dev/null | head -1)
-[ -z "$LINTER" ] && LINTER=$(find ~/.agents/skills ~/.claude/skills ~/.codex/skills -path "*/definition-review/scripts/lint-definition.py" 2>/dev/null | head -1)
+LINTER=""
+[ -n "${IMPROVE_SKILL_DIR:-}" ] && [ -f "$IMPROVE_SKILL_DIR/../definition-review/scripts/lint-definition.py" ] && LINTER="$IMPROVE_SKILL_DIR/../definition-review/scripts/lint-definition.py"
+[ -n "$LINTER" ] || LINTER=$(find scripts -maxdepth 1 -name "lint-definition.py" 2>/dev/null | head -1)
+[ -n "$LINTER" ] || LINTER=$(find skills .agents/skills .claude/skills .codex/skills ~/.agents/skills ~/.claude/skills ~/.codex/skills -path "*/definition-review/scripts/lint-definition.py" 2>/dev/null | head -1)
 for FILE in <list of modified files>; do
-  python3 "${LINTER}" "$FILE" --format json
+  python3 "${LINTER:-lint-definition.py}" "$FILE" --format json
 done
 ```
 
@@ -248,7 +275,7 @@ Derive the subject value using this rule:
 - If no header is found in conversation: default to `claude`
 
 Derive the retro directory (`<retro-dir>`) using this rule:
-- If `$ARGUMENTS` provided a retro file path, use that file's parent directory
+- If the invocation input provided a retro file path, use that file's parent directory
 - If recommendations came from the most recent retro on disk, use that retro file's parent directory
 - If recommendations came from conversation only, try to locate the matching retro on disk by subject/date and use its parent directory
 - If the resolved retro file lives under a legacy root and a canonical equivalent exists under `RETRO_ROOT`, normalize to the canonical directory before writing the outcome
@@ -296,10 +323,9 @@ Include `model_recommendations` as an array of objects `{"agent": "name", "curre
 
 Append to trend history:
 ```bash
-# Try personal skills, then project skills
-HISTORY_SCRIPT=$(find skills -path "*/retro/scripts/retro-history.py" 2>/dev/null | head -1)
-[ -z "$HISTORY_SCRIPT" ] && HISTORY_SCRIPT=$(find .agents/skills .claude/skills .codex/skills -path "*/retro/scripts/retro-history.py" 2>/dev/null | head -1)
-[ -z "$HISTORY_SCRIPT" ] && HISTORY_SCRIPT=$(find ~/.agents/skills ~/.claude/skills ~/.codex/skills -path "*/retro/scripts/retro-history.py" 2>/dev/null | head -1)
+HISTORY_SCRIPT=""
+[ -n "${IMPROVE_SKILL_DIR:-}" ] && [ -f "$IMPROVE_SKILL_DIR/../retro/scripts/retro-history.py" ] && HISTORY_SCRIPT="$IMPROVE_SKILL_DIR/../retro/scripts/retro-history.py"
+[ -n "$HISTORY_SCRIPT" ] || HISTORY_SCRIPT=$(find skills .agents/skills .claude/skills .codex/skills ~/.agents/skills ~/.claude/skills ~/.codex/skills -path "*/retro/scripts/retro-history.py" 2>/dev/null | head -1)
 python3 "${HISTORY_SCRIPT:-retro-history.py}" save <retro-dir>/YYYYMMDDTHHMMSS-improve.json --history "${AGENT_RETRO_DIR:-$HOME/agent-retros}"
 ```
 If the script is not found, warn "retro-history.py not found — outcome not saved to trend history" but do not fail the improve run.
@@ -312,7 +338,7 @@ This lets future retros answer: "Were the last retro's recommendations applied? 
 
 - **Skip heuristic**: Skip when all changes are additive (lines_removed=0) AND target Gotchas/references only
 - **Purpose**: Post-definition-review remediation (NEEDS WORK → fix → confirm), not routine retro-improve
-- **Max iterations**: Ask user or accept --max-iterations N from $ARGUMENTS
+- **Max iterations**: Ask user or accept `--max-iterations N` from the invocation input
 - **No double version bumps**: Validation iterations append sub-entries, don't create new versions
 - **Convergence**: Exit when all files PASS or no progress after an iteration
 
@@ -341,9 +367,7 @@ This subcommand is disjoint from `improve`'s main retro-application flow. It doe
 - **Validation loop is post-improve only.** The `--validate` loop runs AFTER the main improve workflow finishes — it does not replace the per-change verification in step 2c. The per-change checks catch individual regressions; the validation loop catches definition-level quality gaps.
 - **No inline versioning.** Improve never edits inline definition versions. Validation iterations also avoid version headers; keep recording follow-up work under `## [Unreleased]`.
 - **Single outcome file.** The validation loop updates the existing outcome JSON from step 7 — it does not create additional outcome files. One improve run = one outcome file, regardless of validation iterations.
-- **Bad retro file path is not a fallback trigger.** If `$ARGUMENTS` contains a retro file path that doesn't exist, do not silently fall back to conversation history — report the bad path and stop. Fallbacks (conversation, disk) are for missing arguments, not bad arguments.
-- **`--validate` blocks on user input.** Orchestrators and full-cycle agents should pass `--max-iterations N` in `$ARGUMENTS` rather than relying on the interactive prompt, to avoid blocking mid-execution.
+- **Bad retro file path is not a fallback trigger.** If the invocation input contains a retro file path that doesn't exist, do not silently fall back to conversation history — report the bad path and stop. Fallbacks (conversation, disk) are for missing arguments, not bad arguments.
+- **`--validate` blocks on user input.** Orchestrators and full-cycle agents should pass `--max-iterations N` in the invocation input rather than relying on the interactive prompt, to avoid blocking mid-execution.
 - **`--skip-validation` disables progressive disclosure pauses.** When `--skip-validation` is passed, the batch-pause after every 3rd change is suppressed and all changes apply in a single uninterrupted pass. Use for non-interactive orchestrator contexts.
 - **`STATE_ROOT` is lazy, not mandatory.** If no toolkit state directory exists, stay stateless until a step actually needs persistence. Only then create `.agents/`; do not front-load local state creation.
-
-$ARGUMENTS

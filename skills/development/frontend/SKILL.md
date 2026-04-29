@@ -20,6 +20,18 @@ frontend change and remain reviewable in one pass. If the request expands into d
 backend, infra, or release tracks, say so and recommend pairing this skill with the
 matching domain skill or `prod-readiness` rather than refusing the task outright.
 
+## Inputs
+
+Use the current user request as the task input. It may include target paths,
+screenshots, design references, acceptance criteria, or interaction constraints.
+
+- If target files are provided, scope implementation and review to those files plus
+  tightly coupled UI contracts.
+- If no files are provided, infer the UI surface from the request and existing project
+  structure before editing.
+- Shipping, release, or broad production-readiness requests are out of scope for this
+  skill; route those to `git-ship` or `prod-readiness`.
+
 ## Process
 
 1. **Scope and implement**:
@@ -46,7 +58,3 @@ Present a brief summary: what was implemented, review findings (pillar + severit
 - Design review only covers changed files — pre-existing violations in untouched components are not reported.
 - Max 1 retry on the fix loop; unresolved design findings are surfaced to the user, not silently dropped.
 - Cross-domain work is acceptable when frontend remains the primary owner and adjacent edits stay small. If the change splits cleanly into separate tracks, call that out and recommend the companion skill instead of blocking the run.
-
-## Task
-
-$ARGUMENTS

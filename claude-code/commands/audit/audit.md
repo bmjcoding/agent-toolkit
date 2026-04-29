@@ -4,12 +4,19 @@ description: >
   Comprehensive code audit covering correctness, security, accessibility, type safety, and
   operational resilience. Use when the user wants to audit code quality.
 disable-model-invocation: true
-argument-hint: "[paths...] [--dry-run]"
 metadata:
   version: 1.0.0
 ---
 
 Perform a comprehensive audit of the code in scope. Use parallel agents to maximize speed. Cover every dimension below and report findings in a single table grouped by severity (Critical > High > Medium > Low). Scope resolution, autonomy, and `--dry-run` rules are defined in AGENTS.md.
+
+## Inputs
+
+Accepts optional files or directories plus `--dry-run`.
+
+- If paths are provided, audit only those targets and tightly coupled files.
+- If no paths are provided, use the changed-file scope resolution rules from `AGENTS.md`.
+- If `--dry-run` is present, report findings and planned fixes without modifying files.
 
 ## Audit dimensions
 

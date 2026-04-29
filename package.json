@@ -1,13 +1,15 @@
 {
   "name": "agent-toolkit",
   "private": true,
+  "packageManager": "npm@11.13.0",
   "engines": {
-    "node": ">=22"
+    "node": "^22.13.0 || >=24"
   },
   "overrides": {
     "smol-toml": "1.6.1"
   },
   "scripts": {
+    "ci": "bash scripts/local-ci.sh",
     "sync": "node scripts/sync-canonical-adapters.js && node scripts/generate-index.js",
     "smoke": "node scripts/smoke-generated-assets.js",
     "check": "npm run lint && npm run lint:py && npm run validate:lifecycle && npm run validate:claude && npm run validate:definitions && npm run validate:changelogs && npm run smoke",
@@ -23,8 +25,8 @@
     "lint:docs:fix": "markdownlint-cli2 --fix \"**/*.md\"",
     "lint:data": "prettier --check \"**/*.{json,yaml,yml}\"",
     "lint:data:fix": "prettier --write \"**/*.{json,yaml,yml}\"",
-    "lint:py": "uvx --from ruff==0.15.10 ruff check .",
-    "lint:py:fix": "uvx --from ruff==0.15.10 ruff check . --fix"
+    "lint:py": "uvx --from ruff==0.15.12 ruff check .",
+    "lint:py:fix": "uvx --from ruff==0.15.12 ruff check . --fix"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

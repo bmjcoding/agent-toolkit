@@ -5,6 +5,13 @@ All notable changes to this component will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.2.0] - 2026-04-28
+
+### Changed
+
+- Added a portable `## Inputs` section clarifying task, file, screenshot, design
+  reference, and missing-context handling before the scope check.
+
 ## [4.1.0] - 2026-04-15
 
 ### Changed

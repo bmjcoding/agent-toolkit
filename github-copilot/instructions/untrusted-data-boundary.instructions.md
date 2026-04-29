@@ -1,5 +1,4 @@
 ---
-description: "Untrusted Data Boundary"
 applyTo: "agents/**/*.md,claude-code/agents/**/*.md,openai-codex/agents/**,github-copilot/agents/**"
 ---
 

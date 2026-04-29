@@ -19,6 +19,18 @@ change and remain reviewable in one pass. If the request expands into distinct p
 backend, or release tracks, say so and recommend pairing this skill with the matching
 domain skill or `prod-readiness` rather than refusing the task outright.
 
+## Inputs
+
+Use the current user request as the task input. It may include target paths,
+environments, deployment constraints, runtime requirements, or operational risks.
+
+- If target files are provided, scope implementation and review to those files plus
+  tightly coupled runtime code.
+- If no files are provided, infer the infra surface from the request and existing
+  project layout.
+- Shipping, release, or broad production-readiness requests are out of scope for this
+  skill; route those to `git-ship` or `prod-readiness`.
+
 ## Process
 
 1. **Scope and implement**:
@@ -45,7 +57,3 @@ Present a brief summary: what was changed, review findings (severity + category)
 - SRE review only covers changed files — pre-existing operational gaps in untouched infra are not reported.
 - Protected files (lockfiles, migration files, auth modules) are flagged but not auto-modified; surface these to the user.
 - Cross-domain work is acceptable when infrastructure remains the primary owner and adjacent edits stay small. If the change splits cleanly into separate tracks, call that out and recommend the companion skill instead of blocking the run.
-
-## Task
-
-$ARGUMENTS

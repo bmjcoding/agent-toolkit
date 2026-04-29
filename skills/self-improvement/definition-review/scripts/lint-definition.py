@@ -53,7 +53,7 @@ Checks:
     Q09  Agent definition missing maxTurns
     Q10  Instructions explain things the agent already knows
     Q11  Multiple conflicting imperatives (ALWAYS X ... NEVER X)
-    Q12  No $ARGUMENTS in user-invocable skill
+    Q12  No portable input contract in user-invocable skill
     Q15  Eval file (evals/evals.json) has structural issues: wrong keys, non-sequential IDs, missing fields
 """
 
@@ -387,17 +387,16 @@ def lint_file(filepath, file_type=None, base=None):
         if conflicts:
             warn("Q11", f"Potentially conflicting imperatives found — both ALWAYS and NEVER reference: {', '.join(sorted(conflicts)[:3])}")
 
-    # Q12: Missing $ARGUMENTS
-    # Note: this check uses a full-content string match for "$ARGUMENTS". If $ARGUMENTS appears
-    # anywhere in the file — including in code examples, comments, or the body — the check will
-    # not fire. A skill author including $ARGUMENTS as a placeholder in a code block will
-    # suppress this warning without intending to. This is the correct behavior for real skills,
-    # but reviewers should be aware that Q12 is silenced by any occurrence of the string.
+    # Q12: Missing portable input contract. A `## Inputs` section is preferred
+    # because it works across runtimes; `$ARGUMENTS` remains accepted for legacy
+    # Claude-style skills.
     if file_type == "skill":
         is_user_invocable = fm.get("user-invocable", "true").lower() != "false"
         disable_model = fm.get("disable-model-invocation", "false").lower() == "true"
-        if is_user_invocable and "$ARGUMENTS" not in content and disable_model:
-            warn("Q12", "User-invocable skill with disable-model-invocation but no $ARGUMENTS — user input may be ignored")
+        has_inputs_section = bool(re.search(r"(?m)^##\s+Inputs\b", body))
+        has_legacy_arguments = "$ARGUMENTS" in content
+        if is_user_invocable and not (has_inputs_section or has_legacy_arguments) and disable_model:
+            warn("Q12", "User-invocable skill with disable-model-invocation but no ## Inputs section — user input may be ignored")
 
     # Q15: Eval file validation (skills only)
     if file_type == "skill":

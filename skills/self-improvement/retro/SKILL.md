@@ -4,7 +4,6 @@ description: >
   Run a retrospective on any completed run — single agent, subagent, skill, or orchestration
   pipeline. Use when the user wants to debrief, analyze efficiency, or improve a workflow.
 lifecycle: stable
-argument-hint: "[run-type or orchestrator-dir]"
 ---
 
 # Retrospective
@@ -12,6 +11,20 @@ argument-hint: "[run-type or orchestrator-dir]"
 Run a structured retrospective grounded in actual artifacts. Read everything before analyzing.
 This skill is directly user-invocable; orchestration artifacts are optional inputs, not a
 prerequisite.
+
+## Inputs
+
+Accepts optional run context:
+
+```text
+[run type | subject | orchestration/session directory | artifact path]
+```
+
+- A directory path points to orchestration or pipeline artifacts to analyze.
+- A run type or subject narrows the retro target when no artifact directory exists.
+- Empty input analyzes the current conversation and available git context.
+- If a provided artifact path is missing, report the missing path instead of
+  inventing a replacement.
 
 Resolve `STATE_ROOT` once at the start of the run for metadata and memory lookups. Prefer,
 in order: `.agents/`, `.claude/`, `.codex/`, `~/.agents/`, `~/.claude/`, `~/.codex/`.
@@ -25,6 +38,16 @@ Resolve `RETRO_ROOT` once at the start of the run for retro persistence:
 - `RETRO_ROOT="${AGENT_RETRO_DIR:-$HOME/agent-retros}"`
 - Do not discover or invent a project-local retro root
 - Legacy retro roots from prior tool-specific storage, resolved `STATE_ROOT` retro dirs, and flat subject directories stay readable for historical lookups, but new retro writes always go to `RETRO_ROOT`
+
+Resolve `RETRO_SKILL_DIR` once at the start of the run for bundled scripts and
+references. Claude Code replaces `${CLAUDE_SKILL_DIR}` with this skill's installed
+directory; other tools should fall back to local discovery:
+```bash
+RETRO_SKILL_DIR='${CLAUDE_SKILL_DIR}'
+if [ ! -d "$RETRO_SKILL_DIR" ]; then
+  RETRO_SKILL_DIR=$(dirname "$(find skills .agents/skills .claude/skills .codex/skills ~/.agents/skills ~/.claude/skills ~/.codex/skills -path "*/retro/SKILL.md" 2>/dev/null | head -1)")
+fi
+```
 
 **Depth calibration**: Scale the retro to the run. Use this default:
 - **Lightweight** (single agent, <5 files changed, no errors): sections 3.1, 3.2, 3.7, summary table. Skip verify-claims and parse-metrics scripts. Still save and check trends. Recommendations in 3.7 must derive only from findings in 3.1 and 3.2 — do not invent root causes from sections that were skipped.
@@ -70,20 +93,14 @@ Read everything that exists. Skip what doesn't.
 3. Conversation history — task description, user interactions, errors encountered. If retro is invoked in a fresh session (no conversation history), rely on git history and orchestrator artifacts instead.
 
 **Orchestration / pipeline** (standard/full depth only):
-4. Locate and run `parse-metrics.py` to generate structured metrics. Resolve path in this order:
-   - `skills/<category>/retro/scripts/parse-metrics.py` (repo checkout)
-   - `.agents/skills/<category>/retro/scripts/parse-metrics.py` (project-local install)
-   - `.claude/skills/<category>/retro/scripts/parse-metrics.py` (project-local compatibility install)
-   - `.codex/skills/<category>/retro/scripts/parse-metrics.py` (project-local Codex install)
-   - `active retro skill install scripts/parse-metrics.py` (user-global install)
-   - `~/.agents/skills/<category>/retro/scripts/parse-metrics.py` (user-global shared install)
-   - `~/.claude/skills/<category>/retro/scripts/parse-metrics.py` (user-global Claude compatibility install)
-   - `~/.codex/skills/<category>/retro/scripts/parse-metrics.py` (user-global Codex install)
-   - Skip with warning if neither path exists
+4. Locate and run `parse-metrics.py` to generate structured metrics. Use
+   `$RETRO_SKILL_DIR/scripts/parse-metrics.py` first, then fall back to categorized
+   repo, project-local, and user-global skill installs. Skip with warning if no script
+   exists.
    ```bash
-   METRICS_SCRIPT=$(find skills -path "*/retro/scripts/parse-metrics.py" 2>/dev/null | head -1)
-   [ -z "$METRICS_SCRIPT" ] && METRICS_SCRIPT=$(find .agents/skills .claude/skills .codex/skills -path "*/retro/scripts/parse-metrics.py" 2>/dev/null | head -1)
-   [ -z "$METRICS_SCRIPT" ] && METRICS_SCRIPT=$(find ~/.agents/skills ~/.claude/skills ~/.codex/skills -path "*/retro/scripts/parse-metrics.py" 2>/dev/null | head -1)
+   METRICS_SCRIPT=""
+   [ -n "${RETRO_SKILL_DIR:-}" ] && [ -f "$RETRO_SKILL_DIR/scripts/parse-metrics.py" ] && METRICS_SCRIPT="$RETRO_SKILL_DIR/scripts/parse-metrics.py"
+   [ -n "$METRICS_SCRIPT" ] || METRICS_SCRIPT=$(find skills .agents/skills .claude/skills .codex/skills ~/.agents/skills ~/.claude/skills ~/.codex/skills -path "*/retro/scripts/parse-metrics.py" 2>/dev/null | head -1)
    [ -n "$METRICS_SCRIPT" ] && python3 "$METRICS_SCRIPT" [ORCHESTRATOR_DIR]
    ```
    Use the JSON output to ground analysis in data rather than re-parsing artifacts manually.
@@ -275,5 +292,3 @@ If there are 0 `fix` recommendations and only `pattern` recommendations, note:
 If there are 0 recommendations of any type, skip the improve prompt entirely.
 
 **Important**: The user must invoke `improve` directly — do not attempt to apply recommendations yourself or delegate to an agent. The `improve` skill has its own accept/revert verification loop and saves the outcome to `RETRO_ROOT` for trend tracking. Applying fixes through any other mechanism (agent dispatch, manual edits) bypasses verification and outcome tracking.
-
-$ARGUMENTS

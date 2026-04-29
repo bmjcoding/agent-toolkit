@@ -52,7 +52,7 @@ In GitHub Copilot Chat, type `/` followed by the prompt name (without the `.prom
 /sync-toolkit --dry-run
 ```
 
-Arguments after the prompt name are passed through as `$ARGUMENTS` in the prompt body.
+Each prompt documents accepted flags and fallback behavior in its `## Inputs` section.
 
 ## Tool availability
 
@@ -66,10 +66,6 @@ Each prompt declares a `tools` list in its frontmatter. The tools used are a sub
 | `execute` | Execute shell commands (linters, test runners, git) |
 
 Tool availability depends on your GitHub Copilot plan and VS Code extension version. If a tool is unavailable, Copilot will skip it and proceed with available tools.
-
-## Notes on `$ARGUMENTS`
-
-The source commands use `$ARGUMENTS` as a placeholder for user-supplied arguments. In VS Code prompt files, the equivalent mechanism is `${input:argumentName}` with a registered input, but `$ARGUMENTS` is tolerated as a literal string that users can read and mentally map to their typed arguments. If you want typed input prompts, replace `$ARGUMENTS` with `${input:args}` and add an `inputs` section to the frontmatter per the VS Code prompt file spec.
 
 ## Source
 

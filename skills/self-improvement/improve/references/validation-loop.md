@@ -6,7 +6,7 @@
 
 `--validate` is intended for **post-definition-review remediation**: when a prior review returned NEEDS WORK, use `--validate` to apply fixes and confirm the definition now passes. It is not meant as a routine add-on to every retro-improve cycle.
 
-If `$ARGUMENTS` contains `--validate`, run a validation loop **after** the main improve workflow (steps 1–7) completes.
+If the invocation input contains `--validate`, run a validation loop **after** the main improve workflow (steps 1–7) completes.
 
 ---
 
@@ -28,7 +28,7 @@ When skipping, emit:
 
 **Before starting**: Ask the user: "Max validation iterations? (default: 3)" Wait for their response. Accept a number or empty/enter for the default.
 
-Orchestrators and full-cycle agents should pass `--max-iterations N` in `$ARGUMENTS` rather than relying on this interactive prompt, to avoid blocking mid-execution.
+Orchestrators and full-cycle agents should pass `--max-iterations N` in the invocation input rather than relying on this interactive prompt, to avoid blocking mid-execution.
 
 ---
 
@@ -38,7 +38,7 @@ Orchestrators and full-cycle agents should pass `--max-iterations N` in `$ARGUME
 
 2. For each modified definition, run the definition-review checks inline:
    - **Structural**: run `lint-definition.py` on the file (same linter resolution as step 2c). Any S-code error = NEEDS WORK.
-   - **Semantic**: read the full file and evaluate: description quality (would it trigger correctly?), instruction quality (actionable procedures, not declarations?), architecture (under 500 lines? references loaded conditionally?), completeness (gotchas? output template? $ARGUMENTS handled?). For agent definitions also check: tools scoping, maxTurns, disallowedTools, handoff format.
+   - **Semantic**: read the full file and evaluate: description quality (would it trigger correctly?), instruction quality (actionable procedures, not declarations?), architecture (under 500 lines? references loaded conditionally?), completeness (gotchas? output template? portable inputs defined?). For agent definitions also check: tools scoping, maxTurns, disallowedTools, handoff format.
    - **Verdict**: PASS (0 structural errors, 0 quality gaps), NEEDS WORK (fixable issues), or REWRITE (5+ warnings or fundamentally below bar).
 
    Running these checks inline avoids the context-switch risk of loading a second skill mid-workflow. The checks above mirror definition-review's workflow — if definition-review's criteria change, update these to match.

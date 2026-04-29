@@ -14,8 +14,10 @@ Autonomous improve → validate loop. Loaded by `autoresearch-analyst` when disp
 
 ## Inputs
 
-- `retro_file` — path to the retro markdown to apply
-- `max_iterations` — default 3
+- `retro_file` — required path to the retro markdown whose recommendations should
+  be applied.
+- `max_iterations` — optional validation loop cap; default 3.
+- If `retro_file` is missing or unreadable, stop and ask for a valid retro path.
 
 ## Workflow
 

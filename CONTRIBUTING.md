@@ -58,6 +58,54 @@ The repo-local `.claude/skills/definition-review` and `.claude/skills/improve` e
 symlinks to the canonical shared skills under `skills/self-improvement/`, so the
 assistant does not require a prior global `~/.claude/skills` install.
 
+## Contributing an existing skill
+
+Most contributors will already have a skill folder or `SKILL.md` before they open a
+toolkit contribution. Treat these as candidate skills, not finished contributions.
+Prefer using the contribution assistant to import, audit, improve, and validate the skill
+instead of manually copying generated or tool-specific wrappers.
+
+Before prompting the assistant, put the existing skill somewhere in the checkout or paste
+the skill contents into the conversation. Include the intended category, slug, target
+users, expected inputs, and any files that must stay bundled with the skill.
+
+Recommended prompt:
+
+```text
+Use .claude/agents/contribution-assistant.md to import the existing skill at
+<path-or-pasted-content> into this repository.
+
+Target:
+- canonical path: skills/<category>/.../<slug>/
+- skill name: <slug>
+- intended users/tasks: <what this skill helps an agent do>
+- expected inputs: <body/path/options or "none">
+- portability: keep it portable across Claude, Codex, and Copilot unless a
+  platform-specific surface is unavoidable
+
+Please treat this as a candidate skill, not a finished contribution. Normalize it to
+agent-toolkit conventions, preserve the skill's intent, improve the skill authoring
+quality before final validation, move detailed reference content into references/ only
+when it improves progressive disclosure, add or update CHANGELOG.md, run
+definition-review, apply fixes until the review passes or progress stalls, then run
+npm run ci. Report any behavior changes you made.
+```
+
+For a quick import where the category can be inferred:
+
+```text
+Use .claude/agents/contribution-assistant.md to prepare my existing skill in <path> for
+contribution. Choose the appropriate skills/<category>/ path, preserve the intent,
+standardize it for this toolkit, rigorously improve it with definition-review/improve
+before CI validation, update the changelog, and run npm run ci.
+```
+
+Manual contributors should apply the same rules: edit only the canonical
+`skills/<category>/.../<slug>/` source, prefer a portable `## Inputs` section over
+tool-specific argument metadata, keep `SKILL.md` concise, put detailed reference material
+under `references/`, run `definition-review` and fix findings before the final gate, add a
+versioned `CHANGELOG.md` entry, and finish with `npm run ci`.
+
 ## Commit style
 
 Use [Conventional Commits](https://www.conventionalcommits.org/):
@@ -110,11 +158,12 @@ Before opening a pull request, run:
 
 ```sh
 npm ci
-npm run check
-git diff --check
+npm run ci
 ```
 
-CI also runs the repository secret scan on pull requests and protected-branch pushes.
+`npm ci` installs the pinned Node dependencies. `npm run ci` runs the local validation
+gate, including generated asset sync, linting, definition checks, smoke tests, whitespace
+checks, and the repository secret scan.
 
 If you want auto-fixes where available, run:
 

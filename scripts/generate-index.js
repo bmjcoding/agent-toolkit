@@ -351,22 +351,6 @@ function readCanonicalAgents() {
   return results;
 }
 
-function readWorkflowArgumentHint(workflowId) {
-  const claudePath = path.join(REPO_ROOT, 'claude-code', 'commands', workflowId, `${workflowId}.md`);
-  const copilotPath = path.join(REPO_ROOT, 'github-copilot', 'prompts', `${workflowId}.prompt.md`);
-  const candidates = [claudePath, copilotPath];
-
-  for (const candidate of candidates) {
-    const content = readFileSafe(candidate);
-    if (!content) continue;
-    const frontmatter = extractFrontmatterBlock(content) || '';
-    const match = frontmatter.match(/^argument-hint:\s*(.+)$/m);
-    if (match) return normalizeQuotedValue(match[1]);
-  }
-
-  return null;
-}
-
 function readCanonicalWorkflows() {
   const workflowsDir = path.join(REPO_ROOT, 'workflows');
   const results = [];
@@ -378,8 +362,6 @@ function readCanonicalWorkflows() {
     if (!content) continue;
 
     const frontmatter = parseFrontmatter(extractFrontmatterBlock(content));
-    const canonicalArgumentHint = frontmatter['argument-hint'] || null;
-    const argumentHint = canonicalArgumentHint || readWorkflowArgumentHint(id);
 
     results.push({
       id,
@@ -393,8 +375,7 @@ function readCanonicalWorkflows() {
       sourcePath: relativePath(sourcePath),
       adapters: Array.isArray(frontmatter.adapters) ? frontmatter.adapters : [],
       metadata: {
-        argument_hint: argumentHint,
-        metadata_source: canonicalArgumentHint ? 'canonical' : 'adapter-fallback',
+        metadata_source: 'canonical',
       },
     });
   }

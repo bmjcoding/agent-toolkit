@@ -1,5 +1,4 @@
 ---
-description: "npm install to update dependencies. For production dependencies, pin exact versions in package.json (e.g., \"express\": \"4.18.2\") and rely..."
 applyTo: "**/*.js,**/*.ts,**/*.tsx,**/*.jsx,**/package.json"
 ---
 

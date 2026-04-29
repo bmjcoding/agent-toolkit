@@ -11,7 +11,7 @@ Diagram: `references/system-overview.svg` (or render `references/system-overview
 | `retro` | Post-run diagnosis | Git history, conversation, orchestrator artifacts | Retro markdown + JSON summary + trend data → `~/agent-retros/` |
 | `improve` | Apply retro recommendations | Retro output (from conversation or file) | File edits + improve outcome JSON → `~/agent-retros/` |
 | `definition-review` | Pre-merge quality gate | Skill/agent definition path | PASS / NEEDS WORK / REWRITE verdict |
-| `git-ship` | Git shipping (commit, PR, merge, cleanup) | Git state + $ARGUMENTS | Commits, PR, branch cleanup |
+| `git-ship` | Git shipping (commit, PR, merge, cleanup) | Git state + invocation input | Commits, PR, branch cleanup |
 | `prod-readiness` | Production readiness pipeline | Changed files | Build/lint/audit/test/verify + ship verdict |
 
 ### Workflows (lightweight, stateless)

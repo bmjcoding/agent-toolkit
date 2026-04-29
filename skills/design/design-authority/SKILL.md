@@ -6,6 +6,16 @@ lifecycle: stable
 
 # Design Authority — Generator Skill
 
+## Inputs
+
+Use the current UI task as input. It may include target files, component names,
+screenshots, design references, or product constraints.
+
+- If target files are provided, inspect those files before applying these rules.
+- If no files are provided, infer the likely UI surface from the user's request and
+  existing project structure.
+- Treat missing screenshots or design references as optional context, not a blocker.
+
 ## Scope Check
 
 Decide the operating mode before loading references:

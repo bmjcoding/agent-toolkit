@@ -14,9 +14,12 @@ Canonical retro root:
 *Standard/full depth only.* Before finalizing, write the retro draft to a **temp path** and run the verification script:
 
 ```bash
-VERIFY_SCRIPT=$(find skills -path "*/retro/scripts/verify-claims.py" 2>/dev/null | head -1)
-[ -z "$VERIFY_SCRIPT" ] && VERIFY_SCRIPT=$(find .agents/skills .claude/skills .codex/skills -path "*/retro/scripts/verify-claims.py" 2>/dev/null | head -1)
-[ -z "$VERIFY_SCRIPT" ] && VERIFY_SCRIPT=$(find ~/.agents/skills ~/.claude/skills ~/.codex/skills -path "*/retro/scripts/verify-claims.py" 2>/dev/null | head -1)
+RETRO_SKILL_DIR="${RETRO_SKILL_DIR:-}"
+[ -n "$RETRO_SKILL_DIR" ] || RETRO_SKILL_DIR='${CLAUDE_SKILL_DIR}'
+[ -d "$RETRO_SKILL_DIR" ] || RETRO_SKILL_DIR=""
+VERIFY_SCRIPT=""
+[ -n "$RETRO_SKILL_DIR" ] && [ -f "$RETRO_SKILL_DIR/scripts/verify-claims.py" ] && VERIFY_SCRIPT="$RETRO_SKILL_DIR/scripts/verify-claims.py"
+[ -n "$VERIFY_SCRIPT" ] || VERIFY_SCRIPT=$(find skills .agents/skills .claude/skills .codex/skills ~/.agents/skills ~/.claude/skills ~/.codex/skills -path "*/retro/scripts/verify-claims.py" 2>/dev/null | head -1)
 python3 "${VERIFY_SCRIPT:-verify-claims.py}" /tmp/retro-draft-TIMESTAMP.md [--orch-dir DIR]
 ```
 
@@ -82,9 +85,12 @@ Use markdown headers matching the analysis sections. Skip sections that don't ap
 After producing the summary, check for historical retro data:
 
 ```bash
-HISTORY_SCRIPT=$(find skills -path "*/retro/scripts/retro-history.py" 2>/dev/null | head -1)
-[ -z "$HISTORY_SCRIPT" ] && HISTORY_SCRIPT=$(find .agents/skills .claude/skills .codex/skills -path "*/retro/scripts/retro-history.py" 2>/dev/null | head -1)
-[ -z "$HISTORY_SCRIPT" ] && HISTORY_SCRIPT=$(find ~/.agents/skills ~/.claude/skills ~/.codex/skills -path "*/retro/scripts/retro-history.py" 2>/dev/null | head -1)
+RETRO_SKILL_DIR="${RETRO_SKILL_DIR:-}"
+[ -n "$RETRO_SKILL_DIR" ] || RETRO_SKILL_DIR='${CLAUDE_SKILL_DIR}'
+[ -d "$RETRO_SKILL_DIR" ] || RETRO_SKILL_DIR=""
+HISTORY_SCRIPT=""
+[ -n "$RETRO_SKILL_DIR" ] && [ -f "$RETRO_SKILL_DIR/scripts/retro-history.py" ] && HISTORY_SCRIPT="$RETRO_SKILL_DIR/scripts/retro-history.py"
+[ -n "$HISTORY_SCRIPT" ] || HISTORY_SCRIPT=$(find skills .agents/skills .claude/skills .codex/skills ~/.agents/skills ~/.claude/skills ~/.codex/skills -path "*/retro/scripts/retro-history.py" 2>/dev/null | head -1)
 python3 "${HISTORY_SCRIPT:-retro-history.py}" trends --history "${AGENT_RETRO_DIR:-$HOME/agent-retros}" --subject SUBJECT
 ```
 
@@ -141,9 +147,12 @@ Use the `session_id` (compact `YYYYMMDDTHHMMSS`) as `<session-id>`. For skill/ag
 3. Write the summary metrics as a v5.0-schema JSON to `<path>/YYYYMMDDTHHMMSS.json`. The JSON must validate against the v5.0 summary contract:
 
    ```bash
-   VALIDATE_SCRIPT=$(find skills -path "*/retro/scripts/validate.py" 2>/dev/null | head -1)
-   [ -z "$VALIDATE_SCRIPT" ] && VALIDATE_SCRIPT=$(find .agents/skills .claude/skills .codex/skills -path "*/retro/scripts/validate.py" 2>/dev/null | head -1)
-   [ -z "$VALIDATE_SCRIPT" ] && VALIDATE_SCRIPT=$(find ~/.agents/skills ~/.claude/skills ~/.codex/skills -path "*/retro/scripts/validate.py" 2>/dev/null | head -1)
+   RETRO_SKILL_DIR="${RETRO_SKILL_DIR:-}"
+   [ -n "$RETRO_SKILL_DIR" ] || RETRO_SKILL_DIR='${CLAUDE_SKILL_DIR}'
+   [ -d "$RETRO_SKILL_DIR" ] || RETRO_SKILL_DIR=""
+   VALIDATE_SCRIPT=""
+   [ -n "$RETRO_SKILL_DIR" ] && [ -f "$RETRO_SKILL_DIR/scripts/validate.py" ] && VALIDATE_SCRIPT="$RETRO_SKILL_DIR/scripts/validate.py"
+   [ -n "$VALIDATE_SCRIPT" ] || VALIDATE_SCRIPT=$(find skills .agents/skills .claude/skills .codex/skills ~/.agents/skills ~/.claude/skills ~/.codex/skills -path "*/retro/scripts/validate.py" 2>/dev/null | head -1)
    python3 "${VALIDATE_SCRIPT:-validate.py}" <retro.json>
    ```
 

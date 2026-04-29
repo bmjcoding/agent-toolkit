@@ -4,7 +4,6 @@ description: >
   View, resolve, retriage, or clear items in the pipeline backlog. Use when the user wants to
   check the backlog, resolve items, or manage deferred findings.
 disable-model-invocation: true
-argument-hint: "[--resolve N] [--resolve N --wont-fix \"reason\"] [--defer N --env ENV \"reason\"] [--defer N --session \"reason\"] [--retriage] [--clear-resolved] [--agent] [--human] [--env ENV] [--open] [--sync] [--cleanup] [--dry-run]"
 metadata:
   version: 2.3.0
 ---
@@ -21,9 +20,13 @@ rules are defined in AGENTS.md.
 
 Read and display `STATE_ROOT/backlog.md`. If it doesn't exist, report "No backlog items."
 
-## Arguments
+## Inputs
 
-$ARGUMENTS
+Accepts optional backlog action flags:
+
+```text
+[--resolve N] [--resolve N --wont-fix "reason"] [--defer N --env ENV "reason"] [--defer N --session "reason"] [--retriage] [--clear-resolved] [--agent] [--human] [--env ENV] [--open] [--sync] [--cleanup] [--dry-run]
+```
 
 - **No args** — display the backlog
 - **`--resolve <N>`** — mark item #N in Agent Actionable as `resolved` (retain the row; do NOT remove it)

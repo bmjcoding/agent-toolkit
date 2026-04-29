@@ -7,7 +7,6 @@ tools:
   - edit
   - search
   - execute
-argument-hint: "[--resolve N] [--resolve N --wont-fix \\\"reason\\\"] [--defer N --env ENV \\\"reason\\\"] [--defer N --session \\\"reason\\\"] [--retriage] [--clear-resolved] [--agent] [--human] [--env ENV] [--open] [--sync] [--cleanup] [--dry-run]"
 ---
 
 Resolve `STATE_ROOT` once at the start of the run. Prefer, in order: `.agents/`,
@@ -22,9 +21,13 @@ rules are defined in AGENTS.md.
 
 Read and display `STATE_ROOT/backlog.md`. If it doesn't exist, report "No backlog items."
 
-## Arguments
+## Inputs
 
-$ARGUMENTS
+Accepts optional backlog action flags:
+
+```text
+[--resolve N] [--resolve N --wont-fix "reason"] [--defer N --env ENV "reason"] [--defer N --session "reason"] [--retriage] [--clear-resolved] [--agent] [--human] [--env ENV] [--open] [--sync] [--cleanup] [--dry-run]
+```
 
 - **No args** — display the backlog
 - **`--resolve <N>`** — mark item #N in Agent Actionable as `resolved` (retain the row; do NOT remove it)

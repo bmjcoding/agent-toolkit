@@ -12,6 +12,16 @@ lifecycle: stable
 Ad-hoc user requests about skills or agents. Loaded by `autoresearch-analyst` when no
 mode keyword is present and a target can be resolved from the prompt.
 
+## Inputs
+
+Use the dispatch prompt as input. It should name at least one skill or agent target,
+and may include user concerns or external standards to check against.
+
+- Targets may be skill names, agent names, absolute paths, `~/` paths, or literal
+  Markdown file paths.
+- User concerns should be preserved verbatim and merged into Required Changes.
+- If no target can be resolved, emit the error handoff and stop.
+
 ## Workflow
 
 ### 1. Resolve Target(s)

@@ -19,6 +19,18 @@ backend change and remain reviewable in one pass. If the request expands into di
 frontend, infra, or release tracks, say so and recommend pairing this skill with the
 matching domain skill or `prod-readiness` rather than refusing the task outright.
 
+## Inputs
+
+Use the current user request as the task input. It may include target paths,
+acceptance criteria, API contracts, schemas, or security constraints.
+
+- If target files are provided, scope implementation and review to those files plus
+  tightly coupled contract changes.
+- If no files are provided, infer the backend surface from the request and existing
+  project conventions.
+- Shipping, release, or broad production-readiness requests are out of scope for this
+  skill; route those to `git-ship` or `prod-readiness`.
+
 ## Process
 
 1. **Scope and implement**:
@@ -45,7 +57,3 @@ Present a brief summary: what was implemented, any security findings (severity +
 - Security review only covers changed files — pre-existing vulnerabilities in untouched files are not reported.
 - Max 1 retry on the fix loop; unresolved critical findings are surfaced to the user, not silently dropped.
 - Cross-domain work is acceptable when backend remains the primary owner and adjacent edits stay small. If the change splits cleanly into separate tracks, call that out and recommend the companion skill instead of blocking the run.
-
-## Task
-
-$ARGUMENTS

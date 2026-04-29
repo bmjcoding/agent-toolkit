@@ -2,7 +2,6 @@
 name: sync-toolkit
 description: "Detect changed toolkit components, regenerate adapters, update CHANGELOG entries and versions, then commit per-component and open a PR."
 lifecycle: stable
-argument-hint: "[--dry-run] [--no-pr] [--component TYPE/NAME|skills/CATEGORY/.../NAME]"
 adapters:
   - claude-code/commands/sync-toolkit/sync-toolkit.md
   - github-copilot/prompts/sync-toolkit.prompt.md
@@ -16,9 +15,13 @@ use commit logs as changelogs. Commit logs are noisy — merge commits, obscure 
 file-change lists. A CHANGELOG entry is a USER-FACING summary of a noteworthy difference,
 often aggregating multiple commits.
 
-## Arguments
+## Inputs
 
-$ARGUMENTS is the literal string the user typed after invoking this prompt.
+Accepts optional sync flags:
+
+```text
+[--dry-run] [--no-pr] [--component TYPE/NAME|skills/CATEGORY/.../NAME]
+```
 
 - **No args** — sync all changed components, generate CHANGELOGs, commit each component separately, open PR
 - **`--dry-run`** — report what would change; do not write files, commit, or push

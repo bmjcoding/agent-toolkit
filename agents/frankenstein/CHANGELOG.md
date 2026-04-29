@@ -5,6 +5,15 @@ All notable changes to this component will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.5.0] - 2026-04-28
+
+### Changed
+
+- Replaced `TOOLKIT_DIR` bootstrap guidance with runtime-surface discovery for
+  `scripts/orchestrator`, so helper scripts resolve from installed adapters or the
+  active toolkit checkout without requiring toolkit path environment variables in the
+  agent body.
+
 ## [5.4.0] - 2026-04-28
 
 ### Changed

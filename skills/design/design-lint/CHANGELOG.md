@@ -5,6 +5,20 @@ All notable changes to this component will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.4.0] - 2026-04-28
+
+### Changed
+
+- Added a portable `## Inputs` section documenting file, directory, changed-file,
+  and missing-scope behavior for deterministic lint runs.
+
+## [4.3.0] - 2026-04-28
+
+### Changed
+
+- Added check-directory resolution guidance that uses Claude's active skill directory
+  substitution first and falls back to local shared-skill discovery for other tools.
+
 ## [4.2.0] - 2026-04-27
 
 ### Added

@@ -6,9 +6,7 @@
 ## Checks
 
 - [ ] Updated the relevant canonical `CHANGELOG.md`
-- [ ] Ran `node scripts/smoke-generated-assets.js` when generated assets were affected
-- [ ] Ran `npm run lint`
-- [ ] Ran `npm run lint:py` when Python files changed
+- [ ] Ran `npm run ci`
 - [ ] Confirmed no secrets or credentials were added
 - [ ] Updated docs when install, discovery, or governance behavior changed
 
