@@ -122,7 +122,7 @@ Skip this step unless the orchestrator explicitly requests versioning.
 ## Gotchas
 
 ### Gotcha: Changelog skip conditions
-- If `--no-changelog` is passed in $ARGUMENTS, skip changelog generation
+- If `--no-changelog` is passed in the task prompt, skip changelog generation
 - If the repo has no CHANGELOG.md at the root, skip silently
 - If running in "publish phase only" mode (6b), skip — changelog was already written in 6a
 

@@ -5,14 +5,23 @@ description: >
   Use when the user wants to ship code, open a PR, merge, or clean up branches.
 lifecycle: stable
 disable-model-invocation: true
-argument-hint: "[pr | merge | cleanup | --draft | --auto-merge | --force]"
 ---
 
 # Git Ship
 
-Unified git shipping workflow. Subcommand is inferred from `$ARGUMENTS`:
+Unified git shipping workflow.
 
-| Argument starts with | Action |
+## Inputs
+
+Accepts an optional subcommand and flags:
+
+```text
+[pr | merge | cleanup] [--draft] [--auto-merge] [--force] [--pr-number N]
+```
+
+Subcommand is inferred from the invocation input:
+
+| Input starts with | Action |
 |---|---|
 | `pr` | Push + open PR only |
 | `merge` | Enable auto-merge on existing PR |
@@ -24,10 +33,12 @@ Read `references/provider-detection.md` for GitHub vs Bitbucket DC API patterns.
 
 ## Shared Context
 
-```
-Remote URL: !`git remote get-url origin 2>/dev/null`
-Current branch: !`git branch --show-current`
-Default branch: !`git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's|refs/remotes/origin/||' || echo "main"`
+Collect these values at the start of the workflow:
+
+```bash
+git remote get-url origin 2>/dev/null
+git branch --show-current
+git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's|refs/remotes/origin/||' || echo "main"
 ```
 
 On any failure, stop and report the error so the user can resume.
@@ -63,7 +74,7 @@ If rebase conflicts: `git rebase --abort`, report conflicting files, stop.
 
 ### Call 4 (if no existing PR)
 
-Create PR. Parse branch/commits for issue refs (`#\d+`). See `references/provider-detection.md` for provider-specific create commands. Pass `--draft` from `$ARGUMENTS` if present.
+Create PR. Parse branch/commits for issue refs (`#\d+`). See `references/provider-detection.md` for provider-specific create commands. Pass `--draft` from the invocation input if present.
 
 **Auto-merge** (only if `--auto-merge` and not `--draft`): enable via provider API. See `references/provider-detection.md`.
 
@@ -80,7 +91,7 @@ Create PR. Parse branch/commits for issue refs (`#\d+`). See `references/provide
 
 ---
 
-## PR Only *(when $ARGUMENTS starts with `pr`)*
+## PR Only *(when input starts with `pr`)*
 
 Remaining arguments after `pr` are passed through (e.g., `pr --draft --title "Fix auth"`).
 
@@ -92,7 +103,7 @@ Report the PR URL.
 
 ---
 
-## Merge *(when $ARGUMENTS starts with `merge`)*
+## Merge *(when input starts with `merge`)*
 
 Remaining arguments: `--squash | --rebase | --merge`, `--pr-number N`.
 
@@ -101,7 +112,7 @@ Remaining arguments: `--squash | --rebase | --merge`, `--pr-number N`.
 
 ---
 
-## Cleanup *(when $ARGUMENTS starts with `cleanup`)*
+## Cleanup *(when input starts with `cleanup`)*
 
 Remaining arguments: `--force`.
 
@@ -120,5 +131,3 @@ Remaining arguments: `--force`.
 - **Worktree removal on current branch**: `git worktree remove` fails if you're inside the worktree. The cleanup flow handles this by `cd`-ing to main repo first.
 - **Bitbucket DC token expired**: `curl` calls return 401. Report "BITBUCKET_TOKEN may be expired" rather than generic "request failed."
 - **`--auto-merge` on repos with no required status checks**: the PR may merge immediately after creation. Before enabling auto-merge, warn the user: "This repo has no required status checks — enabling auto-merge may merge the PR instantly."
-
-$ARGUMENTS

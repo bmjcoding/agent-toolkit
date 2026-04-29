@@ -5,6 +5,22 @@ All notable changes to this component will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.8.0] - 2026-04-28
+
+### Changed
+
+- Replaced Claude-specific argument metadata, placeholder usage, and validation
+  reference wording with a portable `## Inputs` contract for retro sources,
+  validation flags, and the `remove` subcommand.
+
+## [4.7.0] - 2026-04-28
+
+### Changed
+
+- Added `IMPROVE_SKILL_DIR` resolution based on Claude's active skill directory
+  substitution and reused it for sibling `definition-review` and `retro` helper
+  script lookups before falling back to local discovery.
+
 ## [4.6.0] - 2026-04-28
 
 ### Changed

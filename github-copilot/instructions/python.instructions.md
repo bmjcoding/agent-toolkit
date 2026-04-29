@@ -1,5 +1,4 @@
 ---
-description: "Use uv for dependency management — never pip install directly."
 applyTo: "**/*.py,**/pyproject.toml,**/requirements*.txt"
 ---
 

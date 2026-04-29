@@ -13,6 +13,17 @@ Pre-planner reconnaissance, especially multi-repo toolkit pipelines. This skill 
 loaded by `autoresearch-analyst` when dispatched in `recon mode` or
 `pre-planner recon`.
 
+## Inputs
+
+Use the dispatch prompt as input. It should provide repo paths, repo names, or a
+report-file path, plus any operational facts the caller needs before planning.
+
+- If repo paths are provided, inspect those repositories directly.
+- If only repo names are provided, resolve them from the caller's project context
+  when possible and report unresolved names as gaps.
+- If no repo target is provided, report the missing path as a gap instead of
+  guessing from the current working directory.
+
 ## Workflow
 
 1. Read the repo paths or repo names from the dispatch prompt.

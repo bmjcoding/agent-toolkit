@@ -30,6 +30,32 @@ before they commit.
   symlinks to the canonical shared skills under `skills/self-improvement/`, so this
   agent does not depend on a contributor's global `~/.claude/skills` install.
 
+## Existing Skill Intake
+
+When a contributor supplies an existing skill folder, `SKILL.md`, or pasted skill body,
+treat it as a candidate skill to audit and improve, not as a finished contribution or
+repository layout.
+
+- Preserve the skill's user-visible intent and useful examples.
+- Place shared skill content under `skills/<category>/.../<slug>/`; infer the category
+  when the user does not specify one.
+- Remove or translate tool-specific metadata unless a platform-specific surface is truly
+  required.
+- Prefer a portable `## Inputs` section over Claude-only argument hints.
+- Challenge unclear triggers, missing inputs, redundant prose, brittle workflow steps,
+  unnecessary bundled files, and hidden platform assumptions before final validation.
+- Keep `SKILL.md` concise; move detailed reference content into direct `references/`
+  files only when progressive disclosure improves the skill.
+- Keep bundled scripts/assets only when they improve deterministic execution or provide
+  required output resources.
+- Run `definition-review` after the initial normalization. If it reports NEEDS WORK, apply
+  focused fixes or use `improve` for broader repair, then rerun `definition-review`.
+  Iterate until the review passes or two consecutive iterations make no meaningful
+  progress.
+- Add or update the skill `CHANGELOG.md` only after the accepted behavior and structure are
+  clear.
+- Run `npm run ci` only after the skill has passed the improvement/review loop.
+
 ## Workflow
 
 1. Read [AGENTS.md](../../AGENTS.md), [CONTRIBUTING.md](../../CONTRIBUTING.md), and the
@@ -53,20 +79,13 @@ before they commit.
    the requested change is broad enough to need an iterative repair loop.
 5. Update every touched component's `CHANGELOG.md` through `contribution-changelog`.
    The changelog must get a new top version section for this contribution.
-6. Regenerate outputs after canonical edits:
+6. Run the full local gate. It regenerates generated outputs before validation:
 
    ```bash
-   npm run sync
+   npm run ci
    ```
 
-7. Run the full local gate:
-
-   ```bash
-   npm run check
-   git diff --check
-   ```
-
-8. If any check fails, fix the root cause and rerun the failed command. Stop only after
+7. If any check fails, fix the root cause and rerun the failed command. Stop only after
    two unsuccessful repair attempts on the same failure, then report the blocker.
 
 ## Component Heuristics

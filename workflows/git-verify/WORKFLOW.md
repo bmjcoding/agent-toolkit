@@ -2,7 +2,6 @@
 name: git-verify
 description: "Verify git hygiene and commit safety — secrets, sensitive files, large files, commit quality."
 lifecycle: stable
-argument-hint: "[paths...] [--dry-run]"
 adapters:
   - claude-code/commands/git-verify/git-verify.md
   - github-copilot/prompts/git-verify.prompt.md
@@ -11,6 +10,14 @@ adapters:
 <!-- Canonical shared workflow body. Tool-native wrappers live in the listed adapter files. -->
 
 Verify git hygiene and commit safety before pushing. Use parallel agents to maximize speed. Scope resolution, autonomy, and `--dry-run` rules are defined in AGENTS.md.
+
+## Inputs
+
+Accepts optional files or directories plus `--dry-run`.
+
+- If paths are provided, verify those targets and their git state.
+- If no paths are provided, use the changed-file scope resolution rules from `AGENTS.md`.
+- If `--dry-run` is present, report planned unstaging or ignore-file changes without modifying files.
 
 ## Check 0: Deterministic scan
 

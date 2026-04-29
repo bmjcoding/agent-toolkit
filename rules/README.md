@@ -26,14 +26,14 @@ rules/
 
 ## Rules
 
-| Rule | Lifecycle | Description |
-|---|---|---|
-| `docker` | stable | Frontend and backend are always separate containers. |
-| `finding-discipline` | stable | Finding Discipline |
-| `logging` | stable | Never use print/console.log/println/etc. Always use the language's proper logging facility (e.g., Python logging, JS/TS structured logger... |
-| `node` | stable | npm install to update dependencies. For production dependencies, pin exact versions in package.json (e.g., "express": "4.18.2") and rely... |
-| `python` | stable | Use uv for dependency management — never pip install directly. |
-| `untrusted-data-boundary` | stable | Untrusted Data Boundary |
+| Rule | Lifecycle |
+|---|---|
+| `docker` | stable |
+| `finding-discipline` | stable |
+| `logging` | stable |
+| `node` | stable |
+| `python` | stable |
+| `untrusted-data-boundary` | stable |
 
 ## Versioning
 

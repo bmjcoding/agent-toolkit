@@ -4,12 +4,19 @@ description: >
   Write tests to cover gaps and achieve >=80% coverage on changed files. Use when the user
   wants to add tests, improve coverage, or verify test health.
 disable-model-invocation: true
-argument-hint: "[paths...] [--dry-run]"
 metadata:
   version: 1.0.0
 ---
 
 Write tests to cover gaps in the code in scope. Target: maintain or improve baseline coverage, and achieve >=80% line coverage on new/changed files. Use parallel agents to maximize speed. Scope resolution, autonomy, auto-fix safety, and `--dry-run` rules are defined in AGENTS.md.
+
+## Inputs
+
+Accepts optional files or directories plus `--dry-run`.
+
+- If paths are provided, write or update tests for those targets and tightly coupled behavior.
+- If no paths are provided, use the changed-file scope resolution rules from `AGENTS.md`.
+- If `--dry-run` is present, report coverage gaps and planned tests without modifying files.
 
 ## Phase 0: Baseline
 

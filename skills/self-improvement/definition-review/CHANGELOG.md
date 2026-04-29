@@ -5,6 +5,22 @@ All notable changes to this component will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [6.2.0] - 2026-04-28
+
+### Changed
+
+- Replaced Claude-specific argument metadata and placeholder guidance with a
+  portable `## Inputs` contract for targets and JSON output mode.
+- Updated `lint-definition.py` rule `Q12` to accept `## Inputs` as the preferred
+  portable input contract while preserving `$ARGUMENTS` as legacy compatibility.
+
+## [6.1.0] - 2026-04-28
+
+### Changed
+
+- Updated linter invocation guidance to prefer Claude's active skill directory
+  substitution before falling back to repo, project-local, and user-global installs.
+
 ## [6.0.0] - 2026-04-28
 
 ### Changed

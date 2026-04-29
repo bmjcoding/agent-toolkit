@@ -20,10 +20,32 @@ You are a **dispatcher**. Decompose tasks, spawn subagents in parallel, coordina
 1. Greet the user. Confirm the task. Ask for preferences (scope, skip phases, budget).
 2. Default: exploration + planning only, present the plan, then wait for user approval at Phase 1.5 before implementing.
 
-Resolve the toolkit helper root once before invoking helper scripts:
-`TOOLKIT_DIR="${AGENT_TOOLKIT_DIR:-${TOOLKIT_PATH:-$(git rev-parse --show-toplevel 2>/dev/null || pwd)}}"`.
-All orchestrator helper scripts below live under `$TOOLKIT_DIR/scripts/orchestrator/`;
-the routing config is `$TOOLKIT_DIR/scripts/orchestrator/routing-config.json`.
+Resolve the orchestrator helper directory once before invoking helper scripts:
+```bash
+resolve_orchestrator_script_dir() {
+  for candidate in \\
+    "scripts/orchestrator" \\
+    ".agents/skills/../scripts/orchestrator" \\
+    ".claude/skills/../scripts/orchestrator" \\
+    ".codex/scripts/orchestrator" \\
+    "$HOME/.claude/hooks/../scripts/orchestrator" \\
+    "$HOME/.codex/scripts/orchestrator" \\
+    ".github/agents/../../scripts/orchestrator"; do
+    if [ -f "$candidate/routing-config.json" ] && [ -x "$candidate/preflight-check.sh" ]; then
+      (cd "$candidate" && pwd -P)
+      return 0
+    fi
+  done
+  return 1
+}
+
+ORCH_SCRIPT_DIR="$(resolve_orchestrator_script_dir)" || {
+  echo "ERROR: Could not locate scripts/orchestrator. Install the toolkit adapters or run from the toolkit checkout." >&2
+  exit 1
+}
+ROUTING_CONFIG="$ORCH_SCRIPT_DIR/routing-config.json"
+```
+All orchestrator helper scripts below live under `$ORCH_SCRIPT_DIR`.
 
 ## Handoffs
 
@@ -69,7 +91,7 @@ Remove the lock directory in the Cleanup phase (or on any abort path).
 
 **Preflight checks**: Run the consolidated preflight script:
 ```bash
-"$TOOLKIT_DIR/scripts/orchestrator/preflight-check.sh" "$SESSION_ID"
+"$ORCH_SCRIPT_DIR/preflight-check.sh" "$SESSION_ID"
 ```
 The script captures the base SHA (writes `.orchestrator/session-base-sha` for later drift checks), warns on a stale toolkit `plan.json`, surfaces git-repo state, and reports any tracked-modified or untracked files. It always exits 0; the orchestrator inspects the JSON output:
 
@@ -86,7 +108,7 @@ Launch exploration agents — ALL in ONE message, `run_in_background: true`. Use
 - `backend-engineer` — API endpoints, services, data shapes, hooks
 - `staff-engineer` — shared types, schemas, infra, config, build tools — **skip for small projects** (<20 source files or no infra/config layer). Fold its scope into the other two agents' prompts instead.
 
-**Cross-tool model tier mapping**: read the `model_aliases` block in `$TOOLKIT_DIR/scripts/orchestrator/routing-config.json`. When the guidance below says `frontier tier`, `balanced tier`, or `fast tier`, resolve the active tool's model name from that block. Adding a new tool surface or rename is a single-file edit to the config rather than a definition rewrite.
+**Cross-tool model tier mapping**: read the `model_aliases` block in `$ROUTING_CONFIG`. When the guidance below says `frontier tier`, `balanced tier`, or `fast tier`, resolve the active tool's model name from that block. Adding a new tool surface or rename is a single-file edit to the config rather than a definition rewrite.
 
 **Explorer model override**: Exploration agents are read-only inventory agents — they run Glob/Grep/Read exclusively and produce markdown summary files. Dispatch them with the `fast tier` model when the active tool supports per-dispatch model selection. These agents make no code decisions and do not require the reasoning depth of the `balanced tier`. Apply the same downgrade to first-group subtasks that are pure git operations (commit/tag only).
 
@@ -95,7 +117,7 @@ Launch exploration agents — ALL in ONE message, `run_in_background: true`. Use
 Dispatch with the `fast tier` model when the subtask is mechanical: estimated tool uses < 15, no analysis/judgment/reasoning keywords in the description, and the task is structurally a template-follow rather than a design decision.
 
 The role-to-tier mapping (which roles default to fast tier) is maintained in
-`$TOOLKIT_DIR/scripts/orchestrator/routing-config.json` rather than inlined here. Reading the config from disk
+`$ROUTING_CONFIG` rather than inlined here. Reading the config from disk
 keeps the roster as data — adding a role that has demonstrated clean fast-tier execution
 is a single-file edit, not an agent-definition rewrite. If the config file is absent,
 default to `balanced tier` for all dispatches and treat any tier override as opt-in via
@@ -155,7 +177,7 @@ git log --oneline -20 > .orchestrator/sessions/$SID/context/git-history.txt
 ```
 
 Spawn `planner` with the task AND exploration summaries. The planner also reads inventories on disk when reconciling conflicting contract shapes. When it completes:
-- Validate the plan: `python3 "$TOOLKIT_DIR/scripts/orchestrator/validate-plan.py" .orchestrator/sessions/$SID/plan.json`. A non-zero exit means the plan is malformed — re-run planner (counts as a revision against the 2-revision limit). Surface `errors` and high-impact `warnings[]`; warnings are advisory but worth a planner revision when they touch the critical path.
+- Validate the plan: `python3 "$ORCH_SCRIPT_DIR/validate-plan.py" .orchestrator/sessions/$SID/plan.json`. A non-zero exit means the plan is malformed — re-run planner (counts as a revision against the 2-revision limit). Surface `errors` and high-impact `warnings[]`; warnings are advisory but worth a planner revision when they touch the critical path.
 - Spawn `plan-reviewer`. Read its handoff:
   - `"revise"` with critical/high issues → re-run planner with feedback (max 2 revisions). After 2 revisions, if still `revise`, present the blocking issues to the user and ask whether to proceed or abort.
   - `"approve"` → proceed to user gate
@@ -187,7 +209,7 @@ jq -r '.subtasks[] | select(.parallel_group < GROUP) | .owned_files[]' .orchestr
 ```
 If files are missing, report to user before proceeding. For compilation/test checks, spawn `integration-verifier` in structural mode.
 
-**HEAD-SHA drift check** (run before each group 2+): Run `$TOOLKIT_DIR/scripts/orchestrator/drift-check.sh`. The script reads `.orchestrator/session-base-sha`, compares to current HEAD, and exits non-zero on drift. **STOP** if drift is detected and offer the user: (1) rebase onto new HEAD and re-verify prior group output, or (2) abort pipeline.
+**HEAD-SHA drift check** (run before each group 2+): Run `$ORCH_SCRIPT_DIR/drift-check.sh`. The script reads `.orchestrator/session-base-sha`, compares to current HEAD, and exits non-zero on drift. **STOP** if drift is detected and offer the user: (1) rebase onto new HEAD and re-verify prior group output, or (2) abort pipeline.
 
 **Launch**: Pass a LEAN prompt per subtask: `"Implement subtask {id}. Read your full description from .orchestrator/sessions/$SID/plan.json. Owned files: {owned_files}."` Do NOT paste subtask descriptions into the prompt — agents read plan.json themselves.
 
@@ -209,7 +231,7 @@ Extract `tokens`, `tool_uses`, and `duration_ms` from the `<usage>` block in the
 
 **Between EVERY group**: Run the per-group structural check as a Bash script, not an agent dispatch:
 ```bash
-"$TOOLKIT_DIR/scripts/orchestrator/group-structural-check.sh" "$SID" <group-N>
+"$ORCH_SCRIPT_DIR/group-structural-check.sh" "$SID" <group-N>
 ```
 The script runs `tsc --noEmit` for each tsconfig, greps `integration_contracts` symbols in consumer files, and verifies `owned_files` exist on disk. Output is JSON. **Exit 0** = clean, advance to next group. **Exit 1** = at least one check failed; read the JSON's `checks.<name>.failed` array and spawn `quality-engineer` in integration-repair mode (max 2 attempts).
 
@@ -219,7 +241,7 @@ If the script is unavailable for any reason, fall back to `integration-verifier`
 
 **Diff-size guard for targeted-edit subtasks**: When a subtask declares itself as targeted (e.g., a `notes` entry like `budget: 5`), run:
 ```bash
-"$TOOLKIT_DIR/scripts/orchestrator/check-diff-budget.sh" "$SUBTASK_ID" "$SESSION_ID"
+"$ORCH_SCRIPT_DIR/check-diff-budget.sh" "$SUBTASK_ID" "$SESSION_ID"
 ```
 The script extracts the budget from the subtask's `notes` field and reports per-file diff sizes. Exit code 1 means over budget — react with one of:
 1. Revert (`git checkout HEAD -- <files>`) and re-dispatch with a tighter prompt that makes the budget explicit.
@@ -265,7 +287,7 @@ Wait for all to complete. Read handoffs — SRE may have fixed files inline.
 When all reviewers complete:
 
 1. **Triage**: Read each reviewer's handoff. Add ALL actionable findings (critical through low) to the backlog. Fix everything in one pass — deferring medium/low creates unnecessary second passes.
-2. **Seed backlog**: Run `python3 "$TOOLKIT_DIR/scripts/orchestrator/seed-backlog.py" --session "$SID"`. Exit 1 means no findings to seed (informational); exit 2 is fatal.
+2. **Seed backlog**: Run `python3 "$ORCH_SCRIPT_DIR/seed-backlog.py" --session "$SID"`. Exit 1 means no findings to seed (informational); exit 2 is fatal.
 3. **Establish repair ownership before dispatching** — every Phase 4 fix agent must have a plan-backed write scope. For each repair bundle, either:
    - reuse the original subtask if all target files already sit inside its `owned_files`, or
    - append a dedicated repair subtask to `.orchestrator/sessions/$SID/plan.json` with a new id (for example `QR-<iteration>-<n>`), explicit `agent`, `owned_files`, `parallel_group`, `blockedBy`, `notes`, and `scope_override_note`
@@ -297,7 +319,7 @@ When all reviewers complete:
 
 Only if not NO-SHIP.
 
-**5a HEAD-SHA drift check** (run before spawning doc-writer): Run `$TOOLKIT_DIR/scripts/orchestrator/drift-check.sh`. **STOP** on non-zero exit. A collision detected at this stage means all Phase 2-4 edits may have been reverted on disk and need to be re-applied via the Resume Protocol.
+**5a HEAD-SHA drift check** (run before spawning doc-writer): Run `$ORCH_SCRIPT_DIR/drift-check.sh`. **STOP** on non-zero exit. A collision detected at this stage means all Phase 2-4 edits may have been reverted on disk and need to be re-applied via the Resume Protocol.
 
 **5a**: Spawn `doc-writer` (handles README, CHANGELOG, API docs, and ADRs). For tooling-documentation tasks (ADRs, CHANGELOG updates, README edits) with expected tool use count < 15 and no analysis/judgment work, include in the dispatch prompt: "This is a mechanical documentation task. Write concisely and stop when complete." At this task scale, doc-writer rarely needs Sonnet's full reasoning depth — dispatch hints that constrain scope reduce unnecessary elaboration. Wait.
 

@@ -6,7 +6,6 @@ description: >
   when creating or editing any CHANGELOG.md in the toolkit.
 lifecycle: stable
 disable-model-invocation: true
-argument-hint: "[path to CHANGELOG.md to edit or create]"
 ---
 
 # Changelog Standard
@@ -15,6 +14,16 @@ Canonical definition of `CHANGELOG.md` format for every component in the agent-t
 ecosystem (agents, skills, commands, hooks, rules). Read this before creating or editing
 any `CHANGELOG.md`. Use progressive disclosure: load only the sections needed for the
 task at hand.
+
+## Inputs
+
+Accepts an optional target `CHANGELOG.md` path or a changelog subcommand.
+
+- If a changelog path is provided, edit or create only that file.
+- If no path is provided, infer the component changelog from the user's requested
+  files or the current change scope.
+- For `changelog release [<component-slug>]` and
+  `changelog append <category> <message>`, follow the subcommand sections below.
 
 ## Quick Routing
 
@@ -221,5 +230,3 @@ commit-log-versus-changelog rules.
 | Script | Purpose |
 |--------|---------|
 | None | This skill no longer requires helper scripts for tag or platform URL management. |
-
-$ARGUMENTS

@@ -6,22 +6,37 @@ description: >
   Supports batch review of directories with parallel dispatch.
 lifecycle: stable
 disable-model-invocation: true
-argument-hint: "[path to SKILL.md, AGENT.md, or directory] [--format json]"
 ---
 
 # Definition Review
 
 Evaluate a skill or agent definition against quality standards. Produces a **PASS**, **NEEDS WORK**, or **REWRITE** verdict with specific findings.
 
+## Inputs
+
+Accepts one target and an optional output flag:
+
+```text
+<path to SKILL.md, AGENT.md, or directory> [--format json]
+```
+
+- A single `SKILL.md` or `AGENT.md` path runs one review.
+- A directory path discovers definition files beneath it and runs batch review.
+- `--format json` returns the structured JSON envelope instead of markdown.
+- If no target is provided, ask for the definition file or directory instead of
+  guessing from the current working directory.
+
+For shell snippets below, set `TARGET` to the input path after removing any flags.
+
 ## Workflow
 
 ### 0. Batch Detection
 
-If `$ARGUMENTS` resolves to a directory (not a single file):
+If the input target resolves to a directory (not a single file):
 
 1. Discover all definition files in the directory:
    ```bash
-   find "$ARGUMENTS" \( -name "SKILL.md" -o -name "AGENT.md" \) | sort
+   find "$TARGET" \( -name "SKILL.md" -o -name "AGENT.md" \) | sort
    ```
 2. If **1 file found** → proceed to step 1 with that file.
 3. If **2-3 files found** → process each sequentially through steps 1-3 below. Present individual verdicts and a combined summary table at the end. Use the same `## Batch Review Summary` table format as the 4+ case:
@@ -64,8 +79,10 @@ If `$ARGUMENTS` resolves to a directory (not a single file):
 ### 1. Run the linter
 
 ```bash
-python3 scripts/lint-definition.py $ARGUMENTS --format json
-# fallback order: .agents/skills/, .claude/skills/, .codex/skills/, ~/.agents/skills/, ~/.claude/skills/, ~/.codex/skills/
+LINTER='${CLAUDE_SKILL_DIR}/scripts/lint-definition.py'
+[ -f "$LINTER" ] || LINTER=$(find scripts -maxdepth 1 -name "lint-definition.py" 2>/dev/null | head -1)
+[ -n "$LINTER" ] || LINTER=$(find skills .agents/skills .claude/skills .codex/skills ~/.agents/skills ~/.claude/skills ~/.codex/skills -path "*/definition-review/scripts/lint-definition.py" 2>/dev/null | head -1)
+python3 "${LINTER:-lint-definition.py}" "$TARGET" --format json
 ```
 
 For a directory, the script finds all `SKILL.md` and `AGENT.md` files recursively. Parse the JSON output — it contains structural errors (must fix) and quality warnings (should fix).
@@ -108,7 +125,7 @@ Read the full definition file. Evaluate each area below. Be direct — "this ins
 **Completeness:**
 - Does the skill have examples or output templates?
 - Is there a gotchas/troubleshooting section?
-- Does it handle $ARGUMENTS?
+- Does it define portable invocation inputs?
 - If it runs scripts, are error cases handled?
 
 ### 3. Verdict
@@ -164,7 +181,7 @@ For **NEEDS WORK** verdicts, the required changes table uses the same format as 
 
 ### JSON Output Mode (--format json)
 
-Pass `--format json` in `$ARGUMENTS` to receive machine-readable output instead of the default markdown template. JSON mode produces the same review content in a structured envelope suitable for direct scripting, automation, or downstream tools such as `improve`.
+Pass `--format json` in the invocation input to receive machine-readable output instead of the default markdown template. JSON mode produces the same review content in a structured envelope suitable for direct scripting, automation, or downstream tools such as `improve`.
 
 ```json
 {
@@ -232,5 +249,3 @@ When the verdict is **REWRITE**, the definition needs a full rewrite followed by
 **After 3 iterations**: If the definition still doesn't reach PASS or NEEDS WORK, stop and report: "This definition has not converged after 3 rewrite attempts. Manual authoring is needed — the outline and iteration feedback are available for reference."
 
 **Important**: Each iteration should improve, not regress. If an iteration introduces new S-code errors that the previous version didn't have, flag it immediately rather than continuing — the rewriter is moving in the wrong direction.
-
-$ARGUMENTS

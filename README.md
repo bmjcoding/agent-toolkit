@@ -13,7 +13,9 @@ one-line Claude compatibility shim whose content is exactly `@AGENTS.md`.
 Before opening a pull request, run the repo-local Claude contribution assistant at
 `.claude/agents/contribution-assistant.md`. It standardizes changed components, updates
 versioned changelogs, regenerates generated assets, and runs the local checks that mirror
-CI. If Claude is unavailable, run `npm run check` directly before committing.
+CI. If you are contributing an existing skill, use the prompt templates in
+[CONTRIBUTING.md](CONTRIBUTING.md#contributing-an-existing-skill). If Claude is
+unavailable, run `npm run ci` directly before committing.
 
 ## Repository layout
 
@@ -85,10 +87,10 @@ Install the Node-based lint tooling with:
 npm ci
 ```
 
-Run Ruff via `uvx` with the repo-pinned version:
+Run Ruff via `uvx` with the repo-pinned versions:
 
 ```sh
-uvx --from ruff==0.15.10 ruff check .
+uvx --from ruff==0.15.12 ruff check .
 ```
 
 Run the repo linters with:
@@ -111,8 +113,26 @@ The Node entrypoint covers:
 - `markdownlint-cli2` for Markdown docs and instruction files
 - `prettier --check` for JSON and YAML
 
-Ruff is configured in `pyproject.toml` and invoked through the pinned `uvx` command in
+The repository pins npm through `packageManager`, requires uv `0.11.8` through
+`pyproject.toml`, and invokes Ruff `0.15.12` through the pinned `uvx` command in
 `package.json`.
+
+## Local CI
+
+Run `npm ci` first to install the pinned Node dependencies. Then run `npm run ci`
+before opening a pull request. The similar names are easy to confuse: `npm ci` installs
+dependencies, while `npm run ci` runs the repository's local validation gate.
+
+Run the full local gate with:
+
+```sh
+npm run ci
+```
+
+This regenerates adapters and the catalog, runs `npm run check`, verifies whitespace with
+`git diff --check`, and scans committed, staged, unstaged, and untracked local changes for
+secret patterns. To compare committed changes against a specific base, pass it after
+`--`, for example `npm run ci -- origin/main`.
 
 ## Install
 
@@ -211,7 +231,7 @@ a different format or discovery surface, then regenerate them with
 `node scripts/sync-canonical-adapters.js` when applicable.
 
 Before opening a contribution PR, use `.claude/agents/contribution-assistant.md` or run
-`npm run check` directly. Toolkit changelogs use one-and-done versioned entries: every
+`npm run ci` directly. Toolkit changelogs use one-and-done versioned entries: every
 touched component gets a bumped `## [X.Y.Z] - YYYY-MM-DD` section, not an `[Unreleased]`
 entry.
 

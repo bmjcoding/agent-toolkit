@@ -5,7 +5,6 @@ description: >
   phase, not a --validate flag), git verify, and ship verdict. Use when preparing code for
   production or before shipping.
 disable-model-invocation: true
-argument-hint: "[--dry-run] [--ship [--draft] [--auto-merge]]"
 lifecycle: stable
 ---
 
@@ -13,6 +12,20 @@ lifecycle: stable
 
 Execute all phases below. Scope resolution, autonomy, and `--dry-run` rules are defined in
 `AGENTS.md` and the active tool's project instructions.
+
+## Inputs
+
+Accepts optional paths and flags:
+
+```text
+[paths...] [--dry-run] [--ship [--draft] [--auto-merge]]
+```
+
+- `paths...`: optional files or directories to check. If omitted, use the scope
+  resolution rules from `AGENTS.md`.
+- `--dry-run`: report findings without source edits in auto-fix phases.
+- `--ship`: after all phases complete, route a shippable result to `git-ship`.
+- Flags after `--ship` are passed to `git-ship`.
 
 Resolve `STATE_ROOT` once at the start of the run. Prefer, in order: `.agents/`,
 `.claude/`, `.codex/`, `~/.agents/`, `~/.claude/`, `~/.codex/`. Use the first existing
@@ -76,7 +89,7 @@ VERDICT: NO-SHIP | SHIP WITH CAUTION | CLEAR TO SHIP
 
 ## Auto-ship
 
-If `$ARGUMENTS` contains `--ship`:
+If the invocation input contains `--ship`:
 
 - **CLEAR TO SHIP**: run `git-ship` with any flags after `--ship` (e.g., `--ship --draft`)
 - **SHIP WITH CAUTION**: print warnings, then ask "Ship with these warnings? (yes/no)". Wait for the user's response. If yes, run `git-ship`. If no, stop.
@@ -103,5 +116,3 @@ If no backlog file exists, do not create one just because `prod-readiness` ran. 
 - **Secrets scan is absolute**: even a revoked key in a test fixture is a NO-SHIP. The key may be in git history forever.
 - **Backlog is optional runtime state**: `STATE_ROOT/backlog.md` belongs to the broader backlog workflow. Use it when it already exists or the user explicitly wants persistent tracking; otherwise keep unresolved items in the report only.
 - **`--dry-run` scope**: in `--dry-run` mode, auto-fix phases (lint, audit, simplify) report findings only — no writes to source files. Build and final validation still execute normally. `git-ship` is not run even if `--ship` is present.
-
-$ARGUMENTS

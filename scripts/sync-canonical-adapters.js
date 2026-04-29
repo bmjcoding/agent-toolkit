@@ -311,7 +311,7 @@ function deriveCodexSandboxMode(capabilities, disallowedTools) {
   return 'workspace-write';
 }
 
-function renderCanonicalMarkdown({ name, description, lifecycle, adapterPaths, body, kind, modelTier, capabilities, subagents, skills, argumentHint }) {
+function renderCanonicalMarkdown({ name, description, lifecycle, adapterPaths, body, kind, modelTier, capabilities, subagents, skills }) {
   const adapterLines = adapterPaths.map(adapterPath => `  - ${adapterPath}`).join('\n');
   const metadataLines = [];
   if (lifecycle) metadataLines.push(`lifecycle: ${lifecycle}`);
@@ -330,10 +330,6 @@ function renderCanonicalMarkdown({ name, description, lifecycle, adapterPaths, b
       metadataLines.push('skills:');
       for (const skill of skills) metadataLines.push(`  - ${skill}`);
     }
-  }
-
-  if (kind === 'workflow' && argumentHint) {
-    metadataLines.push(`argument-hint: ${JSON.stringify(argumentHint)}`);
   }
 
   return [
@@ -428,7 +424,7 @@ function renderCodexToml({
   ].join('\n');
 }
 
-function renderCopilotPromptMarkdown({ name, description, body, argumentHint }) {
+function renderCopilotPromptMarkdown({ name, description, body }) {
   const lines = [
     '---',
     `name: ${name}`,
@@ -441,10 +437,6 @@ function renderCopilotPromptMarkdown({ name, description, body, argumentHint }) 
     '  - execute',
   ];
 
-  if (argumentHint) {
-    lines.push(`argument-hint: ${JSON.stringify(argumentHint)}`);
-  }
-
   lines.push('---');
   lines.push('');
   lines.push(body.trim());
@@ -453,10 +445,9 @@ function renderCopilotPromptMarkdown({ name, description, body, argumentHint }) 
   return lines.join('\n');
 }
 
-function renderCopilotInstructionMarkdown({ description, applyTo, body }) {
+function renderCopilotInstructionMarkdown({ applyTo, body }) {
   const lines = [
     '---',
-    `description: ${JSON.stringify(description)}`,
     `applyTo: ${JSON.stringify(applyTo)}`,
     '---',
     '',
@@ -580,8 +571,8 @@ function renderSkillsReadme(skills) {
   lines.push('');
   lines.push('1. Create `skills/<category>/.../<slug>/SKILL.md` with matching `name: <slug>` frontmatter.');
   lines.push('2. Create `skills/<category>/.../<slug>/CHANGELOG.md` with the initial version entry.');
-  lines.push('3. Run `npm run sync` to refresh adapters, catalog inputs, and generated inventories.');
-  lines.push('4. Run `npm run check` before opening a pull request.');
+  lines.push('3. Run `npm run ci` to refresh adapters, catalog inputs, generated inventories,');
+  lines.push('   and validation before opening a pull request.');
   lines.push('');
 
   return lines.join('\n');
@@ -617,12 +608,12 @@ function renderRulesReadme(rules) {
     '',
     '## Rules',
     '',
-    '| Rule | Lifecycle | Description |',
-    '|---|---|---|',
+    '| Rule | Lifecycle |',
+    '|---|---|',
   ];
 
   for (const rule of rules) {
-    lines.push(`| \`${rule.id}\` | ${escapeMarkdownTableCell(rule.lifecycle)} | ${escapeMarkdownTableCell(rule.description)} |`);
+    lines.push(`| \`${rule.id}\` | ${escapeMarkdownTableCell(rule.lifecycle)} |`);
   }
 
   lines.push('');
@@ -633,32 +624,6 @@ function renderRulesReadme(rules) {
   lines.push('');
 
   return lines.join('\n');
-}
-
-function deriveRuleDescription(body) {
-  const firstLine = body
-    .split('\n')
-    .map(line => line.trim())
-    .find(Boolean);
-
-  if (!firstLine) {
-    return 'Shared rule adapter generated from the canonical root rule.';
-  }
-
-  const normalized = firstLine
-    .replace(/^#{1,6}\s+/, '')
-    .replace(/^[-*]\s+/, '')
-    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
-    .replace(/`([^`]+)`/g, '$1')
-    .replace(/\*\*([^*]+)\*\*/g, '$1')
-    .replace(/\s+/g, ' ')
-    .trim();
-
-  if (normalized.length <= 140) {
-    return normalized;
-  }
-
-  return `${normalized.slice(0, 137).trimEnd()}...`;
 }
 
 function extractCanonicalMetadata(markdown) {
@@ -677,8 +642,14 @@ function extractCanonicalMetadata(markdown) {
     capabilities: parseYamlList(parts.frontmatter, 'capabilities'),
     subagents: parseYamlList(parts.frontmatter, 'subagents'),
     skills: parseYamlList(parts.frontmatter, 'skills'),
-    argumentHint: normalizeFrontmatterValue(extractField(/^argument-hint:\s*(.+)$/m, parts.frontmatter, '')),
   };
+}
+
+function removeFrontmatterField(frontmatter, fieldName) {
+  return frontmatter
+    .split('\n')
+    .filter(line => !line.match(new RegExp(`^${fieldName}:\\s*`)))
+    .join('\n');
 }
 
 function listCanonicalHookSlugs() {
@@ -1050,11 +1021,6 @@ function syncWorkflows() {
     const claudeParts = splitFrontmatter(claudeMarkdown);
     const copilotParts = splitFrontmatter(copilotMarkdown);
     const existingCanonical = fs.existsSync(canonicalPath) ? extractCanonicalMetadata(read(canonicalPath)) : null;
-    const argumentHint = normalizeFrontmatterValue(
-      (existingCanonical && existingCanonical.argumentHint) ||
-      extractField(/^argument-hint:\s*(.+)$/m, claudeParts.frontmatter, '') ||
-      extractField(/^argument-hint:\s*(.+)$/m, copilotParts.frontmatter, '')
-    );
     const canonicalBody = existingCanonical
       ? existingCanonical.body
       : stripLeadingHtmlComments(copilotParts.body || claudeParts.body);
@@ -1075,7 +1041,6 @@ function syncWorkflows() {
         name,
         description,
         lifecycle,
-        argumentHint,
         adapterPaths: [
           `claude-code/commands/${name}/${name}.md`,
           `github-copilot/prompts/${name}.prompt.md`,
@@ -1088,14 +1053,13 @@ function syncWorkflows() {
       writeIfChanged(canonicalChangelogPath, read(claudeChangelogPath));
     }
 
-    writeIfChanged(claudePath, `${claudeParts.frontmatter}\n\n${canonicalBody}`);
+    writeIfChanged(claudePath, `${removeFrontmatterField(claudeParts.frontmatter, 'argument-hint')}\n\n${canonicalBody}`);
     writeIfChanged(
       copilotPath,
       renderCopilotPromptMarkdown({
         name,
         description,
         body: canonicalBody,
-        argumentHint,
       })
     );
   }
@@ -1133,11 +1097,6 @@ function syncRules() {
     const parts = splitFrontmatter(canonicalMarkdown);
     const body = stripLeadingHtmlComments(parts.body);
 
-    const explicitDescription = normalizeFrontmatterValue(
-      extractField(/^description:\s*(.+)$/m, parts.frontmatter, '')
-    );
-    const description = explicitDescription || deriveRuleDescription(body);
-
     const explicitApplyTo = normalizeFrontmatterValue(
       extractField(/^applyTo:\s*(.+)$/m, parts.frontmatter, '')
     );
@@ -1158,7 +1117,6 @@ function syncRules() {
     ruleEntries.push({
       id: name,
       lifecycle: normalizeFrontmatterValue(extractField(/^lifecycle:\s*(.+)$/m, parts.frontmatter, '')),
-      description,
     });
 
     writeIfChanged(
@@ -1168,7 +1126,6 @@ function syncRules() {
     writeIfChanged(
       copilotPath,
       renderCopilotInstructionMarkdown({
-        description,
         applyTo,
         body,
       })

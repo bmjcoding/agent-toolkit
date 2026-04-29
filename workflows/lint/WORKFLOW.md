@@ -2,7 +2,6 @@
 name: lint
 description: "Run linting and standards compliance checks, auto-fix everything possible."
 lifecycle: stable
-argument-hint: "[paths...] [--dry-run]"
 adapters:
   - claude-code/commands/lint/lint.md
   - github-copilot/prompts/lint.prompt.md
@@ -11,6 +10,14 @@ adapters:
 <!-- Canonical shared workflow body. Tool-native wrappers live in the listed adapter files. -->
 
 Run linting and standards compliance checks on the code in scope. Auto-fix everything possible. Use parallel agents to maximize speed. Scope resolution, autonomy, and `--dry-run` rules are defined in AGENTS.md.
+
+## Inputs
+
+Accepts optional files or directories plus `--dry-run`.
+
+- If paths are provided, lint only those targets and tightly coupled generated files.
+- If no paths are provided, use the changed-file scope resolution rules from `AGENTS.md`.
+- If `--dry-run` is present, report lint findings and proposed fixes without modifying files.
 
 ## Phase 1: Detect and bootstrap tooling
 

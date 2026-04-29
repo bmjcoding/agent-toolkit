@@ -7,10 +7,17 @@ tools:
   - edit
   - search
   - execute
-argument-hint: "[paths...] [--dry-run]"
 ---
 
 Write tests to cover gaps in the code in scope. Target: maintain or improve baseline coverage, and achieve >=80% line coverage on new/changed files. Use parallel agents to maximize speed. Scope resolution, autonomy, auto-fix safety, and `--dry-run` rules are defined in AGENTS.md.
+
+## Inputs
+
+Accepts optional files or directories plus `--dry-run`.
+
+- If paths are provided, write or update tests for those targets and tightly coupled behavior.
+- If no paths are provided, use the changed-file scope resolution rules from `AGENTS.md`.
+- If `--dry-run` is present, report coverage gaps and planned tests without modifying files.
 
 ## Phase 0: Baseline
 

@@ -14,7 +14,7 @@ the local gate.
 
 - Root `scripts/` contains repo-level automation used by local checks and CI.
 - Prefer deterministic scripts that can run locally and in CI without tool-specific state.
-- Keep generated output checks idempotent: repeated `npm run sync` and `npm run check`
+- Keep generated output checks idempotent: repeated `npm run ci`
   should leave a clean working tree.
 - Repo-level script behavior changes are tracked in the root `CHANGELOG.md` unless a
   script clearly belongs to a component with its own changelog.

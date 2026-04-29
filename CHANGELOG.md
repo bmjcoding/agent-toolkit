@@ -6,6 +6,42 @@ Per-component changelogs live in each component's own `CHANGELOG.md`.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.14.0] - 2026-04-29
+
+### Added
+
+- Added `npm run ci` as the standard local gate for regenerating generated
+  assets, running validation, checking whitespace, and scanning committed plus
+  uncommitted local changes for secret patterns.
+- Documented the difference between `npm ci` dependency installation and
+  `npm run ci` local validation for contributors.
+- Added contributor prompt templates and assistant intake guidance for importing
+  existing skills into the canonical toolkit layout.
+- Clarified that imported existing skills are candidate definitions that must be
+  audited and improved before final CI validation.
+
+### Changed
+
+- Updated workflow adapter generation and catalog metadata to stop preserving
+  Claude-specific argument hints, relying on portable workflow `## Inputs`
+  sections instead.
+- Updated the repo-pinned toolchain and dependency floor to npm `11.13.0`,
+  uv `0.11.8`, Ruff `0.15.12`, and current GitHub Action release tags as of
+  2026-04-28.
+- Removed generated rule-description synthesis from Copilot instruction adapters
+  and the rules inventory.
+- Mapped generated Claude command adapter changes back to canonical workflow
+  changelogs during component validation.
+- Mapped generated rule adapters back to canonical rule changelogs during
+  component validation.
+
+## [4.13.0] - 2026-04-28
+
+### Changed
+
+- Regenerated the shared skills inventory and distribution catalog after updating
+  active skill and agent path-resolution guidance.
+
 ## [4.12.0] - 2026-04-28
 
 ### Added

@@ -1,5 +1,4 @@
 ---
-description: "Frontend and backend are always separate containers."
 applyTo: "**/Dockerfile*,**/docker-compose*.yml,**/docker-compose*.yaml,**/.dockerignore"
 ---
 
