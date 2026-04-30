@@ -5,6 +5,18 @@ All notable changes to this component will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+
+- jq `select(length>0)` no longer collapses the entire object construction when
+  optional fields (subtask_id, handoff_path, stash_name) are empty. Replaced with
+  explicit ternary that emits `null` for empty values, so audit files are never
+  zero bytes.
+- Scope check now skips entirely when the agent input has no `subtask_id` instead
+  of comparing the agent's owned-files set against the cumulative session diff,
+  which falsely flagged in-scope files written by earlier agents.
+
 ## [1.1.0] - 2026-04-28
 
 ### Added

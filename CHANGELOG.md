@@ -6,6 +6,31 @@ Per-component changelogs live in each component's own `CHANGELOG.md`.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- New hooks: `validate-plan` (SubagentStop on planner), `preflight` (SessionStart),
+  `drift-check` (PreToolUse on Agent dispatches). Each wraps an existing
+  `scripts/orchestrator/` helper as an event-driven adapter so the dispatcher no
+  longer needs to remember to invoke them manually.
+- `claude-code/settings-template.json` — canonical hook block for Claude Code.
+  Hand-maintained `~/.claude/settings.json` should mirror this set.
+- `install.sh --check-settings` reports drift between user settings and the
+  template (ghost references and missing registrations).
+- Sixth symlink in `install.sh`: `~/.claude/scripts/orchestrator → <REPO>/scripts/orchestrator`,
+  matching the existing pattern for hooks/rules/skills.
+
+### Fixed
+
+- `post-agent-audit` no longer emits zero-byte audit files. Two compounding bugs
+  resolved: (1) jq `select(length>0)` propagated `empty` upward and silently
+  collapsed the entire object construction; replaced with explicit
+  `if length > 0 then . else null end` ternary. (2) `git diff --name-only HEAD`
+  returned cumulative session diff rather than the diff produced by the most
+  recent agent, falsely flagging in-scope files written by earlier agents; the
+  scope check now skips entirely when the agent input has no `subtask_id`.
+
 ## [4.14.0] - 2026-04-29
 
 ### Added
