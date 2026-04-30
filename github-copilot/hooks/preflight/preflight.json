@@ -1,0 +1,11 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "type": "command",
+        "command": "bash \"${AGENT_TOOLKIT_DIR:-${TOOLKIT_PATH:-$PWD}}/github-copilot/hooks/preflight/preflight.sh\"",
+        "timeoutMs": 5000
+      }
+    ]
+  }
+}

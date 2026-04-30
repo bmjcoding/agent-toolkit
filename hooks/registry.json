@@ -29,6 +29,15 @@
       "timeoutMs": 3000
     },
     {
+      "id": "drift-check",
+      "adapterKind": "direct",
+      "copilotEvent": "PreToolUse",
+      "codexEvent": "PreToolUse",
+      "codexMatcher": "Agent|Task",
+      "codexStatusMessage": "Checking pipeline drift...",
+      "timeoutMs": 3000
+    },
+    {
       "id": "extract-handoff",
       "adapterKind": "handoff",
       "copilotEvent": "SubagentStop",
@@ -74,6 +83,15 @@
       "timeoutMs": 5000
     },
     {
+      "id": "preflight",
+      "adapterKind": "direct",
+      "copilotEvent": "SessionStart",
+      "codexEvent": "SessionStart",
+      "codexMatcher": ".*",
+      "codexStatusMessage": "Running session preflight...",
+      "timeoutMs": 5000
+    },
+    {
       "id": "pre-push-secrets",
       "adapterKind": "command-filter",
       "commandPredicate": "is_git_commit_or_push_command",
@@ -100,6 +118,15 @@
       "codexMatcher": "Bash",
       "codexStatusMessage": "Checking config protection...",
       "timeoutMs": 3000
+    },
+    {
+      "id": "validate-plan",
+      "adapterKind": "direct",
+      "copilotEvent": "SubagentStop",
+      "codexEvent": "Stop",
+      "codexMatcher": ".*",
+      "codexStatusMessage": "Validating plan.json...",
+      "timeoutMs": 5000
     }
   ]
 }

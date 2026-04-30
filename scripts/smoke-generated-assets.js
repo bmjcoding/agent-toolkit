@@ -419,9 +419,11 @@ function assertCodexHookInstallContract(hooks) {
   const codexRegistry = readJson(path.join('openai-codex', 'hooks', 'hooks.json'));
 
   for (const hook of hooks) {
-    const registryEntry = (codexRegistry.hooks.PreToolUse || [])
+    const registryEntry = (codexRegistry.hooks.SessionStart || [])
+      .concat(codexRegistry.hooks.PreToolUse || [])
       .concat(codexRegistry.hooks.PostToolUse || [])
       .concat(codexRegistry.hooks.UserPromptSubmit || [])
+      .concat(codexRegistry.hooks.SubagentStart || [])
       .concat(codexRegistry.hooks.Stop || [])
       .flatMap(group => group.hooks || [])
       .find(entry => typeof entry.command === 'string' && entry.command.includes(`/openai-codex/hooks/${hook}/${hook}.sh`));

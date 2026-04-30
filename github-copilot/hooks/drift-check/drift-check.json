@@ -1,0 +1,11 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "type": "command",
+        "command": "bash \"${AGENT_TOOLKIT_DIR:-${TOOLKIT_PATH:-$PWD}}/github-copilot/hooks/drift-check/drift-check.sh\"",
+        "timeoutMs": 3000
+      }
+    ]
+  }
+}
