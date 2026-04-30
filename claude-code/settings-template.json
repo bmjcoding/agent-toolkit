@@ -1,0 +1,125 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/preflight/preflight.sh",
+            "timeout": 5,
+            "statusMessage": "Running session preflight..."
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/extract-handoff/extract-handoff.sh",
+            "timeout": 5,
+            "statusMessage": "Extracting handoff..."
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/integrity-warn/integrity-warn.sh",
+            "timeout": 10,
+            "statusMessage": "Running integrity check..."
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/validate-plan/validate-plan.sh",
+            "timeout": 5,
+            "statusMessage": "Validating plan.json..."
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/post-agent-audit/post-agent-audit.sh",
+            "timeout": 5,
+            "statusMessage": "Auditing agent scope..."
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash(*)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/protect-config/protect-config.sh",
+            "timeout": 5,
+            "statusMessage": "Checking write protection..."
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/changelog-check/changelog-check.sh",
+            "timeout": 10,
+            "statusMessage": "Validating changelog entry..."
+          }
+        ]
+      },
+      {
+        "matcher": "Bash(git commit*)|Bash(git push*)|Bash(*&& git commit*)|Bash(*&& git push*)|Bash(*; git commit*)|Bash(*; git push*)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/branch-guard/branch-guard.sh",
+            "timeout": 3,
+            "statusMessage": "Checking branch..."
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/pre-push-secrets/pre-push-secrets.sh",
+            "timeout": 30,
+            "statusMessage": "Scanning for secrets..."
+          }
+        ]
+      },
+      {
+        "matcher": "Bash(git commit*)|Bash(git tag*)|Bash(*&& git commit*)|Bash(*&& git tag*)|Bash(*; git commit*)|Bash(*; git tag*)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/git-signing-preflight/git-signing-preflight.sh",
+            "timeout": 5,
+            "statusMessage": "Pre-flighting signing keys..."
+          }
+        ]
+      },
+      {
+        "matcher": "Agent(*)|Task(*)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/dispatch-validate/dispatch-validate.sh",
+            "timeout": 3,
+            "statusMessage": "Validating dispatch prompt..."
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/drift-check/drift-check.sh",
+            "timeout": 3,
+            "statusMessage": "Checking pipeline drift..."
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit(*)|Write(*)|MultiEdit(*)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/printf-lint/printf-lint.sh",
+            "timeout": 3,
+            "statusMessage": "Linting printf safety..."
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1266,6 +1266,28 @@
       }
     },
     {
+      "component_id": "drift-check",
+      "component_kind": "hook",
+      "component_version": "1.0.0",
+      "lifecycle": "stable",
+      "target_tool": "claude-code",
+      "artifact_path": "hooks/drift-check/drift-check.sh",
+      "source_path": "hooks/drift-check/drift-check.sh",
+      "install_path": "~/.claude/hooks/drift-check/drift-check.sh",
+      "install_command": "mkdir -p \"$HOME/.claude/hooks/drift-check\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/drift-check/drift-check.sh\" -o \"$HOME/.claude/hooks/drift-check/drift-check.sh\" && chmod +x \"$HOME/.claude/hooks/drift-check/drift-check.sh\" && mkdir -p \"$HOME/.claude/hooks\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/_adapter_lib.sh\" -o \"$HOME/.claude/hooks/_adapter_lib.sh\" && chmod +x \"$HOME/.claude/hooks/_adapter_lib.sh\" && mkdir -p \"$HOME/.claude/scripts/orchestrator\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/scripts/orchestrator/dispatch-validator.py\" -o \"$HOME/.claude/scripts/orchestrator/dispatch-validator.py\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/scripts/orchestrator/validate-handoff.py\" -o \"$HOME/.claude/scripts/orchestrator/validate-handoff.py\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/scripts/orchestrator/lint-printf-newlines.sh\" -o \"$HOME/.claude/scripts/orchestrator/lint-printf-newlines.sh\" && chmod +x \"$HOME/.claude/scripts/orchestrator/lint-printf-newlines.sh\"",
+      "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/drift-check/drift-check.sh",
+      "checksum_sha256": "77cf69875b4ddbbfdfc6cd1229893bc4aa2e7f2a00d51bfebe88f17eb2a4a825",
+      "bundle_membership": [],
+      "metadata": {
+        "companion_artifacts": [
+          "hooks/_adapter_lib.sh",
+          "scripts/orchestrator/dispatch-validator.py",
+          "scripts/orchestrator/validate-handoff.py",
+          "scripts/orchestrator/lint-printf-newlines.sh"
+        ]
+      }
+    },
+    {
       "component_id": "extract-handoff",
       "component_kind": "hook",
       "component_version": "1.0.1",
@@ -1371,7 +1393,7 @@
     {
       "component_id": "post-agent-audit",
       "component_kind": "hook",
-      "component_version": "1.1.0",
+      "component_version": "1.2.0",
       "lifecycle": "stable",
       "target_tool": "claude-code",
       "artifact_path": "hooks/post-agent-audit/post-agent-audit.sh",
@@ -1379,7 +1401,7 @@
       "install_path": "~/.claude/hooks/post-agent-audit/post-agent-audit.sh",
       "install_command": "mkdir -p \"$HOME/.claude/hooks/post-agent-audit\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/post-agent-audit/post-agent-audit.sh\" -o \"$HOME/.claude/hooks/post-agent-audit/post-agent-audit.sh\" && chmod +x \"$HOME/.claude/hooks/post-agent-audit/post-agent-audit.sh\" && mkdir -p \"$HOME/.claude/hooks\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/_adapter_lib.sh\" -o \"$HOME/.claude/hooks/_adapter_lib.sh\" && chmod +x \"$HOME/.claude/hooks/_adapter_lib.sh\" && mkdir -p \"$HOME/.claude/scripts/orchestrator\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/scripts/orchestrator/dispatch-validator.py\" -o \"$HOME/.claude/scripts/orchestrator/dispatch-validator.py\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/scripts/orchestrator/validate-handoff.py\" -o \"$HOME/.claude/scripts/orchestrator/validate-handoff.py\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/scripts/orchestrator/lint-printf-newlines.sh\" -o \"$HOME/.claude/scripts/orchestrator/lint-printf-newlines.sh\" && chmod +x \"$HOME/.claude/scripts/orchestrator/lint-printf-newlines.sh\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/post-agent-audit/post-agent-audit.sh",
-      "checksum_sha256": "c0f3ba40f34a50ad7540b0f2d8c2af0b67192bb847886fa0622d4d747f91a13f",
+      "checksum_sha256": "9cb3283ebaf2e98bda14988aaff106c973796a6e8cf268865c4e37fa8aa918a9",
       "bundle_membership": [],
       "metadata": {
         "companion_artifacts": [
@@ -1416,6 +1438,28 @@
           "role": "core"
         }
       ],
+      "metadata": {
+        "companion_artifacts": [
+          "hooks/_adapter_lib.sh",
+          "scripts/orchestrator/dispatch-validator.py",
+          "scripts/orchestrator/validate-handoff.py",
+          "scripts/orchestrator/lint-printf-newlines.sh"
+        ]
+      }
+    },
+    {
+      "component_id": "preflight",
+      "component_kind": "hook",
+      "component_version": "1.0.0",
+      "lifecycle": "stable",
+      "target_tool": "claude-code",
+      "artifact_path": "hooks/preflight/preflight.sh",
+      "source_path": "hooks/preflight/preflight.sh",
+      "install_path": "~/.claude/hooks/preflight/preflight.sh",
+      "install_command": "mkdir -p \"$HOME/.claude/hooks/preflight\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/preflight/preflight.sh\" -o \"$HOME/.claude/hooks/preflight/preflight.sh\" && chmod +x \"$HOME/.claude/hooks/preflight/preflight.sh\" && mkdir -p \"$HOME/.claude/hooks\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/_adapter_lib.sh\" -o \"$HOME/.claude/hooks/_adapter_lib.sh\" && chmod +x \"$HOME/.claude/hooks/_adapter_lib.sh\" && mkdir -p \"$HOME/.claude/scripts/orchestrator\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/scripts/orchestrator/dispatch-validator.py\" -o \"$HOME/.claude/scripts/orchestrator/dispatch-validator.py\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/scripts/orchestrator/validate-handoff.py\" -o \"$HOME/.claude/scripts/orchestrator/validate-handoff.py\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/scripts/orchestrator/lint-printf-newlines.sh\" -o \"$HOME/.claude/scripts/orchestrator/lint-printf-newlines.sh\" && chmod +x \"$HOME/.claude/scripts/orchestrator/lint-printf-newlines.sh\"",
+      "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/preflight/preflight.sh",
+      "checksum_sha256": "362b4e6d9365d1168683f15408f6d0007ef7dc2ed8aed3b1a9a6390e5363533e",
+      "bundle_membership": [],
       "metadata": {
         "companion_artifacts": [
           "hooks/_adapter_lib.sh",
@@ -1469,6 +1513,28 @@
           "role": "core"
         }
       ],
+      "metadata": {
+        "companion_artifacts": [
+          "hooks/_adapter_lib.sh",
+          "scripts/orchestrator/dispatch-validator.py",
+          "scripts/orchestrator/validate-handoff.py",
+          "scripts/orchestrator/lint-printf-newlines.sh"
+        ]
+      }
+    },
+    {
+      "component_id": "validate-plan",
+      "component_kind": "hook",
+      "component_version": "1.0.0",
+      "lifecycle": "stable",
+      "target_tool": "claude-code",
+      "artifact_path": "hooks/validate-plan/validate-plan.sh",
+      "source_path": "hooks/validate-plan/validate-plan.sh",
+      "install_path": "~/.claude/hooks/validate-plan/validate-plan.sh",
+      "install_command": "mkdir -p \"$HOME/.claude/hooks/validate-plan\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/validate-plan/validate-plan.sh\" -o \"$HOME/.claude/hooks/validate-plan/validate-plan.sh\" && chmod +x \"$HOME/.claude/hooks/validate-plan/validate-plan.sh\" && mkdir -p \"$HOME/.claude/hooks\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/_adapter_lib.sh\" -o \"$HOME/.claude/hooks/_adapter_lib.sh\" && chmod +x \"$HOME/.claude/hooks/_adapter_lib.sh\" && mkdir -p \"$HOME/.claude/scripts/orchestrator\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/scripts/orchestrator/dispatch-validator.py\" -o \"$HOME/.claude/scripts/orchestrator/dispatch-validator.py\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/scripts/orchestrator/validate-handoff.py\" -o \"$HOME/.claude/scripts/orchestrator/validate-handoff.py\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/scripts/orchestrator/lint-printf-newlines.sh\" -o \"$HOME/.claude/scripts/orchestrator/lint-printf-newlines.sh\" && chmod +x \"$HOME/.claude/scripts/orchestrator/lint-printf-newlines.sh\"",
+      "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/validate-plan/validate-plan.sh",
+      "checksum_sha256": "613600b016c2a896d28ba8641f9b71bd0ab230bf983c0d8670dca4c8d5ba6e25",
+      "bundle_membership": [],
       "metadata": {
         "companion_artifacts": [
           "hooks/_adapter_lib.sh",
@@ -2621,6 +2687,30 @@
       }
     },
     {
+      "component_id": "drift-check",
+      "component_kind": "hook",
+      "component_version": "1.0.0",
+      "lifecycle": "stable",
+      "target_tool": "github-copilot",
+      "artifact_path": "github-copilot/hooks/drift-check/drift-check.json",
+      "source_path": "github-copilot/hooks/drift-check/drift-check.json",
+      "install_path": ".github/hooks/drift-check.json",
+      "install_command": "mkdir -p \".github/hooks\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/drift-check/drift-check.json\" -o \".github/hooks/drift-check.json\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/drift-check/drift-check.sh\" -o \".github/hooks/drift-check.sh\" && chmod +x \".github/hooks/drift-check.sh\" && mkdir -p \"./hooks\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/_adapter_lib.sh\" -o \"./hooks/_adapter_lib.sh\" && chmod +x \"./hooks/_adapter_lib.sh\" && mkdir -p \"./scripts/orchestrator\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/scripts/orchestrator/dispatch-validator.py\" -o \"./scripts/orchestrator/dispatch-validator.py\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/scripts/orchestrator/validate-handoff.py\" -o \"./scripts/orchestrator/validate-handoff.py\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/scripts/orchestrator/lint-printf-newlines.sh\" -o \"./scripts/orchestrator/lint-printf-newlines.sh\" && chmod +x \"./scripts/orchestrator/lint-printf-newlines.sh\" && mkdir -p \"hooks/drift-check\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/drift-check/drift-check.sh\" -o \"hooks/drift-check/drift-check.sh\" && chmod +x \"hooks/drift-check/drift-check.sh\"",
+      "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/drift-check/drift-check.json",
+      "checksum_sha256": "23006afe99a0ff8e827544e3e143c18489b1c6926f54fb90d5dbe5f565d1ba1b",
+      "bundle_membership": [],
+      "metadata": {
+        "companion_artifacts": [
+          "github-copilot/hooks/drift-check/drift-check.sh",
+          "hooks/_adapter_lib.sh",
+          "scripts/orchestrator/dispatch-validator.py",
+          "scripts/orchestrator/validate-handoff.py",
+          "scripts/orchestrator/lint-printf-newlines.sh",
+          "hooks/drift-check/drift-check.sh"
+        ]
+      }
+    },
+    {
       "component_id": "extract-handoff",
       "component_kind": "hook",
       "component_version": "1.0.1",
@@ -2719,7 +2809,7 @@
     {
       "component_id": "post-agent-audit",
       "component_kind": "hook",
-      "component_version": "1.1.0",
+      "component_version": "1.2.0",
       "lifecycle": "stable",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/hooks/post-agent-audit/post-agent-audit.json",
@@ -2761,6 +2851,30 @@
           "scripts/orchestrator/validate-handoff.py",
           "scripts/orchestrator/lint-printf-newlines.sh",
           "hooks/pre-push-secrets/pre-push-secrets.sh"
+        ]
+      }
+    },
+    {
+      "component_id": "preflight",
+      "component_kind": "hook",
+      "component_version": "1.0.0",
+      "lifecycle": "stable",
+      "target_tool": "github-copilot",
+      "artifact_path": "github-copilot/hooks/preflight/preflight.json",
+      "source_path": "github-copilot/hooks/preflight/preflight.json",
+      "install_path": ".github/hooks/preflight.json",
+      "install_command": "mkdir -p \".github/hooks\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/preflight/preflight.json\" -o \".github/hooks/preflight.json\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/preflight/preflight.sh\" -o \".github/hooks/preflight.sh\" && chmod +x \".github/hooks/preflight.sh\" && mkdir -p \"./hooks\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/_adapter_lib.sh\" -o \"./hooks/_adapter_lib.sh\" && chmod +x \"./hooks/_adapter_lib.sh\" && mkdir -p \"./scripts/orchestrator\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/scripts/orchestrator/dispatch-validator.py\" -o \"./scripts/orchestrator/dispatch-validator.py\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/scripts/orchestrator/validate-handoff.py\" -o \"./scripts/orchestrator/validate-handoff.py\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/scripts/orchestrator/lint-printf-newlines.sh\" -o \"./scripts/orchestrator/lint-printf-newlines.sh\" && chmod +x \"./scripts/orchestrator/lint-printf-newlines.sh\" && mkdir -p \"hooks/preflight\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/preflight/preflight.sh\" -o \"hooks/preflight/preflight.sh\" && chmod +x \"hooks/preflight/preflight.sh\"",
+      "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/preflight/preflight.json",
+      "checksum_sha256": "0aed41b38ac4c8aa6ffe3cf89410963cf726b1d0aec941eaf8ee550eba32f044",
+      "bundle_membership": [],
+      "metadata": {
+        "companion_artifacts": [
+          "github-copilot/hooks/preflight/preflight.sh",
+          "hooks/_adapter_lib.sh",
+          "scripts/orchestrator/dispatch-validator.py",
+          "scripts/orchestrator/validate-handoff.py",
+          "scripts/orchestrator/lint-printf-newlines.sh",
+          "hooks/preflight/preflight.sh"
         ]
       }
     },
@@ -2809,6 +2923,30 @@
           "scripts/orchestrator/validate-handoff.py",
           "scripts/orchestrator/lint-printf-newlines.sh",
           "hooks/protect-config/protect-config.sh"
+        ]
+      }
+    },
+    {
+      "component_id": "validate-plan",
+      "component_kind": "hook",
+      "component_version": "1.0.0",
+      "lifecycle": "stable",
+      "target_tool": "github-copilot",
+      "artifact_path": "github-copilot/hooks/validate-plan/validate-plan.json",
+      "source_path": "github-copilot/hooks/validate-plan/validate-plan.json",
+      "install_path": ".github/hooks/validate-plan.json",
+      "install_command": "mkdir -p \".github/hooks\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/validate-plan/validate-plan.json\" -o \".github/hooks/validate-plan.json\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/validate-plan/validate-plan.sh\" -o \".github/hooks/validate-plan.sh\" && chmod +x \".github/hooks/validate-plan.sh\" && mkdir -p \"./hooks\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/_adapter_lib.sh\" -o \"./hooks/_adapter_lib.sh\" && chmod +x \"./hooks/_adapter_lib.sh\" && mkdir -p \"./scripts/orchestrator\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/scripts/orchestrator/dispatch-validator.py\" -o \"./scripts/orchestrator/dispatch-validator.py\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/scripts/orchestrator/validate-handoff.py\" -o \"./scripts/orchestrator/validate-handoff.py\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/scripts/orchestrator/lint-printf-newlines.sh\" -o \"./scripts/orchestrator/lint-printf-newlines.sh\" && chmod +x \"./scripts/orchestrator/lint-printf-newlines.sh\" && mkdir -p \"hooks/validate-plan\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/validate-plan/validate-plan.sh\" -o \"hooks/validate-plan/validate-plan.sh\" && chmod +x \"hooks/validate-plan/validate-plan.sh\"",
+      "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/hooks/validate-plan/validate-plan.json",
+      "checksum_sha256": "3478cced6c515e7c7dec9a591cf96db58044d6c9ca6e49d4fc88e31a936fa06f",
+      "bundle_membership": [],
+      "metadata": {
+        "companion_artifacts": [
+          "github-copilot/hooks/validate-plan/validate-plan.sh",
+          "hooks/_adapter_lib.sh",
+          "scripts/orchestrator/dispatch-validator.py",
+          "scripts/orchestrator/validate-handoff.py",
+          "scripts/orchestrator/lint-printf-newlines.sh",
+          "hooks/validate-plan/validate-plan.sh"
         ]
       }
     },
@@ -3752,6 +3890,30 @@
       }
     },
     {
+      "component_id": "drift-check",
+      "component_kind": "hook",
+      "component_version": "1.0.0",
+      "lifecycle": "stable",
+      "target_tool": "openai-codex",
+      "artifact_path": "openai-codex/hooks/drift-check/drift-check.sh",
+      "source_path": "openai-codex/hooks/drift-check/drift-check.sh",
+      "install_path": "~/.codex/openai-codex/hooks/drift-check/drift-check.sh",
+      "install_command": "mkdir -p \"$HOME/.codex/openai-codex/hooks/drift-check\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/drift-check/drift-check.sh\" -o \"$HOME/.codex/openai-codex/hooks/drift-check/drift-check.sh\" && chmod +x \"$HOME/.codex/openai-codex/hooks/drift-check/drift-check.sh\" && mkdir -p \"$HOME/.codex\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/hooks.json\" -o \"$HOME/.codex/hooks.json\" && mkdir -p \"$HOME/.codex/hooks\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/_adapter_lib.sh\" -o \"$HOME/.codex/hooks/_adapter_lib.sh\" && chmod +x \"$HOME/.codex/hooks/_adapter_lib.sh\" && mkdir -p \"$HOME/.codex/scripts/orchestrator\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/scripts/orchestrator/dispatch-validator.py\" -o \"$HOME/.codex/scripts/orchestrator/dispatch-validator.py\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/scripts/orchestrator/validate-handoff.py\" -o \"$HOME/.codex/scripts/orchestrator/validate-handoff.py\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/scripts/orchestrator/lint-printf-newlines.sh\" -o \"$HOME/.codex/scripts/orchestrator/lint-printf-newlines.sh\" && chmod +x \"$HOME/.codex/scripts/orchestrator/lint-printf-newlines.sh\" && mkdir -p \"$HOME/.codex/hooks/drift-check\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/drift-check/drift-check.sh\" -o \"$HOME/.codex/hooks/drift-check/drift-check.sh\" && chmod +x \"$HOME/.codex/hooks/drift-check/drift-check.sh\"",
+      "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/drift-check/drift-check.sh",
+      "checksum_sha256": "102997b24d02894ffb6c2d1c70d4a496a730942bd583aa1812d947f84af5bd50",
+      "bundle_membership": [],
+      "metadata": {
+        "companion_artifacts": [
+          "openai-codex/hooks/hooks.json",
+          "hooks/_adapter_lib.sh",
+          "scripts/orchestrator/dispatch-validator.py",
+          "scripts/orchestrator/validate-handoff.py",
+          "scripts/orchestrator/lint-printf-newlines.sh",
+          "hooks/drift-check/drift-check.sh"
+        ]
+      }
+    },
+    {
       "component_id": "extract-handoff",
       "component_kind": "hook",
       "component_version": "1.0.1",
@@ -3851,7 +4013,7 @@
     {
       "component_id": "post-agent-audit",
       "component_kind": "hook",
-      "component_version": "1.1.0",
+      "component_version": "1.2.0",
       "lifecycle": "stable",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/hooks/post-agent-audit/post-agent-audit.sh",
@@ -3893,6 +4055,30 @@
           "scripts/orchestrator/validate-handoff.py",
           "scripts/orchestrator/lint-printf-newlines.sh",
           "hooks/pre-push-secrets/pre-push-secrets.sh"
+        ]
+      }
+    },
+    {
+      "component_id": "preflight",
+      "component_kind": "hook",
+      "component_version": "1.0.0",
+      "lifecycle": "stable",
+      "target_tool": "openai-codex",
+      "artifact_path": "openai-codex/hooks/preflight/preflight.sh",
+      "source_path": "openai-codex/hooks/preflight/preflight.sh",
+      "install_path": "~/.codex/openai-codex/hooks/preflight/preflight.sh",
+      "install_command": "mkdir -p \"$HOME/.codex/openai-codex/hooks/preflight\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/preflight/preflight.sh\" -o \"$HOME/.codex/openai-codex/hooks/preflight/preflight.sh\" && chmod +x \"$HOME/.codex/openai-codex/hooks/preflight/preflight.sh\" && mkdir -p \"$HOME/.codex\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/hooks.json\" -o \"$HOME/.codex/hooks.json\" && mkdir -p \"$HOME/.codex/hooks\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/_adapter_lib.sh\" -o \"$HOME/.codex/hooks/_adapter_lib.sh\" && chmod +x \"$HOME/.codex/hooks/_adapter_lib.sh\" && mkdir -p \"$HOME/.codex/scripts/orchestrator\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/scripts/orchestrator/dispatch-validator.py\" -o \"$HOME/.codex/scripts/orchestrator/dispatch-validator.py\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/scripts/orchestrator/validate-handoff.py\" -o \"$HOME/.codex/scripts/orchestrator/validate-handoff.py\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/scripts/orchestrator/lint-printf-newlines.sh\" -o \"$HOME/.codex/scripts/orchestrator/lint-printf-newlines.sh\" && chmod +x \"$HOME/.codex/scripts/orchestrator/lint-printf-newlines.sh\" && mkdir -p \"$HOME/.codex/hooks/preflight\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/preflight/preflight.sh\" -o \"$HOME/.codex/hooks/preflight/preflight.sh\" && chmod +x \"$HOME/.codex/hooks/preflight/preflight.sh\"",
+      "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/preflight/preflight.sh",
+      "checksum_sha256": "fff84a16758aa6ee0d9d544f32b67d496b4368485d222e40a942af64659bbce0",
+      "bundle_membership": [],
+      "metadata": {
+        "companion_artifacts": [
+          "openai-codex/hooks/hooks.json",
+          "hooks/_adapter_lib.sh",
+          "scripts/orchestrator/dispatch-validator.py",
+          "scripts/orchestrator/validate-handoff.py",
+          "scripts/orchestrator/lint-printf-newlines.sh",
+          "hooks/preflight/preflight.sh"
         ]
       }
     },
@@ -3941,6 +4127,30 @@
           "scripts/orchestrator/validate-handoff.py",
           "scripts/orchestrator/lint-printf-newlines.sh",
           "hooks/protect-config/protect-config.sh"
+        ]
+      }
+    },
+    {
+      "component_id": "validate-plan",
+      "component_kind": "hook",
+      "component_version": "1.0.0",
+      "lifecycle": "stable",
+      "target_tool": "openai-codex",
+      "artifact_path": "openai-codex/hooks/validate-plan/validate-plan.sh",
+      "source_path": "openai-codex/hooks/validate-plan/validate-plan.sh",
+      "install_path": "~/.codex/openai-codex/hooks/validate-plan/validate-plan.sh",
+      "install_command": "mkdir -p \"$HOME/.codex/openai-codex/hooks/validate-plan\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/validate-plan/validate-plan.sh\" -o \"$HOME/.codex/openai-codex/hooks/validate-plan/validate-plan.sh\" && chmod +x \"$HOME/.codex/openai-codex/hooks/validate-plan/validate-plan.sh\" && mkdir -p \"$HOME/.codex\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/hooks.json\" -o \"$HOME/.codex/hooks.json\" && mkdir -p \"$HOME/.codex/hooks\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/_adapter_lib.sh\" -o \"$HOME/.codex/hooks/_adapter_lib.sh\" && chmod +x \"$HOME/.codex/hooks/_adapter_lib.sh\" && mkdir -p \"$HOME/.codex/scripts/orchestrator\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/scripts/orchestrator/dispatch-validator.py\" -o \"$HOME/.codex/scripts/orchestrator/dispatch-validator.py\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/scripts/orchestrator/validate-handoff.py\" -o \"$HOME/.codex/scripts/orchestrator/validate-handoff.py\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/scripts/orchestrator/lint-printf-newlines.sh\" -o \"$HOME/.codex/scripts/orchestrator/lint-printf-newlines.sh\" && chmod +x \"$HOME/.codex/scripts/orchestrator/lint-printf-newlines.sh\" && mkdir -p \"$HOME/.codex/hooks/validate-plan\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/hooks/validate-plan/validate-plan.sh\" -o \"$HOME/.codex/hooks/validate-plan/validate-plan.sh\" && chmod +x \"$HOME/.codex/hooks/validate-plan/validate-plan.sh\"",
+      "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/hooks/validate-plan/validate-plan.sh",
+      "checksum_sha256": "7d3b450fa80e30860d708248dfd077e3f2d6fefc3f67147afeb8030e2f4d2ef7",
+      "bundle_membership": [],
+      "metadata": {
+        "companion_artifacts": [
+          "openai-codex/hooks/hooks.json",
+          "hooks/_adapter_lib.sh",
+          "scripts/orchestrator/dispatch-validator.py",
+          "scripts/orchestrator/validate-handoff.py",
+          "scripts/orchestrator/lint-printf-newlines.sh",
+          "hooks/validate-plan/validate-plan.sh"
         ]
       }
     },

@@ -5,6 +5,13 @@ All notable changes to this component will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.3.0] - 2026-04-30
+
+### Added
+
+- Generated Copilot adapters for three new canonical hooks: `drift-check/` (PreToolUse on Agent|Task, checks pipeline drift), `preflight/` (SessionStart, runs session preflight checks), and `validate-plan/` (SubagentStop, validates plan.json). Each adapter delegates to the canonical root hook script via `run_root_hook`.
+- `hooks.json` renderer now initialises `SessionStart` and `SubagentStart` event buckets so hooks that use those event types are correctly placed in the generated registry without a TypeError.
+
 ## [3.2.0] - 2026-04-28
 
 ### Added

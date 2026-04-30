@@ -5,6 +5,17 @@ All notable changes to this component will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.3.0] - 2026-04-30
+
+### Added
+
+- Generated Codex adapters for three new canonical hooks: `drift-check/` (PreToolUse, matcher `Agent|Task`), `preflight/` (SessionStart, matcher `.*`), and `validate-plan/` (Stop, matcher `.*`). Each adapter delegates to the canonical root hook script. `hooks.json` registry updated with entries in the correct event buckets.
+
+### Fixed
+
+- `renderCodexHooksJson()` now initialises `SessionStart` and `SubagentStart` keys in its grouped object so hooks that carry those event types (e.g. `preflight`) no longer crash the generator with `TypeError: Cannot read properties of undefined (reading 'push')`.
+- `smoke-generated-assets.js` `assertCodexHookInstallContract` now scans `SessionStart` and `SubagentStart` buckets in addition to the original four, so hooks in those buckets are properly covered by the smoke test.
+
 ## [3.2.0] - 2026-04-28
 
 ### Added

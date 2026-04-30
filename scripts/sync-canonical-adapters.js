@@ -777,9 +777,11 @@ function renderHookAdapter({ tool, slug, spec }) {
 
 function renderCodexHooksJson(slugs) {
   const grouped = {
+    SessionStart: [],
     PreToolUse: [],
     PostToolUse: [],
     UserPromptSubmit: [],
+    SubagentStart: [],
     Stop: [],
   };
 

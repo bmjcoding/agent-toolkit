@@ -51,24 +51,21 @@ if [ -z "$AGENT_ID" ]; then
   exit 0
 fi
 
-# Look up the agent's owned_files from plan.json. If we have a subtask_id, use
-# that; otherwise union owned_files for any subtask whose `agent` matches.
-OWNED=$(if [ -n "$SUBTASK_ID" ]; then
-  jq -r --arg id "$SUBTASK_ID" '.subtasks[] | select(.id == $id) | .owned_files[]?' "$PLAN" 2>/dev/null
-else
-  jq -r --arg ag "$AGENT_ID" '.subtasks[] | select(.agent == $ag) | .owned_files[]?' "$PLAN" 2>/dev/null
-fi | sort -u)
-
-# Get currently-modified files (tracked + untracked).
-MODIFIED=$( {
-  git diff --name-only HEAD 2>/dev/null
-  git ls-files --others --exclude-standard 2>/dev/null
-} | sort -u)
-
-# Compute set difference: modified - owned = out-of-scope.
+# Look up the agent's owned_files from plan.json only when a subtask_id is
+# present. Without a subtask_id (e.g. browser-verify or ad-hoc research agents)
+# there is no plan-defined scope, so the comparison would falsely flag files
+# written by earlier agents against the cumulative session diff.
+OWNED=""
 OUT_OF_SCOPE=""
-if [ -n "$OWNED" ] && [ -n "$MODIFIED" ]; then
-  OUT_OF_SCOPE=$(comm -23 <(echo "$MODIFIED") <(echo "$OWNED"))
+if [ -n "$SUBTASK_ID" ]; then
+  OWNED=$(jq -r --arg id "$SUBTASK_ID" '.subtasks[] | select(.id == $id) | .owned_files[]?' "$PLAN" 2>/dev/null | sort -u)
+  MODIFIED=$( {
+    git diff --name-only HEAD 2>/dev/null
+    git ls-files --others --exclude-standard 2>/dev/null
+  } | sort -u)
+  if [ -n "$OWNED" ] && [ -n "$MODIFIED" ]; then
+    OUT_OF_SCOPE=$(comm -23 <(echo "$MODIFIED") <(echo "$OWNED"))
+  fi
 fi
 
 # Locate the handoff file. Use the named alias if present, else any phase-qualified alias.
@@ -136,12 +133,12 @@ jq -n \
   '{
      agent: $agent,
      session_id: $sid,
-     subtask_id: ($subtask | select(length>0)),
+     subtask_id: ($subtask | if length > 0 then . else null end),
      handoff_present: $handoff_present,
      handoff_valid: $handoff_valid,
-     handoff_path: ($handoff_path | select(length>0)),
+     handoff_path: ($handoff_path | if length > 0 then . else null end),
      handoff_schema_violations: $handoff_violations,
-     stash_name: ($stash | select(length>0)),
+     stash_name: ($stash | if length > 0 then . else null end),
      out_of_scope_files: ($out_of_scope | split("\n") | map(select(length>0))),
      owned_files: ($owned | split("\n") | map(select(length>0)))
    }' > "$AUDIT_FILE" 2>/dev/null
