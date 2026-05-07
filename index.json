@@ -5,7 +5,7 @@
     {
       "component_id": "autoresearch-analyst",
       "component_kind": "agent",
-      "component_version": "6.3.0",
+      "component_version": "6.4.0",
       "lifecycle": "stable",
       "target_tool": "claude-code",
       "artifact_path": "claude-code/agents/autoresearch-analyst.md",
@@ -13,7 +13,7 @@
       "install_path": "~/.claude/agents/autoresearch-analyst.md",
       "install_command": "mkdir -p \"$HOME/.claude/agents\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/autoresearch-analyst.md\" -o \"$HOME/.claude/agents/autoresearch-analyst.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/autoresearch-analyst.md",
-      "checksum_sha256": "2cc4264d691c3abf58bca38ba84288d5243c02634dbbfca29ab167c79cc4407c",
+      "checksum_sha256": "5d0bf30efaaf921cfa04ee35b9e89f094970a1017a7f04ee214dc6e7208be5a4",
       "bundle_membership": [
         {
           "bundle_id": "self-improvement",
@@ -38,7 +38,10 @@
           "retro",
           "improve",
           "definition-review",
-          "changelog"
+          "changelog",
+          "recon",
+          "full-cycle",
+          "on-demand"
         ],
         "metadata_source": "canonical"
       }
@@ -1747,7 +1750,7 @@
     {
       "component_id": "definition-review",
       "component_kind": "skill",
-      "component_version": "6.2.0",
+      "component_version": "6.3.0",
       "lifecycle": "stable",
       "target_tool": "claude-code",
       "artifact_path": "skills/self-improvement/definition-review/SKILL.md",
@@ -2087,7 +2090,7 @@
     {
       "component_id": "autoresearch-analyst",
       "component_kind": "agent",
-      "component_version": "6.3.0",
+      "component_version": "6.4.0",
       "lifecycle": "stable",
       "target_tool": "github-copilot",
       "artifact_path": "github-copilot/agents/autoresearch-analyst.agent.md",
@@ -2095,7 +2098,7 @@
       "install_path": ".github/agents/autoresearch-analyst.agent.md",
       "install_command": "mkdir -p \".github/agents\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/autoresearch-analyst.agent.md\" -o \".github/agents/autoresearch-analyst.agent.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/autoresearch-analyst.agent.md",
-      "checksum_sha256": "eb4a79de6e9ba13763f761c0f713da4e3a58fe779ef96df44992eecb04e220ee",
+      "checksum_sha256": "74990e8919dc5fa91399a5c3790f155f110ab79252f3dc155dccf44d9ac33e81",
       "bundle_membership": [],
       "metadata": {
         "model_tier": "frontier",
@@ -2111,7 +2114,10 @@
           "retro",
           "improve",
           "definition-review",
-          "changelog"
+          "changelog",
+          "recon",
+          "full-cycle",
+          "on-demand"
         ],
         "metadata_source": "canonical"
       }
@@ -3135,7 +3141,7 @@
     {
       "component_id": "definition-review",
       "component_kind": "skill",
-      "component_version": "6.2.0",
+      "component_version": "6.3.0",
       "lifecycle": "stable",
       "target_tool": "github-copilot",
       "artifact_path": "skills/self-improvement/definition-review/SKILL.md",
@@ -3392,7 +3398,7 @@
     {
       "component_id": "autoresearch-analyst",
       "component_kind": "agent",
-      "component_version": "6.3.0",
+      "component_version": "6.4.0",
       "lifecycle": "stable",
       "target_tool": "openai-codex",
       "artifact_path": "openai-codex/agents/autoresearch-analyst.toml",
@@ -3400,7 +3406,7 @@
       "install_path": "~/.codex/agents/autoresearch-analyst.toml",
       "install_command": "mkdir -p \"$HOME/.codex/agents\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/autoresearch-analyst.toml\" -o \"$HOME/.codex/agents/autoresearch-analyst.toml\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/autoresearch-analyst.toml",
-      "checksum_sha256": "189bedcb3d362c8f80d7b53ec581d33c62c9e4a90df08067710a52eb1c7d7e1c",
+      "checksum_sha256": "1fa71db3183201caa0be6df30a1efb6fe23fc559bf0c5a6b68f5832f64ceaaf8",
       "bundle_membership": [],
       "metadata": {
         "model_tier": "frontier",
@@ -3416,7 +3422,10 @@
           "retro",
           "improve",
           "definition-review",
-          "changelog"
+          "changelog",
+          "recon",
+          "full-cycle",
+          "on-demand"
         ],
         "metadata_source": "canonical"
       }
@@ -4195,7 +4204,7 @@
     {
       "component_id": "definition-review",
       "component_kind": "skill",
-      "component_version": "6.2.0",
+      "component_version": "6.3.0",
       "lifecycle": "stable",
       "target_tool": "openai-codex",
       "artifact_path": "skills/self-improvement/definition-review/SKILL.md",

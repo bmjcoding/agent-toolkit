@@ -398,27 +398,50 @@ def lint_file(filepath, file_type=None, base=None):
         if is_user_invocable and not (has_inputs_section or has_legacy_arguments) and disable_model:
             warn("Q12", "User-invocable skill with disable-model-invocation but no ## Inputs section — user input may be ignored")
 
-    # Q15: Eval file validation (skills only)
-    if file_type == "skill":
-        skill_dir = os.path.dirname(filepath)
-        eval_path = os.path.join(skill_dir, "evals", "evals.json")
-        if os.path.isfile(eval_path):
-            try:
-                with open(eval_path) as ef:
-                    eval_data = json.load(ef)
-                # Check top-level keys
-                if "skill_name" not in eval_data:
-                    warn("Q15", f"Eval file missing 'skill_name' key (found: {list(eval_data.keys())[:3]})")
-                if "evals" not in eval_data:
-                    warn("Q15", f"Eval file missing 'evals' key (found: {list(eval_data.keys())[:3]})")
-                elif isinstance(eval_data["evals"], list):
-                    evals = eval_data["evals"]
-                    # Check sequential IDs
-                    ids = [e.get("id") for e in evals if "id" in e]
-                    expected = list(range(1, len(ids) + 1))
-                    if ids != expected:
-                        warn("Q15", f"Eval IDs not sequential: {ids} (expected {expected})")
-                    # Check required fields per eval
+    # Q15: Eval file validation. Legacy prose eval files are accepted for
+    # incremental migration; executable eval files declare schema_version: 1.
+    definition_dir = os.path.dirname(filepath)
+    eval_path = os.path.join(definition_dir, "evals", "evals.json")
+    if os.path.isfile(eval_path):
+        try:
+            with open(eval_path) as ef:
+                eval_data = json.load(ef)
+
+            if "evals" not in eval_data:
+                warn("Q15", f"Eval file missing 'evals' key (found: {list(eval_data.keys())[:3]})")
+            elif not isinstance(eval_data["evals"], list):
+                warn("Q15", "Eval file 'evals' value must be an array")
+            else:
+                evals = eval_data["evals"]
+                ids = [e.get("id") for e in evals if "id" in e]
+                expected = list(range(1, len(ids) + 1))
+                if ids != expected:
+                    warn("Q15", f"Eval IDs not sequential: {ids} (expected {expected})")
+
+                executable_schema = "schema_version" in eval_data
+                if executable_schema:
+                    component_name = eval_data.get("component_name", "")
+                    component_type = eval_data.get("component_type", "")
+                    if eval_data.get("schema_version") != 1:
+                        warn("Q15", "Executable eval file schema_version must be 1")
+                    if component_name != name:
+                        warn("Q15", f"Eval component_name '{component_name}' must match definition name '{name}'")
+                    if component_type != file_type:
+                        warn("Q15", f"Eval component_type '{component_type}' must match detected type '{file_type}'")
+
+                    for e in evals:
+                        eid = e.get("id", "?")
+                        for field in ("name", "type", "expect"):
+                            if field not in e:
+                                warn("Q15", f"Eval id={eid} missing required field '{field}'")
+                        if "expect" in e and not isinstance(e["expect"], dict):
+                            warn("Q15", f"Eval id={eid} field 'expect' must be an object")
+                else:
+                    # Legacy prose eval shape.
+                    if file_type == "skill" and "skill_name" not in eval_data:
+                        warn("Q15", f"Eval file missing 'skill_name' key (found: {list(eval_data.keys())[:3]})")
+                    if file_type == "agent" and "agent_name" not in eval_data:
+                        warn("Q15", f"Eval file missing 'agent_name' key (found: {list(eval_data.keys())[:3]})")
                     for e in evals:
                         eid = e.get("id", "?")
                         for field in ("name", "prompt", "assertions"):
@@ -426,8 +449,8 @@ def lint_file(filepath, file_type=None, base=None):
                                 warn("Q15", f"Eval id={eid} missing required field '{field}'")
                         if "assertions" in e and not e["assertions"]:
                             warn("Q15", f"Eval id={eid} has empty assertions array")
-            except json.JSONDecodeError as je:
-                warn("Q15", f"Eval file is invalid JSON: {je}")
+        except json.JSONDecodeError as je:
+            warn("Q15", f"Eval file is invalid JSON: {je}")
 
     return findings
 

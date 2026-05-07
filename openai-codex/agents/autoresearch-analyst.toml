@@ -1,7 +1,7 @@
 # Generated from agents/autoresearch-analyst/AGENT.md
 
 name        = "autoresearch-analyst"
-description = "Self-improvement agent that runs retrospectives, applies improvements, reviews definitions, and runs full improve-validate cycles. Spawned by orchestrators or dispatched for batch operations."
+description = "Self-improvement agent for retrospectives, improvements, definition reviews, and full improve-validate cycles. Usable standalone or by orchestration."
 model       = "gpt-5.4"
 model_reasoning_effort = "high"
 sandbox_mode = "workspace-write"
