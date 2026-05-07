@@ -5,6 +5,20 @@ All notable changes to this component will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [6.3.0] - 2026-05-07
+
+### Added
+
+- Replaced prose-only `definition-review` eval cases with executable fixture-backed
+  checks for linter pass/fail behavior, warning surfacing, batch discovery, and
+  source-contract coverage.
+
+### Changed
+
+- Extended `lint-definition.py` eval-file validation to understand schema-backed
+  executable evals for both skills and agents while preserving legacy prose eval
+  compatibility during migration.
+
 ## [6.2.0] - 2026-04-28
 
 ### Changed

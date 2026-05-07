@@ -1,6 +1,6 @@
 ---
 name: autoresearch-analyst
-description: "Self-improvement agent that runs retrospectives, applies improvements, reviews definitions, and runs full improve-validate cycles. Spawned by orchestrators or dispatched for batch operations."
+description: "Self-improvement agent for retrospectives, improvements, definition reviews, and full improve-validate cycles. Usable standalone or by orchestration."
 model: "Claude Opus 4.6"
 tools:
   - read

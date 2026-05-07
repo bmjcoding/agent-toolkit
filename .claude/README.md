@@ -5,9 +5,10 @@ standardization.
 
 ## Contribution Entry Point
 
-Invoke `.claude/agents/contribution-assistant.md` before opening a pull request. It loads
-repo-local skills from `.claude/skills/`, standardizes changed contributions, updates
-versioned changelogs, regenerates generated assets, and runs the local gate.
+Invoke `.claude/agents/contribution-assistant.md` before committing or opening a pull
+request. It loads repo-local skills from `.claude/skills/`, improves and standardizes
+changed contributions, updates versioned changelogs, regenerates generated assets, and
+runs the local gate.
 
 ## Ownership
 

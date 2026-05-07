@@ -141,10 +141,11 @@ secret patterns. To compare committed changes against a specific base, pass it a
 Claude Code loads tool-native surfaces from `~/.claude/`. Shared skills stay canonical at
 repo root, while rules are exposed through generated adapters under `claude-code/rules/`.
 This repository also includes repo-local contribution helpers under `.claude/`:
-`contribution-assistant` and its `contribution-changelog` skill. The repo-local
-`.claude/skills/definition-review` and `.claude/skills/improve` entries are symlinks to the
-canonical shared skills, so contributors can use the assistant without first installing
-the whole toolkit globally.
+`contribution-assistant` and its `contribution-changelog` skill. Use that assistant before
+committing or opening a toolkit contribution PR. The repo-local
+`.claude/skills/definition-review` and `.claude/skills/improve` entries are symlinks to
+the canonical shared skills, so contributors can use the assistant without first
+installing the whole toolkit globally.
 
 ```bash
 TOOLKIT=$(pwd)
@@ -230,10 +231,10 @@ category set in scripts or docs. Add tool-specific adapters only when a runtime 
 a different format or discovery surface, then regenerate them with
 `node scripts/sync-canonical-adapters.js` when applicable.
 
-Before opening a contribution PR, use `.claude/agents/contribution-assistant.md` or run
-`npm run ci` directly. Toolkit changelogs use one-and-done versioned entries: every
-touched component gets a bumped `## [X.Y.Z] - YYYY-MM-DD` section, not an `[Unreleased]`
-entry.
+Before committing or opening a contribution PR, use
+`.claude/agents/contribution-assistant.md` or run `npm run ci` directly. Toolkit
+changelogs use one-and-done versioned entries: every touched component gets a bumped
+`## [X.Y.Z] - YYYY-MM-DD` section, not an `[Unreleased]` entry.
 
 When canonical shared content changes, CI also re-runs adapter sync and catalog
 generation. For example, editing `agents/frankenstein/AGENT.md` regenerates:

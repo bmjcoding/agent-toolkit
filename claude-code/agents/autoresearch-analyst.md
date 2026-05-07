@@ -1,7 +1,7 @@
 ---
 name: autoresearch-analyst
 model: inherit
-description: Self-improvement agent that runs retrospectives, applies improvements, reviews definitions, and runs full improve-validate cycles. Spawned by orchestrators or dispatched for batch operations.
+description: Self-improvement agent for retrospectives, improvements, definition reviews, and full improve-validate cycles. Usable standalone or by orchestration.
 tools: Read, Write, Edit, Glob, Grep, Bash
 disallowedTools: Agent, WebSearch, WebFetch
 permissionMode: auto

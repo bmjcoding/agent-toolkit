@@ -6,6 +6,20 @@ Per-component changelogs live in each component's own `CHANGELOG.md`.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.16.0] - 2026-05-07
+
+### Added
+
+- Added `scripts/run-component-evals.py` and `npm run validate:evals` so
+  schema-backed component evals run as deterministic local checks.
+
+### Changed
+
+- Updated `npm run check` to execute component evals between definition linting and
+  component changelog validation.
+- Clarified that `.claude/agents/contribution-assistant.md` owns pre-commit toolkit
+  contribution cleanup.
+
 ## [4.15.0] - 2026-04-30
 
 ### Added

@@ -1,6 +1,6 @@
 ---
 name: autoresearch-analyst
-description: "Self-improvement agent that runs retrospectives, applies improvements, reviews definitions, and runs full improve-validate cycles. Spawned by orchestrators or dispatched for batch operations."
+description: "Self-improvement agent for retrospectives, improvements, definition reviews, and full improve-validate cycles. Usable standalone or by orchestration."
 lifecycle: stable
 model-tier: frontier
 capabilities:
@@ -14,6 +14,9 @@ skills:
   - improve
   - definition-review
   - changelog
+  - recon
+  - full-cycle
+  - on-demand
 adapters:
   - claude-code/agents/autoresearch-analyst.md
   - github-copilot/agents/autoresearch-analyst.agent.md

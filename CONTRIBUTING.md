@@ -46,9 +46,10 @@ agent-toolkit/
 
 ## Contribution assistant
 
-Claude contributors can use the repo-local `.claude/agents/contribution-assistant.md`
-agent. It reviews changed definitions, applies the toolkit-specific changelog policy,
-regenerates generated assets, and runs local validation before a pull request.
+Claude contributors should use the repo-local `.claude/agents/contribution-assistant.md`
+agent before committing or opening a pull request. It reviews and improves changed
+definitions, applies the toolkit-specific changelog policy, regenerates generated
+assets, and runs local validation.
 
 The companion `.claude/skills/contribution-changelog/SKILL.md` skill is intentionally
 toolkit-specific: contribution PRs add a versioned changelog section immediately instead

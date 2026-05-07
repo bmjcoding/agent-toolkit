@@ -1,0 +1,75 @@
+{
+  "component_name": "autoresearch-analyst",
+  "component_type": "agent",
+  "schema_version": 1,
+  "evals": [
+    {
+      "id": 1,
+      "name": "mode-routing-skills-are-declared",
+      "type": "agent-routing-contract",
+      "target": "agents/autoresearch-analyst/AGENT.md",
+      "expect": {
+        "modes": {
+          "retro": {
+            "skill": "retro",
+            "triggers": ["retro mode", "run a retro"]
+          },
+          "improve": {
+            "skill": "improve",
+            "triggers": ["improve mode", "run improve"]
+          },
+          "review": {
+            "skill": "definition-review",
+            "triggers": ["review mode", "run review"]
+          },
+          "recon": {
+            "skill": "recon",
+            "triggers": ["recon mode", "pre-planner recon"]
+          },
+          "full-cycle": {
+            "skill": "full-cycle",
+            "triggers": ["full-cycle mode", "run full-cycle"]
+          },
+          "on-demand": {
+            "skill": "on-demand",
+            "triggers": ["any other freeform request that resolves to a target"]
+          }
+        }
+      }
+    },
+    {
+      "id": 2,
+      "name": "generated-adapters-preserve-mode-table",
+      "type": "agent-adapter-contract",
+      "target": "agents/autoresearch-analyst/AGENT.md",
+      "expect": {
+        "min_adapters": 3,
+        "adapters_include": [
+          "claude-code/agents/autoresearch-analyst.md",
+          "github-copilot/agents/autoresearch-analyst.agent.md",
+          "openai-codex/agents/autoresearch-analyst.toml"
+        ],
+        "adapter_contains": [
+          "Usable standalone or by orchestration.",
+          "\"review mode\" or \"run review\"",
+          "\"recon mode\" or \"pre-planner recon\"",
+          "\"full-cycle mode\" or \"run full-cycle\"",
+          "any other freeform request that resolves to a target"
+        ]
+      }
+    },
+    {
+      "id": 3,
+      "name": "review-handoff-contract-stays-composable",
+      "type": "text-contains",
+      "target": "agents/autoresearch-analyst/AGENT.md",
+      "expect": {
+        "contains": [
+          "review \u2192 `{\"mode\": \"review\", \"targets\", \"results\"}`",
+          "`required_changes` array",
+          "definition-review on that file first and require a PASS verdict before patching"
+        ]
+      }
+    }
+  ]
+}

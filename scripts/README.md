@@ -18,3 +18,11 @@ the local gate.
   should leave a clean working tree.
 - Repo-level script behavior changes are tracked in the root `CHANGELOG.md` unless a
   script clearly belongs to a component with its own changelog.
+
+## Component Evals
+
+- `run-component-evals.py` executes schema-backed eval files under
+  `skills/**/evals/evals.json` and `agents/**/evals/evals.json`.
+- Legacy prose-only eval files are skipped during migration. Executable eval files
+  declare `schema_version: 1` and must use one of the runner-supported deterministic
+  eval types.
