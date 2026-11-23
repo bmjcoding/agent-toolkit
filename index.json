@@ -507,7 +507,7 @@
       "install_path": "~/.claude/agents/staff-engineer.md",
       "install_command": "mkdir -p \"$HOME/.claude/agents\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/staff-engineer.md\" -o \"$HOME/.claude/agents/staff-engineer.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/claude-code/agents/staff-engineer.md",
-      "checksum_sha256": "ef1ed4a2920fd31bfb7b69898b508cb989ba0e84db4265382ab724e4da9a5251",
+      "checksum_sha256": "9dd6f54b2935d3b09be042ce7f94d07e4c664971eb61a58f69dfc3590654500a",
       "bundle_membership": [
         {
           "bundle_id": "ultra-dev",
@@ -2502,7 +2502,7 @@
       "install_path": ".github/agents/staff-engineer.agent.md",
       "install_command": "mkdir -p \".github/agents\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/staff-engineer.agent.md\" -o \".github/agents/staff-engineer.agent.md\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/github-copilot/agents/staff-engineer.agent.md",
-      "checksum_sha256": "e8091a41a12a75343a5e94ce4d31cb0b940dd90d0360d8e733d912d38e739e6d",
+      "checksum_sha256": "1eddb2df978ecbf20add8d3d1b4d6edc9d713859b523e5ad4d5d446e169dd63f",
       "bundle_membership": [],
       "metadata": {
         "model_tier": "frontier",
@@ -3810,7 +3810,7 @@
       "install_path": "~/.codex/agents/staff-engineer.toml",
       "install_command": "mkdir -p \"$HOME/.codex/agents\" && curl -fsSL \"https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/staff-engineer.toml\" -o \"$HOME/.codex/agents/staff-engineer.toml\"",
       "download_url": "https://raw.githubusercontent.com/bmjcoding/agent-toolkit/main/openai-codex/agents/staff-engineer.toml",
-      "checksum_sha256": "4c31cfae515c795b548e8a76c563eac804564a32cf38b8828c6a863f264d51bd",
+      "checksum_sha256": "4555918c130fe9bc2a1b03c7dc574b455a0eae1b0b5a7106df5d96afa4914d81",
       "bundle_membership": [],
       "metadata": {
         "model_tier": "frontier",
