@@ -68,7 +68,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - PL-2: Removed duplicate "Pre-description file state verification" bullet (was repeated verbatim at lines 94–95; canonical copy retained)
 - PL-3: Format-migration audit grep example generalized — replaced `epics.json|stories.json` with `<old-format-artifact>.json`
 - PL-4: Enum-extension rule generalized — replaced `ToolkitCategorySchema` and `bundle` with `[EnumTypeName]` and `<new-variant>`
-- PL-6: Catalog-page layout spec rule updated — added "If the project's UX spec defines layout categories, use those" qualifier before the default vocabulary list, removing the Sample App vocabulary dependency
+- PL-6: Catalog-page layout spec rule updated — added "If the project's UX spec defines layout categories, use those" qualifier before the default vocabulary list, removing the dependency on a single project’s vocabulary
 
 ## [1.8.0] - 2026-04-14
 

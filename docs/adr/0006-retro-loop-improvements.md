@@ -13,7 +13,7 @@ Over four PRs (#16–#19, session 20260413T215203) and this PR (D2 + D3 + P4, se
 - `frankenstein.md` (the orchestrator dispatcher) was growing unbounded. Each `improve` cycle could add rules; nothing removed them. The retro rubric introduced a size-trajectory check in PR #17, but no deletion mechanism existed.
 - Analyst retrospectives surfaced repeated patterns across sessions (recurring unresolved findings, persistent low-signal P2 noise) with no tooling to detect cross-session trends. Each retro operated in isolation.
 - No mechanism existed to mark a rule as stale or expired. Rules landed via `improve accept` and stayed indefinitely.
-- Eleven of fourteen agent definitions contained project-specific identifiers (function names, file paths, enum values) from the Sample App project, making the definitions non-portable. A verbosity audit (C-8 spike in PR #17) catalogued 34 findings across 14 agents.
+- Eleven of fourteen agent definitions contained project-specific identifiers (function names, file paths, enum values) from a consuming project, making the definitions non-portable. A verbosity audit (C-8 spike in PR #17) catalogued 34 findings across 14 agents.
 - The four-bullet untrusted-data preamble and instruction sandwich appeared verbatim in 11 of 14 agent definitions, contributing approximately 250 duplicate lines corpus-wide.
 
 ## Decision
@@ -40,7 +40,7 @@ The retro skill gains a lightweight date-check at the start of the recommendatio
 
 ### 4. Agent-definition cleanup (D3) and preamble factoring (P4)
 
-**D3**: 32 audit findings across 11 agents are resolved. The highest-priority changes remove project-specific identifiers (function names, file paths, enum values from the Sample App project) and consolidate duplicate rule content. Agents fixed: planner, backend-engineer, quality-engineer, site-reliability-engineer, security-engineer, plan-reviewer, autoresearch-analyst, frontend-engineer, design-architect, doc-writer, integration-verifier, and release-gate.
+**D3**: 32 audit findings across 11 agents are resolved. The highest-priority changes remove project-specific identifiers (function names, file paths, enum values from a consuming project) and consolidate duplicate rule content. Agents fixed: planner, backend-engineer, quality-engineer, site-reliability-engineer, security-engineer, plan-reviewer, autoresearch-analyst, frontend-engineer, design-architect, doc-writer, integration-verifier, and release-gate.
 
 **P4**: The four-bullet untrusted-data prelude and instruction sandwich is extracted to a shared reference file at `skills/self-improvement/improve/references/security-preamble.md`. Each of the 11 agents that previously contained the verbatim block now includes a pointer to that file instead. This factoring reduces the corpus by approximately 200 lines.
 
@@ -51,7 +51,7 @@ The retro skill gains a lightweight date-check at the start of the recommendatio
 - Rule expiry machinery provides a bounded lifecycle for rules: they are added with a review date and can be removed via an auditable, confirmation-gated path.
 - Cross-session pattern detection is now possible once 10+ retros accumulate in `~/agent-retros/sessions/`.
 - P4 factoring removes approximately 200 duplicate lines corpus-wide. `frankenstein.md` and the 11 affected agent definitions are shorter and easier to diff.
-- Agent definitions are now project-neutral and can be used without modification outside the Sample App context.
+- Agent definitions are now project-neutral and can be used without modification across projects.
 
 ### Neutral
 

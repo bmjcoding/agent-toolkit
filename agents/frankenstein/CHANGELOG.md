@@ -137,7 +137,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Phase 3 dep-check: replaced `git diff HEAD -- <dep-files>` (content read into dispatcher context) with `git diff --name-only` + path delegation to security-engineer. Dispatcher no longer reads dep diff content directly.
 - Phase 3b SRE handoff: replaced all-handoff-JSON scan with predictable path requirement (`site-reliability-engineer.json`). Eliminates `ls | grep` locate pattern; uses predictable filename `site-reliability-engineer.json` directly. Forward-contract HTML comment added at edit site.
-- Project-agnosticism pass: removed hardcoded paths (`~/...`), replaced project-specific repo name examples (`sample-app`, `agent-toolkit` in examples) with generic descriptions, replaced hardcoded changelog skill path with `~/.claude/` canonical form.
+- Project-agnosticism pass: removed machine-specific paths, generalized repository examples, and used the home-relative `~/.claude/` path for the changelog skill.
 
 ## [4.1.0] - 2026-04-13
 

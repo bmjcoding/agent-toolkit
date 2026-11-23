@@ -59,7 +59,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Pillar C item 1 (Monochromatic discipline): removed inline project-specific Tailwind v4 color family vocabulary and numeric threshold (D-1/D-2 project-bias). Principle retained; specifics deferred to the design-authority skill's reference files.
+- Pillar C item 1 (Monochromatic discipline): removed inline project-specific Tailwind v4 color family vocabulary and numeric threshold. Principle retained; specifics deferred to the design-authority skill's reference files.
 - Runaway guard line annotated with `# > 57 = maxTurns(60) - 3` comment to document the derivation and prevent drift when maxTurns changes (D-3 verbosity).
 
 ## [4.0.0] - 2026-04-13

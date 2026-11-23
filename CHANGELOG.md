@@ -6,6 +6,12 @@ Per-component changelogs live in each component's own `CHANGELOG.md`.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 This repository adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.16.1] - 2026-11-22
+
+### Changed
+
+- Generalized deployment examples and local paths in historical documentation.
+
 ## [4.16.0] - 2026-05-07
 
 ### Added
@@ -431,7 +437,7 @@ No action required for users who install via symlinks (`./claude-code/scripts/in
 
 - `components[]` field on all 24 bundle manifests (8 per tool, across claude-code, github-copilot, openai-codex). Each entry carries `type`, `id`, and `role` (`core` | `optional` | `dep`). Bundle manifests are now the single source of truth for composition.
 - `dependencies[]` field on all 45 agent manifests (15 per tool). Each entry carries `type`, `id`, `optional`, and an optional `reason` string. The `frankenstein` agent declares 17 primitive dependencies (skills, commands, hooks) and 14 agent-type dependencies; `planner` declares 1 optional agent dependency (`plan-reviewer`).
-- `commands-unsupported/` primitive directory for openai-codex, containing 6 command-stub manifests (`status: unavailable`) documenting that Codex CLI has no user-defined slash-command mechanism. These stubs are indexed by `generate-index.js` and surfaced as unavailable options in the downstream download matrix.
+- `commands-unsupported/` primitive directory for openai-codex, containing 6 command-stub manifests (`status: unavailable`) documenting that Codex CLI has no user-defined slash-command mechanism. These stubs are indexed by `generate-index.js` and available to catalog consumers as unavailable options.
 - Cross-reference validation in `scripts/generate-index.js`: exits with code 1 and names every broken reference when any `components[].id` or `dependencies[].id` does not resolve to a real same-tool manifest entry. Ships with an inline `--test` harness (3 test cases).
 - Notes in 3 bundle manifests documenting where openai-codex command primitives diverge from claude-code equivalents (no user-defined slash commands).
 - Total manifest count increased from 156 to 165.
@@ -450,7 +456,7 @@ No action required for users who install via symlinks (`./claude-code/scripts/in
 
 - `manifest.json` per primitive across all 156 primitives (13 skills × 3 tools + agents, hooks, commands, rules × 3 tools). Each manifest captures `id`, `name`, `type`, `tool`, `version`, `ref`, `download_url`, `install_path`, `install_command`, `files`, `status`, and `experimental` fields.
 - `scripts/generate-index.js` — Node.js generator (uses only `fs` and `path` builtins) that walks all `<tool>/<primitive-type>/<name>/manifest.json` paths and writes `index.json` as a root-level JSON array. Re-run after adding any manifest.
-- `index.json` at the repository root — machine-readable catalog of all 156 manifests; consumed by downstream toolkit consumers.
+- `index.json` at the repository root — machine-readable catalog of all 156 manifests for external installers and download catalogs.
 
 ## [3.0.0] - 2026-04-12
 
