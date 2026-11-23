@@ -1,9 +1,10 @@
 # agent-toolkit — Multi-tool agent scaffolding
 
-A configuration library for AI coding assistants. It provides shared skills, shared
-rules, shared hooks, and tool-specific agents, commands, prompts, generated rule
-adapters, and install assets, plus bundle manifests where the target tool supports them,
-for **Claude Code**, **GitHub Copilot for VS Code**, and **OpenAI Codex**.
+A configuration library for **Claude Code**, **GitHub Copilot for VS Code**, and
+**OpenAI Codex**. The repository keeps shared agent definitions, skills, rules,
+workflows, hooks, and bundle manifests at the root. The tool directories contain
+runtime adapters and install scripts. External installers can discover supported
+artifacts in the generated `index.json` catalog.
 
 `AGENTS.md` is the primary shared instruction source across tools. Root `CLAUDE.md` is a
 one-line Claude compatibility shim whose content is exactly `@AGENTS.md`.
@@ -35,6 +36,7 @@ agent-toolkit/
   claude-code/            # Claude-native agents, commands, hook docs, generated rule adapters, scripts
   github-copilot/         # VS Code Copilot-native agents, prompts, instructions, hooks, scripts
   openai-codex/           # Codex-native agents, hooks, config templates, rule build assets
+  index.json              # Generated distribution catalog for external installers
   AGENTS.md               # Primary shared instructions
   CLAUDE.md               # One-line Claude compatibility shim: @AGENTS.md
 ```
@@ -51,7 +53,7 @@ agent-toolkit/
 - `CLAUDE.md` is a one-line Claude compatibility shim, not the canonical shared
   instruction source.
 - Tool directories contain only tool-native assets or adapters:
-- `claude-code/`: Claude frontmatter wrappers, slash-command adapters, hook docs, generated rule adapters, install scripts.
+  - `claude-code/`: Claude frontmatter wrappers, slash-command adapters, hook docs, generated rule adapters, install scripts.
   - `github-copilot/`: VS Code Copilot agent adapters, prompt adapters, generated instruction adapters, hook manifests/adapters, install scripts.
   - `openai-codex/`: Codex TOML agent adapters, hooks, config templates, rule composition assets.
 - Canonical root `rules/` content is adapted into:
